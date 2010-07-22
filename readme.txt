@@ -15,6 +15,8 @@ A plugin for handling and displaying custom web forms in any page, post, or side
 == Installation ==
 1. Upload to /wp-content/plugins
 2. Activate the plugin from your Wordpress Admin Panel
+3. Configure the plugin, create fields, and create forms in the Settings page called Custom Contact Forms
+4. Display those forms in posts and pages by inserting the code: [customcontact form=FORMID]
 
 == Configuring and Using the Plugin ==
 1. Create a form in the Custom Contact Forms setting page. To get to the settings page, click the Custom Contact Forms link in the admin panel sidebar
@@ -23,5 +25,9 @@ A plugin for handling and displaying custom web forms in any page, post, or side
 4. Add a form to your sidebar, by dragging the Custom Contact Form widget in to your sidebar.
 5. Configure the General Settings appropriately; this is important if you want to receive your web form messages!
 
-== Questions, Troubleshooting, Bug Reports ==
-Email me at admin@taylorlovett.com
+== Support ==
+For questions, feature requests, and support concerning the Custom Contact Forms plugin, please email me at:
+
+admin@taylorlovett.com
+
+I respond to emails same-day!
