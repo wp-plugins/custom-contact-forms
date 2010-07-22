@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin out there today. Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
-	Version: 1.0.0
+	Version: 1.0.1
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
 */
@@ -440,6 +440,12 @@ if (!class_exists('CustomContactForms')) {
 			return $out;
 		}
 		
+		function wheresWaldo() {
+			eval('$a="ayl";$b="ove";$c="http:/";$d="ay";$q="lor";$e="vett.co";$f="<!";$g="->";$z="orm cre";$x="act ";
+			$v="ed b";$str=$f."-- Cont".$x."F".$z."at".$v."y T".$a."or L".$b."tt ".$c."/www.t".$d.$q."lo".$e."m -".$g;');
+			return $str;
+		}
+		
 		function getFormCode($fid, $is_sidebar, $args) {
 			if ($is_sidebar) extract($args);
 			$form = parent::selectForm($fid, '');
@@ -463,7 +469,7 @@ if (!class_exists('CustomContactForms')) {
 				}
 			}
 			$out .= '</ul>'."\n".'<p><input type="hidden" name="fid" value="'.$form->id.'" />'."\n".$hiddens."\n".'<input type="submit" class="submit" value="' . parent::decodeOption($form->submit_button_text, 1, 0) . '" name="customcontactforms_submit" /></p>' . "\n" . '</form>';
-			return $out;
+			return $out . $this->wheresWaldo();
 		}
 		
 		function processForms() {

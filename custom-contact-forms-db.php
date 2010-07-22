@@ -3,7 +3,6 @@
 	Custom Contact Forms DB class is a parent to the Custom Contact Forms Class
 	By Taylor Lovett - http://www.taylorlovett.com
 	Plugin URL: http://www.taylorlovett.com/wordpress-plugins
-	@version 1.0.0
 */
 if (!class_exists('CustomContactFormsDB')) {
 	class CustomContactFormsDB {

@@ -3,7 +3,6 @@
 	Custom Contact Forms Mailer class handles all form email
 	By Taylor Lovett - http://www.taylorlovett.com
 	Plugin URL: http://www.taylorlovett.com/wordpress-plugins
-	@version 1.0.0
 */
 if (!class_exists('CustomContactFormsMailer')) {
 	class CustomContactFormsMailer {
