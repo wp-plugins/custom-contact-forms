@@ -3,7 +3,7 @@ Plugin Name: Custom Contact Forms
 Tags: contact form, web form, custom contact form, custom forms, contact fields, form mailers
 Requires at least: 2.7.1
 Tested up to: 3.0
-Stable tag: 1.0
+Stable tag: 1.0.0
 Contributors: Taylor Lovett
 Download link: http://www.taylorlovett.com/wordpress-plugins/
 Author: Taylor Lovett
@@ -25,3 +25,15 @@ A plugin for handling and displaying custom web forms in any page, post, or side
 
 == Questions, Troubleshooting, Bug Reports ==
 Email me at admin@taylorlovett.com
+
+== Screenshots ==
+Screenshots all located at: http://taylorlovett.com/wordpress-plugins
+
+== Frequently Asked Questions ==
+None yet! Email any questions to admin@taylorlovett.com
+
+== Upgrade Notice ==
+A new version will be released Mid-August 2010
+
+== Changelog ==
+1.0.0: The first version!
