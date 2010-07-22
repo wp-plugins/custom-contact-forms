@@ -5,7 +5,7 @@ form.customcontactform {
 	margin:8px;
 	width:95%;
 	max-width:500px;
-	font-size:.9em;
+	font-size:1em;
 	padding:4px;
 	color:#333333;
 }
@@ -50,8 +50,9 @@ form.customcontactform ul li input[type=text], form.customcontactform ul li text
 	word-wrap:break-word;
 	font-size:.9em;
 }
-form.customcontactform ul li input[type=submit], form.customcontactform-sidebar ul li .submit {
-	font-size:1em;
+form.customcontactform p, form.customcontactform-sidebar p { padding:0 0 4px 17px; margin:0; }
+form.customcontactform ul li input[type=submit], form.customcontactform ul li .submit, form.customcontactform-sidebar ul li .submit {
+	font-size:1em; margin-left:8px;
 }
 form.customcontactform ul li input[type=checkbox], form.customcontactform-sidebar ul li input[type=checkbox] {
 	width:20px;
@@ -138,11 +139,11 @@ form.customcontactform-sidebar ul li input[type=text], form.customcontactform-si
 }
 #customcontactforms-admin .attached_fields {
 	float:left;
-	width:650px;
+	width:600px;
 }
 #customcontactforms-admin .attach_field {
 	float:right;
-	width:310px;
+	width:360px;
 }
 #customcontactforms-admin label span {
 	font-weight:bold;
@@ -171,3 +172,6 @@ form.customcontactform-sidebar ul li input[type=text], form.customcontactform-si
 .width200 {
 	width:200px;
 }
+.red { color:#F00; }
+.bold { font-weight:bold; }
+.italic { font-style:italic; }

@@ -314,14 +314,15 @@ if (!class_exists('CustomContactForms')) {
                     }
                     ?>
               <br />
-              Code to Display Form: <b>[customcontact form=<?php echo $forms[$i]->id ?>]</b> </div>
+              <span class="red bold">*</span> Code to Display Form: <b>[customcontact form=<?php echo $forms[$i]->id ?>]</b> </div>
             <div class="attach_field">
               <label for="field_id">Attach Field:</label>
               <select name="field_id">
                 <?php echo $add_fields; ?>
               </select>
               <input type="submit" name="form_add_field" value="Attach" />
-              <input type="hidden" name="fid" value="<?php echo $forms[$i]->id; ?>" />
+              <input type="hidden" name="fid" value="<?php echo $forms[$i]->id; ?>" /><br />
+              <span class="red bold">*</span> Attach in the order you want fields to display.
             </div></td>
         </form>
       </tr>
@@ -406,7 +407,7 @@ if (!class_exists('CustomContactForms')) {
     <h3 class="hndle"><span>Instructions</span></h3>
     <div class="inside">
       <p>1. Create a form.</p>
-      <p>2. Create fields and attach those fields to the forms of your choice.</p>
+      <p>2. Create fields and attach those fields to the forms of your choice. <b>* Attach the fields in the order that you want them to show up in the form. If you mess up you can detach and reattach them.</b></p>
       <p>3. Display those forms in posts and pages by inserting the code: [customcontact form=<b>FORMID</b>]. Replace <b>FORMID</b> with the id listed to the left of the form slug next to the form of your choice above.</p>
       <p>4. Add a form to your sidebar, by dragging the Custom Contact Form widget in to your sidebar.</p>
       <p>5. Configure the General Settings appropriately; this is important if you want to receive your web form messages!</p>
@@ -468,7 +469,6 @@ if (!class_exists('CustomContactForms')) {
 		function processForms() {
 			if ($_POST[customcontactforms_submit]) {
 				$admin_options = $this->getAdminOptions();
-				//$form = parent::selectForm($_POST[fid], '');
 				$fields = parent::getAttachedFieldsArray($_POST[fid]);
 				$checks = array();
 				foreach ($fields as $field_id) {
@@ -478,14 +478,16 @@ if (!class_exists('CustomContactForms')) {
 				} 
 				$body = '';
 				foreach ($_POST as $key => $value) {
+					$field = parent::selectField('', $key);
 					if ($key != 'customcontactforms_submit' && $key != 'fid')
-						$body .= ucwords(str_replace('_', ' ', $key)) . ': ' . $value . "\n";
+						$body .= $field->field_label . ': ' . $value . "\n";
 					if (in_array($key, $checks)) {
 						$checks_key = array_search($key, $checks);
 						unset($checks[$checks_key]);
 					}
 				} foreach ($checks as $check_key) {
-					$body .= ucwords(str_replace('_', ' ', $check_key)) . ': 0' . "\n";
+					$field = parent::selectField('', $check_key);
+					$body .= ucwords(str_replace('_', ' ', $field->field_label)) . ': 0' . "\n";
 				}
 				$body .= 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
 				$mailer = new CustomContactFormsMailer($admin_options[default_to_email], $admin_options[default_from_email], $admin_options[default_form_subject], $body);

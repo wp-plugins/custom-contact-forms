@@ -3,7 +3,7 @@ Plugin Name: Custom Contact Forms
 Tags: contact form, web form, custom contact form, custom forms, contact fields, form mailers
 Requires at least: 2.7.1
 Tested up to: 3.0
-Stable tag: 1.0.0
+Stable tag: 1.0
 Contributors: Taylor Lovett
 Download link: http://www.taylorlovett.com/wordpress-plugins/
 Author: Taylor Lovett
@@ -18,22 +18,10 @@ A plugin for handling and displaying custom web forms in any page, post, or side
 
 == Configuring and Using the Plugin ==
 1. Create a form in the Custom Contact Forms setting page. To get to the settings page, click the Custom Contact Forms link in the admin panel sidebar
-2. Create fields and attach those fields to the forms of your choice.
+2. Create fields and attach those fields to the forms of your choice. * Attach the fields in the order that you want them to show up in the form. If you mess up you can detach and reattach them.
 3. Display those forms in posts and pages by inserting the code: [customcontact form=FORMID]. Replace FORMID with the id listed to the left of the form slug next to the form of your choice above.
 4. Add a form to your sidebar, by dragging the Custom Contact Form widget in to your sidebar.
 5. Configure the General Settings appropriately; this is important if you want to receive your web form messages!
 
 == Questions, Troubleshooting, Bug Reports ==
 Email me at admin@taylorlovett.com
-
-== Screenshots ==
-Screenshots all located at: http://taylorlovett.com/wordpress-plugins
-
-== Frequently Asked Questions ==
-None yet! Email any questions to admin@taylorlovett.com
-
-== Upgrade Notice ==
-A new version will be released Mid-August 2010
-
-== Changelog ==
-1.0.0: The first version!

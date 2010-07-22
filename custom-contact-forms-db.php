@@ -18,7 +18,7 @@ if (!class_exists('CustomContactFormsDB')) {
 		}
 		
 		function encodeOption($option) {
-			return htmlspecialchars($option, ENT_QUOTES);
+			return htmlspecialchars(stripslashes($option), ENT_QUOTES);
 		}
 		
 		function decodeOption($option, $strip_slashes = 1, $decode_html_chars = 1) {
@@ -62,7 +62,7 @@ if (!class_exists('CustomContactFormsDB')) {
 			global $wpdb;
 			$test = $this->selectForm('', $form_slug);
 			if (empty($test)) {
-				$wpdb->insert($this->forms_table, array('form_slug' => strtolower(str_replace(' ', '_', $form_slug)), 'form_title' => $form_title, 'form_action' => $form_action, 'form_method' => $form_method, 'submit_button_text' => $submit_button_text, 'custom_code' => $custom_code));
+				$wpdb->insert($this->forms_table, array('form_slug' => $this->formatSlug($form_slug), 'form_title' => $this->encodeOption($form_title), 'form_action' => $this->encodeOption($form_action), 'form_method' => $form_method, 'submit_button_text' => $this->encodeOption($submit_button_text), 'custom_code' => $this->encodeOption($custom_code)));
 				return true;
 			}
 			return false;
@@ -73,7 +73,7 @@ if (!class_exists('CustomContactFormsDB')) {
 			$test = $this->selectField('', $field_slug);
 			
 			if (empty($test)) {
-				$wpdb->insert($this->fields_table, array('field_slug' => strtolower(str_replace(' ', '_', $field_slug)), 'field_label' => $field_label, 'field_type' => $field_type, 'field_value' => $field_value, 'field_maxlength' => $field_maxlength));
+				$wpdb->insert($this->fields_table, array('field_slug' => $this->formatSlug($field_slug), 'field_label' => $this->encodeOption($field_label), 'field_type' => $field_type, 'field_value' => $this->encodeOption($field_value), 'field_maxlength' => $this->encodeOption($field_maxlength)));
 				return true;
 			}
 			return false;
@@ -95,7 +95,7 @@ if (!class_exists('CustomContactFormsDB')) {
 			$test = $this->selectForm('', $form_slug);
 			if (!empty($test) and $test->id != $fid) // if form_slug is different then make sure it is unique
 				return false;
-			$wpdb->update($this->forms_table, array('form_slug' => strtolower(str_replace(' ', '_', $form_slug)), 'form_title' => $form_title, 'form_action' => $form_action, 'form_method' => $form_method, 'submit_button_text' => $submit_button_text, 'custom_code' => $custom_code), array('id' => $fid));
+			$wpdb->update($this->forms_table, array('form_slug' => $this->formatSlug($form_slug), 'form_title' => $this->encodeOption($form_title), 'form_action' => $this->encodeOption($form_action), 'form_method' => $form_method, 'submit_button_text' => $this->encodeOption($submit_button_text), 'custom_code' => $this->encodeOption($custom_code)), array('id' => $fid));
 			return true;
 		}
 		
@@ -105,7 +105,7 @@ if (!class_exists('CustomContactFormsDB')) {
 			$test = $this->selectField('', $field_slug);
 			if (!empty($test) and $test->id != $fid) // if form_slug is different then make sure it is unique
 				return false;
-			$wpdb->update($this->fields_table, array('field_slug' => strtolower(str_replace(' ', '_', $field_slug)), 'field_label' => $field_label, 'field_type' => $field_type, 'field_value' => $field_value, 'field_maxlength' => $field_maxlength), array('id' => $fid));
+			$wpdb->update($this->fields_table, array('field_slug' => $this->formatSlug($field_slug), 'field_label' => $this->encodeOption($field_label), 'field_type' => $field_type, 'field_value' => $this->encodeOption($field_value), 'field_maxlength' => $this->encodeOption($field_maxlength)), array('id' => $fid));
 			return true;
 		}
 		
@@ -172,6 +172,11 @@ if (!class_exists('CustomContactFormsDB')) {
 				return true;
 			}
 			return false;
+		}
+		
+		function formatSlug($slug) {
+			$slug = preg_replace('/[^a-zA-Z0-9\s]/', '', $slug);
+			return str_replace(' ', '_', $slug);	
 		}
 	}
 }
