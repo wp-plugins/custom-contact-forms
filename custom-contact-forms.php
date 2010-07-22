@@ -316,7 +316,7 @@ if (!class_exists('CustomContactForms')) {
               <br />
               <span class="red bold">*</span> Code to Display Form: <b>[customcontact form=<?php echo $forms[$i]->id ?>]</b> </div>
             <div class="attach_field">
-              <label for="field_id">Attach Field:</label>
+              <label for="field_id"><span>Attach Field:</span></label>
               <select name="field_id">
                 <?php echo $add_fields; ?>
               </select>
