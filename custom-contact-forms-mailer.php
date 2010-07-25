@@ -1,6 +1,6 @@
 <?php
 /*
-	Custom Contact Forms Mailer class handles all form email
+	Custom Contact Forms Plugin
 	By Taylor Lovett - http://www.taylorlovett.com
 	Plugin URL: http://www.taylorlovett.com/wordpress-plugins
 */

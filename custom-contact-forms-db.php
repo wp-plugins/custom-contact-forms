@@ -1,6 +1,6 @@
 <?php
 /*
-	Custom Contact Forms DB class is a parent to the Custom Contact Forms Class
+	Custom Contact Forms Plugin
 	By Taylor Lovett - http://www.taylorlovett.com
 	Plugin URL: http://www.taylorlovett.com/wordpress-plugins
 */
@@ -14,6 +14,8 @@ if (!class_exists('CustomContactFormsDB')) {
 			$this->forms_table = $wpdb->prefix . 'customcontactforms_forms';
 			$this->fields_table = $wpdb->prefix . 'customcontactforms_fields';
 			$this->createTables();
+			$this->insertFixedFields();
+			$this->updateTables();
 		}
 		
 		function encodeOption($option) {
@@ -50,6 +52,7 @@ if (!class_exists('CustomContactFormsDB')) {
 						`field_type` VARCHAR( 25 ) NOT NULL ,
 						`field_value` TEXT NOT NULL ,
 						`field_maxlength` INT ( 5 )  NOT NULL DEFAULT '0',
+						`user_field` INT ( 1 )  NOT NULL DEFAULT '1',
 						PRIMARY KEY ( `id` )
 						) ENGINE = MYISAM AUTO_INCREMENT=1 ";
 				dbDelta($sql2);
@@ -57,25 +60,40 @@ if (!class_exists('CustomContactFormsDB')) {
 			return true;
 		}
 		
-		function insertForm($form_slug, $form_title, $form_action, $form_method, $submit_button_text, $custom_code) {
+		function updateTables() {
 			global $wpdb;
-			$test = $this->selectForm('', $form_slug);
-			if (empty($test)) {
-				$wpdb->insert($this->forms_table, array('form_slug' => $this->formatSlug($form_slug), 'form_title' => $this->encodeOption($form_title), 'form_action' => $this->encodeOption($form_action), 'form_method' => $form_method, 'submit_button_text' => $this->encodeOption($submit_button_text), 'custom_code' => $this->encodeOption($custom_code)));
-				return true;
-			}
-			return false;
+			if (!$this->columnExists('user_field', $this->fields_table))
+				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `user_field` INT( 1 ) NOT NULL DEFAULT '1'");
+			
+			$this->insertFixedFields();
 		}
 		
-		function insertField($field_slug, $field_label, $field_type, $field_value, $field_maxlength) {
+		function insertFixedFields() {
+			if (!$this->fieldSlugExists('captcha'))
+				$this->insertField('captcha', 'Type the text', 'Text', '', '100', 0);
+		
+		}
+		
+		function columnExists($column, $table) {
 			global $wpdb;
-			$test = $this->selectField('', $field_slug);
+			$tests = $wpdb->get_results("SELECT * FROM INFORMATION_SCHEMA.columns WHERE table_name = '$table' AND column_name = '$column' LIMIT 0 , 30");
+			//echo "SELECT * FROM INFORMATION_SCHEMA.columns WHERE table_name = '$table' AND column_name = '$column' LIMIT 0 , 30";
 			
-			if (empty($test)) {
-				$wpdb->insert($this->fields_table, array('field_slug' => $this->formatSlug($field_slug), 'field_label' => $this->encodeOption($field_label), 'field_type' => $field_type, 'field_value' => $this->encodeOption($field_value), 'field_maxlength' => $this->encodeOption($field_maxlength)));
-				return true;
-			}
-			return false;
+			return (!empty($test[0]) && $test[0]->COLUMN_NAME == $column);
+		}
+		
+		function insertForm($form_slug, $form_title, $form_action, $form_method, $submit_button_text, $custom_code) {
+			global $wpdb;
+			if ($this->formSlugExists($field_slug)) return false;
+			$wpdb->insert($this->forms_table, array('form_slug' => $this->formatSlug($form_slug), 'form_title' => $this->encodeOption($form_title), 'form_action' => $this->encodeOption($form_action), 'form_method' => $form_method, 'submit_button_text' => $this->encodeOption($submit_button_text), 'custom_code' => $this->encodeOption($custom_code)));
+			return true;
+		}
+		
+		function insertField($field_slug, $field_label, $field_type, $field_value, $field_maxlength, $user_field) {
+			global $wpdb;
+			if ($this->fieldSlugExists($field_slug)) return false;
+			$wpdb->insert($this->fields_table, array('field_slug' => $this->formatSlug($field_slug), 'field_label' => $this->encodeOption($field_label), 'field_type' => $field_type, 'field_value' => $this->encodeOption($field_value), 'field_maxlength' => $this->encodeOption($field_maxlength), 'user_field' => $user_field));
+			return true;
 		}
 		
 		function fieldsTableExists() {
@@ -176,6 +194,16 @@ if (!class_exists('CustomContactFormsDB')) {
 		function formatSlug($slug) {
 			$slug = preg_replace('/[^a-zA-Z0-9\s]/', '', $slug);
 			return str_replace(' ', '_', $slug);	
+		}
+		
+		function fieldSlugExists($slug) {
+			$test = $this->selectField('', $slug);
+			return (!empty($test));
+		}
+		
+		function formSlugExists($slug) {
+			$test = $this->selectForm('', $slug);
+			return (!empty($test));
 		}
 	}
 }
