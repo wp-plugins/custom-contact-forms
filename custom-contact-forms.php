@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
-	Version: 1.1.0
+	Version: 1.1.1
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
 */
@@ -40,7 +40,7 @@ if (!class_exists('CustomContactForms')) {
 		
 		function getAdminOptions() {
 			$admin_email = get_option('admin_email');
-			$customcontactAdminOptions = array('show_widget_home' => 1, 'show_widget_pages' => 1, 'show_widget_singles' => 1, 'show_widget_categories' => 1, 'show_widget_archives' => 1, 'default_to_email' => $admin_email, 'default_from_email' => $admin_email, 'default_form_subject' => 'Someone Filled Out Your Contact Form!', 'custom_thank_you' => '', 'thank_you_message' => 'Thank you for filling out our form. We will respond to your inquiry ASAP.'); // defaults
+			$customcontactAdminOptions = array('show_widget_home' => 1, 'show_widget_pages' => 1, 'show_widget_singles' => 1, 'show_widget_categories' => 1, 'show_widget_archives' => 1, 'default_to_email' => $admin_email, 'default_from_email' => $admin_email, 'default_form_subject' => 'Someone Filled Out Your Contact Form!', 'custom_thank_you' => '', 'thank_you_message' => 'Thank you for filling out our form. We will respond to your inquiry ASAP.', 'remember_field_values' => 0); // defaults
 			$customcontactOptions = get_option($this->adminOptionsName);
 			if (!empty($customcontactOptions)) {
 				foreach ($customcontactOptions as $key => $option)
@@ -118,7 +118,6 @@ if (!class_exists('CustomContactForms')) {
 		}
 		
 		function printAdminPage() {
-			parent::encodeOption('sfsfd');
 			$admin_options = $this->getAdminOptions();
 			if ($_POST[form_create]) {
 				parent::insertForm($_POST[form_slug], $_POST[form_title], $_POST[form_action], $_POST[form_method], $_POST[submit_button_text], $_POST[custom_code]);
@@ -397,6 +396,9 @@ if (!class_exists('CustomContactForms')) {
       </tr>
       <?php
                 }
+				$remember_check = ($admin_options[remember_field_values] == 0) ? 'selected="selected"' : '';
+				$remember_fields = '<option value="1">Yes</option><option '.$remember_check.' value="0">No</option>';
+				
                 ?>
     </tbody>
     <tfoot>
@@ -439,6 +441,13 @@ if (!class_exists('CustomContactForms')) {
             <input name="custom_thank_you" value="<?php echo $admin_options[custom_thank_you]; ?>" type="text" maxlength="150" />
           </li>
           <li class="descrip">Leaving this blank will show the default thank you message on form completion.</li>
+          
+          <li>
+            <label for="remember_field_values">Remember Field Values:</label>
+            <select name="remember_field_values"><?php echo $remember_fields; ?></select>
+          </li>
+          <li class="descrip">Setting this to blank will have fields remember how they were last filled out.</li>
+          
            <li>
             <label for="thank_you_message">Default Thank You Message:</label><br />
             <textarea rows="6" cols="47" name="thank_you_message"><?php echo $admin_options[thank_you_message]; ?></textarea>
@@ -532,6 +541,7 @@ if (!class_exists('CustomContactForms')) {
 		function getFormCode($fid, $is_sidebar, $args) {
 			if ($is_sidebar) extract($args);
 			$this->startSession();
+			$admin_options = $this->getAdminOptions();
 			$form = parent::selectForm($fid, '');
 			$class = (!$is_sidebar) ? 'customcontactform' : 'customcontactform-sidebar';
 			$action = (!empty($form->form_action)) ? $form->form_action : get_permalink();
@@ -542,7 +552,11 @@ if (!class_exists('CustomContactForms')) {
 			foreach ($fields as $field_id) {
 				$field = parent::selectField($field_id, '');
 				$input_id = 'id="'.parent::decodeOption($field->field_slug, 1, 1).'"';
-				$field_value = ($_SESSION[fields][$field->field_slug]) ? $_SESSION[fields][$field->field_slug] : parent::decodeOption($field->field_value, 1, 1);
+				$field_value = parent::decodeOption($field->field_value, 1, 1);
+				if ($_SESSION[fields][$field->field_slug]) {
+					if ($admin_options[remember_field_values] == 1)
+						$field_value = $_SESSION[fields][$field->field_slug];
+				}
 				if ($field->user_field == 0 && $field->field_slug == 'captcha') {
 					$out .= '<li>' . $this->getCaptchaCode() . '</li>';
 				} elseif ($field->field_type == 'Text') {
@@ -562,7 +576,7 @@ if (!class_exists('CustomContactForms')) {
 		
 		function getCaptchaCode() {
 			$out = '<img id="captcha-image" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/custom-contact-forms/image.php"> 
-			<br /><input type="text" name="captcha" id="captcha" maxlength="20" />';
+			<br /><label for="captcha">Type the text:</label> <input type="text" name="captcha" id="captcha" maxlength="20" />';
 			
 			return $out;
 		}

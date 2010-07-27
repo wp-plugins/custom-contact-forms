@@ -3,7 +3,7 @@ Plugin Name: Custom Contact Forms
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.7.1
 Tested up to: 3.0
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 Contributors: Taylor Lovett
 Download link: http://www.taylorlovett.com/wordpress-plugins/
 Author: Taylor Lovett
@@ -44,3 +44,6 @@ Required fields option will be added in mid-August 2010
 * custom-contact-forms.css - Forms restyled
 * custom-contact-forms-images.php - Image handling class added
 * image.php, images/ - Image for captcha displaying
+1.1.1
+* custom-contact-forms.css - Label styles changed
+* custom-contact-forms.php - Admin option added to remember field values
