@@ -2,15 +2,15 @@
 Plugin Name: Custom Contact Forms
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.7.1
-Tested up to: 3.0
-Stable tag: 1.1.1
-Contributors: Taylor Lovett
+Tested up to: 3.1
+Stable tag: 1.1.2
+Contributors: Taylor Lovett, Mark Lasserre
 Download link: http://www.taylorlovett.com/wordpress-plugins/
 Author: Taylor Lovett
 Author URI: http://www.taylorlovett.com
 
 == Description ==
-A plugin for handling and displaying custom web forms in any page, post, or sidebar. Extremely customizable!
+Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar.
 
 == Installation ==
 1. Upload to /wp-content/plugins
@@ -47,3 +47,5 @@ Required fields option will be added in mid-August 2010
 1.1.1
 * custom-contact-forms.css - Label styles changed
 * custom-contact-forms.php - Admin option added to remember field values
+1.1.2
+* custom-contact-forms-db.php - create_tables function edited to work for Wordpress MU due to error in wp-admin/includes/upgrade.php

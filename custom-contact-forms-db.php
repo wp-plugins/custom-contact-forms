@@ -30,7 +30,6 @@ if (!class_exists('CustomContactFormsDB')) {
 		
 		function createTables() {
 			global $wpdb;
-			require_once(ABSPATH . 'wp-admin/upgrade-functions.php');
 			if(!$this->formsTableExists()) {
 				$sql1 = " CREATE TABLE `".$this->forms_table."` (
 						`id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
@@ -43,7 +42,7 @@ if (!class_exists('CustomContactFormsDB')) {
 						`custom_code` TEXT NOT NULL ,
 						PRIMARY KEY ( `id` )
 						) ENGINE = MYISAM AUTO_INCREMENT=1 ";
-				dbDelta($sql1);
+				$wpdb->query($sql1);
 			} if(!$this->fieldsTableExists()) {
 				$sql2 = "CREATE TABLE `".$this->fields_table."` (
 						`id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
@@ -55,7 +54,7 @@ if (!class_exists('CustomContactFormsDB')) {
 						`user_field` INT ( 1 )  NOT NULL DEFAULT '1',
 						PRIMARY KEY ( `id` )
 						) ENGINE = MYISAM AUTO_INCREMENT=1 ";
-				dbDelta($sql2);
+				$wpdb->query($sql2);
 			}
 			return true;
 		}
@@ -67,7 +66,7 @@ if (!class_exists('CustomContactFormsDB')) {
 			
 			$this->insertFixedFields();
 		}
-		
+	
 		function insertFixedFields() {
 			if (!$this->fieldSlugExists('captcha'))
 				$this->insertField('captcha', 'Type the text', 'Text', '', '100', 0);
@@ -77,8 +76,6 @@ if (!class_exists('CustomContactFormsDB')) {
 		function columnExists($column, $table) {
 			global $wpdb;
 			$tests = $wpdb->get_results("SELECT * FROM INFORMATION_SCHEMA.columns WHERE table_name = '$table' AND column_name = '$column' LIMIT 0 , 30");
-			//echo "SELECT * FROM INFORMATION_SCHEMA.columns WHERE table_name = '$table' AND column_name = '$column' LIMIT 0 , 30";
-			
 			return (!empty($test[0]) && $test[0]->COLUMN_NAME == $column);
 		}
 		
