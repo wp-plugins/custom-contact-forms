@@ -4,7 +4,7 @@ Tags: contact form, web form, custom contact form, custom forms, captcha form, c
 Requires at least: 2.7.1
 Tested up to: 3.0
 Stable tag: 1.1.2
-Contributors: Taylor Lovett, Mark Lasserre
+Contributors: Taylor Lovett
 Download link: http://www.taylorlovett.com/wordpress-plugins/
 Author: Taylor Lovett
 Author URI: http://www.taylorlovett.com
@@ -28,7 +28,10 @@ Custom Contact Forms is a plugin for handling and displaying custom web forms [c
 == Support ==
 For questions, feature requests, and support concerning the Custom Contact Forms plugin, please email me at:
 admin@taylorlovett.com
-I respond to emails same-day!
+I respond to emails same-day! If you want to be an official tester, email me and I'll put you on this list.
+
+Official Testers:
+Mark Lassarre
 
 == Upgrade Notice ==
 Required fields option will be added in mid-August 2010

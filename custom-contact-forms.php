@@ -6,7 +6,7 @@
 	Version: 1.1.2
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
-	Contributors: Taylor Lovett, Mark Lasserre
+	Contributors: Taylor Lovett
 */
 
 /*
