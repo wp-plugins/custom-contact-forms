@@ -69,7 +69,7 @@ if (!class_exists('CustomContactFormsDB')) {
 	
 		function insertFixedFields() {
 			if (!$this->fieldSlugExists('captcha'))
-				$this->insertField('captcha', 'Type the text', 'Text', '', '100', 0);
+				$this->insertField('captcha', 'Type the number', 'Text', '', '100', 0);
 		
 		}
 		

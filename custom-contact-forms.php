@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
-	Version: 1.1.2
+	Version: 1.1.3
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
 	Contributors: Taylor Lovett
@@ -576,8 +576,9 @@ if (!class_exists('CustomContactForms')) {
 		}
 		
 		function getCaptchaCode() {
+			$captcha = parent::selectField('', 'captcha');
 			$out = '<img id="captcha-image" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/custom-contact-forms/image.php"> 
-			<br /><label for="captcha">Type the text:</label> <input type="text" name="captcha" id="captcha" maxlength="20" />';
+			<br /><label for="captcha">'.$captcha->field_label.'</label> <input type="text" name="captcha" id="captcha" maxlength="20" />';
 			
 			return $out;
 		}
