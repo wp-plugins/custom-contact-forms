@@ -74,7 +74,7 @@ form.customcontactform-sidebar ul li input[type=text], form.customcontactform-si
 	vertical-align:top;
 	margin:1em 0 30px 25px;
 }
-#customcontactforms-admin input, textarea, select {
+#customcontactforms-admin input, #customcontactforms-admin input textarea, #customcontactforms-admin input select {
 	font-size:1em;
 }
 #customcontactforms-admin .icon32 {

@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
-	Version: 1.2.0
+	Version: 1.2.1
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
 	Contributors: Taylor Lovett
@@ -153,13 +153,14 @@ if (!class_exists('CustomContactForms')) {
   <h2>Custom Contact Forms</h2>
   <div id="upgrade">
   	<p>Want to <i>change the appearance of your forms</i> with a simple to use manager? The Style Manager allows style every aspect of your form: <b>Change form border style, form border width, form width, form font family, title font size, title font color, text field width, text field border color, text field font size, text field font color, submit button width/height, submit button font color, and more!</b></p>
-  	<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+  <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
-">
-<p class="head center">Upgrade to the Pro Version for $5.00 USD:</p><input style="margin-left:400px;" class="center" type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<input type="hidden" name="hosted_button_id" value="E7YXZBHN24R7S">
+<p class="head center">Upgrade to the Pro Version for $4.99 USD:</p>
+<input style="margin-left:400px;" type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
 <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
 </form>
+
   </div>
   <div id="create-fields" class="postbox">
     <h3 class="hndle"><span>Create A Form Field</span></h3>
