@@ -68,7 +68,7 @@ if (!class_exists('CustomContactFormsDB')) {
 						`label_width` VARCHAR( 10 ) NOT NULL DEFAULT '110px',
 						`form_width` VARCHAR( 10 ) NOT NULL DEFAULT '500px',
 						`submit_width` VARCHAR( 10 ) NOT NULL DEFAULT '80px',
-						`submit_height` VARCHAR( 10 ) NOT NULL DEFAULT '40px',
+						`submit_height` VARCHAR( 10 ) NOT NULL DEFAULT '35px',
 						`label_fontsize` VARCHAR( 10 ) NOT NULL DEFAULT '1em',
 						`title_fontsize` VARCHAR( 10 ) NOT NULL DEFAULT '1.2em',
 						`field_fontsize` VARCHAR( 10 ) NOT NULL DEFAULT '1em',
@@ -128,21 +128,21 @@ if (!class_exists('CustomContactFormsDB')) {
 		
 		function insertForm($form_slug, $form_title, $form_action, $form_method, $submit_button_text, $custom_code, $form_style) {
 			global $wpdb;
-			if ($this->formSlugExists($form_slug)) return false;
+			if ($this->formSlugExists($this->formatSlug($form_slug))) return false;
 			$wpdb->insert($this->forms_table, array('form_slug' => $this->formatSlug($form_slug), 'form_title' => $this->encodeOption($form_title), 'form_action' => $this->encodeOption($form_action), 'form_method' => $form_method, 'submit_button_text' => $this->encodeOption($submit_button_text), 'form_style' => $form_style, 'custom_code' => $this->encodeOption($custom_code)));
 			return true;
 		}
 		
 		function insertField($field_slug, $field_label, $field_type, $field_value, $field_maxlength, $user_field) {
 			global $wpdb;
-			if ($this->fieldSlugExists($field_slug)) return false;
+			if ($this->fieldSlugExists($this->formatSlug($field_slug))) return false;
 			$wpdb->insert($this->fields_table, array('field_slug' => $this->formatSlug($field_slug), 'field_label' => $this->encodeOption($field_label), 'field_type' => $field_type, 'field_value' => $this->encodeOption($field_value), 'field_maxlength' => $this->encodeOption($field_maxlength), 'user_field' => $user_field));
 			return true;
 		}
 		
 		function insertStyle($style) {
 			global $wpdb;
-			if (empty($style) or empty($style[style_slug]) or $this->styleSlugExists($style[style_slug])) return false;
+			if (empty($style) or empty($style[style_slug]) or $this->styleSlugExists($this->formatSlug($style[style_slug]))) return false;
 			$style[style_slug] = $this->formatSlug($style[style_slug]);
 			foreach ($style as $key => $value) {
 				if ($key != 'style_slug')
@@ -237,7 +237,7 @@ if (!class_exists('CustomContactFormsDB')) {
 		
 		function selectForm($fid, $form_slug) {
 			global $wpdb;
-			$extra = (!empty($field_slug)) ? " or form_slug = '$form_slug'" : '';
+			$extra = (!empty($form_slug)) ? " or form_slug = '$form_slug'" : '';
 			return $wpdb->get_row("SELECT * FROM " . $this->forms_table . " WHERE id='$fid' $extra");
 		}
 		

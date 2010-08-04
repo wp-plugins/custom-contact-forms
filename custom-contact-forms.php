@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: VERSION 2.0.0 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
-	Version: 2.0.0
+	Version: 2.0.1
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
 	Contributors: Taylor Lovett
@@ -529,47 +529,47 @@ if (!class_exists('CustomContactForms')) {
             (Must be unique)</li>
           <li>
             <label for="title_fontsize">Title Font Size:</label>
-            <input type="text" maxlength="20" name="style[title_fontsize]" />
+            <input type="text" maxlength="20" value="1.2em" name="style[title_fontsize]" />
             (ex: 10pt, 10px, 1em)</li>
           <li>
             <label for="title_fontcolor">Title Font Color:</label>
-            <input type="text" maxlength="20" value="#" name="style[title_fontcolor]" />
+            <input type="text" maxlength="20" value="#333333" value="#" name="style[title_fontcolor]" />
             (ex: #FF0000 or red)</li>
           <li>
             <label for="label_width">Label Width:</label>
-            <input type="text" maxlength="20" name="style[label_width]" />
+            <input type="text" maxlength="20" value="110px" name="style[label_width]" />
             (ex: 100px or 20%)</li>
           <li>
             <label for="label_fontsize">Label Font Size:</label>
-            <input type="text" maxlength="20" name="style[label_fontsize]" />
+            <input type="text" maxlength="20" value="1em" name="style[label_fontsize]" />
             (ex: 10px, 10pt, 1em)</li>
           <li>
             <label for="label_fontcolor">Label Font Color:</label>
-            <input type="text" maxlength="20" value="#" name="style[label_fontcolor]" />
+            <input type="text" maxlength="20" value="#333333" name="style[label_fontcolor]" />
             (ex: #FF0000 or red)</li>
           <li>
             <label for="input_width">Text Field Width:</label>
-            <input type="text" maxlength="20" name="style[input_width]" />
+            <input type="text" maxlength="20" value="200px" name="style[input_width]" />
             (ex: 100px or 100%)</li>
           <li>
             <label for="textarea_width">Textarea Field Width:</label>
-            <input type="text" maxlength="20" name="style[textarea_width]" />
+            <input type="text" maxlength="20" value="200px" name="style[textarea_width]" />
             (ex: 100px or 100%)</li>
           <li>
             <label for="textarea_height">Textarea Field Height:</label>
-            <input type="text" maxlength="20" name="style[textarea_height]" />
+            <input type="text" maxlength="20" value="100px" name="style[textarea_height]" />
             (ex: 100px or 100%)</li>
           <li>
             <label for="field_fontsize">Field Font Size:</label>
-            <input type="text" maxlength="20" name="style[field_fontsize]" />
+            <input type="text" maxlength="20" value="1em" name="style[field_fontsize]" />
             (ex: 10px, 10pt, 1em</li>
           <li>
             <label for="field_fontcolor">Field Font Color:</label>
-            <input type="text" maxlength="20" value="#" name="style[field_fontcolor]" />
+            <input type="text" maxlength="20" value="#333333" name="style[field_fontcolor]" />
             (ex: 100px or 100%)</li>
           <li>
             <label for="field_borderstyle">Field Border Style:</label>
-            <select name="style[field_borderstyle]"><?php echo $border_style_options; ?></select>
+            <select name="style[field_borderstyle]"><?php echo str_replace('<option>solid</option>', '<option selected="selected">solid</option>', $border_style_options); ?></select>
             </li>
           <li>
             <label for="form_margin">Form Margin:</label>
@@ -583,47 +583,47 @@ if (!class_exists('CustomContactForms')) {
         <ul class="style_right">
           <li>
             <label for="input_width">Field Border Color:</label>
-            <input type="text" maxlength="20" value="#" name="style[field_bordercolor]" />
+            <input type="text" maxlength="20" value="#333333" name="style[field_bordercolor]" />
             (ex: 100px or 100%)</li>
           <li>
             <label for="form_borderstyle">Form Border Style:</label>
-            <select name="style[form_borderstyle]"><?php echo $border_style_options; ?></select>
+            <select name="style[form_borderstyle]"><?php echo str_replace('<option>solid</option>', '<option selected="selected">solid</option>', $border_style_options); ?></select>
             </li>
           <li>
             <label for="form_bordercolor">Form Border Color:</label>
-            <input type="text" maxlength="20" value="#" name="style[form_bordercolor]" />
+            <input type="text" maxlength="20" value="#333333" name="style[form_bordercolor]" />
             (ex: #00000 or red)</li>
           <li>
             <label for="form_borderwidth">Form Border Width:</label>
-            <input type="text" maxlength="20" name="style[form_borderwidth]" />
+            <input type="text" maxlength="20" value="1px" name="style[form_borderwidth]" />
             (ex: 1px)</li>
           <li>
             <label for="form_borderwidth">Form Width:</label>
-            <input type="text" maxlength="20" name="style[form_width]" />
+            <input type="text" maxlength="20" value="500px" name="style[form_width]" />
             (ex: 100px or 50%)</li>
           <li>
             <label for="form_borderwidth">Form Font Family:</label>
-            <input type="text" maxlength="150" name="style[form_fontfamily]" />
+            <input type="text" maxlength="150" value="Verdana, tahoma, arial" name="style[form_fontfamily]" />
             (ex: Verdana, Tahoma, Arial)</li>
           <li>
             <label for="submit_width">Button Width:</label>
-            <input type="text" maxlength="20" name="style[submit_width]" />
+            <input type="text" maxlength="20" value="80px" name="style[submit_width]" />
             (ex: 100px or 30%)</li>
           <li>
             <label for="submit_height">Button Height:</label>
-            <input type="text" maxlength="20" name="style[submit_height]" />
+            <input type="text" maxlength="20" value="35px" name="style[submit_height]" />
             (ex: 100px or 30%)</li>
           <li>
             <label for="submit_fontsize">Button Font Size:</label>
-            <input type="text" maxlength="20" name="style[submit_fontsize]" />
+            <input type="text" maxlength="20" value="1.1em" name="style[submit_fontsize]" />
             (ex: 10px, 10pt, 1em</li>
           <li>
             <label for="submit_fontcolor">Button Font Color:</label>
-            <input type="text" maxlength="20" value="#" name="style[submit_fontcolor]" />
+            <input type="text" maxlength="20" value="#333333" name="style[submit_fontcolor]" />
             (ex: #FF0000 or red)</li>
           <li>
             <label for="field_backgroundcolor">Field Background Color:</label>
-            <input type="text" maxlength="20" value="#" name="style[field_backgroundcolor]" />
+            <input type="text" maxlength="20" value="#efefef" name="style[field_backgroundcolor]" />
             (ex: #FF0000 or red)</li>
           <li>
             <label for="form_padding">Form Padding:</label>
@@ -861,7 +861,7 @@ if (!class_exists('CustomContactForms')) {
 				$errors = $this->getAllErrors();
 				if (empty($errors)) {
 					$body .= 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
-					$mailer = new CustomContactFormsMailer($admin_options[default_to_email], $admin_options[default_from_email], $admin_options[default_form_subject], $body);
+					$mailer = new CustomContactFormsMailer($admin_options[default_to_email], $admin_options[default_from_email], $admin_options[default_form_subject], stripslashes($body));
 					$mailer->send();
 					if (!empty($admin_options[custom_thank_you])) {
 						header("Location: " . $admin_options[custom_thank_you]);
