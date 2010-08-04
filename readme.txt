@@ -23,8 +23,11 @@ VERSION 2.0.0 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARA
 5. Configure the General Settings appropriately; this is important if you want to receive your web form messages!
 == Support ==
 For questions, feature requests, and support concerning the Custom Contact Forms plugin, please email me at:
-admin@taylorlovett.com
-I respond to emails same-day!
+admin@taylorlovett.com or visit http://www.taylorlovett.com and fill out my contact form.
+
+
+Official Bug Testers:
+Mark Lasserre - www.lasserre.us
 == Upgrade Notice ==
 Required fields option will be added in mid-August 2010
 == Change Log ==
