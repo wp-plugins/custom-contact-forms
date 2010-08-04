@@ -2,8 +2,8 @@
 /*
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
-	Description: Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
-	Version: 1.2.1
+	Description: VERSION 2.0.0 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
+	Version: 2.0.0
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
 	Contributors: Taylor Lovett
@@ -40,7 +40,7 @@ if (!class_exists('CustomContactForms')) {
 		
 		function getAdminOptions() {
 			$admin_email = get_option('admin_email');
-			$customcontactAdminOptions = array('show_widget_home' => 1, 'show_widget_pages' => 1, 'show_widget_singles' => 1, 'show_widget_categories' => 1, 'show_widget_archives' => 1, 'default_to_email' => $admin_email, 'default_from_email' => $admin_email, 'default_form_subject' => 'Someone Filled Out Your Contact Form!', 'custom_thank_you' => '', 'thank_you_message' => 'Thank you for filling out our form. We will respond to your inquiry ASAP.', 'remember_field_values' => 0); // defaults
+			$customcontactAdminOptions = array('show_widget_home' => 1, 'show_widget_pages' => 1, 'show_widget_singles' => 1, 'show_widget_categories' => 1, 'show_widget_archives' => 1, 'default_to_email' => $admin_email, 'default_from_email' => $admin_email, 'default_form_subject' => 'Someone Filled Out Your Contact Form!', 'custom_thank_you' => '', 'remember_field_values' => 0); // defaults
 			$customcontactOptions = get_option($this->adminOptionsName);
 			if (!empty($customcontactOptions)) {
 				foreach ($customcontactOptions as $key => $option)
@@ -73,6 +73,7 @@ if (!class_exists('CustomContactForms')) {
 				$form_options .= '<option value="'.$form->id.'"'.$sel.'>'.$form->form_slug.'</option>';
 			}
 			if (empty($form_options)) { ?>
+
 <p>Create a form in the Custom Contact Forms settings page.</p>
 <?php
 			} else {
@@ -119,7 +120,7 @@ if (!class_exists('CustomContactForms')) {
 		function printAdminPage() {
 			$admin_options = $this->getAdminOptions();
 			if ($_POST[form_create]) {
-				parent::insertForm($_POST[form_slug], $_POST[form_title], $_POST[form_action], $_POST[form_method], $_POST[submit_button_text], $_POST[custom_code]);
+				parent::insertForm($_POST[form_slug], $_POST[form_title], $_POST[form_action], $_POST[form_method], $_POST[submit_button_text], $_POST[custom_code], $_POST[form_style]);
 			} elseif ($_POST[field_create]) {
 				parent::insertField($_POST[field_slug], $_POST[field_label], $_POST[field_type], $_POST[field_value], $_POST[field_maxlength], 1);
 			} elseif ($_POST[general_settings]) {
@@ -132,7 +133,6 @@ if (!class_exists('CustomContactForms')) {
 				$admin_options[show_widget_archives] = $_POST[show_widget_archives];
 				$admin_options[show_widget_home] = $_POST[show_widget_home];
 				$admin_options[custom_thank_you] = $_POST[custom_thank_you];
-				$admin_options[thank_you_message] = $_POST[thank_you_message];
 				update_option($this->adminOptionsName, $admin_options);
 			} elseif ($_POST[field_edit]) {
 				parent::updateField($_POST[field_slug], $_POST[field_label], $_POST[field_type], $_POST[field_value], $_POST[field_maxlength], $_POST[fid]);
@@ -141,27 +141,26 @@ if (!class_exists('CustomContactForms')) {
 			} elseif ($_POST[form_delete]) {
 				parent::deleteForm($_POST[fid]);
 			} elseif ($_POST[form_edit]) {
-				parent::updateForm($_POST[form_slug], $_POST[form_title], $_POST[form_action], $_POST[form_method], $_POST[submit_button_text], $_POST[custom_code], $_POST[fid]);
+				parent::updateForm($_POST[form_slug], $_POST[form_title], $_POST[form_action], $_POST[form_method], $_POST[submit_button_text], $_POST[custom_code], $_POST[form_style], $_POST[fid]);
 			} elseif ($_POST[form_add_field]) {
 				parent::addFieldToForm($_POST[field_id], $_POST[fid]);
 			} elseif ($_POST[disattach_field]) {
 				parent::disattachField($_POST[disattach_field_id], $_POST[fid]);
+			}  elseif ($_POST[style_create]) {
+				parent::insertStyle($_POST[style]);
+			}  elseif ($_POST[style_edit]) {
+				parent::updateStyle($_POST[style]);
+			}  elseif ($_POST[style_delete]) {
+				parent::deleteStyle($_POST[style][id]);
 			}
+			$styles = parent::selectAllStyles();
+			$style_options = '<option value="0">None</option>';
+			foreach ($styles as $style)
+				$style_options .= '<option value="'.$style->id.'">'.$style->style_slug.'</option>';
 			?>
 <div id="customcontactforms-admin">
   <div id="icon-themes" class="icon32"></div>
   <h2>Custom Contact Forms</h2>
-  <div id="upgrade">
-  	<p>Want to <i>change the appearance of your forms</i> with a simple to use manager? The Style Manager allows style every aspect of your form: <b>Change form border style, form border width, form width, form font family, title font size, title font color, text field width, text field border color, text field font size, text field font color, submit button width/height, submit button font color, and more!</b></p>
-  <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="E7YXZBHN24R7S">
-<p class="head center">Upgrade to the Pro Version for $4.99 USD:</p>
-<input style="margin-left:400px;" type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-</form>
-
-  </div>
   <div id="create-fields" class="postbox">
     <h3 class="hndle"><span>Create A Form Field</span></h3>
     <div class="inside">
@@ -223,6 +222,10 @@ if (!class_exists('CustomContactForms')) {
             <label for="form_action">Form Action:</label>
             <input type="text" name="form_action" value="" />
             (If unsure, leave blank.)</li>
+          <li>
+            <label for="form_action">Form Style:</label>
+            <select name="form_style"><?php echo $style_options; ?></select>
+            (<a href="#styles">Click to create a style</a>)</li>
           <li>
             <label for="submit_button_text">Submit Button Text:</label>
             <input type="text" maxlength="200" name="submit_button_text" />
@@ -338,7 +341,7 @@ if (!class_exists('CustomContactForms')) {
     </tfoot>
   </table>
   <h3 class="manage-h3">Manage Forms</h3>
-  <table class="widefat post" id="manage-fields" cellspacing="0">
+  <table class="widefat post" id="manage-forms" cellspacing="0">
     <thead>
       <tr>
         <th scope="col" class="manage-column form-slug">Slug</th>
@@ -347,7 +350,7 @@ if (!class_exists('CustomContactForms')) {
         <th scope="col" class="manage-column form-action">Form Action</th>
         <th scope="col" class="manage-column form-submit">Button Text</th>
         <th scope="col" class="manage-column form-submit">Custom Code</th>
-        <th scope="col" class="manage-column field-action">Action</th>
+        <th scope="col" class="manage-column form-submit">Style</th>
       </tr>
     </thead>
     <tbody>
@@ -357,6 +360,8 @@ if (!class_exists('CustomContactForms')) {
                     $form_methods = '<option>Post</option><option>Get</option>';
                     $form_methods = str_replace('<option>'.$forms[$i]->form_method.'</option>',  '<option selected="selected">'.$forms[$i]->form_method.'</option>', $form_methods);
                     $add_fields = $this->getFieldsForm();
+					$this_style = parent::selectStyle($forms[$i]->form_style, '');
+					$sty_opt = str_replace('<option value="'.$forms[$i]->form_style.'">'.$this_style->style_slug.'</option>', '<option value="'.$forms[$i]->form_style.'" selected="selected">'.$this_style->style_slug.'</option>', $style_options);
                 ?>
       <tr class="<?php if ($i % 2 == 0) echo 'evenrow'; ?>">
         <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -368,14 +373,10 @@ if (!class_exists('CustomContactForms')) {
           <td><input class="width125" type="text" name="form_action" value="<?php echo $forms[$i]->form_action; ?>" /></td>
           <td><input class="width125" type="text" name="submit_button_text" value="<?php echo $forms[$i]->submit_button_text; ?>" /></td>
           <td><input type="text" class="width125" name="custom_code" value="<?php echo $forms[$i]->custom_code; ?>" /></td>
-          <td style="text-align:right"><input type="hidden" name="fid" value="<?php echo $forms[$i]->id; ?>" />
-            <input type="submit" name="form_edit" value="Edit" />
-            <input type="submit" name="form_delete" value="Delete" /></td>
-        </form>
+          <td><select name="form_style"><?php echo $sty_opt; ?></select></td>
       </tr>
       <tr class="<?php if ($i % 2 == 0) echo 'evenrow'; ?>">
-        <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
-          <td colspan="7"><div class="attached_fields">
+          <td colspan="8"><div class="attached_fields">
               <label><span>Attached Fields:</span></label>
               <?php
                     $attached_fields = parent::getAttachedFieldsArray($forms[$i]->id);
@@ -401,14 +402,27 @@ if (!class_exists('CustomContactForms')) {
               <input type="submit" name="form_add_field" value="Attach" />
               <input type="hidden" name="fid" value="<?php echo $forms[$i]->id; ?>" />
               <br />
-              <span class="red bold">*</span> Attach in the order you want fields to display. </div></td>
+              <span class="red bold">*</span> Attach in the order you want fields to display. </div>
+              <div class="actions">
+              	<input type="hidden" name="fid" value="<?php echo $forms[$i]->id; ?>" />
+            	<input type="submit" name="form_edit" value="Edit Form" />
+            	<input type="submit" name="form_delete" value="Delete Form" />
+              </div>
+              <!--<div class="attach_styles">
+              	<label for="attach_styles"><span>Form Style:</span> </label> <select name="attach_styles"><option>really long style name</option></select>
+                <input type="submit" value="Attach" name="attach_styles" /><br />
+                <span class="red bold">*</span> Create form styles at the bottom of the page, and use them to change your forms appearance.
+              </div>-->
+              </td>
         </form>
       </tr>
       <?php
                 }
 				$remember_check = ($admin_options[remember_field_values] == 0) ? 'selected="selected"' : '';
 				$remember_fields = '<option value="1">Yes</option><option '.$remember_check.' value="0">No</option>';
-				
+				$border_style_options = '<option>solid</option><option>dashed</option>
+            <option>grooved</option><option>double</option><option>dotted</option><option>ridged</option><option>none</option>
+            <option>inset</option><option>outset</option>';
                 ?>
     </tbody>
     <tfoot>
@@ -420,7 +434,7 @@ if (!class_exists('CustomContactForms')) {
         <th scope="col" class="manage-column form-action">Form Action</th>
         <th scope="col" class="manage-column form-submit">Button Text</th>
         <th scope="col" class="manage-column form-submit">Custom Code</th>
-        <th scope="col" class="manage-column field-action">Action</th>
+        <th scope="col" class="manage-column form-submit">Style</th>
       </tr>
       </tr>
       
@@ -450,19 +464,15 @@ if (!class_exists('CustomContactForms')) {
             <label for="custom_thank_you">Custom Thank You Page:</label>
             <input name="custom_thank_you" value="<?php echo $admin_options[custom_thank_you]; ?>" type="text" maxlength="150" />
           </li>
-          <li class="descrip">Leaving this blank will show the default thank you message on form completion.</li>
+          <li class="descrip">Upon filling out forms, users will be sent back to the form page if this is left blank.</li>
           
           <li>
             <label for="remember_field_values">Remember Field Values:</label>
             <select name="remember_field_values"><?php echo $remember_fields; ?></select>
           </li>
           <li class="descrip">Setting this to blank will have fields remember how they were last filled out.</li>
-          
-           <li>
-            <label for="thank_you_message">Default Thank You Message:</label><br />
-            <textarea rows="6" cols="47" name="thank_you_message"><?php echo $admin_options[thank_you_message]; ?></textarea>
-          </li>
-          <li class="descrip">This thank you message is shown when a custom.</li>
+
+          <li class="descrip">This thank you message is shown when the custom thank you page is left empty.</li>
           <li class="show-widget">Show Sidebar Widget:</li>
           <li>
             <label>
@@ -504,8 +514,215 @@ if (!class_exists('CustomContactForms')) {
       <p>3. Display those forms in posts and pages by inserting the code: [customcontact form=<b>FORMID</b>]. Replace <b>FORMID</b> with the id listed to the left of the form slug next to the form of your choice above.</p>
       <p>4. Add a form to your sidebar, by dragging the Custom Contact Form widget in to your sidebar.</p>
       <p>5. Configure the General Settings appropriately; this is important if you want to receive your web form messages!</p>
+      <p>6. Create form styles to change your forms appearances. The image below explains how each style field can change the look of your forms.</p>
     </div>
   </div>
+  <div id="style-example"></div>
+  <div id="create-styles" class="postbox">
+    <h3 class="hndle"><span>Create A Style for Your Forms<a name="styles"></a></span></h3>
+    <div class="inside">
+      <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+        <ul class="style_left">
+          <li>
+            <label for="style_slug">Style Slug:</label>
+            <input type="text" maxlength="30" name="style[style_slug]" />
+            (Must be unique)</li>
+          <li>
+            <label for="title_fontsize">Title Font Size:</label>
+            <input type="text" maxlength="20" name="style[title_fontsize]" />
+            (ex: 10pt, 10px, 1em)</li>
+          <li>
+            <label for="title_fontcolor">Title Font Color:</label>
+            <input type="text" maxlength="20" value="#" name="style[title_fontcolor]" />
+            (ex: #FF0000 or red)</li>
+          <li>
+            <label for="label_width">Label Width:</label>
+            <input type="text" maxlength="20" name="style[label_width]" />
+            (ex: 100px or 20%)</li>
+          <li>
+            <label for="label_fontsize">Label Font Size:</label>
+            <input type="text" maxlength="20" name="style[label_fontsize]" />
+            (ex: 10px, 10pt, 1em)</li>
+          <li>
+            <label for="label_fontcolor">Label Font Color:</label>
+            <input type="text" maxlength="20" value="#" name="style[label_fontcolor]" />
+            (ex: #FF0000 or red)</li>
+          <li>
+            <label for="input_width">Text Field Width:</label>
+            <input type="text" maxlength="20" name="style[input_width]" />
+            (ex: 100px or 100%)</li>
+          <li>
+            <label for="textarea_width">Textarea Field Width:</label>
+            <input type="text" maxlength="20" name="style[textarea_width]" />
+            (ex: 100px or 100%)</li>
+          <li>
+            <label for="textarea_height">Textarea Field Height:</label>
+            <input type="text" maxlength="20" name="style[textarea_height]" />
+            (ex: 100px or 100%)</li>
+          <li>
+            <label for="field_fontsize">Field Font Size:</label>
+            <input type="text" maxlength="20" name="style[field_fontsize]" />
+            (ex: 10px, 10pt, 1em</li>
+          <li>
+            <label for="field_fontcolor">Field Font Color:</label>
+            <input type="text" maxlength="20" value="#" name="style[field_fontcolor]" />
+            (ex: 100px or 100%)</li>
+          <li>
+            <label for="field_borderstyle">Field Border Style:</label>
+            <select name="style[field_borderstyle]"><?php echo $border_style_options; ?></select>
+            </li>
+          <li>
+            <label for="form_margin">Form Margin:</label>
+            <input type="text" maxlength="20" value="5px" name="style[form_margin]" />
+            (ex: 5px or 1em)</li>
+          <li>
+            <label for="label_margin">Label Margin:</label>
+            <input type="text" maxlength="20" value="4px" name="style[label_margin]" />
+            (ex: 5px or 1em)</li>
+        </ul>
+        <ul class="style_right">
+          <li>
+            <label for="input_width">Field Border Color:</label>
+            <input type="text" maxlength="20" value="#" name="style[field_bordercolor]" />
+            (ex: 100px or 100%)</li>
+          <li>
+            <label for="form_borderstyle">Form Border Style:</label>
+            <select name="style[form_borderstyle]"><?php echo $border_style_options; ?></select>
+            </li>
+          <li>
+            <label for="form_bordercolor">Form Border Color:</label>
+            <input type="text" maxlength="20" value="#" name="style[form_bordercolor]" />
+            (ex: #00000 or red)</li>
+          <li>
+            <label for="form_borderwidth">Form Border Width:</label>
+            <input type="text" maxlength="20" name="style[form_borderwidth]" />
+            (ex: 1px)</li>
+          <li>
+            <label for="form_borderwidth">Form Width:</label>
+            <input type="text" maxlength="20" name="style[form_width]" />
+            (ex: 100px or 50%)</li>
+          <li>
+            <label for="form_borderwidth">Form Font Family:</label>
+            <input type="text" maxlength="150" name="style[form_fontfamily]" />
+            (ex: Verdana, Tahoma, Arial)</li>
+          <li>
+            <label for="submit_width">Button Width:</label>
+            <input type="text" maxlength="20" name="style[submit_width]" />
+            (ex: 100px or 30%)</li>
+          <li>
+            <label for="submit_height">Button Height:</label>
+            <input type="text" maxlength="20" name="style[submit_height]" />
+            (ex: 100px or 30%)</li>
+          <li>
+            <label for="submit_fontsize">Button Font Size:</label>
+            <input type="text" maxlength="20" name="style[submit_fontsize]" />
+            (ex: 10px, 10pt, 1em</li>
+          <li>
+            <label for="submit_fontcolor">Button Font Color:</label>
+            <input type="text" maxlength="20" value="#" name="style[submit_fontcolor]" />
+            (ex: #FF0000 or red)</li>
+          <li>
+            <label for="field_backgroundcolor">Field Background Color:</label>
+            <input type="text" maxlength="20" value="#" name="style[field_backgroundcolor]" />
+            (ex: #FF0000 or red)</li>
+          <li>
+            <label for="form_padding">Form Padding:</label>
+            <input type="text" maxlength="20" value="5px" name="style[form_padding]" />
+            (ex: 5px or 1em)</li>
+            <li>
+            <label for="title_margin">Title Margin:</label>
+            <input type="text" maxlength="20" value="2px" name="style[title_margin]" />
+            (ex: 5px or 1em)</li>
+          <li>
+            <input type="submit" value="Create Style" name="style_create" />
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+  <h3 class="manage-h3">Manage Form Styles</h3>
+  <table class="widefat post" id="manage-styles" cellspacing="0">
+    <thead>
+      <tr>
+        <th scope="col" class="manage-column"></th>
+        <th scope="col" class="manage-column"></th>
+        <th scope="col" class="manage-column"></th>
+        <th scope="col" class="manage-column"></th>
+        <th scope="col" class="manage-column"></th>
+        <th scope="col" class="manage-column"></th>
+      </tr>
+    </thead>
+    <tbody>
+	<?php
+	$styles = parent::selectAllStyles();
+	$i = 0;
+	foreach ($styles as $style) {
+		?>
+		<tr class="<?php if ($i % 2 == 0) echo 'evenrow'; ?>">
+        <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+        	<td><label>Slug:</label> <input type="text" maxlength="30" value="<?php echo $style->style_slug; ?>" name="style[style_slug]" /><br />
+            <label>Font Family:</label><input type="text" maxlength="20" value="<?php echo $style->form_fontfamily; ?>" name="style[form_fontfamily]" /><br />
+            <input type="submit" class="submit-styles" name="style_edit" value="Update Style" /><br />
+            <input type="submit" class="submit-styles" name="style_delete" value="Delete Style" />
+            </td>
+            
+            <td>
+            <label>Form Width:</label><input type="text" maxlength="20" value="<?php echo $style->form_width; ?>" name="style[form_width]" /><br />
+            <label>Text Field Width:</label><input type="text" maxlength="20" value="<?php echo $style->input_width; ?>" name="style[input_width]" /><br />
+            <label>Textarea Width:</label><input type="text" maxlength="20" value="<?php echo $style->textarea_width; ?>" name="style[textarea_width]" /><br />
+            <label>Textarea Height:</label><input type="text" maxlength="20" value="<?php echo $style->textarea_height; ?>" name="style[textarea_height]" /><br />
+            <label>Label Margin:</label><input type="text" maxlength="20" value="<?php echo $style->label_margin; ?>" name="style[label_margin]" />
+            </td>
+            <td>
+            <label>Label Width:</label><input type="text" maxlength="20" value="<?php echo $style->label_width; ?>" name="style[label_width]" /><br />
+            <label>Button Width:</label><input type="text" maxlength="20" value="<?php echo $style->submit_width; ?>" name="style[submit_width]" /><br />
+            <label>Button Height:</label><input type="text" maxlength="20" value="<?php echo $style->submit_height; ?>" name="style[submit_height]" /><br />
+            <label>Field Background Color:</label><input type="text" maxlength="20" value="<?php echo $style->field_backgroundcolor; ?>" name="style[field_backgroundcolor]" /><br />
+            <label>Title Margin:</label><input type="text" maxlength="20" value="<?php echo $style->title_margin; ?>" name="style[title_margin]" /><br />
+            </td>
+            
+            <td>
+            <label>Title Font Size:</label><input type="text" maxlength="20" value="<?php echo $style->title_fontsize; ?>" name="style[title_fontsize]" /><br />
+            <label>Label Font Size:</label><input type="text" maxlength="20" value="<?php echo $style->label_fontsize; ?>" name="style[label_fontsize]" /><br />
+            <label>Field Font Size:</label><input type="text" maxlength="20" value="<?php echo $style->field_fontsize; ?>" name="style[field_fontsize]" /><br />
+            <label>Button Font Size:</label><input type="text" maxlength="20" value="<?php echo $style->submit_fontsize; ?>" name="style[submit_fontsize]" /><br />
+            <label>Form Padding:</label><input type="text" maxlength="20" value="<?php echo $style->form_padding; ?>" name="style[form_padding]" /><br />
+            </td>
+            
+            <td>
+            <label>Title Font Color:</label><input type="text" maxlength="20" value="<?php echo $style->title_fontcolor; ?>" name="style[title_fontcolor]" /><br />
+            <label>Label Font Color:</label><input type="text" maxlength="20" value="<?php echo $style->label_fontcolor; ?>" name="style[label_fontcolor]" /><br />
+            <label>Field Font Color:</label><input type="text" maxlength="20" value="<?php echo $style->field_fontcolor; ?>" name="style[field_fontcolor]" /><br />
+            <label>Button Font Color:</label><input type="text" maxlength="20" value="<?php echo $style->submit_fontcolor; ?>" name="style[submit_fontcolor]" /><br />
+            <label>Form Margin:</label><input type="text" maxlength="20" value="<?php echo $style->form_margin; ?>" name="style[form_margin]" /><br />
+            </td>
+            
+            <td><label>Form Border Style:</label><select name="style[form_borderstyle]"><?php echo str_replace('<option>'.$style->form_borderstyle.'</option>', '<option selected="selected">'.$style->form_borderstyle.'</option>', $border_style_options); ?></select><br />
+            <label>Form Border Width:</label><input type="text" maxlength="20" value="<?php echo $style->form_borderwidth; ?>" name="style[form_borderwidth]" /><br />
+            <label>Form Border Color:</label><input type="text" maxlength="20" value="<?php echo $style->form_bordercolor; ?>" name="style[form_bordercolor]" /><br />
+            <label>Field Border Color:</label><input type="text" maxlength="20" value="<?php echo $style->field_bordercolor; ?>" name="style[field_bordercolor]" />
+            <label>Field Border Style:</label><select name="style[field_borderstyle]"><?php echo str_replace('<option>'.$style->field_borderstyle.'</option>', '<option selected="selected">'.$style->field_borderstyle.'</option>', $border_style_options); ?></select>
+            <input name="style[id]" type="hidden" value="<?php echo $style->id; ?>" />
+            </td>
+         
+        </form>
+        </tr>
+        <?php
+		$i++;
+	}
+	?>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th scope="col" class="manage-column"></th>
+        <th scope="col" class="manage-column"></th>
+        <th scope="col" class="manage-column"></th>
+        <th scope="col" class="manage-column"></th>
+        <th scope="col" class="manage-column"></th>
+        <th scope="col" class="manage-column"></th>
+      </tr>
+    </tfoot>
+  </table>
 </div>
 <?php
 		}
@@ -553,9 +770,24 @@ if (!class_exists('CustomContactForms')) {
 			$this->startSession();
 			$admin_options = $this->getAdminOptions();
 			$form = parent::selectForm($fid, '');
-			$class = (!$is_sidebar) ? 'customcontactform' : 'customcontactform-sidebar';
+			$out = '';
+			$class = (!$is_sidebar) ? ' class="customcontactform"' : ' class="customcontactform-sidebar"';
+			if ($form->form_style != 0) {
+				$style = parent::selectStyle($form->form_style, '');
+				$class = ' class="'.$style->style_slug.'"';
+				$out .= '<style type="text/css">' . "\n";
+				$out .= '.' . $style->style_slug . " { width: ".$style->form_width."; padding:".$style->form_padding."; margin:".$style->form_margin."; border:".$style->form_borderwidth." ".$style->form_borderstyle." ".$style->form_bordercolor."; font-family:".$style->form_fontfamily."; }\n";
+				$out .= '.' . $style->style_slug . " ul { list-style-type:none; padding:0; margin:0; }\n";
+				$out .= '.' . $style->style_slug . " h4 { padding:0; margin:".$style->title_margin." ".$style->title_margin." ".$style->title_margin." 0; color:".$style->title_fontcolor."; font-size:".$style->title_fontsize."; } \n";
+				$out .= '.' . $style->style_slug . " label { padding:0; margin:".$style->label_margin." ".$style->label_margin." ".$style->label_margin." 0; display:block; color:".$style->label_fontcolor."; width:".$style->label_width."; font-size:".$style->label_fontsize."; } \n";
+				$out .= '.' . $style->style_slug . " input[type=text] { color:".$style->field_fontcolor."; margin:0 0 .4em 0; width:".$style->input_width."; font-size:".$style->field_fontsize."; background-color:".$style->field_backgroundcolor."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
+				$out .= '.' . $style->style_slug . " .submit { color:".$style->submit_fontcolor."; width:".$style->submit_width."; height:".$style->submit_height."; font-size:".$style->submit_fontsize."; } \n";
+				$out .= '.' . $style->style_slug . " textarea { color:".$style->field_fontcolor."; width:".$style->textarea_width."; margin:0 0 .4em 0; height:".$style->textarea_height."; font-size:".$style->field_fontsize."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
+				$out .= '</style>' . "\n";
+				
+			}
 			$action = (!empty($form->form_action)) ? $form->form_action : get_permalink();
-			$out = '<form method="'.strtolower($form->form_method).'" action="'.$action.'" class="'.$class.'">' . "\n";
+			$out .= '<form method="'.strtolower($form->form_method).'" action="'.$action.'"'.$class.'>' . "\n";
 			$out .= parent::decodeOption($form->custom_code, 1, 1) . '<h4>' . parent::decodeOption($form->form_title, 1, 1) . '</h4>' . "\n" . '<ul>';
 			$fields = parent::getAttachedFieldsArray($fid);
 			$hiddens = '';
