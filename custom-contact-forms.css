@@ -69,17 +69,14 @@ form.customcontactform-sidebar ul li input[type=text], form.customcontactform-si
 	width:90%;
 	font-size:12px;
 }
-
 /* ------------------ custom contact forms admin panel ---------------- */
 #customcontactforms-admin {
 	vertical-align:top;
 	margin:1em 0 30px 25px;
 }
-
 #customcontactforms-admin input, textarea, select {
 	font-size:1em;
 }
-
 #customcontactforms-admin .icon32 {
 	margin:-6px 6px 9px 5px;
 }
@@ -123,19 +120,15 @@ form.customcontactform-sidebar ul li input[type=text], form.customcontactform-si
 	width:1000px;
 	margin:20px 1em 1em 5px;
 }
-
 #customcontactforms-admin #manage-styles {
 	width:1000px;
 }
-
 #customcontactforms-admin #manage-styles label {
 	display:block;
 }
-
 #customcontactforms-admin #manage-styles input[type=text], #customcontactforms-admin #manage-styles select, #customcontactforms-admin #manage-styles textarea {
 	width:80px;
 }
-
 #customcontactforms-admin #create-styles .style_left { float:left; width:48% }
 #customcontactforms-admin #create-styles .style_right { float:right; width:48%; clear:none }
 #customcontactforms-admin #general-settings form ul li.descrip {
@@ -171,7 +164,6 @@ form.customcontactform-sidebar ul li input[type=text], form.customcontactform-si
 #customcontactforms-admin #manage-fields {
 	width:1000px;
 }
-
 #customcontactforms-admin #manage-forms {
 	width:1000px;
 	margin-right:10px;

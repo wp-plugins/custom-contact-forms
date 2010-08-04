@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: VERSION 2.0.0 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
-	Version: 2.0.1
+	Version: 2.0.2
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
 	Contributors: Taylor Lovett
@@ -777,7 +777,7 @@ if (!class_exists('CustomContactForms')) {
 				$class = ' class="'.$style->style_slug.'"';
 				$out .= '<style type="text/css">' . "\n";
 				$out .= '.' . $style->style_slug . " { width: ".$style->form_width."; padding:".$style->form_padding."; margin:".$style->form_margin."; border:".$style->form_borderwidth." ".$style->form_borderstyle." ".$style->form_bordercolor."; font-family:".$style->form_fontfamily."; }\n";
-				$out .= '.' . $style->style_slug . " ul { list-style-type:none; padding:0; margin:0; }\n";
+				$out .= '.' . $style->style_slug . " div { padding:0; margin:0; }\n";
 				$out .= '.' . $style->style_slug . " h4 { padding:0; margin:".$style->title_margin." ".$style->title_margin." ".$style->title_margin." 0; color:".$style->title_fontcolor."; font-size:".$style->title_fontsize."; } \n";
 				$out .= '.' . $style->style_slug . " label { padding:0; margin:".$style->label_margin." ".$style->label_margin." ".$style->label_margin." 0; display:block; color:".$style->label_fontcolor."; width:".$style->label_width."; font-size:".$style->label_fontsize."; } \n";
 				$out .= '.' . $style->style_slug . " input[type=text] { color:".$style->field_fontcolor."; margin:0 0 .4em 0; width:".$style->input_width."; font-size:".$style->field_fontsize."; background-color:".$style->field_backgroundcolor."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
@@ -788,7 +788,7 @@ if (!class_exists('CustomContactForms')) {
 			}
 			$action = (!empty($form->form_action)) ? $form->form_action : get_permalink();
 			$out .= '<form method="'.strtolower($form->form_method).'" action="'.$action.'"'.$class.'>' . "\n";
-			$out .= parent::decodeOption($form->custom_code, 1, 1) . '<h4>' . parent::decodeOption($form->form_title, 1, 1) . '</h4>' . "\n" . '<ul>';
+			$out .= parent::decodeOption($form->custom_code, 1, 1) . '<h4>' . parent::decodeOption($form->form_title, 1, 1) . '</h4>' . "\n" . '<div>';
 			$fields = parent::getAttachedFieldsArray($fid);
 			$hiddens = '';
 			foreach ($fields as $field_id) {
@@ -800,19 +800,19 @@ if (!class_exists('CustomContactForms')) {
 						$field_value = $_SESSION[fields][$field->field_slug];
 				}
 				if ($field->user_field == 0 && $field->field_slug == 'captcha') {
-					$out .= '<li>' . $this->getCaptchaCode() . '</li>';
+					$out .= '<p>' . $this->getCaptchaCode() . '</p>';
 				} elseif ($field->field_type == 'Text') {
 					$maxlength = (empty($field->field_maxlength) or $field->field_maxlength <= 0) ? '' : ' maxlength="'.$field->field_maxlength.'"';
-					$out .= '<li><label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'.parent::decodeOption($field->field_label, 1, 1).'</label><input '.$input_id.' type="text" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'"'.$maxlength.' /></li>' . "\n";
+					$out .= '<p><label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'.parent::decodeOption($field->field_label, 1, 1).'</label><input '.$input_id.' type="text" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'"'.$maxlength.' /></p>' . "\n";
 				} elseif ($field->field_type == 'Hidden') {
-					$hiddens .= '<li><input type="hidden" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'" '.$input_id.' /></li>' . "\n";
+					$hiddens .= '<p><input type="hidden" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'" '.$input_id.' /></p>' . "\n";
 				} elseif ($field->field_type == 'Checkbox') {
-					$out .= '<li><input type="checkbox" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.parent::decodeOption($field->field_value, 1, 1).'" '.$input_id.' /> <label class="checkbox" for="'.parent::decodeOption($field->field_slug, 1, 1).'">'.parent::decodeOption($field->field_label, 1, 1).'</label></li>' . "\n";
+					$out .= '<p><input type="checkbox" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.parent::decodeOption($field->field_value, 1, 1).'" '.$input_id.' /> <label class="checkbox" for="'.parent::decodeOption($field->field_slug, 1, 1).'">'.parent::decodeOption($field->field_label, 1, 1).'</label></p>' . "\n";
 				} elseif ($field->field_type == 'Textarea') {
-					$out .= '<li><label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'.parent::decodeOption($field->field_label, 1, 1).'</label><textarea '.$input_id.' rows="5" cols="40" name="'.parent::decodeOption($field->field_slug, 1, 1).'">'.$field_value.'</textarea></li>' . "\n";
+					$out .= '<p><label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'.parent::decodeOption($field->field_label, 1, 1).'</label><textarea '.$input_id.' rows="5" cols="40" name="'.parent::decodeOption($field->field_slug, 1, 1).'">'.$field_value.'</textarea></p>' . "\n";
 				}
 			}
-			$out .= '</ul>'."\n".'<p><input name="form_page" value="'.$_SERVER['REQUEST_URI'].'" type="hidden" /><input type="hidden" name="fid" value="'.$form->id.'" />'."\n".$hiddens."\n".'<input type="submit" class="submit" value="' . parent::decodeOption($form->submit_button_text, 1, 0) . '" name="customcontactforms_submit" /></p>' . "\n" . '</form>';
+			$out .= '</div>'."\n".'<p><input name="form_page" value="'.$_SERVER['REQUEST_URI'].'" type="hidden" /><input type="hidden" name="fid" value="'.$form->id.'" />'."\n".$hiddens."\n".'<input type="submit" class="submit" value="' . parent::decodeOption($form->submit_button_text, 1, 0) . '" name="customcontactforms_submit" /></p>' . "\n" . '</form>';
 			return $out . $this->wheresWaldo();
 		}
 		
