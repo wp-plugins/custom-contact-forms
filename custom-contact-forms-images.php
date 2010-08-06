@@ -12,6 +12,7 @@ if (!class_exists('CustomContactFormsImages')) {
 			$textcolor = imagecolorallocate($src, 10, 0, 0);
 			imagestring($src, 14, 5, 1, $str, $textcolor);
 			imagecopyresampled($image, $src, 0, 0, 0, 0, 96, 24, 63, 18);
+			//header('Content-Type: image/gif');
 			imagepng($image);
 			imagedestroy($image);
 			imagedestroy($src);
