@@ -2,8 +2,8 @@
 /*
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
-	Description: VERSION 2.0.0 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
-	Version: 2.0.1
+	Description: VERSION 2.0.3 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
+	Version: 2.0.3
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
 	Contributors: Taylor Lovett
@@ -780,7 +780,7 @@ if (!class_exists('CustomContactForms')) {
 				$out .= '.' . $style->style_slug . " div { padding:0; margin:0; }\n";
 				$out .= '.' . $style->style_slug . " h4 { padding:0; margin:".$style->title_margin." ".$style->title_margin." ".$style->title_margin." 0; color:".$style->title_fontcolor."; font-size:".$style->title_fontsize."; } \n";
 				$out .= '.' . $style->style_slug . " label { padding:0; margin:".$style->label_margin." ".$style->label_margin." ".$style->label_margin." 0; display:block; color:".$style->label_fontcolor."; width:".$style->label_width."; font-size:".$style->label_fontsize."; } \n";
-				$out .= '.' . $style->style_slug . " label.checkbox { display:inline; }; ";
+				$out .= '.' . $style->style_slug . " label.checkbox { display:inline; }; \n";
 				$out .= '.' . $style->style_slug . " input[type=text] { color:".$style->field_fontcolor."; margin:0 0 .4em 0; width:".$style->input_width."; font-size:".$style->field_fontsize."; background-color:".$style->field_backgroundcolor."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
 				$out .= '.' . $style->style_slug . " .submit { color:".$style->submit_fontcolor."; width:".$style->submit_width."; height:".$style->submit_height."; font-size:".$style->submit_fontsize."; } \n";
 				$out .= '.' . $style->style_slug . " textarea { color:".$style->field_fontcolor."; width:".$style->textarea_width."; margin:0 0 .4em 0; height:".$style->textarea_height."; font-size:".$style->field_fontsize."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
