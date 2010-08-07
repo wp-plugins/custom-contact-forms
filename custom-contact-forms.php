@@ -2,8 +2,8 @@
 /*
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
-	Description: VERSION 2.0.3 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
-	Version: 2.0.3
+	Description: VERSION 2.1.0 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
+	Version: 2.1.0
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
 	Contributors: Taylor Lovett
@@ -28,10 +28,10 @@ if (!class_exists('CustomContactForms')) {
 	class CustomContactForms extends CustomContactFormsDB {
 		var $adminOptionsName = 'customContactFormsAdminOptions';
 		var $widgetOptionsName = 'widget_customContactForms';
-		var $version = '1.1.0';
+		var $version = '2.1.0';
 		var $errors;
 		var $error_return;
-		var $fixed_fields = array('customcontactforms_submit', 'fid', 'form_page', 'captcha');
+		var $fixed_fields = array('customcontactforms_submit', 'fid', 'form_page', 'captcha', 'ishuman');
 		
 		function CustomContactForms() {
 			parent::CustomContactFormsDB();
@@ -73,7 +73,6 @@ if (!class_exists('CustomContactForms')) {
 				$form_options .= '<option value="'.$form->id.'"'.$sel.'>'.$form->form_slug.'</option>';
 			}
 			if (empty($form_options)) { ?>
-
 <p>Create a form in the Custom Contact Forms settings page.</p>
 <?php
 			} else {
@@ -319,8 +318,21 @@ if (!class_exists('CustomContactForms')) {
           <td><input type="text" name="field_label" maxlength="100" value="<?php echo $fields[$i]->field_label; ?>" /></td>
           <td><?php echo $fields[$i]->field_type; ?>
             <input type="hidden" name="field_type" value="<?php echo $fields[$i]->field_type; ?>" /></td>
-          <td><input type="text" name="field_value" maxlength="50" value="<?php echo $fields[$i]->field_value; ?>" /></td>
-          <td><input type="text" class="width50" name="field_maxlength" value="<?php echo $fields[$i]->field_maxlength; ?>" /></td>
+          <td><?php if ($fields[$i]->field_type != 'Checkbox') { ?>
+          	<input type="text" name="field_value" maxlength="50" value="<?php echo $fields[$i]->field_value; ?>" />
+          <?php } else {
+          	echo $fields[$i]->field_value;
+			?>
+            <input type="hidden" name="field_value" value="1" />
+          <?php } ?>
+          </td>
+          <td><?php if ($fields[$i]->field_type != 'Checkbox') { ?>
+          	<input type="text" class="width50" name="field_maxlength" value="<?php echo $fields[$i]->field_maxlength; ?>" />
+          <?php } else { ?>
+          	None<input type="hidden" name="field_maxlength" value="0" />
+          <?php } ?>
+          </td>
+          
           <td><input type="hidden" name="fid" value="<?php echo $fields[$i]->id; ?>" />
             <input type="submit" name="field_edit" value="Edit" /></td>
         </form>
@@ -471,8 +483,6 @@ if (!class_exists('CustomContactForms')) {
             <select name="remember_field_values"><?php echo $remember_fields; ?></select>
           </li>
           <li class="descrip">Setting this to blank will have fields remember how they were last filled out.</li>
-
-          <li class="descrip">This thank you message is shown when the custom thank you page is left empty.</li>
           <li class="show-widget">Show Sidebar Widget:</li>
           <li>
             <label>
@@ -512,12 +522,14 @@ if (!class_exists('CustomContactForms')) {
       <p>1. Create a form.</p>
       <p>2. Create fields and attach those fields to the forms of your choice. <b>* Attach the fields in the order that you want them to show up in the form. If you mess up you can detach and reattach them.</b></p>
       <p>3. Display those forms in posts and pages by inserting the code: [customcontact form=<b>FORMID</b>]. Replace <b>FORMID</b> with the id listed to the left of the form slug next to the form of your choice above.</p>
-      <p>4. Add a form to your sidebar, by dragging the Custom Contact Form widget in to your sidebar.</p>
-      <p>5. Configure the General Settings appropriately; this is important if you want to receive your web form messages!</p>
-      <p>6. Create form styles to change your forms appearances. The image below explains how each style field can change the look of your forms.</p>
+      <p>4. Prevent spam by attaching the fixed field, captcha or ishuman. Captcha requires users to type in a number shown on an image. Ishuman requires users to check a box to prove they aren't a spam bot.</p>
+      <p>5. Add a form to your sidebar, by dragging the Custom Contact Form widget in to your sidebar.</p>
+      <p>6. Configure the General Settings appropriately; this is important if you want to receive your web form messages!</p>
+      <p>7. Create form styles to change your forms appearances. The image below explains how each style field can change the look of your forms.</p>
+      <div id="style-example"></div>
     </div>
   </div>
-  <div id="style-example"></div>
+  <!--<div id="style-example"></div>-->
   <div id="create-styles" class="postbox">
     <h3 class="hndle"><span>Create A Style for Your Forms<a name="styles"></a></span></h3>
     <div class="inside">
@@ -723,6 +735,12 @@ if (!class_exists('CustomContactForms')) {
       </tr>
     </tfoot>
   </table>
+  <div id="plugin-news" class="postbox">
+    <h3 class="hndle"><span>Custom Contact Forms Plugin News</span></h3>
+    <div class="inside">
+		<?php $this->displayPluginNewsFeed(); ?>
+    </div>
+  </div>
 </div>
 <?php
 		}
@@ -757,6 +775,41 @@ if (!class_exists('CustomContactForms')) {
 				$out .= '<option value="'.$field->id.'">'.$field->field_slug.'</option>';
 			}
 			return $out;
+		}
+		
+		function displayPluginNewsFeed() {
+            include_once(ABSPATH . WPINC . '/feed.php');
+            $rss = fetch_feed('http://www.taylorlovett.com/category/custom-contact-forms/feed');
+            if (!is_wp_error($rss) ) {
+                $maxitems = $rss->get_item_quantity(5);
+                $rss_items = $rss->get_items(0, 1); 
+				$rss_items2 = $rss->get_items(1, $maxitems); 
+            }
+            ?>
+            <ul>
+            	<?php if ($maxitems == 0) echo '<li>No items.</li>';
+                else
+                // Loop through each feed item and display each item as a hyperlink.
+                foreach ( $rss_items as $item ) : ?>
+                <li class="first">
+                    <a href='<?php echo $item->get_permalink(); ?>'
+                    title='<?php echo 'Posted '.$item->get_date('j F Y | g:i a'); ?>'>
+                    <?php echo $item->get_title(); ?></a><br />
+                    <?php echo $item->get_content(); ?>
+                </li>
+                <?php endforeach; ?>
+                <?php if ($maxitems == 0) echo '<li>No items.</li>';
+                else
+                // Loop through each feed item and display each item as a hyperlink.
+                foreach ( $rss_items2 as $item ) : ?>
+                <li>
+                    <a href='<?php echo $item->get_permalink(); ?>'
+                    title='<?php echo 'Posted '.$item->get_date('j F Y | g:i a'); ?>'>
+                    <?php echo $item->get_title(); ?></a><br />
+                </li>
+                <?php endforeach; ?>
+            </ul>
+		<?php
 		}
 		
 		function wheresWaldo() {
@@ -840,9 +893,12 @@ if (!class_exists('CustomContactForms')) {
 					$field = parent::selectField($field_id, '');
 					if ($field->field_type == 'Checkbox')
 						$checks[] = $field->field_slug;
-					elseif ($field->field_slug == 'captcha') {
+					if ($field->field_slug == 'captcha') {
 						if ($_POST[captcha] != $_SESSION[captcha])
 							$this->setError('captcha', 'You entered the captcha image code incorrectly');
+					} if ($field->field_slug == 'ishuman') {
+						if ($_POST[ishuman] != 1)
+							$this->setError('ishuman', 'Only humans can use this form.');
 					}
 				} 
 				$body = '';

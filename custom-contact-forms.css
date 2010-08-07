@@ -90,7 +90,6 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 }
 #customcontactforms-admin #instructions {
 	float:left;
-	height:30em;
 	width:29em;
 	margin:20px 1em 1em 5px;
 }
@@ -101,17 +100,15 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 #customcontactforms-admin #general-settings {
 	float:left;
 	clear:both;
-	height:45em;
 	width:29em;
 	margin:20px 1em 1em 5px;
 }
 #customcontactforms-admin #style-example {
-	float:left;
 	background:url(images/style-example.gif) no-repeat top left;
 	width:405px;
 	height:135px;
 	padding-left:20px;
-	margin:20px 0 0 10px;
+	margin:10px 0 0 10px;
 	border:0;
 }
 #customcontactforms-admin #create-styles {
@@ -120,6 +117,12 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 	width:1000px;
 	margin:20px 1em 1em 5px;
 }
+#customcontactforms-admin #plugin-news {
+	clear:both;
+	width:1000px;
+	margin:20px 1em 1em 5px;
+}
+#customcontactforms-admin #plugin-news ul li.first { border-bottom:1px dashed #666; }
 #customcontactforms-admin #manage-styles {
 	width:1000px;
 }

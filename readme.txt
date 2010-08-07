@@ -3,13 +3,13 @@ Plugin Name: Custom Contact Forms
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.7.1
 Tested up to: 3.0
-Stable tag: 2.0.3
+Stable tag: 2.1.0
 Contributors: Taylor Lovett
 Download link: http://www.taylorlovett.com/wordpress-plugins/
 Author: Taylor Lovett
 Author URI: http://www.taylorlovett.com
 == Description ==
-VERSION 2.0.0 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. A plugin for handling and displaying custom web forms in any page, post, or sidebar. Extremely customizable!
+VERSION 2.1.0 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. A plugin for handling and displaying custom web forms in any page, post, or sidebar. Extremely customizable!
 == Installation ==
 1. Upload to /wp-content/plugins
 2. Activate the plugin from your Wordpress Admin Panel
@@ -64,3 +64,7 @@ Required fields option will be added in mid-August 2010
 2.0.3
 * custom-contact-forms.php - custom style checkbox display:block error fixed
 * custom-contact-forms.css - li's converted to p's
+2.1.0
+* custom-contact-forms.php - New fixed field added, plugin news, bug fixes
+* custom-contact-forms.css - New styles added and style bugs fixed
+* custom-contact-forms-db.php - New fixed field added

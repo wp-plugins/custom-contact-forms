@@ -15,8 +15,8 @@ if (!class_exists('CustomContactFormsDB')) {
 			$this->fields_table = $wpdb->prefix . 'customcontactforms_fields';
 			$this->styles_table = $wpdb->prefix . 'customcontactforms_styles';
 			$this->createTables();
-			$this->insertFixedFields();
 			$this->updateTables();
+			$this->insertFixedFields();
 		}
 		
 		function encodeOption($option) {
@@ -110,14 +110,13 @@ if (!class_exists('CustomContactFormsDB')) {
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `title_margin` VARCHAR( 20 ) NOT NULL DEFAULT '2px'");
 			if (!$this->columnExists('label_margin', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `label_margin` VARCHAR( 20 ) NOT NULL DEFAULT '3px'");
-			
-			$this->insertFixedFields();
 		}
 		
 		function insertFixedFields() {
 			if (!$this->fieldSlugExists('captcha'))
 				$this->insertField('captcha', 'Type the numbers', 'Text', '', '100', 0);
-		
+			if (!$this->fieldSlugExists('ishuman'))
+				$this->insertField('ishuman', 'Check if you are a human.', 'Checkbox', '1', '0', 0);
 		}
 		
 		function columnExists($column, $table) {
