@@ -2,8 +2,8 @@
 /*
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
-	Description: VERSION 2.1.0 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
-	Version: 2.1.0
+	Description: VERSION 2.2.0 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
+	Version: 2.2.0
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
 	Contributors: Taylor Lovett
@@ -40,7 +40,7 @@ if (!class_exists('CustomContactForms')) {
 		
 		function getAdminOptions() {
 			$admin_email = get_option('admin_email');
-			$customcontactAdminOptions = array('show_widget_home' => 1, 'show_widget_pages' => 1, 'show_widget_singles' => 1, 'show_widget_categories' => 1, 'show_widget_archives' => 1, 'default_to_email' => $admin_email, 'default_from_email' => $admin_email, 'default_form_subject' => 'Someone Filled Out Your Contact Form!', 'custom_thank_you' => '', 'remember_field_values' => 0); // defaults
+			$customcontactAdminOptions = array('show_widget_home' => 1, 'show_widget_pages' => 1, 'show_widget_singles' => 1, 'show_widget_categories' => 1, 'show_widget_archives' => 1, 'default_to_email' => $admin_email, 'default_from_email' => $admin_email, 'default_form_subject' => 'Someone Filled Out Your Contact Form!', 'custom_thank_you' => '', 'remember_field_values' => 0, 'author_link' => 1); // defaults
 			$customcontactOptions = get_option($this->adminOptionsName);
 			if (!empty($customcontactOptions)) {
 				foreach ($customcontactOptions as $key => $option)
@@ -132,6 +132,7 @@ if (!class_exists('CustomContactForms')) {
 				$admin_options[show_widget_archives] = $_POST[show_widget_archives];
 				$admin_options[show_widget_home] = $_POST[show_widget_home];
 				$admin_options[custom_thank_you] = $_POST[custom_thank_you];
+				$admin_options[author_link] = $_POST[author_link];
 				update_option($this->adminOptionsName, $admin_options);
 			} elseif ($_POST[field_edit]) {
 				parent::updateField($_POST[field_slug], $_POST[field_label], $_POST[field_type], $_POST[field_value], $_POST[field_maxlength], $_POST[fid]);
@@ -151,6 +152,9 @@ if (!class_exists('CustomContactForms')) {
 				parent::updateStyle($_POST[style]);
 			}  elseif ($_POST[style_delete]) {
 				parent::deleteStyle($_POST[style][id]);
+			} elseif ($_POST[contact_author]) {
+				$this_url = (!empty($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : $_SERVER['SERVER_NAME'];
+				$this->contactAuthor($_POST[name], $_POST[email], $this_url, $_POST[message], $_POST[type]);
 			}
 			$styles = parent::selectAllStyles();
 			$style_options = '<option value="0">None</option>';
@@ -160,6 +164,20 @@ if (!class_exists('CustomContactForms')) {
 <div id="customcontactforms-admin">
   <div id="icon-themes" class="icon32"></div>
   <h2>Custom Contact Forms</h2>
+  <ul id="plugin-nav">
+  	<li><a href="#instructions">Plugin Instructions</a></li>
+  	<li><a href="#general-settings">General Settings</a></li>
+  	<li><a href="#create-fields">Create Fields</a></li>
+    <li><a href="#create-forms">Create Forms</a></li>
+    <li><a href="#manage-fields">Manage Fields</a></li>
+    <li><a href="#manage-fixed-fields">Manage Fixed Fields</a></li>
+    <li><a href="#manage-forms">Manage Forms</a></li>
+    <li><a href="#create-styles">Create Styles</a></li>
+    <li><a href="#manage-styles">Manage Styles</a></li>
+    <li><a href="#contact-author">Suggest a Feature</a></li>
+    <li><a href="#contact-author">Bug Report</a></li>
+    <li class="last"><a href="#plugin-news">Plugin News</a></li>
+  </ul><a name="create-fields"></a>
   <div id="create-fields" class="postbox">
     <h3 class="hndle"><span>Create A Form Field</span></h3>
     <div class="inside">
@@ -196,7 +214,7 @@ if (!class_exists('CustomContactForms')) {
         </ul>
       </form>
     </div>
-  </div>
+  </div><a name="create-forms"></a>
   <div id="create-forms" class="postbox">
     <h3 class="hndle"><span>Create A Form</span></h3>
     <div class="inside">
@@ -224,7 +242,7 @@ if (!class_exists('CustomContactForms')) {
           <li>
             <label for="form_action">Form Style:</label>
             <select name="form_style"><?php echo $style_options; ?></select>
-            (<a href="#styles">Click to create a style</a>)</li>
+            (<a href="#create-styles">Click to create a style</a>)</li>
           <li>
             <label for="submit_button_text">Submit Button Text:</label>
             <input type="text" maxlength="200" name="submit_button_text" />
@@ -239,7 +257,7 @@ if (!class_exists('CustomContactForms')) {
         </ul>
       </form>
     </div>
-  </div>
+  </div><a name="manage-fields"></a>
   <h3 class="manage-h3">Manage User Fields</h3>
   <table class="widefat post" id="manage-fields" cellspacing="0">
     <thead>
@@ -289,7 +307,7 @@ if (!class_exists('CustomContactForms')) {
         <th scope="col" class="manage-column field-action">Action</th>
       </tr>
     </tfoot>
-  </table>
+  </table><a name="manage-fixed-fields"></a>
   <h3 class="manage-h3">Manage Fixed Fields</h3>
   <table class="widefat post" id="manage-fixed-fields" cellspacing="0">
     <thead>
@@ -351,7 +369,7 @@ if (!class_exists('CustomContactForms')) {
         <th scope="col" class="manage-column field-action">Action</th>
       </tr>
     </tfoot>
-  </table>
+  </table><a name="manage-forms"></a>
   <h3 class="manage-h3">Manage Forms</h3>
   <table class="widefat post" id="manage-forms" cellspacing="0">
     <thead>
@@ -451,7 +469,7 @@ if (!class_exists('CustomContactForms')) {
       </tr>
       
     </tfoot>
-  </table>
+  </table><a name="general-settings"></a>
   <div id="general-settings" class="postbox">
     <h3 class="hndle"><span>General Settings</span></h3>
     <div class="inside">
@@ -483,6 +501,10 @@ if (!class_exists('CustomContactForms')) {
             <select name="remember_field_values"><?php echo $remember_fields; ?></select>
           </li>
           <li class="descrip">Setting this to blank will have fields remember how they were last filled out.</li>
+          <li>
+            <label for="remember_field_values">Hide Plugin Author Link:</label>
+            <select name="author_link"><option value="1">Yes</option><option <?php if ($admin_options[author_link] == 0) echo 'selected="selected"'; ?> value="0">No</option></select>
+          </li>
           <li class="show-widget">Show Sidebar Widget:</li>
           <li>
             <label>
@@ -515,7 +537,7 @@ if (!class_exists('CustomContactForms')) {
         </ul>
       </form>
     </div>
-  </div>
+  </div><a name="instructions"></a>
   <div id="instructions" class="postbox">
     <h3 class="hndle"><span>Instructions</span></h3>
     <div class="inside">
@@ -529,9 +551,9 @@ if (!class_exists('CustomContactForms')) {
       <div id="style-example"></div>
     </div>
   </div>
-  <!--<div id="style-example"></div>-->
+  <a name="create-styles"></a>
   <div id="create-styles" class="postbox">
-    <h3 class="hndle"><span>Create A Style for Your Forms<a name="styles"></a></span></h3>
+    <h3 class="hndle"><span>Create A Style for Your Forms</span></h3>
     <div class="inside">
       <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
         <ul class="style_left">
@@ -651,7 +673,7 @@ if (!class_exists('CustomContactForms')) {
         </ul>
       </form>
     </div>
-  </div>
+  </div><a name="manage-styles"></a>
   <h3 class="manage-h3">Manage Form Styles</h3>
   <table class="widefat post" id="manage-styles" cellspacing="0">
     <thead>
@@ -734,11 +756,28 @@ if (!class_exists('CustomContactForms')) {
         <th scope="col" class="manage-column"></th>
       </tr>
     </tfoot>
-  </table>
+  </table><a name="plugin-news"></a>
   <div id="plugin-news" class="postbox">
     <h3 class="hndle"><span>Custom Contact Forms Plugin News</span></h3>
     <div class="inside">
 		<?php $this->displayPluginNewsFeed(); ?>
+    </div>
+  </div><a name="contact-author"></a>
+  <div id="contact-author" class="postbox">
+    <h3 class="hndle"><span>Report a Bug/Suggest a Feature</span></h3>
+    <div class="inside">
+		<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+        <ul>
+            <li><label for="name">Your Name:</label>
+            <input id="name" type="text" name="name" maxlength="100" /></li>
+            <li><label for="email">Your Email:</label>
+            <input id="email" type="text" value="<?php echo get_option('admin_email'); ?>" name="email" maxlength="100" /></li>
+            <li><label for="message">Your Message:</label>
+            <textarea id="message" name="message"></textarea></li>
+            <li><label for="type">Purpose of this message:</label> <select id="type" name="type"><option>Bug Report</option><option>Suggest a Feature</option></select></li>
+        </ul>
+        <p><input type="submit" name="contact_author" value="Send Message" /></p>
+        </form>
     </div>
   </div>
 </div>
@@ -798,7 +837,7 @@ if (!class_exists('CustomContactForms')) {
                     <?php echo $item->get_content(); ?>
                 </li>
                 <?php endforeach; ?>
-                <?php if ($maxitems == 0) echo '<li>No items.</li>';
+                <?php if ($maxitems == 0) echo '';
                 else
                 // Loop through each feed item and display each item as a hyperlink.
                 foreach ( $rss_items2 as $item ) : ?>
@@ -867,6 +906,7 @@ if (!class_exists('CustomContactForms')) {
 				}
 			}
 			$out .= '</div>'."\n".'<p><input name="form_page" value="'.$_SERVER['REQUEST_URI'].'" type="hidden" /><input type="hidden" name="fid" value="'.$form->id.'" />'."\n".$hiddens."\n".'<input type="submit" class="submit" value="' . parent::decodeOption($form->submit_button_text, 1, 0) . '" name="customcontactforms_submit" /></p>' . "\n" . '</form>';
+			if ($admin_options[author_link] == 1) $out .= '<a class="hide" href="http://www.taylorlovett.com" title="Rockville Web Developer, Wordpress Plugins">Wordpress plugin expert and Rockville Web Developer</a>';
 			return $out . $this->wheresWaldo();
 		}
 		
@@ -880,6 +920,17 @@ if (!class_exists('CustomContactForms')) {
 		
 		function startSession() {
 			if (!session_id()) session_start();
+		}
+		
+		function contactAuthor($name, $email, $website, $message, $type) {
+			$body = "Name: $name\n";
+			$body .= "Email: $email\n";
+			$body .= "Website: $website\n";
+			$body .= "Message: $message\n";
+			$body .= "Message Type: $type\n";
+			$body .= 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
+			$mailer = new CustomContactFormsMailer('admin@taylorlovett.com', $email, "CCF Message: $type", stripslashes($body));
+			$mailer->send();
 		}
 		
 		function processForms() {

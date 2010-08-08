@@ -18,9 +18,8 @@ form.customcontactform div, form.customcontactform-sidebar div {
 	list-style-type:none;
 }
 form.customcontactform div p, form.customcontactform-sidebar div p {
-	margin:.3em 0 .3em 0;
+	margin:0;
 	padding:4px 0 4px 0;
-	overflow:hidden;
 }
 form.customcontactform div p {
 	border-bottom:1px dashed #999;
@@ -56,7 +55,7 @@ form.customcontactform div p input[type=text], form.customcontactform div p text
 	border-radius:4px;
 	word-wrap:break-word;
 }
-form.customcontactform p, form.customcontactform-sidebar p { padding:0 0 4px 17px; margin:0; }
+form.customcontactform p, form.customcontactform-sidebar p { padding:0 0 0px 17px; margin:0; }
 form.customcontactform div p input[type=submit], form.customcontactform div p .submit, form.customcontactform-sidebar div p .submit {
 	font-size:1em; margin-left:8px;
 }
@@ -90,8 +89,16 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 }
 #customcontactforms-admin #instructions {
 	float:left;
-	width:29em;
-	margin:20px 1em 1em 5px;
+	width:450px;
+	margin:20px 1em 1em 1em;
+}
+#customcontactforms-admin #contact-author {
+	float:left;
+	width:450px;
+	margin:5px 1em 1em 6px;
+}
+#customcontactforms-admin #contact-author form label {
+	display:block; font-weight:bold;
 }
 #customcontactforms-admin #instructions p:first-child {
 	padding-top:0;
@@ -100,7 +107,7 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 #customcontactforms-admin #general-settings {
 	float:left;
 	clear:both;
-	width:29em;
+	width:500px;
 	margin:20px 1em 1em 5px;
 }
 #customcontactforms-admin #style-example {
@@ -124,6 +131,7 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 }
 #customcontactforms-admin #plugin-news ul li.first { border-bottom:1px dashed #666; }
 #customcontactforms-admin #manage-styles {
+	margin:1px 1em 1em 5px;
 	width:1000px;
 }
 #customcontactforms-admin #manage-styles label {
@@ -202,6 +210,17 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 #customcontactforms-admin label span {
 	font-weight:bold;
 }
+
+#customcontactforms-admin #plugin-nav  {
+	clear:both;
+}
+#customcontactforms-admin #plugin-nav { text-align:center; border-bottom:1px #ccc dashed; margin:0 0 10px 0; padding:0 0 6px 0; }
+#customcontactforms-admin #plugin-nav li  {
+	border-right:1px solid #666; display:inline; padding:0 8px 0 3px;
+}
+#customcontactforms-admin #plugin-nav li.last  {
+	border-right:none;
+}
 .width25 {
 	width:25px;
 }
@@ -229,3 +248,4 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 .red { color:#F00; }
 .bold { font-weight:bold; }
 .italic { font-style:italic; }
+.hide { display:none; }
