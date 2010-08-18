@@ -2,14 +2,35 @@
 Plugin Name: Custom Contact Forms
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.7.1
-Tested up to: 3.0
-Stable tag: 2.2.0
+Tested up to: 3.1
+Stable tag: 2.2.3
 Contributors: Taylor Lovett
 Download link: http://www.taylorlovett.com/wordpress-plugins/
 Author: Taylor Lovett
 Author URI: http://www.taylorlovett.com
 == Description ==
-VERSION 2.2.0 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. A plugin for handling and displaying custom web forms in any page, post, or sidebar. Extremely customizable!
+Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. A plugin for handling and displaying custom web forms in any page, post, or sidebar.
+Special Features:
+- The most customizable form plugin for Wordpress, guaranteed
+- Create unlimited forms
+- Create unlimited fields
+- Customize every aspect of fields and forms: titles, labels, maxlength, initial value, form action, form method, form style, and much more
+- Create checkboxes, textareas, text fields, etc.
+- Captcha and "Are You Human?" spam blockers included and easily attached to any form
+- Create custom styles to change the appearance of your forms: borders, font sizes, colors, padding, margins, background, and more
+- You can create unlimited styles to use on as many forms as you want - NO CSS KNOWLEDGE REQUIRED!
+- Custom thank you pages
+- Custom error pages for when forms are filled out incorrectly
+- Option to have forms remember field values for when users hit the back button after an error
+- Easily report bugs and suggest new features
+- Script in constant development - new version released every week
+- Easily process your forms with 3rd party sites like Infusionsoft or Aweber
+- Valid XHTML and CSS
+- No javascript required
+- Stylish field tooltips powered by jquery
+- Popover forms with Jquery (Coming soon!)
+- Free unlimited support
+
 == Installation ==
 1. Upload to /wp-content/plugins
 2. Activate the plugin from your Wordpress Admin Panel
@@ -71,3 +92,7 @@ Required fields option will be added in mid-August 2010
 2.2.0
 * custom-contact-forms.php - Plugin nav, hide plugin author link, bug reporting, suggest a feature
 * custom-contact-forms.css - New styles added and style bugs fixed
+2.2.3
+* custom-contact-forms.php - Remember fields bug fixed, init rearranged, field instructions
+* custom-contact-forms.css
+* custom-contact-forms-db.php

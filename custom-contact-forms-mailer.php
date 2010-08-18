@@ -24,7 +24,7 @@ if (!class_exists('CustomContactFormsMailer')) {
 			$this->addHeader('Reply-To: '.$this->from."\r\n");
 			$this->addHeader('Return-Path: '.$this->from."\r\n");
 			$this->addHeader('X-mailer: ZFmail 1.0'."\r\n");
-			mail($this->to, $this->subject, $this->body, $this->headers);
+			wp_mail($this->to, $this->subject, $this->body, $this->headers);
 		}
 	
 		function addHeader($header){

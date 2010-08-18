@@ -110,13 +110,21 @@ if (!class_exists('CustomContactFormsDB')) {
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `title_margin` VARCHAR( 20 ) NOT NULL DEFAULT '2px'");
 			if (!$this->columnExists('label_margin', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `label_margin` VARCHAR( 20 ) NOT NULL DEFAULT '3px'");
+			if (!$this->columnExists('field_instructions', $this->fields_table))
+				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `field_instructions` TEXT NOT NULL");
 		}
 		
 		function insertFixedFields() {
+			$captcha = array('field_slug' => 'captcha', 'field_label' => 'Type the numbers.', 'field_type' => 'Text', 'field_value' => '', 'maxlength' => '100', 'user_field' => 0, 'field_instructions' => 'Type the numbers displayed in the image above.');
+			$ishuman = array('field_slug' => 'ishuman', 'field_label' => 'Check if you are human.', 'field_type' => 'Checkbox', 'field_value' => '1', 'maxlength' => '0', 'user_field' => 0, 'field_instructions' => 'This helps us prevent spam.');
+			$fixedEmail = array('field_slug' => 'fixedEmail', 'field_label' => 'Your Email', 'field_type' => 'Text', 'field_value' => '', 'field_maxlength' => '100', 'user_field' => 0, 'field_instructions' => 'Please enter your email address.');
 			if (!$this->fieldSlugExists('captcha'))
-				$this->insertField('captcha', 'Type the numbers', 'Text', '', '100', 0);
+				$this->insertField($captcha);
 			if (!$this->fieldSlugExists('ishuman'))
-				$this->insertField('ishuman', 'Check if you are a human.', 'Checkbox', '1', '0', 0);
+				$this->insertField($ishuman);
+			if (!$this->fieldSlugExists('fixedEmail'))
+				$this->insertField($fixedEmail);
+		
 		}
 		
 		function columnExists($column, $table) {
@@ -132,10 +140,16 @@ if (!class_exists('CustomContactFormsDB')) {
 			return true;
 		}
 		
-		function insertField($field_slug, $field_label, $field_type, $field_value, $field_maxlength, $user_field) {
+		function insertField($field) {
 			global $wpdb;
-			if ($this->fieldSlugExists($this->formatSlug($field_slug))) return false;
-			$wpdb->insert($this->fields_table, array('field_slug' => $this->formatSlug($field_slug), 'field_label' => $this->encodeOption($field_label), 'field_type' => $field_type, 'field_value' => $this->encodeOption($field_value), 'field_maxlength' => $this->encodeOption($field_maxlength), 'user_field' => $user_field));
+			if (empty($field) or empty($field[field_slug]) or $this->fieldSlugExists($this->formatSlug($field[field_slug]))) return false;
+			
+			$field[field_slug] = $this->formatSlug($field[field_slug]);
+			foreach ($field as $key => $value) {
+				if ($key != 'field_slug')
+					$field[$key] = $this->encodeOption($value);
+			}
+			$wpdb->insert($this->fields_table, $field);
 			return true;
 		}
 		
@@ -176,13 +190,13 @@ if (!class_exists('CustomContactFormsDB')) {
 			return true;
 		}
 		
-		function updateField($field_slug, $field_label, $field_type, $field_value, $field_maxlength, $fid) {
+		function updateField($field_slug, $field_label, $field_type, $field_value, $field_maxlength, $field_instructions, $fid) {
 			global $wpdb;
 			if (empty($field_slug)) return false;
 			$test = $this->selectField('', $field_slug);
 			if (!empty($test) and $test->id != $fid) // if field_slug is different then make sure it is unique
 				return false;
-			$wpdb->update($this->fields_table, array('field_slug' => $this->formatSlug($field_slug), 'field_label' => $this->encodeOption($field_label), 'field_type' => $field_type, 'field_value' => $this->encodeOption($field_value), 'field_maxlength' => $this->encodeOption($field_maxlength)), array('id' => $fid));
+			$wpdb->update($this->fields_table, array('field_slug' => $this->formatSlug($field_slug), 'field_label' => $this->encodeOption($field_label), 'field_type' => $field_type, 'field_value' => $this->encodeOption($field_value), 'field_maxlength' => $this->encodeOption($field_maxlength), 'field_instructions' => $this->encodeOption($field_instructions)), array('id' => $fid));
 			return true;
 		}
 		

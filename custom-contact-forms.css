@@ -38,6 +38,12 @@ form.customcontactform div p label.checkbox, form.customcontactform-sidebar div 
 	display:inline;
 	width:20%;
 }
+form.customcontactform div .show-field-instructions, form.customcontactform-sidebar div .show-field-instructions {
+
+}
+form.customcontactform div span.field-instructions, form.customcontactform-sidebar div span.field-instructions {
+	display:none;
+}
 form.customcontactform div p input[type=text], form.customcontactform div p textarea, form.customcontactform-sidebar div p input[type=text], form.customcontactform-sidebar div p textarea {
 	border-width:1px;
 	border-style:solid;
@@ -57,7 +63,7 @@ form.customcontactform div p input[type=text], form.customcontactform div p text
 }
 form.customcontactform p, form.customcontactform-sidebar p { padding:0 0 0px 17px; margin:0; }
 form.customcontactform div p input[type=submit], form.customcontactform div p .submit, form.customcontactform-sidebar div p .submit {
-	font-size:1em; margin-left:8px;
+	font-size:1em; margin-left:2px;
 }
 form.customcontactform div p input[type=checkbox], form.customcontactform-sidebar div p input[type=checkbox] {
 	width:20px;
@@ -67,6 +73,7 @@ form.customcontactform div p input[type=checkbox], form.customcontactform-sideba
 form.customcontactform-sidebar div p input[type=text], form.customcontactform-sidebar div p textarea {
 	width:90%;
 	font-size:12px;
+	margin:0;
 }
 /* ------------------ custom contact forms admin panel ---------------- */
 #customcontactforms-admin {
@@ -153,7 +160,6 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 }
 #customcontactforms-admin #create-fields {
 	float:left;
-	height:22em;
 	clear:left;
 	width:450px;
 	margin:0 1em 1em 5px;
@@ -161,7 +167,6 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 #customcontactforms-admin #create-forms {
 	float:left;
 	width:500px;
-	height:22em;
 	border-left:1px solid #ccc;
 	margin:0 1em 1em 1em;
 }
@@ -249,3 +254,32 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 .bold { font-weight:bold; }
 .italic { font-style:italic; }
 .hide { display:none; }
+
+/* ----- popover box ---------- */
+
+.ccf-popover {
+	position: absolute;
+	top:25%;
+	left:25%;
+	width:500px;
+	padding:10px;
+	background-color:#fff;
+	border:1px solid #666;
+	display:none;
+}
+
+.ccf-popover .ccf-popover-close { position:absolute; top:1px; right:5px; }
+.tooltip {
+	background-color:#000;
+	border:1px solid #fff;
+	padding:10px 15px;
+	width:200px;
+	display:none;
+	color:#fff;
+	text-align:left;
+	font-size:12px;
+
+	/* outline radius for mozilla/firefox only */
+	-moz-box-shadow:0 0 10px #000;
+	-webkit-box-shadow:0 0 10px #000;
+}
