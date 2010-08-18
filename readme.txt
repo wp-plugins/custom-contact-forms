@@ -16,43 +16,43 @@ Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact 
 Special Features:
 ------------------
 
-- The most customizable form plugin for Wordpress, guaranteed
+* The most customizable form plugin for Wordpress, guaranteed
 
-- Create unlimited forms
+* Create unlimited forms
 
-- Create unlimited fields
+* Create unlimited fields
 
-- Customize every aspect of fields and forms: titles, labels, maxlength, initial value, form action, form method, form style, and much more
+* Customize every aspect of fields and forms: titles, labels, maxlength, initial value, form action, form method, form style, and much more
 
-- Create checkboxes, textareas, text fields, etc.
+* Create checkboxes, textareas, text fields, etc.
 
-- Captcha and "Are You Human?" spam blockers included and easily attached to any form
+* Captcha and "Are You Human?" spam blockers included and easily attached to any form
 
-- Create custom styles to change the appearance of your forms: borders, font sizes, colors, padding, margins, background, and more
+* Create custom styles to change the appearance of your forms: borders, font sizes, colors, padding, margins, background, and more
 
-- You can create unlimited styles to use on as many forms as you want - NO CSS KNOWLEDGE REQUIRED!
+* You can create unlimited styles to use on as many forms as you want - NO CSS KNOWLEDGE REQUIRED!
 
-- Custom thank you pages
+* Custom thank you pages
 
-- Custom error pages for when forms are filled out incorrectly
+* Custom error pages for when forms are filled out incorrectly
 
-- Option to have forms remember field values for when users hit the back button after an error
+* Option to have forms remember field values for when users hit the back button after an error
 
-- Easily report bugs and suggest new features
+* Easily report bugs and suggest new features
 
-- Script in constant development - new version released every week
+* Script in constant development - new version released every week
 
-- Easily process your forms with 3rd party sites like Infusionsoft or Aweber
+* Easily process your forms with 3rd party sites like Infusionsoft or Aweber
 
-- Valid XHTML and CSS
+* Valid XHTML and CSS
 
-- No javascript required
+* No javascript required
 
-- Stylish field tooltips powered by jquery
+* Stylish field tooltips powered by jquery
 
-- Popover forms with Jquery (Coming soon!)
+* Popover forms with Jquery (Coming soon!)
 
-- Free unlimited support
+* Free unlimited support
 
 == Installation ==
 1. Upload to /wp-content/plugins
