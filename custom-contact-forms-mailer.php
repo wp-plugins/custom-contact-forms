@@ -11,12 +11,14 @@ if (!class_exists('CustomContactFormsMailer')) {
 		var $subject;
 		var $body;
 		var $headers;
+		var $wp_mail_function;
 	
-		 function CustomContactFormsMailer($to, $from, $subject, $body){
+		 function CustomContactFormsMailer($to, $from, $subject, $body, $wp_mail_function){
 			$this->to = $to;
 			$this->from = $from;
 			$this->subject = $subject;
 			$this->body = $body;
+			$this->wp_mail_function = $wp_mail_function;
 		}
 	
 		function send(){
@@ -24,7 +26,10 @@ if (!class_exists('CustomContactFormsMailer')) {
 			$this->addHeader('Reply-To: '.$this->from."\r\n");
 			$this->addHeader('Return-Path: '.$this->from."\r\n");
 			$this->addHeader('X-mailer: ZFmail 1.0'."\r\n");
-			wp_mail($this->to, $this->subject, $this->body, $this->headers);
+			if ($this->wp_mail_function == 1)
+				wp_mail($this->to, $this->subject, $this->body, $this->headers);
+			else
+				mail($this->to, $this->subject, $this->body, $this->headers);
 		}
 	
 		function addHeader($header){

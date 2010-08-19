@@ -283,3 +283,36 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 	-moz-box-shadow:0 0 10px #000;
 	-webkit-box-shadow:0 0 10px #000;
 }
+/* --- form success popover --------------------  */
+#ccf-form-success {
+	display:none;
+	border: 9px solid #efefef;
+	border-spacing:0;
+	width:420px;
+	height:200px
+	padding:0px;
+	margin:0;
+	-moz-border-radius:35px;
+	-khtml-border-radius:35px;
+	-webkit-border-radius:35px;
+	border-radius:305px;
+	position:fixed;
+	left:30%;
+	background-color:white;
+	top:30%;
+}
+
+#ccf-form-success h5 {
+	background-color:#efefef; margin:0 0 15px 0;
+	text-align:left;
+	padding:9px;
+	font-size:1.5em;
+	font-weight:bold;
+}
+#ccf-form-success p { padding:8px; font-size:1.1em; text-align:center; }
+#ccf-form-success a.close {
+	position:absolute;
+	right:12px;
+	font-size:1em;
+	top:7px;
+}

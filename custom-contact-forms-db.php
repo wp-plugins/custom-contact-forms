@@ -115,8 +115,8 @@ if (!class_exists('CustomContactFormsDB')) {
 		}
 		
 		function insertFixedFields() {
-			$captcha = array('field_slug' => 'captcha', 'field_label' => 'Type the numbers.', 'field_type' => 'Text', 'field_value' => '', 'maxlength' => '100', 'user_field' => 0, 'field_instructions' => 'Type the numbers displayed in the image above.');
-			$ishuman = array('field_slug' => 'ishuman', 'field_label' => 'Check if you are human.', 'field_type' => 'Checkbox', 'field_value' => '1', 'maxlength' => '0', 'user_field' => 0, 'field_instructions' => 'This helps us prevent spam.');
+			$captcha = array('field_slug' => 'captcha', 'field_label' => 'Type the numbers.', 'field_type' => 'Text', 'field_value' => '', 'field_maxlength' => '100', 'user_field' => 0, 'field_instructions' => 'Type the numbers displayed in the image above.');
+			$ishuman = array('field_slug' => 'ishuman', 'field_label' => 'Check if you are human.', 'field_type' => 'Checkbox', 'field_value' => '1', 'field_maxlength' => '0', 'user_field' => 0, 'field_instructions' => 'This helps us prevent spam.');
 			$fixedEmail = array('field_slug' => 'fixedEmail', 'field_label' => 'Your Email', 'field_type' => 'Text', 'field_value' => '', 'field_maxlength' => '100', 'user_field' => 0, 'field_instructions' => 'Please enter your email address.');
 			if (!$this->fieldSlugExists('captcha'))
 				$this->insertField($captcha);
@@ -143,7 +143,6 @@ if (!class_exists('CustomContactFormsDB')) {
 		function insertField($field) {
 			global $wpdb;
 			if (empty($field) or empty($field[field_slug]) or $this->fieldSlugExists($this->formatSlug($field[field_slug]))) return false;
-			
 			$field[field_slug] = $this->formatSlug($field[field_slug]);
 			foreach ($field as $key => $value) {
 				if ($key != 'field_slug')

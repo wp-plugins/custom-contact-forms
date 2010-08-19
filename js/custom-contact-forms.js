@@ -40,4 +40,9 @@ $j(document).ready(function(){
 		opacity: 0.7
 	
 	});
+	
+	$j("#ccf-form-success").delay(500).fadeIn('slow');
+	$j("#ccf-form-success .close").click(function() {
+		$j("#ccf-form-success").fadeOut();											  
+	});
 });

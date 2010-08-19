@@ -2,8 +2,8 @@
 /*
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
-	Description: VERSION 2.2.4 RELEASED! YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
-	Version: 2.2.4
+	Description: YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
+	Version: 2.2.5
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
 	Contributors: Taylor Lovett
@@ -31,7 +31,8 @@ if (!class_exists('CustomContactForms')) {
 		var $version = '2.1.0';
 		var $form_errors;
 		var $error_return;
-		var $fixed_fields = array('customcontactforms_submit', 'fid', 'form_page', 'captcha', 'ishuman');
+		var $gets;
+		var $fixed_fields = array('customcontactforms_submit', 'fid', 'fixedEmail', 'form_page', 'captcha', 'ishuman');
 		
 		function CustomContactForms() {
 			parent::CustomContactFormsDB();
@@ -40,7 +41,8 @@ if (!class_exists('CustomContactForms')) {
 		
 		function getAdminOptions() {
 			$admin_email = get_option('admin_email');
-			$customcontactAdminOptions = array('show_widget_home' => 1, 'show_widget_pages' => 1, 'show_widget_singles' => 1, 'show_widget_categories' => 1, 'show_widget_archives' => 1, 'default_to_email' => $admin_email, 'default_from_email' => $admin_email, 'default_form_subject' => 'Someone Filled Out Your Contact Form!', 'custom_thank_you' => '', 'remember_field_values' => 0, 'author_link' => 1, 'enable_widget_tooltips' => 1); // defaults
+			$customcontactAdminOptions = array('show_widget_home' => 1, 'show_widget_pages' => 1, 'show_widget_singles' => 1, 'show_widget_categories' => 1, 'show_widget_archives' => 1, 'default_to_email' => $admin_email, 'default_from_email' => $admin_email, 'default_form_subject' => 'Someone Filled Out Your Contact Form!', 
+			'custom_thank_you' => '', 'remember_field_values' => 0, 'author_link' => 1, 'enable_widget_tooltips' => 1, 'wp_mail_function' => 1, 'form_success_message' => 'Thank you for filling out our web form. We will get back to you ASAP.'); // default general settings
 			$customcontactOptions = get_option($this->adminOptionsName);
 			if (!empty($customcontactOptions)) {
 				foreach ($customcontactOptions as $key => $option)
@@ -50,6 +52,7 @@ if (!class_exists('CustomContactForms')) {
 			return $customcontactAdminOptions;
 		}
 		function init() {
+			$this->storeGets();
 			$this->getAdminOptions();
 			if (!is_admin()) {
 				wp_enqueue_script('jquery');
@@ -110,13 +113,22 @@ if (!class_exists('CustomContactForms')) {
 <!-- Custom Contact Forms by Taylor Lovett - http://www.taylorlovett.com -->
 <link rel="stylesheet" href="<?php echo get_option('siteurl'); ?>/wp-content/plugins/custom-contact-forms/custom-contact-forms.css" type="text/css" media="screen" />
 <!--<script type="text/javascript" language="javascript" src="<?php echo get_option('siteurl'); ?>/wp-content/plugins/custom-contact-forms/js/custom-contact-forms.js"></script>-->
-<?php		//wp_enqueue_script('jquery-dialog', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/jquery-ui.min.js');
-			wp_enqueue_script('jquery-tools', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.tools.min.js');
-			wp_enqueue_script('ccf-main', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/custom-contact-forms.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), '1.0');
+<?php		wp_enqueue_script('jquery-tools', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.tools.min.js');
+			//wp_enqueue_script('jquery-ui-position', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.ui.position.js');
+			//wp_enqueue_script('jquery-ui-widget', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.ui.widget.js');
+			//wp_enqueue_script('jquery-bgiframe', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.bgiframe-2.1.1.js');
+			wp_enqueue_script('ccf-main', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/custom-contact-forms.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'/*, 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-dialog'*/), '1.0');
+			//jquery-ui-position
 		}
 		
 		function setFormError($key, $message) {
 			$this->form_errors[$key] = $message;
+		}
+		
+		function storeGets() {
+			foreach ($_GET as $k => $v) {
+				$this->gets[$k] = $v;
+			}
 		}
 		
 		function getFormError($key) {
@@ -144,6 +156,8 @@ if (!class_exists('CustomContactForms')) {
 				$admin_options[show_widget_home] = $_POST[show_widget_home];
 				$admin_options[custom_thank_you] = $_POST[custom_thank_you];
 				$admin_options[author_link] = $_POST[author_link];
+				$admin_options[form_success_message] = $_POST[form_success_message];
+				$admin_options[wp_mail_function] = $_POST[wp_mail_function];
 				$admin_options[enable_widget_tooltips] = $_POST[enable_widget_tooltips];
 				$admin_options[remember_field_values] = $_POST[remember_field_values];
 				update_option($this->adminOptionsName, $admin_options);
@@ -514,7 +528,7 @@ if (!class_exists('CustomContactForms')) {
           <li class="descrip">Form emails will be sent <span>from</span> this address.</li>
           <li>
             <label for="default_form_subject">Default Email Subject:</label>
-            <input name="default_form_subject" value="<?php echo $admin_options[default_form_subject]; ?>" type="text" maxlength="150" />
+            <input name="default_form_subject" value="<?php echo $admin_options[default_form_subject]; ?>" type="text" />
           </li>
           <li class="descrip">Default subject to be included in all form emails.</li>
           <li>
@@ -522,6 +536,11 @@ if (!class_exists('CustomContactForms')) {
             <input name="custom_thank_you" value="<?php echo $admin_options[custom_thank_you]; ?>" type="text" maxlength="150" />
           </li>
           <li class="descrip">Upon filling out forms, users will be sent back to the form page if this is left blank.</li>
+          <li>
+            <label for="form_success_message">Thank You Message:</label>
+            <input name="form_success_message" value="<?php echo $admin_options[form_success_message]; ?>" type="text"/>
+          </li>
+          <li class="descrip">If a custom thank you page is not provided, this message will be displayed in a stylish JQuery popover when a user successfully fills out a form.</li>
           
           <li>
             <label for="remember_field_values">Remember Field Values:</label>
@@ -534,10 +553,15 @@ if (!class_exists('CustomContactForms')) {
           </li>
           <li class="descrip">Enabling this shows tooltips containing field instructions on forms in the widget.</li>
           <li>
-            <label for="remember_field_values">Hide Plugin Author Link:</label>
+            <label for="author_link">Hide Plugin Author Link in Code:</label>
             <select name="author_link"><option value="1">Yes</option><option <?php if ($admin_options[author_link] == 0) echo 'selected="selected"'; ?> value="0">No</option></select>
           </li>
-          <li class="show-widget">Show Sidebar Widget:</li>
+          <li>
+            <label for="wp_mail_function">Use Wordpress Mail Function:</label>
+            <select name="wp_mail_function"><option value="1">Yes</option><option <?php if ($admin_options[wp_mail_function] == 0) echo 'selected="selected"'; ?> value="0">No</option></select>
+          </li>
+          <li class="descrip">Setting this to no will use the PHP mail function. If your forms aren't sending mail properly try setting this to no.</li>
+          <li class="show-widget"><b>Show Sidebar Widget:</b></li>
           <li>
             <label>
             <input value="1" type="checkbox" name="show_widget_home" <?php if ($admin_options[show_widget_home] == 1) echo 'checked="checked"'; ?> />
@@ -955,8 +979,9 @@ if (!class_exists('CustomContactForms')) {
 		
 		function getCaptchaCode($form_id) {
 			$captcha = parent::selectField('', 'captcha');
+			$instructions = (empty($captcha->field_instructions)) ? '' : 'title="'.$captcha->field_instructions.'" class="tooltip-field"';
 			$out = '<img id="captcha-image" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/custom-contact-forms/image.php?fid='.$form_id.'" /> 
-			<br /><label for="captcha">'.$captcha->field_label.'</label> <input type="text" name="captcha" id="captcha" maxlength="20" />';
+			<br /><label for="captcha'.$form_id.'">'.$captcha->field_label.'</label> <input type="text" '.$instructions.' name="captcha" id="captcha'.$form_id.'" maxlength="20" />';
 			return $out;
 		}
 		
@@ -965,14 +990,27 @@ if (!class_exists('CustomContactForms')) {
 		}
 		
 		function contactAuthor($name, $email, $website, $message, $type) {
+			$admin_options = $this->getAdminOptions();
 			$body = "Name: $name\n";
 			$body .= "Email: $email\n";
 			$body .= "Website: $website\n";
 			$body .= "Message: $message\n";
 			$body .= "Message Type: $type\n";
 			$body .= 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
-			$mailer = new CustomContactFormsMailer('admin@taylorlovett.com', $email, "CCF Message: $type", stripslashes($body));
+			$mailer = new CustomContactFormsMailer('admin@taylorlovett.com', $email, "CCF Message: $type", stripslashes($body), $admin_options[wp_mail_function]);
 			$mailer->send();
+		}
+		
+		function insertFormSuccessCode() {
+			$admin_options = $this->getAdminOptions();
+		?>
+        	<div id="ccf-form-success">
+            	<h5>Successful Form Submission</h5>
+                <p><?php echo $admin_options[form_success_message]; ?></p>
+                <a href="javascript:void(0)" class="close">[close]</a>
+            </div>
+
+        <?php
 		}
 		
 		function processForms() {
@@ -985,14 +1023,15 @@ if (!class_exists('CustomContactForms')) {
 				$cap_name = 'captcha_' . $_POST[fid];
 				foreach ($fields as $field_id) {
 					$field = parent::selectField($field_id, '');
-					if ($field->field_type == 'Checkbox')
-						$checks[] = $field->field_slug;
-					if ($field->field_slug == 'captcha') {
-						if ($_POST[captcha] != $_SESSION[$cap_name])
-							$this->setFormError('captcha', 'You entered the captcha image code incorrectly');
-					} if ($field->field_slug == 'ishuman') {
+					 if ($field->field_slug == 'ishuman') {
 						if ($_POST[ishuman] != 1)
 							$this->setFormError('ishuman', 'Only humans can use this form.');
+					} elseif ($field->field_slug == 'captcha') {
+						if ($_POST[captcha] != $_SESSION[$cap_name])
+							$this->setFormError('captcha', 'You entered the captcha image code incorrectly');
+					} else {
+						if ($field->field_type == 'Checkbox')
+							$checks[] = $field->field_slug;
 					}
 				} 
 				$body = '';
@@ -1012,12 +1051,14 @@ if (!class_exists('CustomContactForms')) {
 				$errors = $this->getAllFormErrors();
 				if (empty($errors)) {
 					unset($_SESSION['captcha_' . $_POST[fid]]);
+					unset($_SESSION[fields]);
 					$body .= 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
-					$mailer = new CustomContactFormsMailer($admin_options[default_to_email], $admin_options[default_from_email], $admin_options[default_form_subject], stripslashes($body));
+					$mailer = new CustomContactFormsMailer($admin_options[default_to_email], $admin_options[default_from_email], $admin_options[default_form_subject], stripslashes($body), $admin_options[wp_mail_function]);
 					$mailer->send();
 					if (!empty($admin_options[custom_thank_you])) {
 						header("Location: " . $admin_options[custom_thank_you]);
 					}
+					add_action('wp_footer', array(&$this, 'insertFormSuccessCode'), 1);
 				}
 				unset($_POST);
 			}
@@ -1042,4 +1083,5 @@ if (isset($customcontact)) {
 	//add_action('wp_footer', array(&$customcontact, 'insertPopoverCode'));
 }
 add_action('admin_menu', 'CustomContactForms_ap');
+				
 ?>
