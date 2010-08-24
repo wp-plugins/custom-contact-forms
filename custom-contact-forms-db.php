@@ -98,6 +98,12 @@ if (!class_exists('CustomContactFormsDB')) {
 				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `user_field` INT( 1 ) NOT NULL DEFAULT '1'");
 			if (!$this->columnExists('form_style', $this->forms_table))
 				$wpdb->query("ALTER TABLE `" . $this->forms_table . "` ADD `form_style` INT( 10 ) NOT NULL DEFAULT '0'");
+			if (!$this->columnExists('form_email', $this->forms_table))
+				$wpdb->query("ALTER TABLE `" . $this->forms_table . "` ADD `form_email` VARCHAR( 50 ) NOT NULL");
+			if (!$this->columnExists('form_success_message', $this->forms_table))
+				$wpdb->query("ALTER TABLE `" . $this->forms_table . "` ADD `form_success_message` TEXT NOT NULL");
+			if (!$this->columnExists('form_thank_you_page', $this->forms_table))
+				$wpdb->query("ALTER TABLE `" . $this->forms_table . "` ADD `form_thank_you_page` VARCHAR ( 200 ) NOT NULL");
 			if (!$this->columnExists('field_backgroundcolor', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `field_backgroundcolor` VARCHAR( 20 ) NOT NULL DEFAULT '#efefef'");
 			if (!$this->columnExists('field_borderstyle', $this->styles_table))
@@ -110,8 +116,13 @@ if (!class_exists('CustomContactFormsDB')) {
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `title_margin` VARCHAR( 20 ) NOT NULL DEFAULT '2px'");
 			if (!$this->columnExists('label_margin', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `label_margin` VARCHAR( 20 ) NOT NULL DEFAULT '3px'");
+			if (!$this->columnExists('textarea_backgroundcolor', $this->styles_table))
+				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `textarea_backgroundcolor` VARCHAR( 20 ) NOT NULL DEFAULT '#efefef'");
 			if (!$this->columnExists('field_instructions', $this->fields_table))
 				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `field_instructions` TEXT NOT NULL");
+			if (!$this->columnExists('field_required', $this->fields_table))
+				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `field_required` INT( 1 ) NOT NULL DEFAULT '0'");
+		
 		}
 		
 		function insertFixedFields() {
@@ -133,10 +144,14 @@ if (!class_exists('CustomContactFormsDB')) {
 			return (!empty($test[0]) && $test[0]->COLUMN_NAME == $column);
 		}
 		
-		function insertForm($form_slug, $form_title, $form_action, $form_method, $submit_button_text, $custom_code, $form_style) {
+		function insertForm($form) {
 			global $wpdb;
-			if ($this->formSlugExists($this->formatSlug($form_slug))) return false;
-			$wpdb->insert($this->forms_table, array('form_slug' => $this->formatSlug($form_slug), 'form_title' => $this->encodeOption($form_title), 'form_action' => $this->encodeOption($form_action), 'form_method' => $form_method, 'submit_button_text' => $this->encodeOption($submit_button_text), 'form_style' => $form_style, 'custom_code' => $this->encodeOption($custom_code)));
+			if (empty($form) or empty($form[form_slug]) or $this->formSlugExists($this->formatSlug($form[form_slug]))) return false;
+			$form[form_slug] = $this->formatSlug($form[form_slug]);
+			//foreach ($form as $key => $value)
+			//	$form[$key] = $this->encodeOption($value);
+			$form = array_map(array(&$this, 'encodeOption'), $form);
+			$wpdb->insert($this->forms_table, $form);
 			return true;
 		}
 		
@@ -179,38 +194,41 @@ if (!class_exists('CustomContactFormsDB')) {
 			return ($wpdb->get_var("show tables like '". $this->styles_table . "'") == $this->styles_table);
 		}
 		
-		function updateForm($form_slug, $form_title, $form_action, $form_method, $submit_button_text, $custom_code, $form_style, $fid) {
+		function updateForm($form, $fid) {
 			global $wpdb;
-			if (empty($form_slug)) return false;
-			$test = $this->selectForm('', $form_slug);
-			if (!empty($test) and $test->id != $fid) // if form_slug is different then make sure it is unique
-				return false;
-			$wpdb->update($this->forms_table, array('form_slug' => $this->formatSlug($form_slug), 'form_title' => $this->encodeOption($form_title), 'form_action' => $this->encodeOption($form_action), 'form_method' => $form_method, 'form_style' => $form_style, 'submit_button_text' => $this->encodeOption($submit_button_text), 'custom_code' => $this->encodeOption($custom_code)), array('id' => $fid));
+			if (!empty($form[form_slug])) {
+				$test = $this->selectForm('', $this->formatSlug($form[form_slug]));
+				if (!empty($test) and $test->id != $fid) return false;
+				$form[form_slug] = $this->formatSlug($form[form_slug]);
+			}
+			$form = array_map(array(&$this, 'encodeOption'), $form);
+			$wpdb->update($this->forms_table, $form, array('id' => $fid));
 			return true;
 		}
 		
-		function updateField($field_slug, $field_label, $field_type, $field_value, $field_maxlength, $field_instructions, $fid) {
+		function updateField($field, $fid) {
 			global $wpdb;
-			if (empty($field_slug)) return false;
-			$test = $this->selectField('', $field_slug);
-			if (!empty($test) and $test->id != $fid) // if field_slug is different then make sure it is unique
-				return false;
-			$wpdb->update($this->fields_table, array('field_slug' => $this->formatSlug($field_slug), 'field_label' => $this->encodeOption($field_label), 'field_type' => $field_type, 'field_value' => $this->encodeOption($field_value), 'field_maxlength' => $this->encodeOption($field_maxlength), 'field_instructions' => $this->encodeOption($field_instructions)), array('id' => $fid));
+			if (!empty($field[field_slug])) {
+				$test = $this->selectField('', $this->formatSlug($field[field_slug]));
+				if (!empty($test) and $test->id != $fid)
+					return false;
+				$field[field_slug] = $this->formatSlug($field[field_slug]);
+			}
+			$field = array_map(array(&$this, 'encodeOption'), $field);
+			$wpdb->update($this->fields_table, $field, array('id' => $fid));
 			return true;
 		}
 		
-		function updateStyle($style) {
+		function updateStyle($style, $sid) {
 			global $wpdb;
 			if (empty($style[style_slug])) return false;
-			$test = $this->selectStyle('', $style[style_slug]);
-			if (!empty($test) and $test->id != $style[id]) // if style_slug is different then make sure it is unique
+			$test = $this->selectStyle('', $this->formatSlug($style[style_slug]));
+			if (!empty($test) and $test->id != $sid) // if style_slug is different then make sure it is unique
 				return false;
 			$style[style_slug] = $this->formatSlug($style[style_slug]);
-			foreach ($style as $key => $value) {
-				if ($key != 'style_slug')
-					$style[$key] = $this->formatStyle($this->encodeOption($value));
-			}
-			$wpdb->update($this->styles_table, $style, array('id' => $style[id]));
+			$style = array_map(array(&$this, 'encodeOption'), $style);
+			
+			$wpdb->update($this->styles_table, $style, array('id' => $sid));
 			return true;
 		}
 		
@@ -247,7 +265,7 @@ if (!class_exists('CustomContactFormsDB')) {
 			return $wpdb->get_results("SELECT * FROM " . $this->styles_table . " ORDER BY style_slug ASC");	
 		}
 		
-		function selectForm($fid, $form_slug) {
+		function selectForm($fid, $form_slug = '') {
 			global $wpdb;
 			$extra = (!empty($form_slug)) ? " or form_slug = '$form_slug'" : '';
 			return $wpdb->get_row("SELECT * FROM " . $this->forms_table . " WHERE id='$fid' $extra");

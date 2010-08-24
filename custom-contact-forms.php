@@ -2,8 +2,8 @@
 /*
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
-	Description: YOU CAN NOW CUSTOMIZE EVERY ASPECT OF YOUR FORMS APPEARANCE WITH ANY EASY TO USE FORM - BORDERS, FONT SIZES, COLORS, PADDING, MARGINS, BACKGROUNDS, AND MORE. Custom Contact Forms is a plugin for handling and displaying custom web forms [customcontact form=1] in any page, post, category, or archive in which you want the form to show. This plugin allows you to create fields with a variety of options and to attach them to specific forms you create; definitely allows for more customization than any other Wordpress Contact Form plugin; comes with a customizable captcha spam blocker! Also comes with a web form widget to drag-and-drop in to your sidebar. <a href="options-general.php?page=custom-contact-forms" title="Maryland Wordpress Developer">Plugin Settings</a>
-	Version: 2.2.5
+	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form. <a href=options-general.php?page=custom-contact-forms">Settings</a>
+	Version: 3.0.0
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
 	Contributors: Taylor Lovett
@@ -32,7 +32,14 @@ if (!class_exists('CustomContactForms')) {
 		var $form_errors;
 		var $error_return;
 		var $gets;
-		var $fixed_fields = array('customcontactforms_submit', 'fid', 'fixedEmail', 'form_page', 'captcha', 'ishuman');
+		var $current_thank_you_message;
+		var $fixed_fields = array('customcontactforms_submit' => '', 
+							'fid' => '', 
+							'fixedEmail' => 'Use this field if you want the plugin to throw an error on fake emails.', 
+							'form_page' => '', 
+							'captcha' => 'This field requires users to type numbers in an image preventing spam.', 
+							'ishuman' => 'This field requires users to check a box to prove they aren\'t a spam bot.'
+							);
 		
 		function CustomContactForms() {
 			parent::CustomContactFormsDB();
@@ -42,7 +49,7 @@ if (!class_exists('CustomContactForms')) {
 		function getAdminOptions() {
 			$admin_email = get_option('admin_email');
 			$customcontactAdminOptions = array('show_widget_home' => 1, 'show_widget_pages' => 1, 'show_widget_singles' => 1, 'show_widget_categories' => 1, 'show_widget_archives' => 1, 'default_to_email' => $admin_email, 'default_from_email' => $admin_email, 'default_form_subject' => 'Someone Filled Out Your Contact Form!', 
-			'custom_thank_you' => '', 'remember_field_values' => 0, 'author_link' => 1, 'enable_widget_tooltips' => 1, 'wp_mail_function' => 1, 'form_success_message' => 'Thank you for filling out our web form. We will get back to you ASAP.'); // default general settings
+			'remember_field_values' => 0, 'author_link' => 1, 'enable_widget_tooltips' => 1, 'wp_mail_function' => 1, 'form_success_message' => 'Thank you for filling out our web form. We will get back to you ASAP.'); // default general settings
 			$customcontactOptions = get_option($this->adminOptionsName);
 			if (!empty($customcontactOptions)) {
 				foreach ($customcontactOptions as $key => $option)
@@ -108,12 +115,18 @@ if (!class_exists('CustomContactForms')) {
 			echo $before_widget . $this->getFormCode($option[widget_form_id], true) . $after_widget;
 		}
 		function addHeaderCode() {
-			
 			?>
-<!-- Custom Contact Forms by Taylor Lovett - http://www.taylorlovett.com -->
-<link rel="stylesheet" href="<?php echo get_option('siteurl'); ?>/wp-content/plugins/custom-contact-forms/custom-contact-forms.css" type="text/css" media="screen" />
-<!--<script type="text/javascript" language="javascript" src="<?php echo get_option('siteurl'); ?>/wp-content/plugins/custom-contact-forms/js/custom-contact-forms.js"></script>-->
-<?php		wp_enqueue_script('jquery-tools', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.tools.min.js');
+            <!-- Custom Contact Forms by Taylor Lovett - http://www.taylorlovett.com -->
+            <link rel="stylesheet" href="<?php echo get_option('siteurl'); ?>/wp-content/plugins/custom-contact-forms/custom-contact-forms.css" type="text/css" media="screen" />
+            <?php		
+		}
+		
+		function insertAdminScripts() {
+			wp_enqueue_script('ccf-main', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/custom-contact-forms-admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'/*, 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-dialog'*/), '1.0');
+		}
+		
+		function insertFrontEndScripts() {
+			wp_enqueue_script('jquery-tools', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.tools.min.js');
 			//wp_enqueue_script('jquery-ui-position', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.ui.position.js');
 			//wp_enqueue_script('jquery-ui-widget', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.ui.widget.js');
 			//wp_enqueue_script('jquery-bgiframe', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.bgiframe-2.1.1.js');
@@ -142,7 +155,7 @@ if (!class_exists('CustomContactForms')) {
 		function printAdminPage() {
 			$admin_options = $this->getAdminOptions();
 			if ($_POST[form_create]) {
-				parent::insertForm($_POST[form_slug], $_POST[form_title], $_POST[form_action], $_POST[form_method], $_POST[submit_button_text], $_POST[custom_code], $_POST[form_style]);
+				parent::insertForm($_POST[form]);
 			} elseif ($_POST[field_create]) {
 				parent::insertField($_POST[field]);
 			} elseif ($_POST[general_settings]) {
@@ -162,13 +175,13 @@ if (!class_exists('CustomContactForms')) {
 				$admin_options[remember_field_values] = $_POST[remember_field_values];
 				update_option($this->adminOptionsName, $admin_options);
 			} elseif ($_POST[field_edit]) {
-				parent::updateField($_POST[field_slug], $_POST[field_label], $_POST[field_type], $_POST[field_value], $_POST[field_maxlength], $_POST[field_instructions], $_POST[fid]);
+				parent::updateField($_POST[field], $_POST[fid]);
 			} elseif ($_POST[field_delete]) {
 				parent::deleteField($_POST[fid]);
 			} elseif ($_POST[form_delete]) {
 				parent::deleteForm($_POST[fid]);
 			} elseif ($_POST[form_edit]) {
-				parent::updateForm($_POST[form_slug], $_POST[form_title], $_POST[form_action], $_POST[form_method], $_POST[submit_button_text], $_POST[custom_code], $_POST[form_style], $_POST[fid]);
+				parent::updateForm($_POST[form], $_POST[fid]);
 			} elseif ($_POST[form_add_field]) {
 				parent::addFieldToForm($_POST[field_id], $_POST[fid]);
 			} elseif ($_POST[disattach_field]) {
@@ -176,9 +189,9 @@ if (!class_exists('CustomContactForms')) {
 			}  elseif ($_POST[style_create]) {
 				parent::insertStyle($_POST[style]);
 			}  elseif ($_POST[style_edit]) {
-				parent::updateStyle($_POST[style]);
+				parent::updateStyle($_POST[style], $_POST[sid]);
 			}  elseif ($_POST[style_delete]) {
-				parent::deleteStyle($_POST[style][id]);
+				parent::deleteStyle($_POST[sid]);
 			} elseif ($_POST[contact_author]) {
 				$this_url = (!empty($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : $_SERVER['SERVER_NAME'];
 				$this->contactAuthor($_POST[name], $_POST[email], $this_url, $_POST[message], $_POST[type]);
@@ -203,6 +216,7 @@ if (!class_exists('CustomContactForms')) {
     <li><a href="#manage-styles">Manage Styles</a></li>
     <li><a href="#contact-author">Suggest a Feature</a></li>
     <li><a href="#contact-author">Bug Report</a></li>
+    <li><a href="#custom-html">Custom HTML Forms (New!)</a></li>
     <li class="last"><a href="#plugin-news">Plugin News</a></li>
   </ul><a name="create-fields"></a>
   <div id="create-fields" class="postbox">
@@ -236,6 +250,9 @@ if (!class_exists('CustomContactForms')) {
             <input class="width50" size="10" name="field[field_maxlength]" type="text" maxlength="4" />
             (0 for no limit; only applies to Text fields)</li>
           <li>
+            <label for="field_required">Required Field:</label>
+            <select name="field[field_required]"><option value="0">No</option><option value="1">Yes</option></select></li>
+          <li>
             <label for="field_value">Field Instructions:</label>
             <input name="field[field_instructions]" type="text" /><br />
             (If this is filled out, a tooltip popover displaying this text will show when the field is selected.)
@@ -253,36 +270,48 @@ if (!class_exists('CustomContactForms')) {
       <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
         <ul>
           <li>
-            <label for="form_name">Form Slug:</label>
-            <input type="text" maxlength="100" name="form_slug" />
-            (Must be unique)</li>
+            <label for="form[form_name]">Form Slug:</label>
+            <input type="text" maxlength="100" name="form[form_slug]" /><br />
+            (Must be unique and contain only underscores and alphanumeric characters.)</li>
           <li>
-            <label for="form_title">Form Title:</label>
-            <input type="text" maxlength="200" name="form_title" />
+            <label for="form[form_title]">Form Title:</label>
+            <input type="text" maxlength="200" name="form[form_title]" />
             (The form header text)</li>
           <li>
-            <label for="form_method">Form Method:</label>
-            <select name="form_method">
+            <label for="form[form_method]">Form Method:</label>
+            <select name="form[form_method]">
               <option>Post</option>
               <option>Get</option>
             </select>
             (If unsure, leave as is.)</li>
           <li>
-            <label for="form_action">Form Action:</label>
-            <input type="text" name="form_action" value="" />
+            <label for="form[form_action]">Form Action:</label>
+            <input type="text" name="form[form_action]" value="" />
             (If unsure, leave blank.)</li>
           <li>
-            <label for="form_action">Form Style:</label>
-            <select name="form_style"><?php echo $style_options; ?></select>
+            <label for="form[form_action]">Form Style:</label>
+            <select name="form[form_style]"><?php echo $style_options; ?></select>
             (<a href="#create-styles">Click to create a style</a>)</li>
           <li>
-            <label for="submit_button_text">Submit Button Text:</label>
-            <input type="text" maxlength="200" name="submit_button_text" />
+            <label for="form[submit_button_text]">Submit Button Text:</label>
+            <input type="text" maxlength="200" name="form[submit_button_text]" />
           </li>
           <li>
-            <label for="custom_code">Custom Code:</label>
-            <input type="text" name="custom_code" />
-            (If unsure, leave blank.)</li>
+            <label for="form[custom_code]">Custom Code:</label>
+            <input type="text" name="form[custom_code]" /><br />
+            (If unsure, leave blank. This field allows you to insert custom HTML directly after the starting form tag.)</li>
+          <li>
+            <label for="form[form_email]">Form Destination Email:</label>
+            <input type="text" name="form[form_email]" /><br />
+            (Will receive all submissions from this form; if left blank it will use the default specified in general settings.)</li>
+          <li>
+            <label for="form[form_success_message]">Form Success Message:</label>
+            <input type="text" name="form[form_success_message]" /><br />
+            (Will be displayed in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.)</li>
+          <li>
+            <label for="form[form_thank_you_page]">Custom Success URL:</label>
+            <input type="text" name="form[form_thank_you_page]" /><br />
+            (If this is filled out, users will be sent to this page when they successfully fill out this form. If it is left blank, a popover showing the form's "success message" will be displayed on form success.)</li>
           <li>
             <input type="submit" value="Create Form" name="form_create" />
           </li>
@@ -298,6 +327,7 @@ if (!class_exists('CustomContactForms')) {
         <th scope="col" class="manage-column field-label">Label</th>
         <th scope="col" class="manage-column field-type">Type</th>
         <th scope="col" class="manage-column field-value">Initial Value</th>
+        <th scope="col" class="manage-column field-required">Required</th>
         <th scope="col" class="manage-column field-maxlength">Maxlength</th>
         <th scope="col" class="manage-column field-action">Action</th>
       </tr>
@@ -314,20 +344,22 @@ if (!class_exists('CustomContactForms')) {
       <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">        
       <tr<?php if ($z % 2 == 1) echo ' class="evenrow"'; ?>>
         
-          <td><input type="text" name="field_slug" maxlength="50" value="<?php echo $fields[$i]->field_slug; ?>" /></td>
-          <td><input type="text" name="field_label" maxlength="100" value="<?php echo $fields[$i]->field_label; ?>" /></td>
-          <td><select name="field_type">
+          <td><input type="text" name="field[field_slug]" class="width100" maxlength="50" value="<?php echo $fields[$i]->field_slug; ?>" /></td>
+          <td><input type="text" name="field[field_label]" maxlength="100" value="<?php echo $fields[$i]->field_label; ?>" /></td>
+          <td><select name="field[field_type]">
               <?php echo $field_types; ?>
             </select></td>
-          <td><input type="text" name="field_value" maxlength="50" value="<?php echo $fields[$i]->field_value; ?>" /></td>
-          <td><input type="text" class="width50" name="field_maxlength" value="<?php echo $fields[$i]->field_maxlength; ?>" /></td>
+          <td><input type="text" name="field[field_value]" maxlength="50" class="width75" value="<?php echo $fields[$i]->field_value; ?>" /></td>
+          <td><select name="field[field_required]"><option value="1">Yes</option><option value="0" <?php if ($fields[$i]->field_required != 1) echo 'selected="selected"'; ?>>No</option></select></td>
+          <td><input type="text" class="width50" name="field[field_maxlength]" value="<?php echo $fields[$i]->field_maxlength; ?>" /></td>
           <td><input type="hidden" name="fid" value="<?php echo $fields[$i]->id; ?>" />
+            <span class="fields-options-expand"></span>
             <input type="submit" name="field_edit" value="Edit" />
             <input type="submit" name="field_delete" value="Delete" /></td>
         
       </tr>
       <tr<?php if ($z % 2 == 1) echo ' class="evenrow"'; ?>>
-      	<td colspan="6" style="border-bottom:1px solid black;">Field Instructions: <input type="text" name="field_instructions" value="<?php echo $fields[$i]->field_instructions; ?>" /></td>
+      	<td class="fields-extra-options" colspan="7" style="border-bottom:1px solid black;">Field Instructions: <input type="text" class="width200" name="field[field_instructions]" value="<?php echo $fields[$i]->field_instructions; ?>" /></td>
       </tr>
       </form>
       <?php
@@ -340,6 +372,7 @@ if (!class_exists('CustomContactForms')) {
         <th scope="col" class="manage-column field-label">Label</th>
         <th scope="col" class="manage-column field-type">Type</th>
         <th scope="col" class="manage-column field-value">Initial Value</th>
+        <th scope="col" class="manage-column field-required">Required</th>
         <th scope="col" class="manage-column field-maxlength">Maxlength</th>
         <th scope="col" class="manage-column field-action">Action</th>
       </tr>
@@ -353,6 +386,7 @@ if (!class_exists('CustomContactForms')) {
         <th scope="col" class="manage-column field-label">Label</th>
         <th scope="col" class="manage-column field-type">Type</th>
         <th scope="col" class="manage-column field-value">Initial Value</th>
+        <th scope="col" class="manage-column field-value">Required</th>
         <th scope="col" class="manage-column field-maxlength">Maxlength</th>
         <th scope="col" class="manage-column field-action">Action</th>
       </tr>
@@ -367,33 +401,38 @@ if (!class_exists('CustomContactForms')) {
                     
                 ?>
       <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">        
-      <tr <?php if ($z % 2 == 0) echo ' class="evenrow"'; ?>>
+      <tr <?php if ($z % 2 == 0) echo ' class="evenrow"'; ?> style="border:none;">
         
-          <td><?php echo $fields[$i]->field_slug; ?>
-            <input type="hidden" name="field_slug" value="<?php echo $fields[$i]->field_slug; ?>" /></td>
-          <td><input type="text" name="field_label" maxlength="100" value="<?php echo $fields[$i]->field_label; ?>" /></td>
+          <td><?php echo $fields[$i]->field_slug; ?></td>
+          <td><input type="text" name="field[field_label]" maxlength="100" value="<?php echo $fields[$i]->field_label; ?>" /></td>
           <td><?php echo $fields[$i]->field_type; ?>
-            <input type="hidden" name="field_type" value="<?php echo $fields[$i]->field_type; ?>" /></td>
-          <td><?php if ($fields[$i]->field_type != 'Checkbox') { ?>
-          	<input type="text" name="field_value" maxlength="50" value="<?php echo $fields[$i]->field_value; ?>" />
+            <td><?php if ($fields[$i]->field_type != 'Checkbox') { ?>
+          	<input type="text" name="field[field_value]" class="width75" maxlength="50" value="<?php echo $fields[$i]->field_value; ?>" />
           <?php } else {
           	echo $fields[$i]->field_value;
 			?>
-            <input type="hidden" name="field_value" value="1" />
+          <?php } ?>
+          </td>
+          <td>
+          <?php if ($fields[$i]->field_slug == 'fixedEmail') { ?>
+          <select name="field[field_required]"><option value="1">Yes</option><option <?php if($fields[$i]->field_required != 1) echo 'selected="selected"'; ?> value="0">No</option></select>
+          <?php } else { ?>
+          	Yes
           <?php } ?>
           </td>
           <td><?php if ($fields[$i]->field_type != 'Checkbox') { ?>
-          	<input type="text" class="width50" name="field_maxlength" value="<?php echo $fields[$i]->field_maxlength; ?>" />
+          	<input type="text" class="width50" name="field[field_maxlength]" value="<?php echo $fields[$i]->field_maxlength; ?>" />
           <?php } else { ?>
-          	None<input type="hidden" name="field_maxlength" value="0" />
+          	None
           <?php } ?>
           </td>
           
           <td><input type="hidden" name="fid" value="<?php echo $fields[$i]->id; ?>" />
+            <span class="fixed-fields-options-expand"></span>
             <input type="submit" name="field_edit" value="Edit" /></td>
       </tr>
-      <tr <?php if ($z % 2 == 0) echo ' class="evenrow"'; ?>>
-      	<td colspan="6" style="border-bottom:1px solid black;">Field Instructions: <input type="text" name="field_instructions" value="<?php echo $fields[$i]->field_instructions; ?>" /></td>
+      <tr <?php if ($z % 2 == 0) echo ' class="evenrow"'; ?> style="border:none;">
+      	<td class="fixed-fields-extra-options" colspan="7" style="border-bottom:1px solid black;">Field Instructions: <input type="text" name="field[field_instructions]" class="width200" value="<?php echo $fields[$i]->field_instructions; ?>" /> - <?php echo $this->fixed_fields[$fields[$i]->field_slug]; ?></td>
       </tr>
       </form>
       <?php
@@ -406,6 +445,7 @@ if (!class_exists('CustomContactForms')) {
         <th scope="col" class="manage-column field-label">Label</th>
         <th scope="col" class="manage-column field-type">Type</th>
         <th scope="col" class="manage-column field-value">Initial Value</th>
+        <th scope="col" class="manage-column field-value">Required</th>
         <th scope="col" class="manage-column field-maxlength">Maxlength</th>
         <th scope="col" class="manage-column field-action">Action</th>
       </tr>
@@ -415,13 +455,12 @@ if (!class_exists('CustomContactForms')) {
   <table class="widefat post" id="manage-forms" cellspacing="0">
     <thead>
       <tr>
+      	<th scope="col" class="manage-column form-code">Form Display Code</th>
         <th scope="col" class="manage-column form-slug">Slug</th>
         <th scope="col" class="manage-column form-title">Title</th>
-        <th scope="col" class="manage-column form-method">Method</th>
-        <th scope="col" class="manage-column form-action">Form Action</th>
         <th scope="col" class="manage-column form-submit">Button Text</th>
-        <th scope="col" class="manage-column form-submit">Custom Code</th>
         <th scope="col" class="manage-column form-submit">Style</th>
+        <th scope="col" class="manage-column form-submit">Action</th>
       </tr>
     </thead>
     <tbody>
@@ -436,56 +475,68 @@ if (!class_exists('CustomContactForms')) {
                 ?>
       <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
       <tr class="<?php if ($i % 2 == 0) echo 'evenrow'; ?>">
-          <td><input type="text" class="width75" name="form_slug" value="<?php echo $forms[$i]->form_slug; ?>" /></td>
-          <td><input type="text" class="width125" name="form_title" value="<?php echo $forms[$i]->form_title; ?>" /></td>
-          <td><select name="form_method">
-              <?php echo $form_methods; ?>
-            </select></td>
-          <td><input class="width125" type="text" name="form_action" value="<?php echo $forms[$i]->form_action; ?>" /></td>
-          <td><input class="width125" type="text" name="submit_button_text" value="<?php echo $forms[$i]->submit_button_text; ?>" /></td>
-          <td><input type="text" class="width125" name="custom_code" value="<?php echo $forms[$i]->custom_code; ?>" /></td>
-          <td><select name="form_style"><?php echo $sty_opt; ?></select></td>
+      	  <td><span class="bold">[customcontact form=<?php echo $forms[$i]->id ?>]</span></td>
+          <td><input type="text" class="width75" name="form[form_slug]" value="<?php echo $forms[$i]->form_slug; ?>" /></td>
+          <td><input type="text" class="width125" name="form[form_title]" value="<?php echo $forms[$i]->form_title; ?>" /></td>
+          <td><input class="width100" type="text" name="form[submit_button_text]" value="<?php echo $forms[$i]->submit_button_text; ?>" /></td>
+          <td><select name="form[form_style]"><?php echo $sty_opt; ?></select></td>
+          <td><input type="hidden" name="fid" value="<?php echo $forms[$i]->id; ?>" />
+            <span class="form-options-expand"></span>
+            <input type="submit" name="form_edit" value="Edit" />
+            <input type="submit" name="form_delete" value="Delete" />
+          </td>
       </tr>
       <tr class="<?php if ($i % 2 == 0) echo 'evenrow'; ?>">
-          <td colspan="8" style="border-bottom:1px solid black;"><div class="attached_fields">
-              <label><span>Attached Fields:</span></label>
-              <?php
-                    $attached_fields = parent::getAttachedFieldsArray($forms[$i]->id);
-                    if (empty($attached_fields)) echo 'None ';
-                    else {
-                        echo '<select name="disattach_field_id">';
-                        foreach($attached_fields as $attached_field) {
-                            $this_field = parent::selectField($attached_field, '');
-                            echo $this_field->field_slug . ' <option value="'.$this_field->id.'">'.$this_field->field_slug.'</option>';
-                            ?>
-              <?php
-                        }
-                        echo '</select> <input type="submit" value="Disattach Field" name="disattach_field" />';
-                    }
-                    ?>
-              <br />
-              <span class="red bold">*</span> Code to Display Form: <b>[customcontact form=<?php echo $forms[$i]->id ?>]</b> </div>
-            <div class="attach_field">
-              <label for="field_id"><span>Attach Field:</span></label>
-              <select name="field_id">
-                <?php echo $add_fields; ?>
-              </select>
-              <input type="submit" name="form_add_field" value="Attach" />
-              <input type="hidden" name="fid" value="<?php echo $forms[$i]->id; ?>" />
-              <br />
-              <span class="red bold">*</span> Attach in the order you want fields to display. </div>
-              <div class="actions">
-              	<input type="hidden" name="fid" value="<?php echo $forms[$i]->id; ?>" />
-            	<input type="submit" name="form_edit" value="Edit Form" />
-            	<input type="submit" name="form_delete" value="Delete Form" />
-              </div>
-              <!--<div class="attach_styles">
-              	<label for="attach_styles"><span>Form Style:</span> </label> <select name="attach_styles"><option>really long style name</option></select>
-                <input type="submit" value="Attach" name="attach_styles" /><br />
-                <span class="red bold">*</span> Create form styles at the bottom of the page, and use them to change your forms appearance.
-              </div>-->
-              </td>
+          <td class="form-extra-options textcenter" colspan="8" style="border-bottom:1px solid black;">
+              <table class="form-extra-options-table">
+              	<tbody>
+                	<tr>
+                    	<td class="bold">Form Method</td>
+                        <td class="bold">Form Action</td>
+                        <td class="bold">Destination Email</td>
+                        <td class="bold">Custom Code</td>
+                        <td class="bold">Success Message</td>
+                        <td class="bold">Custom Success URL</td>
+                    </tr>
+                    <tr>
+                    	<td><select name="form[form_method]"><?php echo $form_methods; ?></select></td>
+                    	<td><input type="text" name="form[form_action]" value="<?php echo $forms[$i]->form_action; ?>" /></td>
+                        <td><input type="text" name="form[form_email]" value="<?php echo $forms[$i]->form_email; ?>" /></td>
+                        <td><input type="text" name="form[custom_code]" value="<?php echo $forms[$i]->custom_code; ?>" /></td>
+                        <td><input type="text" name="form[form_success_message]" value="<?php echo $forms[$i]->form_success_message; ?>" /></td>
+                    	<td><input type="text" class="width125" name="form[form_thank_you_page]" value="<?php echo $forms[$i]->form_thank_you_page; ?>" /></td>
+                    </tr>
+                    <tr>
+                    	<td colspan="3">
+                        	<label for="disattach_field_id"><span>Attached Fields:</span></label>
+							  <?php
+                              	$attached_fields = parent::getAttachedFieldsArray($forms[$i]->id);
+                                if (empty($attached_fields)) echo 'None ';
+                                else {
+                                	echo '<select name="disattach_field_id">';
+                                    foreach($attached_fields as $attached_field) {
+                                    	$this_field = parent::selectField($attached_field, '');
+                                        echo $this_field->field_slug . ' <option value="'.$this_field->id.'">'.$this_field->field_slug.'</option>';
+                                    }
+                                    echo '</select> <input type="submit" value="Disattach Field" name="disattach_field" />';
+                                }
+                              ?><br />
+                              <span class="red bold">*</span> Attach fields in the order you want them displayed.
+                        </td>
+                        <td colspan="3">
+                        	<label for="field_id"><span>Attach Field:</span></label>
+              					<select name="field_id"><?php echo $add_fields; ?></select> <input type="submit" name="form_add_field" value="Attach Field" />
+                                <br /><span class="red bold">*</span> Attach fixed fields or ones you <a href="#create-fields">create</a>.
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td colspan="6"><label for="theme_code_<?php echo $forms[$i]->id; ?>"><span>Code to Display Form in Theme Files:</span></label> <input type="text" class="width225" value="if (function_exists('serveCustomContactForm')) { serveCustomContactForm(<?php echo $forms[$i]->id; ?>); }" name="theme_code_<?php echo $form[$i]->id; ?>" /></td>
+                    </tr>
+                </tbody>
+          	  </table>
+          </td>
       </tr>
+      
       </form>
       <?php
                 }
@@ -499,13 +550,12 @@ if (!class_exists('CustomContactForms')) {
     <tfoot>
       <tr>
       <tr>
+      	<th scope="col" class="manage-column form-code">Form Code</th>
         <th scope="col" class="manage-column form-slug">Slug</th>
         <th scope="col" class="manage-column form-title">Title</th>
-        <th scope="col" class="manage-column form-method">Method</th>
-        <th scope="col" class="manage-column form-action">Form Action</th>
         <th scope="col" class="manage-column form-submit">Button Text</th>
-        <th scope="col" class="manage-column form-submit">Custom Code</th>
         <th scope="col" class="manage-column form-submit">Style</th>
+        <th scope="col" class="manage-column form-submit">Action</th>
       </tr>
       </tr>
       
@@ -520,27 +570,22 @@ if (!class_exists('CustomContactForms')) {
             <label for="default_to_email">Default Email:</label>
             <input name="default_to_email" value="<?php echo $admin_options[default_to_email]; ?>" type="text" maxlength="100" />
           </li>
-          <li class="descrip">Form emails will be sent <span>to</span> this address.</li>
+          <li class="descrip">Form emails will be sent <span>to</span> this address, if no destination email is specified by the form.</li>
           <li>
             <label for="default_from_email">Default From Email:</label>
             <input name="default_from_email" value="<?php echo $admin_options[default_from_email]; ?>" type="text" maxlength="100" />
           </li>
-          <li class="descrip">Form emails will be sent <span>from</span> this address.</li>
+          <li class="descrip">Form emails will be sent <span>from</span> this address. It is recommended you provide a real email address that has been created through your host.</li>
           <li>
             <label for="default_form_subject">Default Email Subject:</label>
             <input name="default_form_subject" value="<?php echo $admin_options[default_form_subject]; ?>" type="text" />
           </li>
           <li class="descrip">Default subject to be included in all form emails.</li>
           <li>
-            <label for="custom_thank_you">Custom Thank You Page:</label>
-            <input name="custom_thank_you" value="<?php echo $admin_options[custom_thank_you]; ?>" type="text" maxlength="150" />
-          </li>
-          <li class="descrip">Upon filling out forms, users will be sent back to the form page if this is left blank.</li>
-          <li>
-            <label for="form_success_message">Thank You Message:</label>
+            <label for="form_success_message">Default Thank You Message:</label>
             <input name="form_success_message" value="<?php echo $admin_options[form_success_message]; ?>" type="text"/>
           </li>
-          <li class="descrip">If a custom thank you page is not provided, this message will be displayed in a stylish JQuery popover when a user successfully fills out a form.</li>
+          <li class="descrip">If someone fills out a form for which a success message is not provided and a custom success page is not provided, the plugin will show a popover containing this message.</li>
           
           <li>
             <label for="remember_field_values">Remember Field Values:</label>
@@ -599,11 +644,12 @@ if (!class_exists('CustomContactForms')) {
     <div class="inside">
       <p>1. Create a form.</p>
       <p>2. Create fields and attach those fields to the forms of your choice. <b>* Attach the fields in the order that you want them to show up in the form. If you mess up you can detach and reattach them.</b></p>
-      <p>3. Display those forms in posts and pages by inserting the code: [customcontact form=<b>FORMID</b>]. Replace <b>FORMID</b> with the id listed to the left of the form slug next to the form of your choice above.</p>
+      <p>3. Display those forms in posts and pages by inserting the code: [customcontact form=<b>FORMID</b>]. Replace <b>FORMID</b> with the id listed to the left of the form slug next to the form of your choice above. You can also display forms in theme files; the code for this is provided within each forms admin section.</p>
       <p>4. Prevent spam by attaching the fixed field, captcha or ishuman. Captcha requires users to type in a number shown on an image. Ishuman requires users to check a box to prove they aren't a spam bot.</p>
       <p>5. Add a form to your sidebar, by dragging the Custom Contact Form widget in to your sidebar.</p>
       <p>6. Configure the General Settings appropriately; this is important if you want to receive your web form messages!</p>
       <p>7. Create form styles to change your forms appearances. The image below explains how each style field can change the look of your forms.</p>
+      <p>8. (advanced) If you are confident in your HTML and CSS skills, you can use the <a href="#custom-html">Custom HTML Forms feature</a> as a framework and write your forms from scratch. This allows you to use this plugin simply to process your form requests. The Custom HTML Forms feature will process and email any form variables sent to it regardless of whether they are created in the fields manager.</p>
       <div id="style-example"></div>
     </div>
   </div>
@@ -723,6 +769,10 @@ if (!class_exists('CustomContactForms')) {
             <label for="title_margin">Title Margin:</label>
             <input type="text" maxlength="20" value="2px" name="style[title_margin]" />
             (ex: 5px or 1em)</li>
+            <li>
+            <label for="textarea_backgroundcolor">Textarea Background Color:</label>
+            <input type="text" maxlength="20" value="#efefef" name="style[textarea_backgroundcolor]" />
+            (ex: #FF0000 or red)</li>
           <li>
             <input type="submit" value="Create Style" name="style_create" />
           </li>
@@ -752,6 +802,7 @@ if (!class_exists('CustomContactForms')) {
         <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
         	<td><label>Slug:</label> <input type="text" maxlength="30" value="<?php echo $style->style_slug; ?>" name="style[style_slug]" /><br />
             <label>Font Family:</label><input type="text" maxlength="20" value="<?php echo $style->form_fontfamily; ?>" name="style[form_fontfamily]" /><br />
+            <label>Textarea Background<br />Color:</label><input type="text" maxlength="20" value="<?php echo $style->textarea_backgroundcolor; ?>" name="style[textarea_backgroundcolor]" /><br />
             <input type="submit" class="submit-styles" name="style_edit" value="Update Style" /><br />
             <input type="submit" class="submit-styles" name="style_delete" value="Delete Style" />
             </td>
@@ -792,7 +843,7 @@ if (!class_exists('CustomContactForms')) {
             <label>Form Border Color:</label><input type="text" maxlength="20" value="<?php echo $style->form_bordercolor; ?>" name="style[form_bordercolor]" /><br />
             <label>Field Border Color:</label><input type="text" maxlength="20" value="<?php echo $style->field_bordercolor; ?>" name="style[field_bordercolor]" />
             <label>Field Border Style:</label><select name="style[field_borderstyle]"><?php echo str_replace('<option>'.$style->field_borderstyle.'</option>', '<option selected="selected">'.$style->field_borderstyle.'</option>', $border_style_options); ?></select>
-            <input name="style[id]" type="hidden" value="<?php echo $style->id; ?>" />
+            <input name="sid" type="hidden" value="<?php echo $style->id; ?>" />
             </td>
          
         </form>
@@ -836,6 +887,30 @@ if (!class_exists('CustomContactForms')) {
         </form>
     </div>
   </div>
+  <a name="custom-html"></a>
+  <div id="custom-html" class="postbox">
+    <h3 class="hndle"><span>Custom HTML Forms (Advanced)</span></h3>
+    <div class="inside">
+		<p>If you know HTML and simply want to use this plugin to process form requests, this feature is for you. 
+        The following HTML is a the framework to which you must adhere. In order for your form to work you MUST do the following: 
+        <b>a)</b> Keep the form action/method the same (yes the action is supposed to be empty), <b>b)</b> Include all the hidden fields shown below, <b>c)</b> provide a 
+        hidden field with a success message or thank you page (both hidden fields are included below, you must choose one or the other and fill in the value part of the input field appropriately.</p>
+        <textarea id="custom_html_textarea">
+&lt;form method=&quot;post&quot; action=&quot;&quot;&gt;
+&lt;input type=&quot;hidden&quot; name=&quot;ccf_customhtml&quot; value=&quot;1&quot; /&gt;
+&lt;input type=&quot;hidden&quot; name=&quot;success_message&quot; value=&quot;Thank you for filling out our form!&quot; /&gt;
+&lt;input type=&quot;hidden&quot; name=&quot;thank_you_page&quot; value=&quot;http://www.google.com&quot; /&gt;
+&lt;input type=&quot;hidden&quot; name=&quot;destination_email&quot; value=&quot;<?php echo $admin_options[default_to_email]; ?>&quot; /&gt;
+&lt;input type=&quot;hidden&quot; name=&quot;required_fields&quot; value=&quot;field_name1, field_name2&quot; /&gt;
+
+&lt;!-- Build your form in here. It is recommended you only use this feature if you are experienced with HTML. 
+The success_message field will add a popover containing the message when the form is completed successfully, the thank_you_page field will force 
+the user to be redirected to that specific page on successful form completion. The required_fields hidden field is optional; to use it seperate 
+the field names you want required by commas. Remember to use underscores instead of spaces in field names! --&gt;
+
+&lt;/form&gt;</textarea>
+    </div>
+  </div>
 </div>
 <?php
 		}
@@ -848,7 +923,8 @@ if (!class_exists('CustomContactForms')) {
 				foreach ($errors as $error) {
 					$out .= '<li>'.$error.'</li>' . "\n";
 				}
-				return $out . '</ul>' . "\n" . '<p><a href="'.$this->error_return.'" title="Go Back">&lt; Back to Form</a></p></div>';
+				$err_link = (!empty($this->error_return)) ? '<p><a href="'.$this->error_return.'" title="Go Back">&lt; Back to Form</a></p>' : '';
+				return $out . '</ul>' . "\n" . $err_link . '</div>';
 			}
 			$matches = array();
 			preg_match_all('/\[customcontact form=([0-9]+)\]/si', $content, $matches);
@@ -922,66 +998,95 @@ if (!class_exists('CustomContactForms')) {
 			return $str;
 		}
 		
+		function validEmail($email) {
+		  if (!ereg("^[^@]{1,64}@[^@]{1,255}$", $email)) return false;
+		  $email_array = explode("@", $email);
+		  $local_array = explode(".", $email_array[0]);
+		  for ($i = 0; $i < sizeof($local_array); $i++) {
+			if (!ereg("^(([A-Za-z0-9!#$%&'*+/=?^_`{|}~-][A-Za-z0-9!#$%&'*+/=?^_`{|}~\.-]{0,63})|(\"[^(\\|\")]{0,62}\"))$", $local_array[$i])) {
+			  return false;
+			}
+		  }
+		  if (!ereg("^\[?[0-9\.]+\]?$", $email_array[1])) {
+			$domain_array = explode(".", $email_array[1]);
+			if (sizeof($domain_array) < 2) return false;
+			for ($i = 0; $i < sizeof($domain_array); $i++) {
+			  if (!ereg("^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|([A-Za-z0-9]+))$", $domain_array[$i])) {
+				return false;
+			  }
+			}
+		  }
+		  return true;
+		}
+		
 		function getFormCode($fid, $is_sidebar = false, $popover = false) {
 			$admin_options = $this->getAdminOptions();
 			$form = parent::selectForm($fid, '');
+			$form_key = time();
 			$out = '';
-			$popover_class = '';//($popover == true) ? 'ccf-popover ccf-popover' .$form->id : '';
-			$class = (!$is_sidebar) ? ' class="customcontactform '.$popover_class.'"' : ' class="customcontactform-sidebar '.$popover_class.'"';
+			$form_styles = '';
+			$style_class = (!$is_sidebar) ? ' customcontactform' : ' customcontactform-sidebar';
+			$form_id = 'form-' . $form->id . '-'.$form_key;
 			if ($form->form_style != 0) {
 				$style = parent::selectStyle($form->form_style, '');
-				$class = ' class="'.$style->style_slug.' '.$popover_class.'"';
-				$out .= '<style type="text/css">' . "\n";
-				$out .= '.' . $style->style_slug . " { width: ".$style->form_width."; padding:".$style->form_padding."; margin:".$style->form_margin."; border:".$style->form_borderwidth." ".$style->form_borderstyle." ".$style->form_bordercolor."; font-family:".$style->form_fontfamily."; }\n";
-				$out .= '.' . $style->style_slug . " div { padding:0; margin:0; }\n";
-				$out .= '.' . $style->style_slug . " h4 { padding:0; margin:".$style->title_margin." ".$style->title_margin." ".$style->title_margin." 0; color:".$style->title_fontcolor."; font-size:".$style->title_fontsize."; } \n";
-				$out .= '.' . $style->style_slug . " label { padding:0; margin:".$style->label_margin." ".$style->label_margin." ".$style->label_margin." 0; display:block; color:".$style->label_fontcolor."; width:".$style->label_width."; font-size:".$style->label_fontsize."; } \n";
-				$out .= '.' . $style->style_slug . " label.checkbox { display:inline; }; \n";
-				$out .= '.' . $style->style_slug . " input[type=text] { color:".$style->field_fontcolor."; margin:0; width:".$style->input_width."; font-size:".$style->field_fontsize."; background-color:".$style->field_backgroundcolor."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
-				$out .= '.' . $style->style_slug . " .submit { color:".$style->submit_fontcolor."; width:".$style->submit_width."; height:".$style->submit_height."; font-size:".$style->submit_fontsize."; } \n";
-				$out .= '.' . $style->style_slug . " textarea { color:".$style->field_fontcolor."; width:".$style->textarea_width."; margin:0; height:".$style->textarea_height."; font-size:".$style->field_fontsize."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
-				$out .= '</style>' . "\n";
-				
+				$style_class = $style->style_slug;
 			}
 			$action = (!empty($form->form_action)) ? $form->form_action : get_permalink();
-			$out .= '<form method="'.strtolower($form->form_method).'" action="'.$action.'"'.$class.'>' . "\n";
-			$out .= parent::decodeOption($form->custom_code, 1, 1) . '<h4>' . parent::decodeOption($form->form_title, 1, 1) . '</h4>' . "\n" . '<div>';
+			$out .= '<form id="'.$form_id.'" method="'.strtolower($form->form_method).'" action="'.$action.'" class="'.$style_class.'">' . "\n";
+			$out .= parent::decodeOption($form->custom_code, 1, 1) . '<h4 id="h4-' . $form->id . '-'.$form_key.'">' . parent::decodeOption($form->form_title, 1, 1) . '</h4>' . "\n" . '<div id="div-' . $form->id . '-'.$form_key.'">';
 			$fields = parent::getAttachedFieldsArray($fid);
 			$hiddens = '';
 			foreach ($fields as $field_id) {
 				$field = parent::selectField($field_id, '');
+				$req = ($field->field_required == 1) ? '* ' : '';
+				$req_long = ($field->field_required == 1) ? ' (required)' : '';
 				$input_id = 'id="'.parent::decodeOption($field->field_slug, 1, 1).'"';
 				$field_value = parent::decodeOption($field->field_value, 1, 1);
-				$instructions = (empty($field->field_instructions)) ? '' : 'title="'.$field->field_instructions.'" class="tooltip-field"';
+				$instructions = (empty($field->field_instructions)) ? '' : 'title="' . $field->field_instructions . $req_long . '" class="tooltip-field"';
 				if ($admin_options[enable_widget_tooltips] == 0 && $is_sidebar) $instructions = '';
 				if ($_SESSION[fields][$field->field_slug]) {
 					if ($admin_options[remember_field_values] == 1)
 						$field_value = $_SESSION[fields][$field->field_slug];
 				}
+				
 				if ($field->user_field == 0 && $field->field_slug == 'captcha') {
 					$out .= '<p>' . $this->getCaptchaCode($form->id) . '</p>';
 				} elseif ($field->field_type == 'Text') {
 					$maxlength = (empty($field->field_maxlength) or $field->field_maxlength <= 0) ? '' : ' maxlength="'.$field->field_maxlength.'"';
-					$out .= '<p><label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'.parent::decodeOption($field->field_label, 1, 1).'</label><input '.$instructions.' '.$input_id.' type="text" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'"'.$maxlength.' /></p>' . "\n";
+					$out .= '<p><label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'. $req .parent::decodeOption($field->field_label, 1, 1).'</label><input '.$instructions.' '.$input_id.' type="text" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'"'.$maxlength.' /></p>' . "\n";
 				} elseif ($field->field_type == 'Hidden') {
 					$hiddens .= '<p><input type="hidden" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'" '.$input_id.' /></p>' . "\n";
 				} elseif ($field->field_type == 'Checkbox') {
-					$out .= '<p><input '.$instructions.' type="checkbox" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.parent::decodeOption($field->field_value, 1, 1).'" '.$input_id.' /> <label class="checkbox" for="'.parent::decodeOption($field->field_slug, 1, 1).'">'.parent::decodeOption($field->field_label, 1, 1).'</label></p>' . "\n";
+					$out .= '<p><input '.$instructions.' type="checkbox" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.parent::decodeOption($field->field_value, 1, 1).'" '.$input_id.' /> <label class="checkbox" for="'.parent::decodeOption($field->field_slug, 1, 1).'">' . $req .parent::decodeOption($field->field_label, 1, 1).'</label></p>' . "\n";
 				} elseif ($field->field_type == 'Textarea') {
-					$out .= '<p><label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'.parent::decodeOption($field->field_label, 1, 1).'</label><textarea '.$instructions.' '.$input_id.' rows="5" cols="40" name="'.parent::decodeOption($field->field_slug, 1, 1).'">'.$field_value.'</textarea></p>' . "\n";
+					$out .= '<p><label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'. $req .parent::decodeOption($field->field_label, 1, 1).'</label><textarea '.$instructions.' '.$input_id.' rows="5" cols="40" name="'.parent::decodeOption($field->field_slug, 1, 1).'">'.$field_value.'</textarea></p>' . "\n";
 				}
 			}
 			$submit_text = (!empty($form->submit_button_text)) ? parent::decodeOption($form->submit_button_text, 1, 0) : 'Submit';
-			$out .= '</div>'."\n".'<p><input name="form_page" value="'.$_SERVER['REQUEST_URI'].'" type="hidden" /><input type="hidden" name="fid" value="'.$form->id.'" />'."\n".$hiddens."\n".'<input type="submit" class="submit" value="' . $submit_text . '" name="customcontactforms_submit" /></p>' . "\n" . '</form>';
+			$out .= '</div>'."\n".'<p><input name="form_page" value="'.$_SERVER['REQUEST_URI'].'" type="hidden" /><input type="hidden" name="fid" value="'.$form->id.'" />'."\n".$hiddens."\n".'<input type="submit" id="submit-' . $form->id . '-'.$form_key.'" class="submit" value="' . $submit_text . '" name="customcontactforms_submit" /></p>' . "\n" . '</form>';
 			if ($admin_options[author_link] == 1) $out .= '<a class="hide" href="http://www.taylorlovett.com" title="Rockville Web Developer, Wordpress Plugins">Wordpress plugin expert and Rockville Web Developer Taylor Lovett</a>';
-			return $out . $this->wheresWaldo();
+			
+			if ($form->form_style != 0) {
+				$form_styles .= '<style type="text/css">' . "\n";
+				$form_styles .= '#' . $form_id . " { width: ".$style->form_width."; padding:".$style->form_padding."; margin:".$style->form_margin."; border:".$style->form_borderwidth." ".$style->form_borderstyle." ".$style->form_bordercolor."; font-family:".$style->form_fontfamily."; }\n";
+				$form_styles .= '#' . $form_id . " div { padding:0; margin:0; }\n";
+				$form_styles .= '#' . $form_id . " h4 { padding:0; margin:".$style->title_margin." ".$style->title_margin." ".$style->title_margin." 0; color:".$style->title_fontcolor."; font-size:".$style->title_fontsize."; } \n";
+				$form_styles .= '#' . $form_id . " label { padding:0; margin:".$style->label_margin." ".$style->label_margin." ".$style->label_margin." 0; display:block; color:".$style->label_fontcolor."; width:".$style->label_width."; font-size:".$style->label_fontsize."; } \n";
+				$form_styles .= '#' . $form_id . " label.checkbox { display:inline; } \n";
+				$form_styles .= '#' . $form_id . " input[type=text] { color:".$style->field_fontcolor."; margin:0; width:".$style->input_width."; font-size:".$style->field_fontsize."; background-color:".$style->field_backgroundcolor."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
+				$form_styles .= '#' . $form_id . " .submit { color:".$style->submit_fontcolor."; width:".$style->submit_width."; height:".$style->submit_height."; font-size:".$style->submit_fontsize."; } \n";
+				$form_styles .= '#' . $form_id . " textarea { color:".$style->field_fontcolor."; width:".$style->textarea_width."; margin:0; background-color:".$style->textarea_backgroundcolor."; height:".$style->textarea_height."; font-size:".$style->field_fontsize."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
+				$form_styles .= '</style>' . "\n";
+			}
+			
+			return $form_styles . $out . $this->wheresWaldo();
 		}
 		
 		function getCaptchaCode($form_id) {
 			$captcha = parent::selectField('', 'captcha');
 			$instructions = (empty($captcha->field_instructions)) ? '' : 'title="'.$captcha->field_instructions.'" class="tooltip-field"';
 			$out = '<img id="captcha-image" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/custom-contact-forms/image.php?fid='.$form_id.'" /> 
-			<br /><label for="captcha'.$form_id.'">'.$captcha->field_label.'</label> <input type="text" '.$instructions.' name="captcha" id="captcha'.$form_id.'" maxlength="20" />';
+			<br /><label for="captcha'.$form_id.'">* '.$captcha->field_label.'</label> <input type="text" '.$instructions.' name="captcha" id="captcha'.$form_id.'" maxlength="20" />';
 			return $out;
 		}
 		
@@ -1002,23 +1107,56 @@ if (!class_exists('CustomContactForms')) {
 		}
 		
 		function insertFormSuccessCode() {
-			$admin_options = $this->getAdminOptions();
 		?>
         	<div id="ccf-form-success">
             	<h5>Successful Form Submission</h5>
-                <p><?php echo $admin_options[form_success_message]; ?></p>
+                <p><?php echo $this->current_thank_you_message; ?></p>
                 <a href="javascript:void(0)" class="close">[close]</a>
             </div>
 
         <?php
 		}
 		
+		function requiredFieldsArrayFromList($list) {
+			if (empty($list)) return array();
+			$list = str_replace(' ', '', $list);
+			$array = explode(',', $list);
+			foreach ($array as $k => $v) {
+				if (empty($array[$k])) unset($array[$k]);
+			}
+			return $array;
+		}
+		
 		function processForms() {
-			if ($_POST[customcontactforms_submit]) {
+			if ($_POST[ccf_customhtml]) {
+				$admin_options = $this->getAdminOptions();
+				$fixed_customhtml_fields = array('required_fields', 'success_message', 'thank_you_page', 'destination_email', 'ccf_customhtml');
+				$req_fields = $this->requiredFieldsArrayFromList($_POST[required_fields]);
+				$body = '';
+				foreach ($_POST as $key => $value) {
+					if (!in_array($key, $fixed_customhtml_fields)) {
+						if (in_array($key, $req_fields) && !empty($value))
+							unset($req_fields[array_search($key, $req_fields)]);
+						$body .= ucwords(str_replace('_', ' ', $key)) . ': ' . $value . "\n";
+					}
+				} foreach($req_fields as $err)
+					$this->setFormError($err, 'You left the "' . $err . '" field blank.');
+				$errors = $this->getAllFormErrors();
+				if (empty($errors)) {
+					$body .= "\n" . 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
+					$mailer = new CustomContactFormsMailer($_POST[destination_email], $admin_options[default_from_email], $admin_options[default_form_subject], stripslashes($body), $admin_options[wp_mail_function]);
+					$mailer->send();
+					if ($_POST[thank_you_page])
+						header("Location: " . $_POST[thank_you_page]);
+					$this->current_thank_you_message = (!empty($_POST[success_message])) ? $_POST[success_message] : $admin_options[form_success_message];
+					add_action('wp_footer', array(&$this, 'insertFormSuccessCode'), 1);
+				}
+			} elseif ($_POST[customcontactforms_submit]) {
 				$this->startSession();
 				$this->error_return = $_POST[form_page];
 				$admin_options = $this->getAdminOptions();
 				$fields = parent::getAttachedFieldsArray($_POST[fid]);
+				$form = parent::selectForm($_POST[fid]);
 				$checks = array();
 				$cap_name = 'captcha_' . $_POST[fid];
 				foreach ($fields as $field_id) {
@@ -1029,16 +1167,19 @@ if (!class_exists('CustomContactForms')) {
 					} elseif ($field->field_slug == 'captcha') {
 						if ($_POST[captcha] != $_SESSION[$cap_name])
 							$this->setFormError('captcha', 'You entered the captcha image code incorrectly');
+					} elseif ($field->field_slug == 'fixedEmail' && $field->field_required == 1 && !empty($_POST[fixedEmail])) {
+						if (!$this->validEmail($_POST[fixedEmail])) $this->setFormError('bad_email', 'The email address you provided was invalid.');
 					} else {
-						if ($field->field_type == 'Checkbox')
-							$checks[] = $field->field_slug;
-					}
+						if ($field->field_required == 1 && empty($_POST[$field->field_slug]))
+							$this->setFormError($field->field_slug, 'You left the "'.$field->field_label.'" field blank.');
+					} if ($field->field_type == 'Checkbox')
+						$checks[] = $field->field_slug;
 				} 
 				$body = '';
 				foreach ($_POST as $key => $value) {
 					$_SESSION[fields][$key] = $value;
 					$field = parent::selectField('', $key);
-					if (!in_array($key, $this->fixed_fields))
+					if (!array_key_exists($key, $this->fixed_fields))
 						$body .= $field->field_label . ': ' . $value . "\n";
 					if (in_array($key, $checks)) {
 						$checks_key = array_search($key, $checks);
@@ -1053,11 +1194,13 @@ if (!class_exists('CustomContactForms')) {
 					unset($_SESSION['captcha_' . $_POST[fid]]);
 					unset($_SESSION[fields]);
 					$body .= 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
-					$mailer = new CustomContactFormsMailer($admin_options[default_to_email], $admin_options[default_from_email], $admin_options[default_form_subject], stripslashes($body), $admin_options[wp_mail_function]);
+					$to_email = (!empty($form->form_email)) ? $form->form_email : $admin_options[default_to_email];
+					$mailer = new CustomContactFormsMailer($to_email, $admin_options[default_from_email], $admin_options[default_form_subject], stripslashes($body), $admin_options[wp_mail_function]);
 					$mailer->send();
-					if (!empty($admin_options[custom_thank_you])) {
-						header("Location: " . $admin_options[custom_thank_you]);
+					if (!empty($form->form_thank_you_page)) {
+						header("Location: " . $form->form_thank_you_page);
 					}
+					$this->current_thank_you_message = (!empty($form->form_success_message)) ? $form->form_success_message : $admin_options[form_success_message];
 					add_action('wp_footer', array(&$this, 'insertFormSuccessCode'), 1);
 				}
 				unset($_POST);
@@ -1075,11 +1218,21 @@ if (!function_exists('CustomContactForms_ap')) {
 		}
 	}
 }
+
+if (!function_exists('serveCustomContactForm')) {
+	function serveCustomContactForm($fid) {
+		global $customcontact;
+		echo $customcontact->getFormCode($fid);
+	}
+}
+
 if (isset($customcontact)) {
 	add_action('init', array(&$customcontact, 'init'), 1);
 	add_action('wp_head', array(&$customcontact, 'addHeaderCode'), 1);
+	add_action('wp_head', array(&$customcontact, 'insertFrontEndScripts'), 1);
 	add_action('admin_head', array(&$customcontact, 'addHeaderCode'), 1);
 	add_filter('the_content', array(&$customcontact, 'contentFilter'));
+	add_action('admin_print_scripts', array(&$customcontact, 'insertAdminScripts'), 1);
 	//add_action('wp_footer', array(&$customcontact, 'insertPopoverCode'));
 }
 add_action('admin_menu', 'CustomContactForms_ap');

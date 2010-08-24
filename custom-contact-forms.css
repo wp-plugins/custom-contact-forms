@@ -104,6 +104,17 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 	width:450px;
 	margin:5px 1em 1em 6px;
 }
+
+#customcontactforms-admin #custom-html {
+	float:left;
+	width:520px;
+	margin:5px 1em 1em 6px;
+}
+#customcontactforms-admin #custom-html p { margin: 4px 0 4px 0 ; }
+#customcontactforms-admin #custom-html #custom_html_textarea {
+	width:495px;
+	height:220px;
+}
 #customcontactforms-admin #contact-author form label {
 	display:block; font-weight:bold;
 }
@@ -127,7 +138,7 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 }
 #customcontactforms-admin #create-styles {
 	clear:both;
-	height:38em;
+	height:40em;
 	width:1000px;
 	margin:20px 1em 1em 5px;
 }
@@ -226,34 +237,19 @@ form.customcontactform-sidebar div p input[type=text], form.customcontactform-si
 #customcontactforms-admin #plugin-nav li.last  {
 	border-right:none;
 }
-.width25 {
-	width:25px;
-}
-.width50 {
-	width:50px;
-}
-.width75 {
-	width:75px;
-}
-.width100 {
-	width:100px;
-}
-.width125 {
-	width:125px;
-}
-.width150 {
-	width:150px;
-}
-.width175 {
-	width:175px;
-}
-.width200 {
-	width:200px;
-}
+.width25 { width:25px; } .width50 { width:50px; } .width75 { width:75px; } .width100 { width:100px; }
+.width125 { width:125px; } .width150 { width:150px; } .width175 { width:175px; } .width200 { width:200px; }
+.width225 { width:225px; } .width250 { width:250px; } .width275 { width:275px; } .width300 { width:300px; }
+
 .red { color:#F00; }
 .bold { font-weight:bold; }
 .italic { font-style:italic; }
 .hide { display:none; }
+.clear { clear:both; }
+.textcenter { text-align:center; }
+.floatleft { float:left; }
+.floatright { float:right; }
+.form-extra-options-table { margin:0 auto 0 auto; }
 
 /* ----- popover box ---------- */
 
