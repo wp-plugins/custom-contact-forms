@@ -7,7 +7,7 @@ Download link: http://www.taylorlovett.com/wordpress-plugins/
 Author: Taylor Lovett
 Author URI: http://www.taylorlovett.com
 Tested up to: 3.1
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -147,3 +147,6 @@ Visit http://www.taylorlovett.com/wordpress-plugins for screenshots.
 
 = 3.0.1 =
 *	custom-contact-forms.php - Theme display tags corrected
+
+= 3.0.2 =
+*	Bug fixed
