@@ -1,4 +1,5 @@
 === Custom Contact Forms ===
+Author: Taylor Lovett
 Contributors: Taylor Lovett
 Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
