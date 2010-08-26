@@ -1,11 +1,8 @@
 === Custom Contact Forms ===
-Plugin Name: Custom Contact Forms
+Contributors: Taylor Lovett
+Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.7.1
-Contributors: Taylor Lovett
-Download link: http://www.taylorlovett.com/wordpress-plugins/
-Author: Taylor Lovett
-Author URI: http://www.taylorlovett.com
 Tested up to: 3.1
 Stable tag: 3.0.2
 
