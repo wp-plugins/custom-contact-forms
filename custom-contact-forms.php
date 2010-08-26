@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form. <a href="options-general.php?page=custom-contact-forms">Settings</a>
-	Version: 3.0.0
+	Version: 3.0.1
 	Author: <a href="http://www.taylorlovett.com" title="Maryland Wordpress Developer">Taylor Lovett</a>
 	Author URI: http://www.taylorlovett.com
 	Contributors: Taylor Lovett
@@ -530,7 +530,7 @@ if (!class_exists('CustomContactForms')) {
                         </td>
                     </tr>
                     <tr>
-                    	<td colspan="6"><label for="theme_code_<?php echo $forms[$i]->id; ?>"><span>Code to Display Form in Theme Files:</span></label> <input type="text" class="width225" value="if (function_exists('serveCustomContactForm')) { serveCustomContactForm(<?php echo $forms[$i]->id; ?>); }" name="theme_code_<?php echo $form[$i]->id; ?>" /></td>
+                    	<td colspan="6"><label for="theme_code_<?php echo $forms[$i]->id; ?>"><span>Code to Display Form in Theme Files:</span></label> <input type="text" class="width225" value="&lt;?php if (function_exists('serveCustomContactForm')) { serveCustomContactForm(<?php echo $forms[$i]->id; ?>); } ?&gt;" name="theme_code_<?php echo $form[$i]->id; ?>" /></td>
                     </tr>
                 </tbody>
           	  </table>
