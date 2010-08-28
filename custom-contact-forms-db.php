@@ -108,8 +108,8 @@ if (!class_exists('CustomContactFormsDB')) {
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `field_backgroundcolor` VARCHAR( 20 ) NOT NULL DEFAULT '#efefef'");
 			if (!$this->columnExists('field_borderstyle', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `field_borderstyle` VARCHAR( 20 ) NOT NULL DEFAULT 'solid'");
-			if (!$this->columnExists('form_margin', $this->styles_table))
-				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `form_margin` VARCHAR( 20 ) NOT NULL DEFAULT '6px'");
+			if (!$this->columnExists('form_success_title', $this->forms_table))
+				$wpdb->query("ALTER TABLE `" . $this->forms_table . "` ADD `form_success_title` VARCHAR( 150 ) NOT NULL DEFAULT 'Form Success!'");
 			if (!$this->columnExists('form_padding', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `form_padding` VARCHAR( 20 ) NOT NULL DEFAULT '4px'");
 			if (!$this->columnExists('title_margin', $this->styles_table))

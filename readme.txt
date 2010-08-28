@@ -4,7 +4,7 @@ Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.7.1
 Tested up to: 3.1
-Stable tag: 3.0.2
+Stable tag: 3.1.0
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -34,11 +34,12 @@ Special Features:
 *	Script in constant development - new version released every week
 *	Easily process your forms with 3rd party sites like Infusionsoft or Aweber
 *	Set a __custom thank you page__ for each form or use the built in thank you page popover with a custom thank you message
-*	Valid XHTML and CSS
+*	Choose between XHTML or HTML. All code is clean and valid!
 *	No javascript required
 *	Stylish field tooltips powered by jquery
 *	Popover forms with Jquery (Coming soon!)
 *	Free unlimited support
+*	Ability to disable JQuery if it is conflicting with other plugins.
 
 == Installation ==
 1. Upload to /wp-content/plugins
@@ -51,7 +52,7 @@ Special Features:
 2. Create fields and attach those fields to the forms of your choice. Attach the fields in the order that you want them to show up in the form. If you mess up you can detach and reattach them.
 3. Display those forms in posts and pages by inserting the code: __[customcontact form=FORMID]__. Replace __FORMID__ with the id listed to the left of the form slug next to the form of your choice above. You can also __display forms in theme files__; the code for this is provided within each forms admin section.
 4. Prevent spam by attaching the fixed field, captcha or ishuman. Captcha requires users to type in a number shown on an image. Ishuman requires users to check a box to prove they aren't a spam bot.
-5. Add a form to your sidebar, by dragging the Custom Contact Form widget in to your sidebar.
+5. Add a form to your sidebar, by dragging the Custom Contact Form reusable widget in to your sidebar.
 6. Configure the General Settings appropriately; this is important if you want to receive your web form messages!
 7. Create form styles to change your forms appearances. The image below explains how each style field can change the look of your forms.
 8. (advanced) If you are confident in your HTML and CSS skills, you can use the Custom HTML Forms feature as a framework and write your forms from scratch. This allows you to use this plugin simply to process your form requests. The Custom HTML Forms feature will process and email any form variables sent to it regardless of whether they are created in the fields manager.
@@ -143,7 +144,12 @@ Visit http://www.taylorlovett.com/wordpress-plugins for screenshots.
 *	custom-contact-forms.css - New styles added and old ones modified
 
 = 3.0.1 =
-*	custom-contact-forms.php - Theme display tags corrected
+*	custom-contact-forms.php - Php tags added to theme form display code
 
 = 3.0.2 =
-*	Bug fixed
+*	custom-contact-forms.php - Bugs fixed
+
+= 3.1.0 =
+*	custom-contact-forms.php - Success message title, disable jquery, choose between xhmtl and html, and more
+*	custom-contact-forms-db.php - Success message title added
+*	custom-contact-forms.css - Form styles rewritten

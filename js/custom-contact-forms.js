@@ -29,14 +29,10 @@ $j(document).ready(function(){
 													  
 	});
 	
-	$j(".tooltip-field").tooltip({
-		// place tooltip on the right edge
+	$j(".customcontactform .tooltip-field").tooltip({
 		position: "center right",
-		// a little tweaking of the position
 		offset: [-2, 10],
-		// use the built-in fadeIn/fadeOut effect
 		effect: "fade",
-		// custom opacity setting
 		opacity: 0.7
 	
 	});
@@ -45,4 +41,5 @@ $j(document).ready(function(){
 	$j("#ccf-form-success .close").click(function() {
 		$j("#ccf-form-success").fadeOut();											  
 	});
+	
 });

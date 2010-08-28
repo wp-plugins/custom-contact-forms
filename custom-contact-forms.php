@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form. <a href="options-general.php?page=custom-contact-forms">Settings</a>
-	Version: 3.0.2
+	Version: 3.1.0
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
@@ -28,11 +28,12 @@ if (!class_exists('CustomContactForms')) {
 	class CustomContactForms extends CustomContactFormsDB {
 		var $adminOptionsName = 'customContactFormsAdminOptions';
 		var $widgetOptionsName = 'widget_customContactForms';
-		var $version = '3.0.2';
+		var $version = '2.1.0';
 		var $form_errors;
 		var $error_return;
 		var $gets;
 		var $current_thank_you_message;
+		var $current_thank_you_message_title;
 		var $fixed_fields = array('customcontactforms_submit' => '', 
 							'fid' => '', 
 							'fixedEmail' => 'Use this field if you want the plugin to throw an error on fake emails.', 
@@ -49,7 +50,7 @@ if (!class_exists('CustomContactForms')) {
 		function getAdminOptions() {
 			$admin_email = get_option('admin_email');
 			$customcontactAdminOptions = array('show_widget_home' => 1, 'show_widget_pages' => 1, 'show_widget_singles' => 1, 'show_widget_categories' => 1, 'show_widget_archives' => 1, 'default_to_email' => $admin_email, 'default_from_email' => $admin_email, 'default_form_subject' => 'Someone Filled Out Your Contact Form!', 
-			'remember_field_values' => 0, 'author_link' => 1, 'enable_widget_tooltips' => 1, 'wp_mail_function' => 1, 'form_success_message' => 'Thank you for filling out our web form. We will get back to you ASAP.'); // default general settings
+			'remember_field_values' => 0, 'author_link' => 1, 'enable_widget_tooltips' => 1, 'wp_mail_function' => 1, 'form_success_message_title' => 'Form Success!', 'form_success_message' => 'Thank you for filling out our web form. We will get back to you ASAP.', 'enable_jquery' => 1, 'code_type' => 'XHTML'); // default general settings
 			$customcontactOptions = get_option($this->adminOptionsName);
 			if (!empty($customcontactOptions)) {
 				foreach ($customcontactOptions as $key => $option)
@@ -62,76 +63,34 @@ if (!class_exists('CustomContactForms')) {
 			$this->storeGets();
 			$this->getAdminOptions();
 			if (!is_admin()) {
-				wp_enqueue_script('jquery');
 				$this->startSession();
 				$this->processForms();
 			}
-			$this->registerSidebar();
 		}
 		
-		function registerSidebar() {
-			register_sidebar_widget(__('Custom Contact Form'), array($this, 'widget_customContactForms'));
-			register_widget_control('Custom Contact Form', array($this, 'customContactForms_control'), 300, 200);
-		}
-		
-		function customContactForms_control() {
-			$option = get_option($this->widgetOptionsName);
-			if (empty($option)) $option = array('widget_form_id' => '0');
-			if ($_POST[widget_form_id]) {
-				$option[widget_form_id] = $_POST[widget_form_id];
-				update_option($this->widgetOptionsName, $option);
-				$option = get_option($this->widgetOptionsName);
-			}
-			$forms = parent::selectAllForms();
-			
-			$form_options = '';
-			foreach ($forms as $form) {
-				$sel = ($option[widget_form_id] == $form->id) ? ' selected="selected"' : '';
-				$form_options .= '<option value="'.$form->id.'"'.$sel.'>'.$form->form_slug.'</option>';
-			}
-			if (empty($form_options)) { ?>
-<p>Create a form in the Custom Contact Forms settings page.</p>
-<?php
-			} else {
-				?>
-<p>
-  <label for="widget_form_id">Show Form:</label>
-  <select name="widget_form_id">
-    <?php echo $form_options; ?>
-  </select>
-</p>
-<?php
-			}
-		}
-		function widget_customContactForms($args) {
-			extract($args);
-			$admin_option = $this->getAdminOptions();
-			if ((is_front_page() and $admin_option[show_widget_home] != 1) or (is_single() and $admin_option[show_widget_singles] != 1) or 
-				(is_page() and $admin_option[show_widget_pages] != 1) or (is_category() and $admin_option[show_widget_categories] != 1) or 
-				(is_archive() and $admin_option[show_widget_archives] != 1))
-				return false;
-			$option = get_option($this->widgetOptionsName);
-			if (empty($option) or $option[widget_form_id] < 1) return false;
-			echo $before_widget . $this->getFormCode($option[widget_form_id], true) . $after_widget;
-		}
-		function addHeaderCode() {
-			?>
-            <!-- Custom Contact Forms by Taylor Lovett - http://www.taylorlovett.com -->
-            <link rel="stylesheet" href="<?php echo get_option('siteurl'); ?>/wp-content/plugins/custom-contact-forms/custom-contact-forms.css" type="text/css" media="screen" />
-            <?php		
+		function insertStyleSheets() {
+            wp_register_style('customContactFormsStyleSheet', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/custom-contact-forms.css');
+            wp_enqueue_style('customContactFormsStyleSheet');
 		}
 		
 		function insertAdminScripts() {
+			wp_enqueue_script('jquery');
 			wp_enqueue_script('ccf-main', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/custom-contact-forms-admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'/*, 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-dialog'*/), '1.0');
 		}
 		
 		function insertFrontEndScripts() {
-			wp_enqueue_script('jquery-tools', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.tools.min.js');
-			//wp_enqueue_script('jquery-ui-position', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.ui.position.js');
-			//wp_enqueue_script('jquery-ui-widget', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.ui.widget.js');
-			//wp_enqueue_script('jquery-bgiframe', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.bgiframe-2.1.1.js');
-			wp_enqueue_script('ccf-main', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/custom-contact-forms.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'/*, 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-dialog'*/), '1.0');
-			//jquery-ui-position
+			if (!is_admin()) { 
+				$admin_options = $this->getAdminOptions();
+				if ($admin_options[enable_jquery] == 1) {
+					wp_enqueue_script('jquery');
+					wp_enqueue_script('jquery-tools', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.tools.min.js');
+					//wp_enqueue_script('jquery-ui-position', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.ui.position.js');
+					//wp_enqueue_script('jquery-ui-widget', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.ui.widget.js');
+					//wp_enqueue_script('jquery-bgiframe', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/jquery.bgiframe-2.1.1.js');
+					wp_enqueue_script('ccf-main', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/custom-contact-forms.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-resizable'/*, 'jquery-ui-draggable', 'jquery-ui-dialog'*/), '1.0');
+					//jquery-ui-position
+				}
+			}
 		}
 		
 		function setFormError($key, $message) {
@@ -169,7 +128,10 @@ if (!class_exists('CustomContactForms')) {
 				$admin_options[show_widget_home] = $_POST[show_widget_home];
 				$admin_options[custom_thank_you] = $_POST[custom_thank_you];
 				$admin_options[author_link] = $_POST[author_link];
+				$admin_options[enable_jquery] = $_POST[enable_jquery];
+				$admin_options[code_type] = $_POST[code_type];
 				$admin_options[form_success_message] = $_POST[form_success_message];
+				$admin_options[form_success_message_title] = $_POST[form_success_message_title];
 				$admin_options[wp_mail_function] = $_POST[wp_mail_function];
 				$admin_options[enable_widget_tooltips] = $_POST[enable_widget_tooltips];
 				$admin_options[remember_field_values] = $_POST[remember_field_values];
@@ -227,10 +189,11 @@ if (!class_exists('CustomContactForms')) {
           <li>
             <label for="field_slug">* Slug (Name):</label>
             <input name="field[field_slug]" type="text" maxlength="50" />
-            (Must be unique)</li>
+            (A slug is simply a way to identify your form. It can only contain underscores, letters, and numbers and must be unique.)</li>
           <li>
             <label for="field_label">Field Label:</label>
-            <input name="field[field_label]" type="text" maxlength="100" />
+            <input name="field[field_label]" type="text" maxlength="100" /><br />
+            (The field label is displayed next to the field and is visible to the user.)
           </li>
           <li>
             <label for="field_type">* Field Type:</label>
@@ -243,15 +206,17 @@ if (!class_exists('CustomContactForms')) {
           </li>
           <li>
             <label for="field_value">Initial Value:</label>
-            <input name="field[field_value]" type="text" maxlength="50" />
+            <input name="field[field_value]" type="text" maxlength="50" /><br />
+            (This is the initial value of the field. If you set the type as checkbox, it is recommend you set this to what the checkbox is implying. For example if I were creating the checkbox "Are you human?", I would set the initial value to "Yes".)
           </li>
           <li>
             <label for="field_maxlength">Max Length:</label>
             <input class="width50" size="10" name="field[field_maxlength]" type="text" maxlength="4" />
-            (0 for no limit; only applies to Text fields)</li>
+            <br />(0 for no limit; only applies to Text fields)</li>
           <li>
             <label for="field_required">Required Field:</label>
-            <select name="field[field_required]"><option value="0">No</option><option value="1">Yes</option></select></li>
+            <select name="field[field_required]"><option value="0">No</option><option value="1">Yes</option></select><br />
+            (If a field is required and a user leaves it blank, the plugin will display an error message explainging the problem.)</li>
           <li>
             <label for="field_value">Field Instructions:</label>
             <input name="field[field_instructions]" type="text" /><br />
@@ -307,6 +272,10 @@ if (!class_exists('CustomContactForms')) {
           <li>
             <label for="form[form_success_message]">Form Success Message:</label>
             <input type="text" name="form[form_success_message]" /><br />
+            (Will be displayed in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.)</li>
+           <li>
+            <label for="form[form_success_title]">Form Success Message Title:</label>
+            <input type="text" name="form[form_success_title]" /><br />
             (Will be displayed in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.)</li>
           <li>
             <label for="form[form_thank_you_page]">Custom Success URL:</label>
@@ -491,18 +460,18 @@ if (!class_exists('CustomContactForms')) {
               <table class="form-extra-options-table">
               	<tbody>
                 	<tr>
-                    	<td class="bold">Form Method</td>
+                    	<td class="bold">Method</td>
                         <td class="bold">Form Action</td>
                         <td class="bold">Destination Email</td>
-                        <td class="bold">Custom Code</td>
+                        <td class="bold">Success Message Title</td>
                         <td class="bold">Success Message</td>
                         <td class="bold">Custom Success URL</td>
                     </tr>
                     <tr>
                     	<td><select name="form[form_method]"><?php echo $form_methods; ?></select></td>
-                    	<td><input type="text" name="form[form_action]" value="<?php echo $forms[$i]->form_action; ?>" /></td>
-                        <td><input type="text" name="form[form_email]" value="<?php echo $forms[$i]->form_email; ?>" /></td>
-                        <td><input type="text" name="form[custom_code]" value="<?php echo $forms[$i]->custom_code; ?>" /></td>
+                    	<td><input class="width100" type="text" name="form[form_action]" value="<?php echo $forms[$i]->form_action; ?>" /></td>
+                        <td><input class="width100" type="text" name="form[form_email]" value="<?php echo $forms[$i]->form_email; ?>" /></td>
+                        <td><input type="text" name="form[form_success_title]" value="<?php echo $forms[$i]->form_success_title; ?>" /></td>
                         <td><input type="text" name="form[form_success_message]" value="<?php echo $forms[$i]->form_success_message; ?>" /></td>
                     	<td><input type="text" class="width125" name="form[form_thank_you_page]" value="<?php echo $forms[$i]->form_thank_you_page; ?>" /></td>
                     </tr>
@@ -530,7 +499,7 @@ if (!class_exists('CustomContactForms')) {
                         </td>
                     </tr>
                     <tr>
-                    	<td colspan="6"><label for="theme_code_<?php echo $forms[$i]->id; ?>"><span>Code to Display Form in Theme Files:</span></label> <input type="text" class="width225" value="&lt;?php if (function_exists('serveCustomContactForm')) { serveCustomContactForm(<?php echo $forms[$i]->id; ?>); } ?&gt;" name="theme_code_<?php echo $form[$i]->id; ?>" /></td>
+                    	<td colspan="6"><label for="theme_code_<?php echo $forms[$i]->id; ?>"><span>Code to Display Form in Theme Files:</span></label> <input type="text" class="width225" value="&lt;?php if (function_exists('serveCustomContactForm')) { serveCustomContactForm(<?php echo $forms[$i]->id; ?>); } ?&gt;" name="theme_code_<?php echo $forms[$i]->id; ?>" /> <label for="form[custom_code]">Custom Code</label> <input name="form[custom_code]" type="text" value="<?php echo $forms[$i]->custom_code; ?>" /></td>
                     </tr>
                 </tbody>
           	  </table>
@@ -571,6 +540,13 @@ if (!class_exists('CustomContactForms')) {
             <input name="default_to_email" value="<?php echo $admin_options[default_to_email]; ?>" type="text" maxlength="100" />
           </li>
           <li class="descrip">Form emails will be sent <span>to</span> this address, if no destination email is specified by the form.</li>
+     
+          <li>
+            <label for="enable_jquery">Emable JQuery:</label>
+            <select name="enable_jquery"><option value="1">Yes</option><option <?php if ($admin_options[enable_jquery] != 1) echo 'selected="selected"'; ?> value="0">No</option></select>
+          </li>
+          <li class="descrip">Some plugins don't setup JQuery correctly, so when any other plugin uses JQuery (whether correctly or not), JQuery works for neither plugin. This plugin uses JQuery correctly. If another plugin isn't using JQuery correctly but is more important to you than this one: disable this option. 99% of this plugin's functionality will work without JQuery, just no field instruction tooltips.</li>
+
           <li>
             <label for="default_from_email">Default From Email:</label>
             <input name="default_from_email" value="<?php echo $admin_options[default_from_email]; ?>" type="text" maxlength="100" />
@@ -582,7 +558,13 @@ if (!class_exists('CustomContactForms')) {
           </li>
           <li class="descrip">Default subject to be included in all form emails.</li>
           <li>
-            <label for="form_success_message">Default Thank You Message:</label>
+            <label for="form_success_message_title">Default Form Success Message Title:</label>
+            <input name="form_success_message_title" value="<?php echo $admin_options[form_success_message_title]; ?>" type="text"/>
+          </li>
+          <li class="descrip">If someone fills out a form for which a success message title is not provided and a custom success page is not provided, the plugin will show a popover using this field as the window title.</li>
+          
+          <li>
+            <label for="form_success_message">Default Form Success Message:</label>
             <input name="form_success_message" value="<?php echo $admin_options[form_success_message]; ?>" type="text"/>
           </li>
           <li class="descrip">If someone fills out a form for which a success message is not provided and a custom success page is not provided, the plugin will show a popover containing this message.</li>
@@ -601,6 +583,11 @@ if (!class_exists('CustomContactForms')) {
             <label for="author_link">Hide Plugin Author Link in Code:</label>
             <select name="author_link"><option value="1">Yes</option><option <?php if ($admin_options[author_link] == 0) echo 'selected="selected"'; ?> value="0">No</option></select>
           </li>
+          <li>
+            <label for="code_type">Use Code Type:</label>
+            <select name="code_type"><option>XHTML</option><option <?php if ($admin_options[code_type] == 'HTML') echo 'selected="selected"'; ?>>HTML</option></select>
+          </li>
+          <li class="descrip">This lets you switch the form code between HTML and XHTML.</li>
           <li>
             <label for="wp_mail_function">Use Wordpress Mail Function:</label>
             <select name="wp_mail_function"><option value="1">Yes</option><option <?php if ($admin_options[wp_mail_function] == 0) echo 'selected="selected"'; ?> value="0">No</option></select>
@@ -651,6 +638,7 @@ if (!class_exists('CustomContactForms')) {
       <p>7. Create form styles to change your forms appearances. The image below explains how each style field can change the look of your forms.</p>
       <p>8. (advanced) If you are confident in your HTML and CSS skills, you can use the <a href="#custom-html">Custom HTML Forms feature</a> as a framework and write your forms from scratch. This allows you to use this plugin simply to process your form requests. The Custom HTML Forms feature will process and email any form variables sent to it regardless of whether they are created in the fields manager.</p>
       <div id="style-example"></div>
+      <div id="success-popover-example"></div>
     </div>
   </div>
   <a name="create-styles"></a>
@@ -715,6 +703,10 @@ if (!class_exists('CustomContactForms')) {
             <label for="label_margin">Label Margin:</label>
             <input type="text" maxlength="20" value="4px" name="style[label_margin]" />
             (ex: 5px or 1em)</li>
+          <li>
+            <label for="textarea_backgroundcolor">Textarea Background Color:</label>
+            <input type="text" maxlength="20" value="#efefef" name="style[textarea_backgroundcolor]" />
+            (ex: #FF0000 or red)</li>
         </ul>
         <ul class="style_right">
           <li>
@@ -769,10 +761,7 @@ if (!class_exists('CustomContactForms')) {
             <label for="title_margin">Title Margin:</label>
             <input type="text" maxlength="20" value="2px" name="style[title_margin]" />
             (ex: 5px or 1em)</li>
-            <li>
-            <label for="textarea_backgroundcolor">Textarea Background Color:</label>
-            <input type="text" maxlength="20" value="#efefef" name="style[textarea_backgroundcolor]" />
-            (ex: #FF0000 or red)</li>
+           
           <li>
             <input type="submit" value="Create Style" name="style_create" />
           </li>
@@ -879,9 +868,9 @@ if (!class_exists('CustomContactForms')) {
             <input id="name" type="text" name="name" maxlength="100" /></li>
             <li><label for="email">Your Email:</label>
             <input id="email" type="text" value="<?php echo get_option('admin_email'); ?>" name="email" maxlength="100" /></li>
-            <li><label for="message">Your Message:</label>
+            <li><label for="message">* Your Message:</label>
             <textarea id="message" name="message"></textarea></li>
-            <li><label for="type">Purpose of this message:</label> <select id="type" name="type"><option>Bug Report</option><option>Suggest a Feature</option></select></li>
+            <li><label for="type">* Purpose of this message:</label> <select id="type" name="type"><option>Bug Report</option><option>Suggest a Feature</option></select></li>
         </ul>
         <p><input type="submit" name="contact_author" value="Send Message" /></p>
         </form>
@@ -1033,12 +1022,13 @@ the field names you want required by commas. Remember to use underscores instead
 			}
 			$action = (!empty($form->form_action)) ? $form->form_action : get_permalink();
 			$out .= '<form id="'.$form_id.'" method="'.strtolower($form->form_method).'" action="'.$action.'" class="'.$style_class.'">' . "\n";
-			$out .= parent::decodeOption($form->custom_code, 1, 1) . '<h4 id="h4-' . $form->id . '-'.$form_key.'">' . parent::decodeOption($form->form_title, 1, 1) . '</h4>' . "\n" . '<div id="div-' . $form->id . '-'.$form_key.'">';
+			$out .= parent::decodeOption($form->custom_code, 1, 1) . '<h4 id="h4-' . $form->id . '-'.$form_key.'">' . parent::decodeOption($form->form_title, 1, 1) . '</h4>' . "\n";
 			$fields = parent::getAttachedFieldsArray($fid);
 			$hiddens = '';
+			$code_type = ($admin_options[code_type] == 'XHTML') ? ' /' : '';
 			foreach ($fields as $field_id) {
 				$field = parent::selectField($field_id, '');
-				$req = ($field->field_required == 1) ? '* ' : '';
+				$req = ($field->field_required == 1 or $field->field_slug == 'ishuman') ? '* ' : '';
 				$req_long = ($field->field_required == 1) ? ' (required)' : '';
 				$input_id = 'id="'.parent::decodeOption($field->field_slug, 1, 1).'"';
 				$field_value = parent::decodeOption($field->field_value, 1, 1);
@@ -1050,26 +1040,26 @@ the field names you want required by commas. Remember to use underscores instead
 				}
 				
 				if ($field->user_field == 0 && $field->field_slug == 'captcha') {
-					$out .= '<p>' . $this->getCaptchaCode($form->id) . '</p>';
+					$out .= '<div>' . "\n" . $this->getCaptchaCode($form->id) . "\n" . '</div>' . "\n";
 				} elseif ($field->field_type == 'Text') {
 					$maxlength = (empty($field->field_maxlength) or $field->field_maxlength <= 0) ? '' : ' maxlength="'.$field->field_maxlength.'"';
-					$out .= '<p><label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'. $req .parent::decodeOption($field->field_label, 1, 1).'</label><input '.$instructions.' '.$input_id.' type="text" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'"'.$maxlength.' /></p>' . "\n";
+					$out .= '<div>'."\n".'<label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'. $req .parent::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<input '.$instructions.' '.$input_id.' type="text" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'"'.$maxlength.''.$code_type.'>'."\n".'</div>' . "\n";
 				} elseif ($field->field_type == 'Hidden') {
-					$hiddens .= '<p><input type="hidden" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'" '.$input_id.' /></p>' . "\n";
+					$hiddens .= '<input type="hidden" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'" '.$input_id.''.$code_type.'>' . "\n";
 				} elseif ($field->field_type == 'Checkbox') {
-					$out .= '<p><input '.$instructions.' type="checkbox" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.parent::decodeOption($field->field_value, 1, 1).'" '.$input_id.' /> <label class="checkbox" for="'.parent::decodeOption($field->field_slug, 1, 1).'">' . $req .parent::decodeOption($field->field_label, 1, 1).'</label></p>' . "\n";
+					$out .= '<div>'."\n".'<input '.$instructions.' type="checkbox" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.parent::decodeOption($field->field_value, 1, 1).'" '.$input_id.''.$code_type.'> '."\n".'<label class="checkbox" for="'.parent::decodeOption($field->field_slug, 1, 1).'">' . $req .parent::decodeOption($field->field_label, 1, 1).'</label>'."\n".'</div>' . "\n";
 				} elseif ($field->field_type == 'Textarea') {
-					$out .= '<p><label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'. $req .parent::decodeOption($field->field_label, 1, 1).'</label><textarea '.$instructions.' '.$input_id.' rows="5" cols="40" name="'.parent::decodeOption($field->field_slug, 1, 1).'">'.$field_value.'</textarea></p>' . "\n";
+					$out .= '<div>'."\n".'<label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'. $req .parent::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<textarea '.$instructions.' '.$input_id.' rows="5" cols="40" name="'.parent::decodeOption($field->field_slug, 1, 1).'">'.$field_value.'</textarea>'."\n".'</div>' . "\n";
 				}
 			}
 			$submit_text = (!empty($form->submit_button_text)) ? parent::decodeOption($form->submit_button_text, 1, 0) : 'Submit';
-			$out .= '</div>'."\n".'<p><input name="form_page" value="'.$_SERVER['REQUEST_URI'].'" type="hidden" /><input type="hidden" name="fid" value="'.$form->id.'" />'."\n".$hiddens."\n".'<input type="submit" id="submit-' . $form->id . '-'.$form_key.'" class="submit" value="' . $submit_text . '" name="customcontactforms_submit" /></p>' . "\n" . '</form>';
-			if ($admin_options[author_link] == 1) $out .= '<a class="hide" href="http://www.taylorlovett.com" title="Rockville Web Developer, Wordpress Plugins">Wordpress plugin expert and Rockville Web Developer Taylor Lovett</a>';
+			$out .= '<input name="form_page" value="'.$_SERVER['REQUEST_URI'].'" type="hidden"'.$code_type.'>'."\n".'<input type="hidden" name="fid" value="'.$form->id.'"'.$code_type.'>'."\n".$hiddens."\n".'<input type="submit" id="submit-' . $form->id . '-'.$form_key.'" class="submit" value="' . $submit_text . '" name="customcontactforms_submit"'.$code_type.'>' . "\n" . '</form>';
+			if ($admin_options[author_link] == 1) $out .= "\n".'<a class="hide" href="http://www.taylorlovett.com" title="Rockville Web Developer, Wordpress Plugins">Wordpress plugin expert and Rockville Web Developer Taylor Lovett</a>';
 			
 			if ($form->form_style != 0) {
 				$form_styles .= '<style type="text/css">' . "\n";
 				$form_styles .= '#' . $form_id . " { width: ".$style->form_width."; padding:".$style->form_padding."; margin:".$style->form_margin."; border:".$style->form_borderwidth." ".$style->form_borderstyle." ".$style->form_bordercolor."; font-family:".$style->form_fontfamily."; }\n";
-				$form_styles .= '#' . $form_id . " div { padding:0; margin:0; }\n";
+				//$form_styles .= '#' . $form_id . " div { padding:0; margin:0; }\n";
 				$form_styles .= '#' . $form_id . " h4 { padding:0; margin:".$style->title_margin." ".$style->title_margin." ".$style->title_margin." 0; color:".$style->title_fontcolor."; font-size:".$style->title_fontsize."; } \n";
 				$form_styles .= '#' . $form_id . " label { padding:0; margin:".$style->label_margin." ".$style->label_margin." ".$style->label_margin." 0; display:block; color:".$style->label_fontcolor."; width:".$style->label_width."; font-size:".$style->label_fontsize."; } \n";
 				$form_styles .= '#' . $form_id . " label.checkbox { display:inline; } \n";
@@ -1083,10 +1073,12 @@ the field names you want required by commas. Remember to use underscores instead
 		}
 		
 		function getCaptchaCode($form_id) {
+			$admin_options = $this->getAdminOptions();
+			$code_type = ($admin_options[code_type] == 'XHTML') ? ' /' : '';
 			$captcha = parent::selectField('', 'captcha');
 			$instructions = (empty($captcha->field_instructions)) ? '' : 'title="'.$captcha->field_instructions.'" class="tooltip-field"';
-			$out = '<img id="captcha-image" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/custom-contact-forms/image.php?fid='.$form_id.'" /> 
-			<br /><label for="captcha'.$form_id.'">* '.$captcha->field_label.'</label> <input type="text" '.$instructions.' name="captcha" id="captcha'.$form_id.'" maxlength="20" />';
+			$out = '<img width="63" height="18" alt="Captcha image for a contact form" id="captcha-image" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/custom-contact-forms/image.php?fid='.$form_id.'"'.$code_type.'> 
+			<div><label for="captcha'.$form_id.'">* '.$captcha->field_label.'</label> <input type="text" '.$instructions.' name="captcha" id="captcha'.$form_id.'" maxlength="20"'.$code_type.'></div>';
 			return $out;
 		}
 		
@@ -1095,6 +1087,7 @@ the field names you want required by commas. Remember to use underscores instead
 		}
 		
 		function contactAuthor($name, $email, $website, $message, $type) {
+			if (empty($message)) return false;
 			$admin_options = $this->getAdminOptions();
 			$body = "Name: $name\n";
 			$body .= "Email: $email\n";
@@ -1104,12 +1097,13 @@ the field names you want required by commas. Remember to use underscores instead
 			$body .= 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
 			$mailer = new CustomContactFormsMailer('admin@taylorlovett.com', $email, "CCF Message: $type", stripslashes($body), $admin_options[wp_mail_function]);
 			$mailer->send();
+			return true;
 		}
 		
 		function insertFormSuccessCode() {
 		?>
         	<div id="ccf-form-success">
-            	<h5>Successful Form Submission</h5>
+            	<h5><?php echo $this->current_thank_you_message_title; ?></h5>
                 <p><?php echo $this->current_thank_you_message; ?></p>
                 <a href="javascript:void(0)" class="close">[close]</a>
             </div>
@@ -1201,6 +1195,7 @@ the field names you want required by commas. Remember to use underscores instead
 						header("Location: " . $form->form_thank_you_page);
 					}
 					$this->current_thank_you_message = (!empty($form->form_success_message)) ? $form->form_success_message : $admin_options[form_success_message];
+					$this->current_thank_you_message_title = (!empty($form->form_success_title)) ? $form->form_success_title : $admin_options[form_success_message_title];
 					add_action('wp_footer', array(&$this, 'insertFormSuccessCode'), 1);
 				}
 				unset($_POST);
@@ -1208,6 +1203,7 @@ the field names you want required by commas. Remember to use underscores instead
 		}
 	}
 }
+require_once('custom-contact-forms-widget.php');
 $customcontact = new CustomContactForms();
 if (!function_exists('CustomContactForms_ap')) {
 	function CustomContactForms_ap() {
@@ -1226,15 +1222,24 @@ if (!function_exists('serveCustomContactForm')) {
 	}
 }
 
+if (!function_exists('CCFWidgetInit')) {
+	function CCFWidgetInit() {
+		register_widget('CustomContactFormsWidget');
+	}
+}
+
 if (isset($customcontact)) {
 	add_action('init', array(&$customcontact, 'init'), 1);
-	add_action('wp_head', array(&$customcontact, 'addHeaderCode'), 1);
-	add_action('wp_head', array(&$customcontact, 'insertFrontEndScripts'), 1);
-	add_action('admin_head', array(&$customcontact, 'addHeaderCode'), 1);
-	add_filter('the_content', array(&$customcontact, 'contentFilter'));
+	add_action('wp_print_scripts', array(&$customcontact, 'insertFrontEndScripts'), 1);
 	add_action('admin_print_scripts', array(&$customcontact, 'insertAdminScripts'), 1);
-	//add_action('wp_footer', array(&$customcontact, 'insertPopoverCode'));
-}
-add_action('admin_menu', 'CustomContactForms_ap');
+	add_action('wp_print_styles', array(&$customcontact, 'insertStyleSheets'), 1);
+	add_action('admin_print_styles', array(&$customcontact, 'insertStyleSheets'), 1);
+	add_filter('the_content', array(&$customcontact, 'contentFilter'));
+	/*add_action('wp_footer', array(&$customcontact, 'insertPopoverCode'));*/
+	add_action('widgets_init', 'CCFWidgetInit');
+	add_action('admin_menu', 'CustomContactForms_ap');
+}	
+//add_action('wp_footer', array(&$customcontact, 'insertFormSuccessCode'), 1);
 				
+			
 ?>
