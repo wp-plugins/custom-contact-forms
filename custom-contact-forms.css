@@ -1,0 +1,299 @@
+/* Custom Contact Forms CSS */
+form.customcontactform, form.customcontactform-sidebar {
+	margin:8px;
+	width:95%;
+	max-width:600px;
+	font-size:1em;
+	padding:4px;
+}
+form.customcontactform-sidebar { width:100%; }
+form.customcontactform h4, form.customcontactform-sidebar h4 {
+	font-size:1.3em;
+	font-weight:bold;
+}
+form.customcontactform div label, form.customcontactform-sidebar div label { display:block; width:100%; }
+form.customcontactform div label.checkbox, form.customcontactform-sidebar div label.checkbox { display:inline; }
+form.customcontactform div, form.customcontactform-sidebar div {
+	border-bottom: 1px dashed #666;
+	padding:.4em 0 .3em 0;
+	width:100%;
+	margin:0 0 4px 0;
+}
+form.customcontactform div div, form.customcontactform-sidebar div div { border-bottom:none; padding:0; }
+form.customcontactform div input, form.customcontactform div select, form.customcontactform-sidebar div input, form.customcontactform-sidebar div select {
+	width:16em;
+	padding:2px;
+	margin:0;
+	font-size:1.3em;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	-moz-border-radius:4px;
+	-khtml-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+}
+form.customcontactform div input[type=checkbox], form.customcontactform-sidebar div input[type=checkbox] { width:30px; margin:0 6px 0 0; }
+form.customcontactform input, form.customcontactform-sidebar input { margin: 7px 0 0 0; }
+form.customcontactform div textarea, form.customcontactform-sidebar div textarea {
+	width:16em;
+	padding:4px;
+	margin:0;
+	font-size:1.3em;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	-moz-border-radius:6px;
+	-khtml-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	height:5em;
+}
+form.customcontactform-sidebar div input[type=text], 
+form.customcontactform-sidebar div select, 
+form.customcontactform-sidebar div textarea { width:95%; max-width:16em; margin:2px 0 4px 0; }
+
+
+/* ------------------ custom contact forms admin panel ---------------- */
+#customcontactforms-admin {
+	vertical-align:top;
+	margin:1em 0 30px 25px;
+}
+#customcontactforms-admin label { font-weight:bold; }
+#customcontactforms-admin input, textarea, select {
+	font-size:1em;
+}
+#customcontactforms-admin .icon32 {
+	margin:-6px 6px 9px 5px;
+}
+#customcontactforms-admin .inside {
+	padding:5px 10px 10px 10px;
+}
+#customcontactforms-admin h3 {
+	margin:0 0 7px 0;
+	height:25px;
+	padding: 7px 0 0 9px;
+}
+#customcontactforms-admin #instructions {
+	float:left;
+	width:450px;
+	margin:20px 1em 1em 1em;
+}
+#customcontactforms-admin #contact-author {
+	float:left;
+	width:450px;
+	margin:5px 1em 1em 6px;
+}
+
+#customcontactforms-admin #custom-html {
+	float:left;
+	width:520px;
+	margin:5px 1em 1em 6px;
+}
+#customcontactforms-admin #custom-html p { margin: 4px 0 4px 0 ; }
+#customcontactforms-admin #custom-html #custom_html_textarea {
+	width:495px;
+	height:220px;
+}
+#customcontactforms-admin #contact-author form label {
+	display:block; font-weight:bold;
+}
+#customcontactforms-admin #instructions p:first-child {
+	padding-top:0;
+	margin-top:0;
+}
+#customcontactforms-admin #general-settings {
+	float:left;
+	clear:both;
+	width:500px;
+	margin:20px 1em 1em 5px;
+}
+#customcontactforms-admin #general-settings label { font-weight:bold; }
+#customcontactforms-admin #style-example {
+	background:url(images/style-example.gif) no-repeat top left;
+	width:405px;
+	height:135px;
+	padding-left:20px;
+	margin:10px 0 0 10px;
+	border:0;
+}
+#customcontactforms-admin #success-popover-example {
+	background:url(images/success-popover-example.gif) no-repeat top left;
+	width:405px;
+	height:135px;
+	padding-left:20px;
+	margin:10px 0 0 10px;
+	border:0;
+}
+#customcontactforms-admin #create-styles {
+	clear:both;
+	height:42em;
+	width:1000px;
+	margin:20px 1em 1em 5px;
+}
+#customcontactforms-admin #plugin-news {
+	clear:both;
+	width:1000px;
+	margin:20px 1em 1em 5px;
+}
+#customcontactforms-admin #plugin-news ul li.first { border-bottom:1px dashed #666; }
+#customcontactforms-admin #manage-styles {
+	margin:1px 1em 1em 5px;
+	width:1000px;
+}
+#customcontactforms-admin #manage-styles label {
+	display:block;
+}
+#customcontactforms-admin #manage-styles input[type=text], #customcontactforms-admin #manage-styles select, #customcontactforms-admin #manage-styles textarea {
+	width:80px;
+}
+#customcontactforms-admin #create-styles .style_left { float:left; width:48% }
+#customcontactforms-admin #create-styles .style_right { float:right; width:48%; clear:none }
+#customcontactforms-admin #general-settings form div p.descrip {
+	font-style:italic;
+	padding-left:20px;
+}
+#customcontactforms-admin #general-settings form div p.show-widget {
+	margin-top:1em;
+	padding-top:.4em;
+	border-top:1px solid #ccc;
+}
+#customcontactforms-admin #create-fields {
+	float:left;
+	clear:left;
+	width:450px;
+	margin:0 1em 1em 5px;
+}
+#customcontactforms-admin #create-forms {
+	float:left;
+	width:500px;
+	border-left:1px solid #ccc;
+	margin:0 1em 1em 1em;
+}
+#customcontactforms-admin #create-forms .inside div p {
+	font-size:.8em;
+}
+#customcontactforms-admin .manage-h3 {
+	clear:both;
+	margin-top:20px;
+}
+#customcontactforms-admin #manage-fields {
+	width:1000px;
+}
+#customcontactforms-admin #manage-forms {
+	width:1000px;
+	margin-right:10px;
+}
+#customcontactforms-admin #manage-fixed-fields {
+	width:1000px;
+}
+#customcontactforms-admin .evenrow {
+	background-color:#f5f5f5;
+}
+#customcontactforms-admin .nobordertop {
+	border-top:none;
+}
+#customcontactforms-admin .borderbottom {
+	border-bottom:2px solid black;
+}
+#customcontactforms-admin .attached_fields {
+	float:left;
+	width:400px;
+}
+#customcontactforms-admin .attach_field {
+	float:left;
+	width:300px;
+}
+#customcontactforms-admin .actions {
+	float:right;
+	width: 80px; padding:0 18px 0 8px;
+}
+#customcontactforms-admin .attach_styles {
+	float:left;
+	width:300px;
+}
+#customcontactforms-admin label span {
+	font-weight:bold;
+}
+
+#customcontactforms-admin #plugin-nav  {
+	clear:both;
+}
+#customcontactforms-admin #plugin-nav { text-align:center; border-bottom:1px #ccc dashed; margin:0 0 10px 0; padding:0 0 6px 0; }
+#customcontactforms-admin #plugin-nav li  {
+	border-right:1px solid #666; display:inline; padding:0 8px 0 3px;
+}
+#customcontactforms-admin #plugin-nav li.last  {
+	border-right:none;
+}
+.width25 { width:25px; } .width50 { width:50px; } .width75 { width:75px; } .width100 { width:100px; }
+.width125 { width:125px; } .width150 { width:150px; } .width175 { width:175px; } .width200 { width:200px; }
+.width225 { width:225px; } .width250 { width:250px; } .width275 { width:275px; } .width300 { width:300px; }
+
+.red { color:#F00; }
+.bold { font-weight:bold; }
+.italic { font-style:italic; }
+.hide { display:none; }
+.clear { clear:both; }
+.textcenter { text-align:center; }
+.floatleft { float:left; }
+.floatright { float:right; }
+.form-extra-options-table { margin:0 auto 0 auto; }
+
+/* ----- popover box ---------- */
+
+.ccf-popover {
+	position: absolute;
+	top:25%;
+	left:25%;
+	width:500px;
+	padding:10px;
+	background-color:#fff;
+	border:1px solid #666;
+	display:none;
+}
+
+.ccf-popover .ccf-popover-close { position:absolute; top:1px; right:5px; }
+.tooltip {
+	background-color:#000;
+	border:1px solid #fff;
+	padding:10px 15px;
+	width:200px;
+	display:none;
+	color:#fff;
+	text-align:left;
+	font-size:12px;
+
+	/* outline radius for mozilla/firefox only */
+	-moz-box-shadow:0 0 10px #000;
+	-webkit-box-shadow:0 0 10px #000;
+}
+/* --- form success popover --------------------  */
+#ccf-form-success {
+	display:none;
+	border: 9px solid #efefef;
+	border-spacing:0;
+	width:480px;
+	height:200px
+	padding:0px;
+	margin:0;
+	-moz-border-radius:35px;
+	-khtml-border-radius:35px;
+	-webkit-border-radius:35px;
+	border-radius:305px;
+	position:fixed;
+	left:30%;
+	background-color:white;
+	top:30%;
+}
+
+#ccf-form-success h5 {
+	background-color:#efefef; margin:0 0 15px 0px;
+	text-align:left;
+	padding:9px 9px 9px 20px;
+	font-size:1.5em;
+	font-weight:bold;
+}
+#ccf-form-success p { padding:8px; font-size:1.1em; text-align:center; }
+#ccf-form-success a.close {
+	position:absolute;
+	right:12px;
+	font-size:1em;
+	top:7px;
+}
