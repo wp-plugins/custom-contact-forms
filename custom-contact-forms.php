@@ -3,11 +3,10 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form. <a href="options-general.php?page=custom-contact-forms">Settings</a>
-	Version: 3.1.0
+	Version: 3.1.1
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
-
 /*
 	Copyright (C) 2010-2011 Taylor Lovett, taylorlovett.com (admin@taylorlovett.com)
 	This program is free software; you can redistribute it and/or modify
@@ -546,7 +545,6 @@ if (!class_exists('CustomContactForms')) {
             <select name="enable_jquery"><option value="1">Yes</option><option <?php if ($admin_options[enable_jquery] != 1) echo 'selected="selected"'; ?> value="0">No</option></select>
           </li>
           <li class="descrip">Some plugins don't setup JQuery correctly, so when any other plugin uses JQuery (whether correctly or not), JQuery works for neither plugin. This plugin uses JQuery correctly. If another plugin isn't using JQuery correctly but is more important to you than this one: disable this option. 99% of this plugin's functionality will work without JQuery, just no field instruction tooltips.</li>
-
           <li>
             <label for="default_from_email">Default From Email:</label>
             <input name="default_from_email" value="<?php echo $admin_options[default_from_email]; ?>" type="text" maxlength="100" />
@@ -891,12 +889,10 @@ if (!class_exists('CustomContactForms')) {
 &lt;input type=&quot;hidden&quot; name=&quot;thank_you_page&quot; value=&quot;http://www.google.com&quot; /&gt;
 &lt;input type=&quot;hidden&quot; name=&quot;destination_email&quot; value=&quot;<?php echo $admin_options[default_to_email]; ?>&quot; /&gt;
 &lt;input type=&quot;hidden&quot; name=&quot;required_fields&quot; value=&quot;field_name1, field_name2&quot; /&gt;
-
 &lt;!-- Build your form in here. It is recommended you only use this feature if you are experienced with HTML. 
 The success_message field will add a popover containing the message when the form is completed successfully, the thank_you_page field will force 
 the user to be redirected to that specific page on successful form completion. The required_fields hidden field is optional; to use it seperate 
 the field names you want required by commas. Remember to use underscores instead of spaces in field names! --&gt;
-
 &lt;/form&gt;</textarea>
     </div>
   </div>
@@ -1107,7 +1103,6 @@ the field names you want required by commas. Remember to use underscores instead
                 <p><?php echo $this->current_thank_you_message; ?></p>
                 <a href="javascript:void(0)" class="close">[close]</a>
             </div>
-
         <?php
 		}
 		
@@ -1214,20 +1209,17 @@ if (!function_exists('CustomContactForms_ap')) {
 		}
 	}
 }
-
 if (!function_exists('serveCustomContactForm')) {
 	function serveCustomContactForm($fid) {
 		global $customcontact;
 		echo $customcontact->getFormCode($fid);
 	}
 }
-
 if (!function_exists('CCFWidgetInit')) {
 	function CCFWidgetInit() {
 		register_widget('CustomContactFormsWidget');
 	}
 }
-
 if (isset($customcontact)) {
 	add_action('init', array(&$customcontact, 'init'), 1);
 	add_action('wp_print_scripts', array(&$customcontact, 'insertFrontEndScripts'), 1);

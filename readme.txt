@@ -4,17 +4,15 @@ Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.7.1
 Tested up to: 3.1
-Stable tag: 3.1.0
+Stable tag: 3.1.1
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
 == Description ==
-
 Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form.
 
 Special Features:
 ------------------
-
 *	The most customizable form plugin for Wordpress, guaranteed
 *	Create __unlimited__ forms
 *	Create __unlimited__ fields
@@ -69,87 +67,68 @@ Popover forms will be added in September 2010.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots.
 
 == Changelog ==
-
 = 1.0.0 =
 *	Plugin Release
-
 = 1.0.1 =
 *	custom-contact-forms.css - Form style changes
-
 = 1.1.0 =
 *	custom-contact-forms-db.php - Table upgrade functions added
 *	custom-contact-forms.php - New functions for error handling and captcha
 *	custom-contact-forms.css - Forms restyled
 *	custom-contact-forms-images.php - Image handling class added
 *	image.php, images/ - Image for captcha displaying
-
 = 1.1.1 =
 *	custom-contact-forms.css - Label styles changed
 *	custom-contact-forms.php - Admin option added to remember field values
-
 = 1.1.2 =
 *	custom-contact-forms-db.php - create_tables function edited to work for Wordpress MU due to error in wp-admin/includes/upgrade.php
-
 = 1.1.3 =
 *	custom-contact-forms.php - Captcha label bug fixed
 *	custom-contact-forms-db.php - Default captcha label changed
-
 = 1.2.0 =
 *	custom-contact-forms.php - Option to update to Custom Contact Forms Pro
-
 = 1.2.1 =
 *	custom-contact-forms.php - Upgrade options changed
 *	custom-contact-forms-css.php - CSS bug corrected
-
 = 2.0.0 =
 *	custom-contact-forms.php - Style manager added
 *	custom-contact-forms.css - style manager styles added
 *	custom-contact-forms-db.php - Style manager db functions added
-
 = 2.0.1 =
 *	custom-contact-forms.php - Duplicate form slug bug fixed, default style values added, stripslahses on form messages
 *	custom-contact-forms-db.php - default style values added
-
 = 2.0.2 =
 *	custom-contact-forms.php - Form li's changed to p's
 *	images/ - folder readded to correct captcha error
-
 = 2.0.3 =
 *	custom-contact-forms.php - custom style checkbox display:block error fixed
 *	custom-contact-forms.css - li's converted to p's
-
 = 2.1.0 =
 *	custom-contact-forms.php - New fixed field added, plugin news, bug fixes
 *	custom-contact-forms.css - New styles added and style bugs fixed
 *	custom-contact-forms-db.php - New fixed field added
-
 = 2.2.0 =
 *	custom-contact-forms.php - Plugin nav, hide plugin author link, bug reporting, suggest a feature
 *	custom-contact-forms.css - New styles added and style bugs fixed
-
 = 2.2.3 =
 *	custom-contact-forms.php - Remember fields bug fixed, init rearranged, field instructions
 *	custom-contact-forms.css
 *	custom-contact-forms-db.php
-
 = 2.2.4 =
 *	custom-contact-forms.php - Textarea field instruction bug fixed
-
 = 2.2.5 =
 *	custom-contact-forms.php - Fixed field insert bug fixed
-
 = 3.0.0 =
 *	custom-contact-forms.php - Required fields, admin panel changed, style manager bugs fixed, custom html feature added, much more
 *	custom-contact-forms-db.php - New functions added and old ones fixed
 *	custom-contact-forms.css - New styles added and old ones modified
-
 = 3.0.1 =
 *	custom-contact-forms.php - Php tags added to theme form display code
-
 = 3.0.2 =
 *	custom-contact-forms.php - Bugs fixed
-
 = 3.1.0 =
 *	custom-contact-forms.php - Success message title, disable jquery, choose between xhmtl and html, and more
 *	custom-contact-forms-db.php - Success message title added
 *	custom-contact-forms.css - Form styles rewritten
+= 3.1.1 =
+*	custom-contact-forms-db.php - Style manager bug fixed

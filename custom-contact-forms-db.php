@@ -114,10 +114,12 @@ if (!class_exists('CustomContactFormsDB')) {
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `form_padding` VARCHAR( 20 ) NOT NULL DEFAULT '4px'");
 			if (!$this->columnExists('title_margin', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `title_margin` VARCHAR( 20 ) NOT NULL DEFAULT '2px'");
+			if (!$this->columnExists('form_margin', $this->styles_table))
+				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `form_margin` VARCHAR( 20 ) NOT NULL DEFAULT '4px'");
 			if (!$this->columnExists('label_margin', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `label_margin` VARCHAR( 20 ) NOT NULL DEFAULT '3px'");
 			if (!$this->columnExists('textarea_backgroundcolor', $this->styles_table))
-				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `textarea_backgroundcolor` VARCHAR( 20 ) NOT NULL DEFAULT '#efefef'");
+				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `textarea_backgroundcolor` VARCHAR( 20 ) NOT NULL DEFAULT '#ffffff'");
 			if (!$this->columnExists('field_instructions', $this->fields_table))
 				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `field_instructions` TEXT NOT NULL");
 			if (!$this->columnExists('field_required', $this->fields_table))
@@ -175,6 +177,7 @@ if (!class_exists('CustomContactFormsDB')) {
 				if ($key != 'style_slug')
 					$style[$key] = $this->formatStyle($this->encodeOption($value));
 			}
+			print_r($style);
 			$wpdb->insert($this->styles_table, $style);
 			return true;
 		}
