@@ -32,8 +32,8 @@ if (!class_exists('CustomContactForms')) {
 		var $form_errors;
 		var $error_return;
 		var $gets;
+		var $current_form;
 		var $current_thank_you_message;
-		var $current_thank_you_message_title;
 		var $fixed_fields = array('customcontactforms_submit' => '', 
 							'fid' => '', 
 							'fixedEmail' => 'Use this field if you want the plugin to throw an error on fake emails.', 
@@ -91,7 +91,6 @@ if (!class_exists('CustomContactForms')) {
 		}
 		
 		function insertAdminScripts() {
-			//wp_enqueue_script('jquery');
 			wp_enqueue_script('ccf-main', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/custom-contact-forms-admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'/*, 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-dialog'*/), '1.0');
 		}
 		
@@ -1212,7 +1211,10 @@ the field names you want required by commas. Remember to use underscores instead
 						$option_value = (!empty($option->option_value)) ? ' value="' . $option->option_value . '"' : '';
 						$field_options .= '<option'.$option_sel.''.$option_value.'>' . $option->option_label . '</option>' . "\n";
 					}
-					if (!empty($options)) $out .= '<div>'."\n".'<select '.$instructions.' '.$input_id.' name="'.parent::decodeOption($field->field_slug, 1, 1).'">'."\n".$field_options.'</select>'."\n".'<label class="checkbox" for="'.parent::decodeOption($field->field_slug, 1, 1).'">'. $req .parent::decodeOption($field->field_label, 1, 1).'</label>'."\n".'</div>' . "\n";
+					if (!empty($options)) {
+						if (!$is_sidebar) $out .= '<div>'."\n".'<select '.$instructions.' '.$input_id.' name="'.parent::decodeOption($field->field_slug, 1, 1).'">'."\n".$field_options.'</select>'."\n".'<label class="checkbox" for="'.parent::decodeOption($field->field_slug, 1, 1).'">'. $req .parent::decodeOption($field->field_label, 1, 1).'</label>'."\n".'</div>' . "\n";
+						else  $out .= '<div>'."\n".'<label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'. $req .parent::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<select '.$instructions.' '.$input_id.' name="'.parent::decodeOption($field->field_slug, 1, 1).'">'."\n".$field_options.'</select>'."\n".'</div>' . "\n";
+					}
 				} elseif ($field->field_type == 'Radio') {
 					$field_options = '';
 					$options = parent::getAttachedFieldOptionsArray($field->id);
@@ -1277,10 +1279,29 @@ the field names you want required by commas. Remember to use underscores instead
 		}
 		
 		function insertFormSuccessCode() {
+			$admin_options = $this->getAdminOptions();
+			if ($this->current_form !== 0) {
+				$form = parent::selectForm($this->current_form);
+				$success_message = (!empty($form->form_success_message)) ? $form->form_success_message : $admin_options[form_success_message];
+				$success_title = (!empty($form->form_success_title)) ? $form->form_success_title : $admin_options[form_success_message_title];
+			} else {
+				$success_title = $admin_options[form_success_message_title];
+				$success_message = (empty($this->current_thank_you_message)) ? $admin_options[form_success_message] : $this->current_thank_you_message;
+			} if ($form->form_style != 0) {
+				$style = parent::selectStyle($form->form_style);
+				?>
+                <style type="text/css">
+					<!--
+					#ccf-form-success { border-color:<?php echo $style->success_popover_bordercolor; ?>; }
+					#ccf-form-success h5 { background-color:<?php echo $style->success_popover_bordercolor; ?>; }
+					-->
+				</style>
+                <?php
+			}
 		?>
         	<div id="ccf-form-success">
-            	<h5><?php echo $this->current_thank_you_message_title; ?></h5>
-                <p><?php echo $this->current_thank_you_message; ?></p>
+            	<h5><?php echo $success_title; ?></h5>
+                <p><?php echo $success_message; ?></p>
                 <a href="javascript:void(0)" class="close">[close]</a>
             </div>
 
@@ -1319,6 +1340,7 @@ the field names you want required by commas. Remember to use underscores instead
 					if ($_POST[thank_you_page])
 						header("Location: " . $_POST[thank_you_page]);
 					$this->current_thank_you_message = (!empty($_POST[success_message])) ? $_POST[success_message] : $admin_options[form_success_message];
+					$this->current_form = 0;
 					add_action('wp_footer', array(&$this, 'insertFormSuccessCode'), 1);
 				}
 			} elseif ($_POST[customcontactforms_submit]) {
@@ -1373,8 +1395,7 @@ the field names you want required by commas. Remember to use underscores instead
 					if (!empty($form->form_thank_you_page)) {
 						header("Location: " . $form->form_thank_you_page);
 					}
-					$this->current_thank_you_message = (!empty($form->form_success_message)) ? $form->form_success_message : $admin_options[form_success_message];
-					$this->current_thank_you_message_title = (!empty($form->form_success_title)) ? $form->form_success_title : $admin_options[form_success_message_title];
+					$this->current_form = $form->id;
 					add_action('wp_footer', array(&$this, 'insertFormSuccessCode'), 1);
 				}
 				unset($_POST);
