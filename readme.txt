@@ -158,6 +158,7 @@ Visit http://www.taylorlovett.com/wordpress-plugins for screenshots.
 
 = 3.5.0 =
 *	custom-contact-forms.php - Radio and dropdowns added via the field option manager
+*	custom-contact-forms-mailer.php - Email body changed
 *	custom-contact-forms-db.php - Field option methods added
 *	custom-contact-forms.css - Form styles reorganized, file removed
 *	css/custom-contact-forms.css - Form styles reorganized
