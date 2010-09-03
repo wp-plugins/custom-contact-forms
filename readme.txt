@@ -16,6 +16,7 @@ Special Features:
 ------------------
 
 *	The most customizable form plugin for Wordpress, guaranteed
+*	__Latency problem fixed. Script loads quickly because tables are only checked on plugin activation.__
 *	Create __unlimited__ forms
 *	Create __unlimited__ fields
 *	Required Fields (New!)
