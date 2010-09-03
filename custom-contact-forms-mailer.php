@@ -26,6 +26,7 @@ if (!class_exists('CustomContactFormsMailer')) {
 			$this->addHeader('Reply-To: '.$this->from."\r\n");
 			$this->addHeader('Return-Path: '.$this->from."\r\n");
 			$this->addHeader('X-mailer: ZFmail 1.0'."\r\n");
+			$this->body .= "\n\n\n----------\nSent by Custom Contact Forms\nA WordPress Plugin created by Taylor Lovett\nReport a Bug/Get Support: http://www.taylorlovett.com\n";
 			if ($this->wp_mail_function == 1)
 				wp_mail($this->to, $this->subject, $this->body, $this->headers);
 			else

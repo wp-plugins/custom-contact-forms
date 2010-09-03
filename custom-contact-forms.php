@@ -3,10 +3,11 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form. <a href="options-general.php?page=custom-contact-forms">Settings</a>
-	Version: 3.1.2
+	Version: 3.5.0
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
+
 /*
 	Copyright (C) 2010-2011 Taylor Lovett, taylorlovett.com (admin@taylorlovett.com)
 	This program is free software; you can redistribute it and/or modify
@@ -46,6 +47,12 @@ if (!class_exists('CustomContactForms')) {
 			$this->form_errors = array();
 		}
 		
+		function activatePlugin() {
+			parent::createTables();
+			parent::updateTables();
+			parent::insertFixedFields();
+		}
+		
 		function getAdminOptions() {
 			$admin_email = get_option('admin_email');
 			$customcontactAdminOptions = array('show_widget_home' => 1, 'show_widget_pages' => 1, 'show_widget_singles' => 1, 'show_widget_categories' => 1, 'show_widget_archives' => 1, 'default_to_email' => $admin_email, 'default_from_email' => $admin_email, 'default_form_subject' => 'Someone Filled Out Your Contact Form!', 
@@ -67,13 +74,24 @@ if (!class_exists('CustomContactForms')) {
 			}
 		}
 		
-		function insertStyleSheets() {
-            wp_register_style('customContactFormsStyleSheet', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/custom-contact-forms.css');
-            wp_enqueue_style('customContactFormsStyleSheet');
+		function insertFrontEndStyles() {
+			if (!is_admin()) {
+            	wp_register_style('CCFStandardsCSS', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/css/custom-contact-forms-standards.css');
+            	wp_register_style('CCFFormsCSS', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/css/custom-contact-forms.css');
+            	wp_enqueue_style('CCFStandardsCSS');
+				wp_enqueue_style('CCFFormsCSS');
+			}
+		}
+		
+		function insertBackEndStyles() {
+            wp_register_style('CCFStandardsCSS', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/css/custom-contact-forms-standards.css');
+            wp_register_style('CCFAdminCSS', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/css/custom-contact-forms-admin.css');
+            wp_enqueue_style('CCFStandardsCSS');
+			wp_enqueue_style('CCFAdminCSS');
 		}
 		
 		function insertAdminScripts() {
-			wp_enqueue_script('jquery');
+			//wp_enqueue_script('jquery');
 			wp_enqueue_script('ccf-main', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/custom-contact-forms-admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'/*, 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-dialog'*/), '1.0');
 		}
 		
@@ -145,8 +163,12 @@ if (!class_exists('CustomContactForms')) {
 				parent::updateForm($_POST[form], $_POST[fid]);
 			} elseif ($_POST[form_add_field]) {
 				parent::addFieldToForm($_POST[field_id], $_POST[fid]);
-			} elseif ($_POST[disattach_field]) {
-				parent::disattachField($_POST[disattach_field_id], $_POST[fid]);
+			} elseif ($_POST[attach_field_option]) {
+				parent::addFieldOptionToField($_POST[attach_option_id], $_POST[fid]);
+			} elseif ($_POST[dettach_field]) {
+				parent::dettachField($_POST[dettach_field_id], $_POST[fid]);
+			} elseif ($_POST[dettach_field_option]) {
+				parent::dettachFieldOption($_POST[dettach_option_id], $_POST[fid]);
 			}  elseif ($_POST[style_create]) {
 				parent::insertStyle($_POST[style]);
 			}  elseif ($_POST[style_edit]) {
@@ -156,6 +178,12 @@ if (!class_exists('CustomContactForms')) {
 			} elseif ($_POST[contact_author]) {
 				$this_url = (!empty($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : $_SERVER['SERVER_NAME'];
 				$this->contactAuthor($_POST[name], $_POST[email], $this_url, $_POST[message], $_POST[type]);
+			} elseif ($_POST[delete_field_option]) {
+				parent::deleteFieldOption($_POST[oid]);
+			} elseif ($_POST[edit_field_option]) {
+				parent::updateFieldOption($_POST[option], $_POST[oid]);
+			} elseif ($_POST[create_field_option]) {
+				parent::insertFieldOption($_POST[option]);
 			}
 			$styles = parent::selectAllStyles();
 			$style_options = '<option value="0">None</option>';
@@ -175,6 +203,7 @@ if (!class_exists('CustomContactForms')) {
     <li><a href="#manage-forms">Manage Forms</a></li>
     <li><a href="#create-styles">Create Styles</a></li>
     <li><a href="#manage-styles">Manage Styles</a></li>
+    <li><a href="#manage-field-options">Manage Field Options</a></li>
     <li><a href="#contact-author">Suggest a Feature</a></li>
     <li><a href="#contact-author">Bug Report</a></li>
     <li><a href="#custom-html">Custom HTML Forms (New!)</a></li>
@@ -187,7 +216,7 @@ if (!class_exists('CustomContactForms')) {
         <ul>
           <li>
             <label for="field_slug">* Slug (Name):</label>
-            <input name="field[field_slug]" type="text" maxlength="50" />
+            <input name="field[field_slug]" type="text" maxlength="50" /><br />
             (A slug is simply a way to identify your form. It can only contain underscores, letters, and numbers and must be unique.)</li>
           <li>
             <label for="field_label">Field Label:</label>
@@ -201,19 +230,23 @@ if (!class_exists('CustomContactForms')) {
               <option>Textarea</option>
               <option>Hidden</option>
               <option>Checkbox</option>
+              <option>Radio</option>
+              <option>Dropdown</option>
             </select>
           </li>
           <li>
             <label for="field_value">Initial Value:</label>
             <input name="field[field_value]" type="text" maxlength="50" /><br />
-            (This is the initial value of the field. If you set the type as checkbox, it is recommend you set this to what the checkbox is implying. For example if I were creating the checkbox "Are you human?", I would set the initial value to "Yes".)
+            (This is the initial value of the field. If you set the type as checkbox, it is recommend you set this to what the checkbox is implying. For example if I were creating the checkbox 
+            "Are you human?", I would set the initial value to "Yes". If you set the field type as "Dropdown" or "Radio", you should enter the slug of the 
+            <a href="#manage-field-options" title="Create a Field Option">field option</a> you would like initially selected.)
           </li>
           <li>
             <label for="field_maxlength">Max Length:</label>
             <input class="width50" size="10" name="field[field_maxlength]" type="text" maxlength="4" />
             <br />(0 for no limit; only applies to Text fields)</li>
           <li>
-            <label for="field_required">Required Field:</label>
+            <label for="field_required">* Required Field:</label>
             <select name="field[field_required]"><option value="0">No</option><option value="1">Yes</option></select><br />
             (If a field is required and a user leaves it blank, the plugin will display an error message explainging the problem.)</li>
           <li>
@@ -234,7 +267,7 @@ if (!class_exists('CustomContactForms')) {
       <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
         <ul>
           <li>
-            <label for="form[form_name]">Form Slug:</label>
+            <label for="form[form_name]">* Form Slug:</label>
             <input type="text" maxlength="100" name="form[form_slug]" /><br />
             (Must be unique and contain only underscores and alphanumeric characters.)</li>
           <li>
@@ -242,7 +275,7 @@ if (!class_exists('CustomContactForms')) {
             <input type="text" maxlength="200" name="form[form_title]" />
             (The form header text)</li>
           <li>
-            <label for="form[form_method]">Form Method:</label>
+            <label for="form[form_method]">* Form Method:</label>
             <select name="form[form_method]">
               <option>Post</option>
               <option>Get</option>
@@ -250,8 +283,8 @@ if (!class_exists('CustomContactForms')) {
             (If unsure, leave as is.)</li>
           <li>
             <label for="form[form_action]">Form Action:</label>
-            <input type="text" name="form[form_action]" value="" />
-            (If unsure, leave blank.)</li>
+            <input type="text" name="form[form_action]" value="" /><br />
+            (If unsure, leave blank. Enter a URL here, if and only if you want to process your forms somewhere else, for example with a service like Aweber or InfusionSoft.)</li>
           <li>
             <label for="form[form_action]">Form Style:</label>
             <select name="form[form_style]"><?php echo $style_options; ?></select>
@@ -305,12 +338,13 @@ if (!class_exists('CustomContactForms')) {
                 $fields = parent::selectAllFields();
                 for ($i = 0, $z = 0; $i < count($fields); $i++, $z++) {
 					if ($fields[$i]->user_field == 0) { $z--; continue; }
-                    $field_types = '<option>Text</option><option>Textarea</option><option>Hidden</option><option>Checkbox</option>';
+					$attached_options = parent::getAttachedFieldOptionsArray($fields[$i]->id);
+                    $field_types = '<option>Text</option><option>Textarea</option><option>Hidden</option><option>Checkbox</option><option>Radio</option><option>Dropdown</option>';
                     $field_types = str_replace('<option>'.$fields[$i]->field_type.'</option>',  '<option selected="selected">'.$fields[$i]->field_type.'</option>', $field_types);
                     
                 ?>
       <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">        
-      <tr<?php if ($z % 2 == 1) echo ' class="evenrow"'; ?>>
+      <tr<?php if ($z % 2 == 1) echo ' class="evenrow"'; ?> style="border-bottom">
         
           <td><input type="text" name="field[field_slug]" class="width100" maxlength="50" value="<?php echo $fields[$i]->field_slug; ?>" /></td>
           <td><input type="text" name="field[field_label]" maxlength="100" value="<?php echo $fields[$i]->field_label; ?>" /></td>
@@ -319,15 +353,58 @@ if (!class_exists('CustomContactForms')) {
             </select></td>
           <td><input type="text" name="field[field_value]" maxlength="50" class="width75" value="<?php echo $fields[$i]->field_value; ?>" /></td>
           <td><select name="field[field_required]"><option value="1">Yes</option><option value="0" <?php if ($fields[$i]->field_required != 1) echo 'selected="selected"'; ?>>No</option></select></td>
-          <td><input type="text" class="width50" name="field[field_maxlength]" value="<?php echo $fields[$i]->field_maxlength; ?>" /></td>
+          <td>
+          <?php if ($fields[$i]->field_type == 'Dropdown' || $fields[$i]->field_type == 'Radio') { ?>
+          	<b>-</b>
+          <?php } else { ?>
+          	<input type="text" class="width50" name="field[field_maxlength]" value="<?php echo $fields[$i]->field_maxlength; ?>" />
+          <?php } ?>
+          </td>
           <td><input type="hidden" name="fid" value="<?php echo $fields[$i]->id; ?>" />
             <span class="fields-options-expand"></span>
             <input type="submit" name="field_edit" value="Edit" />
-            <input type="submit" name="field_delete" value="Delete" /></td>
+            <input type="submit" name="field_delete" class="delete_button" value="Delete" /></td>
         
       </tr>
       <tr<?php if ($z % 2 == 1) echo ' class="evenrow"'; ?>>
-      	<td class="fields-extra-options" colspan="7" style="border-bottom:1px solid black;">Field Instructions: <input type="text" class="width200" name="field[field_instructions]" value="<?php echo $fields[$i]->field_instructions; ?>" /></td>
+ 		<td class="fields-extra-options" colspan="7" style="border-top:0; border-bottom:1px solid black;">
+        <div class="field-instructions">
+        <label for="field_instructions">Field Instructions:</label> 
+        <input type="text" class="width150" name="field[field_instructions]" value="<?php echo $fields[$i]->field_instructions; ?>" />
+        </div>
+        <?php 
+		if ($fields[$i]->field_type == 'Radio' || $fields[$i]->field_type == 'Dropdown') { ?>
+            <div class="dettach-field-options">
+            <?php if (empty($attached_options)) { ?>
+                <b>No Attached Options</b>
+            <?php } else { ?>
+                <select name="dettach_option_id">
+                <?php
+                foreach ($attached_options as $option_id) {
+                    $option = parent::selectFieldOption($option_id);
+                    ?>
+                    <option value="<?php echo $option_id; ?>"><?php echo $option->option_slug; ?></option>
+                    <?php
+                }
+                ?>
+                </select> 
+                <input type="submit" name="dettach_field_option" value="Dettach Field Option" />
+             <?php } ?>
+                <br /><span class="red bold">*</span> Dettach field options you <a href="#create-field-options">create</a>.
+            </div>
+            <?php $all_options = $this->getFieldOptionsForm(); ?>
+            <div class="attach-field-options">
+            <?php if (empty($all_options)) { ?>
+                    <b>No Field Options to Attach</b>
+            <?php } else { ?>
+                <select name="attach_option_id">
+            <?php echo $all_options; ?>
+                </select> <input type="submit" name="attach_field_option" value="Attach Field Option" />
+            <?php } ?>
+                <br /><span class="red bold">*</span> Attach field options in the order you want them to display.
+            </div>
+        <?php } ?>
+        </td>
       </tr>
       </form>
       <?php
@@ -418,7 +495,65 @@ if (!class_exists('CustomContactForms')) {
         <th scope="col" class="manage-column field-action">Action</th>
       </tr>
     </tfoot>
-  </table><a name="manage-forms"></a>
+  </table><a name="manage-field-options"></a>
+  <div id="field-options" class="postbox">
+    <h3 class="hndle"><span>Manage Field Options (for Dropdown and Radio Fields)</span></h3>
+    <div class="inside">
+    	<div class="option-header">
+            <div class="slug">Slug</div>
+            <div class="label">Label</div>
+            <div class="option-value">Value</div>
+            <div class="action">Action</div>
+        </div>
+    	<table id="edit-field-options">
+        	<?php
+			$options = parent::selectAllFieldOptions();
+			$i = 0;
+			foreach ($options as $option) {
+				?>
+				<tr<?php if ($i % 2 == 1) echo ' class="evenrow-field-options"'; ?>>
+					<form method="post" action="<?php echo $_SERVER['REQUEST_URI']?>">
+					<td class="slug"><input type="text" maxlength="20" name="option[option_slug]" value="<?php echo $option->option_slug; ?>" class="width50" /></td>
+					<td class="label"><input type="text" name="option[option_label]" value="<?php echo $option->option_label; ?>" class="width100" /></td>
+					<td class="option-value"><input type="text" name="option[option_value]" value="<?php echo $option->option_value; ?>" class="width100" /></td>
+					<td class="action">
+                    	<input type="submit" value="Edit" name="edit_field_option" /> 
+						<input type="submit"class="delete_button" value="Delete" name="delete_field_option" />
+					</td>
+                    <input type="hidden" name="oid" value="<?php echo $option->id; ?>" />
+                    </form>
+				</tr>
+				<?php
+				$i++;
+			} if (empty($options)) {
+				?>
+                   <tr><td class="ccf-center">No field options have been created.</td></tr>
+                <?php
+			}
+			?>
+        </table>
+        <div class="option-header">
+            <div class="slug">Slug</div>
+            <div class="label">Label</div>
+            <div class="option-value">Value</div>
+            <div class="action">Action</div>
+        </div>
+        <form method="post" action="<?php echo $_SERVER['REQUEST_URI']?>">
+        <div class="create-field-options-header">Create a Field Option</div>
+        <ul id="create-field-options">
+        	<li><label for="option[option_slug]">Option Slug:</label> <input maxlength="20" type="text" name="option[option_slug]" /><br />
+            (Used to identify this option, solely for admin purposes; must be unique, and contain only letters, numbers, and underscores. Example: "slug_one")</li>
+            <li><label for="option[option_label]">Option Label:</label> <input type="text" name="option[option_label]" /><br />
+            (This is what is shown to the user in the dropdown or radio field. Example:)</li>
+            <li><label for="option[option_value]">Option Value:</label> <input type="text" name="option[option_value]" /><br />
+            (This is the actual value of the option which isn't shown to the user. This can be the same thing as the label. An example pairing of label => value is: "The color green" => "green" or "Yes" => "1".)</li>
+        	<li><input type="submit" name="create_field_option" value="Create Field Option" /></li>
+        </ul>
+        <p id="edit-field-comments"><b>*</b> The option value is behind the scences; unseen by the user, but when a user fills out the form, the option value is what is actually sent in the email to you. For dropdown fields the option value is optional, for radio fields it is required.</p>
+        </form>
+    </div>
+  </div>
+  <a name="manage-forms"></a>
   <h3 class="manage-h3">Manage Forms</h3>
   <table class="widefat post" id="manage-forms" cellspacing="0">
     <thead>
@@ -451,7 +586,7 @@ if (!class_exists('CustomContactForms')) {
           <td><input type="hidden" name="fid" value="<?php echo $forms[$i]->id; ?>" />
             <span class="form-options-expand"></span>
             <input type="submit" name="form_edit" value="Edit" />
-            <input type="submit" name="form_delete" value="Delete" />
+            <input type="submit" name="form_delete" class="delete_button" value="Delete" />
           </td>
       </tr>
       <tr class="<?php if ($i % 2 == 0) echo 'evenrow'; ?>">
@@ -476,17 +611,17 @@ if (!class_exists('CustomContactForms')) {
                     </tr>
                     <tr>
                     	<td colspan="3">
-                        	<label for="disattach_field_id"><span>Attached Fields:</span></label>
+                        	<label for="dettach_field_id"><span>Attached Fields:</span></label>
 							  <?php
                               	$attached_fields = parent::getAttachedFieldsArray($forms[$i]->id);
                                 if (empty($attached_fields)) echo 'None ';
                                 else {
-                                	echo '<select name="disattach_field_id">';
+                                	echo '<select name="dettach_field_id">';
                                     foreach($attached_fields as $attached_field) {
                                     	$this_field = parent::selectField($attached_field, '');
                                         echo $this_field->field_slug . ' <option value="'.$this_field->id.'">'.$this_field->field_slug.'</option>';
                                     }
-                                    echo '</select> <input type="submit" value="Disattach Field" name="disattach_field" />';
+                                    echo '</select> <input type="submit" value="Dettach Field" name="dettach_field" />';
                                 }
                               ?><br />
                               <span class="red bold">*</span> Attach fields in the order you want them displayed.
@@ -541,10 +676,11 @@ if (!class_exists('CustomContactForms')) {
           <li class="descrip">Form emails will be sent <span>to</span> this address, if no destination email is specified by the form.</li>
      
           <li>
-            <label for="enable_jquery">Emable JQuery:</label>
+            <label for="enable_jquery">Enable JQuery:</label>
             <select name="enable_jquery"><option value="1">Yes</option><option <?php if ($admin_options[enable_jquery] != 1) echo 'selected="selected"'; ?> value="0">No</option></select>
           </li>
           <li class="descrip">Some plugins don't setup JQuery correctly, so when any other plugin uses JQuery (whether correctly or not), JQuery works for neither plugin. This plugin uses JQuery correctly. If another plugin isn't using JQuery correctly but is more important to you than this one: disable this option. 99% of this plugin's functionality will work without JQuery, just no field instruction tooltips.</li>
+
           <li>
             <label for="default_from_email">Default From Email:</label>
             <input name="default_from_email" value="<?php echo $admin_options[default_from_email]; ?>" type="text" maxlength="100" />
@@ -647,119 +783,127 @@ if (!class_exists('CustomContactForms')) {
         <ul class="style_left">
           <li>
             <label for="style_slug">Style Slug:</label>
-            <input type="text" maxlength="30" name="style[style_slug]" />
+            <input type="text" maxlength="30" class="width75" name="style[style_slug]" />
             (Must be unique)</li>
           <li>
             <label for="title_fontsize">Title Font Size:</label>
-            <input type="text" maxlength="20" value="1.2em" name="style[title_fontsize]" />
+            <input type="text" maxlength="20" value="1.2em" class="width75" name="style[title_fontsize]" />
             (ex: 10pt, 10px, 1em)</li>
           <li>
             <label for="title_fontcolor">Title Font Color:</label>
-            <input type="text" maxlength="20" value="#333333" value="#" name="style[title_fontcolor]" />
+            <input type="text" maxlength="20" value="#333333" value="#" class="width75" name="style[title_fontcolor]" />
             (ex: #FF0000 or red)</li>
           <li>
             <label for="label_width">Label Width:</label>
-            <input type="text" maxlength="20" value="110px" name="style[label_width]" />
+            <input type="text" maxlength="20" value="110px" class="width75" name="style[label_width]" />
             (ex: 100px or 20%)</li>
           <li>
             <label for="label_fontsize">Label Font Size:</label>
-            <input type="text" maxlength="20" value="1em" name="style[label_fontsize]" />
+            <input type="text" maxlength="20" value="1em" class="width75" name="style[label_fontsize]" />
             (ex: 10px, 10pt, 1em)</li>
           <li>
             <label for="label_fontcolor">Label Font Color:</label>
-            <input type="text" maxlength="20" value="#333333" name="style[label_fontcolor]" />
+            <input type="text" maxlength="20" value="#333333" class="width75" name="style[label_fontcolor]" />
             (ex: #FF0000 or red)</li>
           <li>
             <label for="input_width">Text Field Width:</label>
-            <input type="text" maxlength="20" value="200px" name="style[input_width]" />
+            <input type="text" maxlength="20" value="200px" class="width75" name="style[input_width]" />
             (ex: 100px or 100%)</li>
           <li>
             <label for="textarea_width">Textarea Field Width:</label>
-            <input type="text" maxlength="20" value="200px" name="style[textarea_width]" />
+            <input type="text" maxlength="20" value="200px" class="width75" name="style[textarea_width]" />
             (ex: 100px or 100%)</li>
           <li>
             <label for="textarea_height">Textarea Field Height:</label>
-            <input type="text" maxlength="20" value="100px" name="style[textarea_height]" />
+            <input type="text" maxlength="20" value="100px" class="width75" name="style[textarea_height]" />
             (ex: 100px or 100%)</li>
           <li>
             <label for="field_fontsize">Field Font Size:</label>
-            <input type="text" maxlength="20" value="1em" name="style[field_fontsize]" />
+            <input type="text" maxlength="20" value="1em" class="width75" name="style[field_fontsize]" />
             (ex: 10px, 10pt, 1em</li>
           <li>
             <label for="field_fontcolor">Field Font Color:</label>
-            <input type="text" maxlength="20" value="#333333" name="style[field_fontcolor]" />
+            <input type="text" maxlength="20" value="#333333" class="width75" name="style[field_fontcolor]" />
             (ex: 100px or 100%)</li>
           <li>
             <label for="field_borderstyle">Field Border Style:</label>
-            <select name="style[field_borderstyle]"><?php echo str_replace('<option>solid</option>', '<option selected="selected">solid</option>', $border_style_options); ?></select>
+            <select class="width75" name="style[field_borderstyle]"><?php echo str_replace('<option>solid</option>', '<option selected="selected">solid</option>', $border_style_options); ?></select>
             </li>
           <li>
             <label for="form_margin">Form Margin:</label>
-            <input type="text" maxlength="20" value="5px" name="style[form_margin]" />
+            <input type="text" maxlength="20" value="5px" class="width75" name="style[form_margin]" />
             (ex: 5px or 1em)</li>
           <li>
             <label for="label_margin">Label Margin:</label>
-            <input type="text" maxlength="20" value="4px" name="style[label_margin]" />
+            <input type="text" maxlength="20" value="4px" class="width75" name="style[label_margin]" />
             (ex: 5px or 1em)</li>
           <li>
             <label for="textarea_backgroundcolor">Textarea Background Color:</label>
-            <input type="text" maxlength="20" value="#efefef" name="style[textarea_backgroundcolor]" />
+            <input type="text" maxlength="20" value="#ffffff" class="width75" name="style[textarea_backgroundcolor]" />
             (ex: #FF0000 or red)</li>
+          
         </ul>
         <ul class="style_right">
           <li>
             <label for="input_width">Field Border Color:</label>
-            <input type="text" maxlength="20" value="#333333" name="style[field_bordercolor]" />
+            <input type="text" maxlength="20" value="#333333" class="width75" name="style[field_bordercolor]" />
             (ex: 100px or 100%)</li>
           <li>
             <label for="form_borderstyle">Form Border Style:</label>
-            <select name="style[form_borderstyle]"><?php echo str_replace('<option>solid</option>', '<option selected="selected">solid</option>', $border_style_options); ?></select>
+            <select class="width75" name="style[form_borderstyle]"><?php echo str_replace('<option>solid</option>', '<option selected="selected">solid</option>', $border_style_options); ?></select>
             </li>
           <li>
             <label for="form_bordercolor">Form Border Color:</label>
-            <input type="text" maxlength="20" value="#333333" name="style[form_bordercolor]" />
+            <input type="text" maxlength="20" value="#333333" class="width75" name="style[form_bordercolor]" />
             (ex: #00000 or red)</li>
           <li>
             <label for="form_borderwidth">Form Border Width:</label>
-            <input type="text" maxlength="20" value="1px" name="style[form_borderwidth]" />
+            <input type="text" maxlength="20" value="1px" class="width75" name="style[form_borderwidth]" />
             (ex: 1px)</li>
           <li>
             <label for="form_borderwidth">Form Width:</label>
-            <input type="text" maxlength="20" value="500px" name="style[form_width]" />
+            <input type="text" maxlength="20" value="500px" class="width75" name="style[form_width]" />
             (ex: 100px or 50%)</li>
           <li>
             <label for="form_borderwidth">Form Font Family:</label>
-            <input type="text" maxlength="150" value="Verdana, tahoma, arial" name="style[form_fontfamily]" />
+            <input type="text" maxlength="150" value="Verdana, tahoma, arial" class="width75" name="style[form_fontfamily]" />
             (ex: Verdana, Tahoma, Arial)</li>
           <li>
             <label for="submit_width">Button Width:</label>
-            <input type="text" maxlength="20" value="80px" name="style[submit_width]" />
+            <input type="text" maxlength="20" value="80px" class="width75" name="style[submit_width]" />
             (ex: 100px or 30%)</li>
           <li>
             <label for="submit_height">Button Height:</label>
-            <input type="text" maxlength="20" value="35px" name="style[submit_height]" />
+            <input type="text" maxlength="20" value="35px" class="width75" name="style[submit_height]" />
             (ex: 100px or 30%)</li>
           <li>
             <label for="submit_fontsize">Button Font Size:</label>
-            <input type="text" maxlength="20" value="1.1em" name="style[submit_fontsize]" />
+            <input type="text" maxlength="20" value="1.1em" class="width75" name="style[submit_fontsize]" />
             (ex: 10px, 10pt, 1em</li>
           <li>
             <label for="submit_fontcolor">Button Font Color:</label>
-            <input type="text" maxlength="20" value="#333333" name="style[submit_fontcolor]" />
+            <input type="text" maxlength="20" value="#333333" class="width75" name="style[submit_fontcolor]" />
             (ex: #FF0000 or red)</li>
           <li>
             <label for="field_backgroundcolor">Field Background Color:</label>
-            <input type="text" maxlength="20" value="#efefef" name="style[field_backgroundcolor]" />
+            <input type="text" maxlength="20" value="#efefef" class="width75" name="style[field_backgroundcolor]" />
             (ex: #FF0000 or red)</li>
           <li>
             <label for="form_padding">Form Padding:</label>
-            <input type="text" maxlength="20" value="5px" name="style[form_padding]" />
+            <input type="text" maxlength="20" value="5px" class="width75" name="style[form_padding]" />
             (ex: 5px or 1em)</li>
             <li>
             <label for="title_margin">Title Margin:</label>
-            <input type="text" maxlength="20" value="2px" name="style[title_margin]" />
+            <input type="text" maxlength="20" value="2px" class="width75" name="style[title_margin]" />
             (ex: 5px or 1em)</li>
-           
+          <li>
+            <label for="title_margin">Dropdown Width:</label>
+            <input type="text" maxlength="20" value="auto" class="width75" name="style[dropdown_width]" />
+            (ex: 30px, 20%, or auto)</li>
+          <li>
+            <label for="success_popover_bordercolor">Success Popover Border Color:</label>
+            <input type="text" maxlength="20" value="#efefef" class="width75" name="style[success_popover_bordercolor]" />
+            (ex: #FF0000)</li>
           <li>
             <input type="submit" value="Create Style" name="style_create" />
           </li>
@@ -790,8 +934,9 @@ if (!class_exists('CustomContactForms')) {
         	<td><label>Slug:</label> <input type="text" maxlength="30" value="<?php echo $style->style_slug; ?>" name="style[style_slug]" /><br />
             <label>Font Family:</label><input type="text" maxlength="20" value="<?php echo $style->form_fontfamily; ?>" name="style[form_fontfamily]" /><br />
             <label>Textarea Background<br />Color:</label><input type="text" maxlength="20" value="<?php echo $style->textarea_backgroundcolor; ?>" name="style[textarea_backgroundcolor]" /><br />
+            <label>Success Popover<br />Border Color:</label><input type="text" maxlength="20" value="<?php echo $style->success_popover_bordercolor; ?>" name="style[success_popover_bordercolor]" /><br />
             <input type="submit" class="submit-styles" name="style_edit" value="Update Style" /><br />
-            <input type="submit" class="submit-styles" name="style_delete" value="Delete Style" />
+            <input type="submit" class="submit-styles" class="delete_button" name="style_delete" value="Delete Style" />
             </td>
             
             <td>
@@ -799,6 +944,7 @@ if (!class_exists('CustomContactForms')) {
             <label>Text Field Width:</label><input type="text" maxlength="20" value="<?php echo $style->input_width; ?>" name="style[input_width]" /><br />
             <label>Textarea Width:</label><input type="text" maxlength="20" value="<?php echo $style->textarea_width; ?>" name="style[textarea_width]" /><br />
             <label>Textarea Height:</label><input type="text" maxlength="20" value="<?php echo $style->textarea_height; ?>" name="style[textarea_height]" /><br />
+            <label>Dropdown Width:</label><input type="text" maxlength="20" value="<?php echo $style->dropdown_width; ?>" name="style[dropdown_width]" />
             <label>Label Margin:</label><input type="text" maxlength="20" value="<?php echo $style->label_margin; ?>" name="style[label_margin]" />
             </td>
             <td>
@@ -889,10 +1035,12 @@ if (!class_exists('CustomContactForms')) {
 &lt;input type=&quot;hidden&quot; name=&quot;thank_you_page&quot; value=&quot;http://www.google.com&quot; /&gt;
 &lt;input type=&quot;hidden&quot; name=&quot;destination_email&quot; value=&quot;<?php echo $admin_options[default_to_email]; ?>&quot; /&gt;
 &lt;input type=&quot;hidden&quot; name=&quot;required_fields&quot; value=&quot;field_name1, field_name2&quot; /&gt;
+
 &lt;!-- Build your form in here. It is recommended you only use this feature if you are experienced with HTML. 
 The success_message field will add a popover containing the message when the form is completed successfully, the thank_you_page field will force 
 the user to be redirected to that specific page on successful form completion. The required_fields hidden field is optional; to use it seperate 
 the field names you want required by commas. Remember to use underscores instead of spaces in field names! --&gt;
+
 &lt;/form&gt;</textarea>
     </div>
   </div>
@@ -937,7 +1085,16 @@ the field names you want required by commas. Remember to use underscores instead
 			$fields = parent::selectAllFields();
 			$out = '';
 			foreach ($fields as $field) {
-				$out .= '<option value="'.$field->id.'">'.$field->field_slug.'</option>';
+				$out .= '<option value="'.$field->id.'">'.$field->field_slug.'</option>' . "\n";
+			}
+			return $out;
+		}
+		
+		function getFieldOptionsForm() {
+			$options = parent::selectAllFieldOptions();
+			$out = '';
+			foreach ($options as $option) {
+				$out .= '<option value="'.$option->id.'">'.$option->option_slug.'</option>' . "\n";
 			}
 			return $out;
 		}
@@ -1046,6 +1203,26 @@ the field names you want required by commas. Remember to use underscores instead
 					$out .= '<div>'."\n".'<input '.$instructions.' type="checkbox" name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.parent::decodeOption($field->field_value, 1, 1).'" '.$input_id.''.$code_type.'> '."\n".'<label class="checkbox" for="'.parent::decodeOption($field->field_slug, 1, 1).'">' . $req .parent::decodeOption($field->field_label, 1, 1).'</label>'."\n".'</div>' . "\n";
 				} elseif ($field->field_type == 'Textarea') {
 					$out .= '<div>'."\n".'<label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'. $req .parent::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<textarea '.$instructions.' '.$input_id.' rows="5" cols="40" name="'.parent::decodeOption($field->field_slug, 1, 1).'">'.$field_value.'</textarea>'."\n".'</div>' . "\n";
+				} elseif ($field->field_type == 'Dropdown') {
+					$field_options = '';
+					$options = parent::getAttachedFieldOptionsArray($field->id);
+					foreach ($options as $option_id) {
+						$option = parent::selectFieldOption($option_id);
+						$option_sel = ($field->field_value == $option->option_slug) ? ' selected="selected"' : '';
+						$option_value = (!empty($option->option_value)) ? ' value="' . $option->option_value . '"' : '';
+						$field_options .= '<option'.$option_sel.''.$option_value.'>' . $option->option_label . '</option>' . "\n";
+					}
+					if (!empty($options)) $out .= '<div>'."\n".'<select '.$instructions.' '.$input_id.' name="'.parent::decodeOption($field->field_slug, 1, 1).'">'."\n".$field_options.'</select>'."\n".'<label class="checkbox" for="'.parent::decodeOption($field->field_slug, 1, 1).'">'. $req .parent::decodeOption($field->field_label, 1, 1).'</label>'."\n".'</div>' . "\n";
+				} elseif ($field->field_type == 'Radio') {
+					$field_options = '';
+					$options = parent::getAttachedFieldOptionsArray($field->id);
+					foreach ($options as $option_id) {
+						$option = parent::selectFieldOption($option_id);
+						$option_sel = ($field->field_value == $option->option_slug) ? ' checked="checked"' : '';
+						$field_options .= '<input'.$option_sel.' type="radio" '.$instructions.' name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.parent::decodeOption($option->option_value, 1, 1).'"'.$code_type.'> <label class="select" for="'.parent::decodeOption($field->field_slug, 1, 1).'">' . parent::decodeOption($option->option_label, 1, 1) . '</label>' . "\n";
+					}
+					$field_label = (!empty($field->field_label)) ? '<label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'. $req .parent::decodeOption($field->field_label, 1, 1).'</label>' : '';
+					if (!empty($options)) $out .= '<div>'."\n".$field_label."\n".$field_options."\n".'</div>' . "\n";
 				}
 			}
 			$submit_text = (!empty($form->submit_button_text)) ? parent::decodeOption($form->submit_button_text, 1, 0) : 'Submit';
@@ -1055,11 +1232,14 @@ the field names you want required by commas. Remember to use underscores instead
 			if ($form->form_style != 0) {
 				$form_styles .= '<style type="text/css">' . "\n";
 				$form_styles .= '#' . $form_id . " { width: ".$style->form_width."; padding:".$style->form_padding."; margin:".$style->form_margin."; border:".$style->form_borderwidth." ".$style->form_borderstyle." ".$style->form_bordercolor."; font-family:".$style->form_fontfamily."; }\n";
-				//$form_styles .= '#' . $form_id . " div { padding:0; margin:0; }\n";
+				$form_styles .= '#' . $form_id . " div { margin-bottom:6px }\n";
 				$form_styles .= '#' . $form_id . " h4 { padding:0; margin:".$style->title_margin." ".$style->title_margin." ".$style->title_margin." 0; color:".$style->title_fontcolor."; font-size:".$style->title_fontsize."; } \n";
 				$form_styles .= '#' . $form_id . " label { padding:0; margin:".$style->label_margin." ".$style->label_margin." ".$style->label_margin." 0; display:block; color:".$style->label_fontcolor."; width:".$style->label_width."; font-size:".$style->label_fontsize."; } \n";
-				$form_styles .= '#' . $form_id . " label.checkbox { display:inline; } \n";
-				$form_styles .= '#' . $form_id . " input[type=text] { color:".$style->field_fontcolor."; margin:0; width:".$style->input_width."; font-size:".$style->field_fontsize."; background-color:".$style->field_backgroundcolor."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
+				$form_styles .= '#' . $form_id . " input[type=checkbox] { margin:0; }";
+				$form_styles .= '#' . $form_id . " label.checkbox, #" . $form_id . " label.radio, #" . $form_id . " label.select { display:inline; } \n";
+				$form_styles .= '#' . $form_id . " input[type=text], #" . $form_id . " select { color:".$style->field_fontcolor."; margin:0; width:".$style->input_width."; font-size:".$style->field_fontsize."; background-color:".$style->field_backgroundcolor."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
+				$form_styles .= '#' . $form_id . " select { width:".$style->dropdown_width."; }\n";
+				//$form_styles .= '#' . $form_id . " input[type=radio] { width:".$style->dropdown_width."; }\n";
 				$form_styles .= '#' . $form_id . " .submit { color:".$style->submit_fontcolor."; width:".$style->submit_width."; height:".$style->submit_height."; font-size:".$style->submit_fontsize."; } \n";
 				$form_styles .= '#' . $form_id . " textarea { color:".$style->field_fontcolor."; width:".$style->textarea_width."; margin:0; background-color:".$style->textarea_backgroundcolor."; height:".$style->textarea_height."; font-size:".$style->field_fontsize."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
 				$form_styles .= '</style>' . "\n";
@@ -1103,6 +1283,7 @@ the field names you want required by commas. Remember to use underscores instead
                 <p><?php echo $this->current_thank_you_message; ?></p>
                 <a href="javascript:void(0)" class="close">[close]</a>
             </div>
+
         <?php
 		}
 		
@@ -1159,8 +1340,10 @@ the field names you want required by commas. Remember to use underscores instead
 					} elseif ($field->field_slug == 'fixedEmail' && $field->field_required == 1 && !empty($_POST[fixedEmail])) {
 						if (!$this->validEmail($_POST[fixedEmail])) $this->setFormError('bad_email', 'The email address you provided was invalid.');
 					} else {
-						if ($field->field_required == 1 && empty($_POST[$field->field_slug]))
-							$this->setFormError($field->field_slug, 'You left the "'.$field->field_label.'" field blank.');
+						if ($field->field_required == 1 && empty($_POST[$field->field_slug])) {
+							$field_error_label = (empty($field->field_label)) ? $field->field_slug : $field->field_label;
+							$this->setFormError($field->field_slug, 'You left the "'.$field_error_label.'" field blank.');
+						}
 					} if ($field->field_type == 'Checkbox')
 						$checks[] = $field->field_slug;
 				} 
@@ -1168,9 +1351,10 @@ the field names you want required by commas. Remember to use underscores instead
 				foreach ($_POST as $key => $value) {
 					$_SESSION[fields][$key] = $value;
 					$field = parent::selectField('', $key);
-					if (!array_key_exists($key, $this->fixed_fields) or $key == 'fixedEmail')
-						$body .= $field->field_label . ': ' . $value . "\n";
-					if (in_array($key, $checks)) {
+					if (!array_key_exists($key, $this->fixed_fields) or $key == 'fixedEmail') {
+						$mail_field_label = (empty($field->field_label)) ? $field->field_slug : $field->field_label;
+						$body .= $mail_field_label . ': ' . $value . "\n";
+					} if (in_array($key, $checks)) {
 						$checks_key = array_search($key, $checks);
 						unset($checks[$checks_key]);
 					}
@@ -1209,25 +1393,28 @@ if (!function_exists('CustomContactForms_ap')) {
 		}
 	}
 }
+
 if (!function_exists('serveCustomContactForm')) {
 	function serveCustomContactForm($fid) {
 		global $customcontact;
 		echo $customcontact->getFormCode($fid);
 	}
 }
+
 if (!function_exists('CCFWidgetInit')) {
 	function CCFWidgetInit() {
 		register_widget('CustomContactFormsWidget');
 	}
 }
+
 if (isset($customcontact)) {
 	add_action('init', array(&$customcontact, 'init'), 1);
+	register_activation_hook(__FILE__, array(&$customcontact, 'activatePlugin'));
 	add_action('wp_print_scripts', array(&$customcontact, 'insertFrontEndScripts'), 1);
 	add_action('admin_print_scripts', array(&$customcontact, 'insertAdminScripts'), 1);
-	add_action('wp_print_styles', array(&$customcontact, 'insertStyleSheets'), 1);
-	add_action('admin_print_styles', array(&$customcontact, 'insertStyleSheets'), 1);
+	add_action('wp_print_styles', array(&$customcontact, 'insertFrontEndStyles'), 1);
+	add_action('admin_print_styles', array(&$customcontact, 'insertBackEndStyles'), 1);
 	add_filter('the_content', array(&$customcontact, 'contentFilter'));
-	/*add_action('wp_footer', array(&$customcontact, 'insertPopoverCode'));*/
 	add_action('widgets_init', 'CCFWidgetInit');
 	add_action('admin_menu', 'CustomContactForms_ap');
 }	

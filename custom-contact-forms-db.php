@@ -9,14 +9,14 @@ if (!class_exists('CustomContactFormsDB')) {
 		var $forms_table;
 		var $fields_table;
 		var $styles_table;
+		var $field_options_table;
 		function CustomContactFormsDB() {
 			global $wpdb;
-			$this->forms_table = $wpdb->prefix . 'customcontactforms_forms';
-			$this->fields_table = $wpdb->prefix . 'customcontactforms_fields';
-			$this->styles_table = $wpdb->prefix . 'customcontactforms_styles';
-			$this->createTables();
-			$this->updateTables();
-			$this->insertFixedFields();
+			$table_prefix = $wpdb->prefix;
+			$this->forms_table = $table_prefix . 'customcontactforms_forms';
+			$this->fields_table = $table_prefix . 'customcontactforms_fields';
+			$this->styles_table = $table_prefix . 'customcontactforms_styles';
+			$this->field_options_table = $table_prefix . 'customcontactforms_field_options';
 		}
 		
 		function encodeOption($option) {
@@ -44,6 +44,15 @@ if (!class_exists('CustomContactFormsDB')) {
 						PRIMARY KEY ( `id` )
 						) ENGINE = MYISAM AUTO_INCREMENT=1 ";
 				$wpdb->query($sql1);
+			} if(!$this->fieldOptionsTableExists()) {
+				$sql5 = " CREATE TABLE `".$this->field_options_table."` (
+						`id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+						`option_slug` VARCHAR( 100 ) NOT NULL ,
+						`option_label` VARCHAR( 200 ) NOT NULL ,
+						`option_value` VARCHAR( 100 ) NOT NULL ,
+						PRIMARY KEY ( `id` )
+						) ENGINE = MYISAM AUTO_INCREMENT=1 ";
+				$wpdb->query($sql5);
 			} if(!$this->fieldsTableExists()) {
 				$sql2 = "CREATE TABLE `".$this->fields_table."` (
 						`id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
@@ -112,16 +121,24 @@ if (!class_exists('CustomContactFormsDB')) {
 				$wpdb->query("ALTER TABLE `" . $this->forms_table . "` ADD `form_success_title` VARCHAR( 150 ) NOT NULL DEFAULT 'Form Success!'");
 			if (!$this->columnExists('form_padding', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `form_padding` VARCHAR( 20 ) NOT NULL DEFAULT '4px'");
-			if (!$this->columnExists('title_margin', $this->styles_table))
-				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `title_margin` VARCHAR( 20 ) NOT NULL DEFAULT '2px'");
 			if (!$this->columnExists('form_margin', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `form_margin` VARCHAR( 20 ) NOT NULL DEFAULT '4px'");
+			if (!$this->columnExists('title_margin', $this->styles_table))
+				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `title_margin` VARCHAR( 20 ) NOT NULL DEFAULT '2px'");
 			if (!$this->columnExists('label_margin', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `label_margin` VARCHAR( 20 ) NOT NULL DEFAULT '3px'");
 			if (!$this->columnExists('textarea_backgroundcolor', $this->styles_table))
-				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `textarea_backgroundcolor` VARCHAR( 20 ) NOT NULL DEFAULT '#ffffff'");
+				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `textarea_backgroundcolor` VARCHAR( 20 ) NOT NULL DEFAULT '#efefef'");
+			if (!$this->columnExists('success_popover_bordercolor', $this->styles_table))
+				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `success_popover_bordercolor` VARCHAR( 20 ) NOT NULL DEFAULT '#efefef'");
+			
+			if (!$this->columnExists('dropdown_width', $this->styles_table))
+				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `dropdown_width` VARCHAR( 20 ) NOT NULL DEFAULT 'auto'");
+			
 			if (!$this->columnExists('field_instructions', $this->fields_table))
 				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `field_instructions` TEXT NOT NULL");
+			if (!$this->columnExists('field_options', $this->fields_table))
+				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `field_options` VARCHAR( 300 ) NOT NULL");
 			if (!$this->columnExists('field_required', $this->fields_table))
 				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `field_required` INT( 1 ) NOT NULL DEFAULT '0'");
 		
@@ -150,8 +167,6 @@ if (!class_exists('CustomContactFormsDB')) {
 			global $wpdb;
 			if (empty($form) or empty($form[form_slug]) or $this->formSlugExists($this->formatSlug($form[form_slug]))) return false;
 			$form[form_slug] = $this->formatSlug($form[form_slug]);
-			//foreach ($form as $key => $value)
-			//	$form[$key] = $this->encodeOption($value);
 			$form = array_map(array(&$this, 'encodeOption'), $form);
 			$wpdb->insert($this->forms_table, $form);
 			return true;
@@ -169,6 +184,15 @@ if (!class_exists('CustomContactFormsDB')) {
 			return true;
 		}
 		
+		function insertFieldOption($option) {
+			global $wpdb;
+			if (empty($option) or empty($option[option_slug]) or $this->fieldOptionsSlugExists($this->formatSlug($option[option_slug]))) return false;
+			$option[option_slug] = $this->formatSlug($option[option_slug]);
+			$option = array_map(array(&$this, 'encodeOption'), $option);
+			$wpdb->insert($this->field_options_table, $option);
+			return true;
+		}
+		
 		function insertStyle($style) {
 			global $wpdb;
 			if (empty($style) or empty($style[style_slug]) or $this->styleSlugExists($this->formatSlug($style[style_slug]))) return false;
@@ -177,10 +201,10 @@ if (!class_exists('CustomContactFormsDB')) {
 				if ($key != 'style_slug')
 					$style[$key] = $this->formatStyle($this->encodeOption($value));
 			}
-			print_r($style);
 			$wpdb->insert($this->styles_table, $style);
 			return true;
 		}
+		
 		
 		function fieldsTableExists() {
 			global $wpdb;
@@ -195,6 +219,11 @@ if (!class_exists('CustomContactFormsDB')) {
 		function stylesTableExists() {
 			global $wpdb;
 			return ($wpdb->get_var("show tables like '". $this->styles_table . "'") == $this->styles_table);
+		}
+		
+		function fieldOptionsTableExists() {
+			global $wpdb;
+			return ($wpdb->get_var("show tables like '". $this->field_options_table . "'") == $this->field_options_table);
 		}
 		
 		function updateForm($form, $fid) {
@@ -222,6 +251,19 @@ if (!class_exists('CustomContactFormsDB')) {
 			return true;
 		}
 		
+		function updateFieldOption($option, $oid) {
+			global $wpdb;
+			if (!empty($option[option_slug])) {
+				$test = $this->selectFieldOption('', $this->formatSlug($option[option_slug]));
+				if (!empty($test) and $test->id != $oid)
+					return false;
+				$option[option_slug] = $this->formatSlug($option[option_slug]);
+			}
+			$option = array_map(array(&$this, 'encodeOption'), $option);
+			$wpdb->update($this->field_options_table, $option, array('id' => $oid));
+			return true;
+		}
+		
 		function updateStyle($style, $sid) {
 			global $wpdb;
 			if (empty($style[style_slug])) return false;
@@ -243,13 +285,22 @@ if (!class_exists('CustomContactFormsDB')) {
 		
 		function deleteField($fid) {
 			global $wpdb;
+			$this->dettachFieldAll($fid);
 			$wpdb->query("DELETE FROM " . $this->fields_table . " WHERE id='$fid'");
-			return true;
+			return false;
 		}
 		
 		function deleteStyle($sid) {
 			global $wpdb;
+			$this->dettachStyleAll($sid);
 			$wpdb->query("DELETE FROM " . $this->styles_table . " WHERE id='$sid'");
+			return true;
+		}
+		
+		function deleteFieldOption($oid) {
+			global $wpdb;
+			$this->dettachFieldOptionAll($oid);
+			$wpdb->query("DELETE FROM " . $this->field_options_table . " WHERE id='$oid'");
 			return true;
 		}
 		
@@ -263,6 +314,11 @@ if (!class_exists('CustomContactFormsDB')) {
 			return $wpdb->get_results("SELECT * FROM " . $this->fields_table . " ORDER BY field_slug ASC");	
 		}
 		
+		function selectAllFieldOptions() {
+			global $wpdb;
+			return $wpdb->get_results("SELECT * FROM " . $this->field_options_table . " ORDER BY option_slug ASC");	
+		}
+		
 		function selectAllStyles() {
 			global $wpdb;
 			return $wpdb->get_results("SELECT * FROM " . $this->styles_table . " ORDER BY style_slug ASC");	
@@ -274,25 +330,41 @@ if (!class_exists('CustomContactFormsDB')) {
 			return $wpdb->get_row("SELECT * FROM " . $this->forms_table . " WHERE id='$fid' $extra");
 		}
 		
-		function selectStyle($sid, $style_slug) {
+		function selectStyle($sid, $style_slug = '') {
 			global $wpdb;
 			$extra = (!empty($style_slug)) ? " or style_slug = '$style_slug'" : '';
 			return $wpdb->get_row("SELECT * FROM " . $this->styles_table . " WHERE id='$sid' $extra");
 		}
 		
-		function selectField($fid, $field_slug) {
+		function selectField($fid, $field_slug = '') {
 			global $wpdb;
 			$extra = (!empty($field_slug)) ? " or field_slug = '$field_slug'" : '';
 			return $wpdb->get_row("SELECT * FROM " . $this->fields_table . " WHERE id='$fid'" . $extra);
 		}
 		
-		function addFieldToForm($field_id, $form_id) {
+		function selectFieldOption($oid, $option_slug = '') {
 			global $wpdb;
+			$extra = (!empty($option_slug)) ? " or option_slug = '$option_slug'" : '';
+			return $wpdb->get_row("SELECT * FROM " . $this->field_options_table . " WHERE id='$oid'" . $extra);
+		}
+		
+		function addFieldToForm($field_id, $form_id) {
 			$form = $this->selectForm($form_id, '');
 			$fields = $this->getAttachedFieldsArray($form_id);
 			if (!in_array($field_id, $fields)) {
-				$newfields = $form->form_fields . $field_id . ',';
-				$wpdb->update($this->forms_table, array('form_fields' => $newfields), array('id' => $form_id));
+				$new_fields = $form->form_fields . $field_id . ',';
+				$this->updateForm(array('form_fields' => $new_fields), $form_id);
+				return true;
+			}
+			return false;
+		}
+		
+		function addFieldOptionToField($option_id, $field_id) {
+			$field = $this->selectField($field_id);
+			$options = $this->getAttachedFieldOptionsArray($field_id);
+			if (!in_array($option_id, $options)) {
+				$new_options = $field->field_options . $option_id . ',';
+				$this->updateField(array('field_options' => $new_options), $field_id);
 				return true;
 			}
 			return false;
@@ -305,16 +377,54 @@ if (!class_exists('CustomContactFormsDB')) {
 			return $out;
 		}
 		
-		function disattachField($field_id, $form_id) {
-			global $wpdb;
+		function getAttachedFieldOptionsArray($field_id) {
+			$field = $this->selectField($field_id);
+			$out = explode(',', $field->field_options);
+			if (!empty($out)) array_pop($out);
+			return $out;
+		}
+		
+		function dettachField($field_id, $form_id) {
 			$fields = $this->getAttachedFieldsArray($form_id);
 			if (!empty($fields) && in_array($field_id, $fields)) {
-				$form = $this->selectForm($form_id, '');
-				$newfields = str_replace($field_id . ',', '', $form->form_fields);
-				$wpdb->update($this->forms_table, array('form_fields' => $newfields), array('id' => $form_id));
+				$form = $this->selectForm($form_id);
+				$new_fields = str_replace($field_id . ',', '', $form->form_fields);
+				$this->updateForm(array('form_fields' => $new_fields), $form_id);
 				return true;
 			}
 			return false;
+		}
+		
+		function dettachFieldAll($field_id) {
+			$forms = $this->selectAllForms();
+			foreach ($forms as $form)
+				$this->dettachField($field_id, $form->id);
+		}
+		
+		function dettachFieldOptionAll($option_id) {
+			$fields = $this->selectAllFields();
+			foreach ($fields as $field)
+				$this->dettachFieldOption($option_id, $field->id);
+		}
+		
+		function dettachFieldOption($option_id, $field_id) {
+			$options = $this->getAttachedFieldOptionsArray($field_id);
+			if (!empty($options) && in_array($option_id, $options)) {
+				$field = $this->selectField($field_id);
+				$new_options = str_replace($option_id . ',', '', $field->field_options);
+				$this->updateField(array('field_options' => $new_options), $field_id);
+				return true;
+			}
+			return false;
+		}
+		
+		function dettachStyleAll($style_id) {
+			$forms = $this->selectAllForms();
+			foreach ($forms as $form) {
+				if ($form->form_style == $style_id) {
+					$this->updateForm(array('form_style' => 0), $form->id);
+				}
+			}
 		}
 		
 		function formatSlug($slug) {
@@ -334,6 +444,11 @@ if (!class_exists('CustomContactFormsDB')) {
 		
 		function formSlugExists($slug) {
 			$test = $this->selectForm('', $slug);
+			return (!empty($test));
+		}
+		
+		function fieldOptionsSlugExists($slug) {
+			$test = $this->selectFieldOption('', $slug);
 			return (!empty($test));
 		}
 	}
