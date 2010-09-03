@@ -51,7 +51,7 @@ form.customcontactform div select { font-size:1.3em; width:auto; margin-right:9p
 form.customcontactform-sidebar div input[type=text], 
 form.customcontactform-sidebar div select, 
 form.customcontactform-sidebar div textarea { width:95%; max-width:16em; margin:2px 0 4px 0; }
-
+form.customcontactform-sidebar div select { width:auto; }
 /* ----- popover box ---------- */
 
 .ccf-popover {
@@ -89,10 +89,10 @@ form.customcontactform-sidebar div textarea { width:95%; max-width:16em; margin:
 	height:200px;
 	padding:0px;
 	margin:0;
-	-moz-border-radius:35px;
-	-khtml-border-radius:35px;
-	-webkit-border-radius:35px;
-	border-radius:305px;
+	-moz-border-radius:30px;
+	-khtml-border-radius:30px;
+	-webkit-border-radius:30px;
+	border-radius:250px;
 	position:fixed;
 	left:30%;
 	background-color:white;
