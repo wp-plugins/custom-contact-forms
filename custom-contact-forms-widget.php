@@ -39,7 +39,7 @@ if (!class_exists('CustomContactFormsWidget')) {
 			$form_id = esc_attr($instance['form_id']);
 			?>
 			<p><label for="<?php echo $this->get_field_id('form_id'); ?>">
-			Choose a Form:
+			Choose a Form:<br />
 			<select id="<?php echo $this->get_field_id('form_id'); ?>" name="<?php echo $this->get_field_name('form_id'); ?>">
 				<?php
 				foreach ($forms as $form) {
@@ -50,6 +50,7 @@ if (!class_exists('CustomContactFormsWidget')) {
 				?>
 			</select>
 			</label></p>
+            <p><a href="options-general.php?page=custom-contact-forms#create-forms">Create a Form</a></p>
 			<?php 
     	}
 	}

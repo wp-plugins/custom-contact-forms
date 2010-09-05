@@ -22,7 +22,7 @@
 #customcontactforms-admin #instructions {
 	float:left;
 	clear:none;
-	width:400px;
+	width:436px;
 	margin:20px 1em 1em 1em;
 }
 #customcontactforms-admin #contact-author {
@@ -126,7 +126,7 @@
 #customcontactforms-admin #field-options .evenrow-field-options { background-color:#f9f9f9; }
 #customcontactforms-admin #general-settings label { font-weight:bold; }
 #customcontactforms-admin #style-example {
-	background:url(images/style-example.gif) no-repeat top left;
+	background:url(../images/style-example.gif) no-repeat top left;
 	width:405px;
 	height:135px;
 	padding-left:20px;
@@ -134,7 +134,7 @@
 	border:0;
 }
 #customcontactforms-admin #success-popover-example {
-	background:url(images/success-popover-example.gif) no-repeat top left;
+	background:url(../images/success-popover-example.gif) no-repeat top left;
 	width:405px;
 	height:135px;
 	padding-left:20px;
@@ -253,4 +253,41 @@
 }
 #customcontactforms-admin #plugin-nav li.last  {
 	border-right:none;
+}
+/* CCF Install Popover -------------------------------- */
+#ccf-install-popover {
+	display:none;
+	border: 9px solid #efefef;
+	border-spacing:0;
+	width:680px;
+	height:400px;
+	padding:0px;
+	margin:0;
+	-moz-border-radius:10px;
+	-khtml-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:15px;
+	position:fixed;
+	left:30%;
+	background-color:white;
+	top:20px;
+}
+#ccf-install-popover div {
+	background-color:#efefef;
+	padding:9px 9px 9px 20px;
+	margin:0 0 15px 0px;
+	height:1.3em;
+}
+#ccf-install-popover div h5 {
+	text-align:left;
+	float:left;
+	margin:0;
+	font-size:1.5em;
+	font-weight:bold;
+}
+#ccf-install-popover p { padding:8px; clear:both; font-size:1.1em; text-align:center; }
+#ccf-install-popover div a.close {
+	float:right;
+	display:block;
+	font-size:12px;
 }

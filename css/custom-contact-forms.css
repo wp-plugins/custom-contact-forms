@@ -89,27 +89,34 @@ form.customcontactform-sidebar div select { width:auto; }
 	height:200px;
 	padding:0px;
 	margin:0;
-	-moz-border-radius:30px;
-	-khtml-border-radius:30px;
-	-webkit-border-radius:30px;
-	border-radius:250px;
+	-moz-border-radius:10px;
+	-khtml-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:15px;
 	position:fixed;
 	left:30%;
 	background-color:white;
 	top:30%;
 }
-
-#ccf-form-success h5 {
-	background-color:#efefef; margin:0 0 15px 0px;
-	text-align:left;
+#ccf-form-success div {
+	background-color:#efefef;
 	padding:9px 9px 9px 20px;
+	margin:0 0 15px 0px;
+	height:1.3em;
+}
+#ccf-form-success div h5 {
+	text-align:left;
+	float:left;
+	margin:0;
+	padding:0;
 	font-size:1.5em;
 	font-weight:bold;
 }
-#ccf-form-success p { padding:8px; font-size:1.1em; text-align:center; }
-#ccf-form-success a.close {
-	position:absolute;
-	right:12px;
-	font-size:1em;
-	top:7px;
+#ccf-form-success p { padding:8px; margin:0; clear:both; font-size:1.1em; text-align:center; }
+#ccf-form-success div a.close {
+	float:right;
+	display:block;
+	font-size:12px;
+	margin:0;
+	padding:0;
 }

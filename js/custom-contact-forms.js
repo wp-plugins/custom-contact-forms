@@ -29,7 +29,7 @@ $j(document).ready(function(){
 													  
 	});
 	
-	$j(".customcontactform .tooltip-field").tooltip({
+	$j(".ccf-tooltip-field").tooltip({
 		position: "center right",
 		offset: [-2, 10],
 		effect: "fade",

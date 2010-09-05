@@ -36,4 +36,8 @@ $j(document).ready(function(){
 			.find(".fields-extra-options:first")
 			.toggle();
 	});
+	$j("#ccf-install-popover").delay(500).fadeIn('slow');
+	$j("#ccf-install-popover .close").click(function() {
+		$j("#ccf-install-popover").fadeOut();											  
+	});
 });

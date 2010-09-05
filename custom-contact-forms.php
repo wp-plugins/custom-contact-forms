@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form. <a href="options-general.php?page=custom-contact-forms">Settings</a>
-	Version: 3.5.0
+	Version: 3.5.1
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
@@ -28,7 +28,7 @@ if (!class_exists('CustomContactForms')) {
 	class CustomContactForms extends CustomContactFormsDB {
 		var $adminOptionsName = 'customContactFormsAdminOptions';
 		var $widgetOptionsName = 'widget_customContactForms';
-		var $version = '2.1.0';
+		var $version = '3.5.1';
 		var $form_errors;
 		var $error_return;
 		var $gets;
@@ -48,6 +48,9 @@ if (!class_exists('CustomContactForms')) {
 		}
 		
 		function activatePlugin() {
+			$admin_options = $this->getAdminOptions();
+			$admin_options[show_install_popover] = 1;
+			update_option($this->adminOptionsName, $admin_options);
 			parent::createTables();
 			parent::updateTables();
 			parent::insertFixedFields();
@@ -56,7 +59,8 @@ if (!class_exists('CustomContactForms')) {
 		function getAdminOptions() {
 			$admin_email = get_option('admin_email');
 			$customcontactAdminOptions = array('show_widget_home' => 1, 'show_widget_pages' => 1, 'show_widget_singles' => 1, 'show_widget_categories' => 1, 'show_widget_archives' => 1, 'default_to_email' => $admin_email, 'default_from_email' => $admin_email, 'default_form_subject' => 'Someone Filled Out Your Contact Form!', 
-			'remember_field_values' => 0, 'author_link' => 1, 'enable_widget_tooltips' => 1, 'wp_mail_function' => 1, 'form_success_message_title' => 'Form Success!', 'form_success_message' => 'Thank you for filling out our web form. We will get back to you ASAP.', 'enable_jquery' => 1, 'code_type' => 'XHTML'); // default general settings
+			'remember_field_values' => 0, 'author_link' => 1, 'enable_widget_tooltips' => 1, 'wp_mail_function' => 1, 'form_success_message_title' => 'Form Success!', 'form_success_message' => 'Thank you for filling out our web form. We will get back to you ASAP.', 'enable_jquery' => 1, 'code_type' => 'XHTML',
+			'show_install_popover' => 0); // default general settings
 			$customcontactOptions = get_option($this->adminOptionsName);
 			if (!empty($customcontactOptions)) {
 				foreach ($customcontactOptions as $key => $option)
@@ -67,7 +71,6 @@ if (!class_exists('CustomContactForms')) {
 		}
 		function init() {
 			$this->storeGets();
-			$this->getAdminOptions();
 			if (!is_admin()) {
 				$this->startSession();
 				$this->processForms();
@@ -86,12 +89,18 @@ if (!class_exists('CustomContactForms')) {
 		function insertBackEndStyles() {
             wp_register_style('CCFStandardsCSS', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/css/custom-contact-forms-standards.css');
             wp_register_style('CCFAdminCSS', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/css/custom-contact-forms-admin.css');
+			wp_register_style('CCFColorPickerCSS', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/css/colorpicker.css');
             wp_enqueue_style('CCFStandardsCSS');
 			wp_enqueue_style('CCFAdminCSS');
+			wp_enqueue_style('CCFColorPickerCSS');
 		}
 		
 		function insertAdminScripts() {
 			wp_enqueue_script('ccf-main', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/custom-contact-forms-admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'/*, 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-dialog'*/), '1.0');
+			wp_enqueue_script('ccf-colorpicker', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/colorpicker.js');
+			wp_enqueue_script('ccf-eye', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/eye.js');
+			wp_enqueue_script('ccf-utils', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/utils.js');
+			wp_enqueue_script('ccf-layout', get_option('siteurl') . '/wp-content/plugins/custom-contact-forms/js/layout.js?ver=1.0.2');
 		}
 		
 		function insertFrontEndScripts() {
@@ -127,8 +136,22 @@ if (!class_exists('CustomContactForms')) {
 			return $this->form_errors;
 		}
 		
+		function insertInstallPopover() {
+			?>
+            <div id="ccf-install-popover">
+            	<div>
+                	<h5>Welcome to Custom Contact Forms</h5>
+                	<a href="javascript:void(0)" class="close">[close]</a>
+                </div>
+            	<p>herrro!</p>
+            </div>
+            <?php
+		}
+		
 		function printAdminPage() {
 			$admin_options = $this->getAdminOptions();
+			//if ($admin_options[show_install_popover] == 1)
+				//add_action('admin_footer', array(&$this, 'insertInstallPopover'));
 			if ($_POST[form_create]) {
 				parent::insertForm($_POST[form]);
 			} elseif ($_POST[field_create]) {
@@ -540,9 +563,9 @@ if (!class_exists('CustomContactForms')) {
         <form method="post" action="<?php echo $_SERVER['REQUEST_URI']?>">
         <div class="create-field-options-header">Create a Field Option</div>
         <ul id="create-field-options">
-        	<li><label for="option[option_slug]">Option Slug:</label> <input maxlength="20" type="text" name="option[option_slug]" /><br />
+        	<li><label for="option[option_slug]">* Option Slug:</label> <input maxlength="20" type="text" name="option[option_slug]" /><br />
             (Used to identify this option, solely for admin purposes; must be unique, and contain only letters, numbers, and underscores. Example: "slug_one")</li>
-            <li><label for="option[option_label]">Option Label:</label> <input type="text" name="option[option_label]" /><br />
+            <li><label for="option[option_label]">* Option Label:</label> <input type="text" name="option[option_label]" /><br />
             (This is what is shown to the user in the dropdown or radio field. Example:)</li>
             <li><label for="option[option_value]">Option Value:</label> <input type="text" name="option[option_value]" /><br />
             (This is the actual value of the option which isn't shown to the user. This can be the same thing as the label. An example pairing of label => value is: "The color green" => "green" or "Yes" => "1".)</li>
@@ -781,7 +804,7 @@ if (!class_exists('CustomContactForms')) {
       <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
         <ul class="style_left">
           <li>
-            <label for="style_slug">Style Slug:</label>
+            <label for="style_slug">* Style Slug:</label>
             <input type="text" maxlength="30" class="width75" name="style[style_slug]" />
             (Must be unique)</li>
           <li>
@@ -790,8 +813,8 @@ if (!class_exists('CustomContactForms')) {
             (ex: 10pt, 10px, 1em)</li>
           <li>
             <label for="title_fontcolor">Title Font Color:</label>
-            <input type="text" maxlength="20" value="#333333" value="#" class="width75" name="style[title_fontcolor]" />
-            (ex: #FF0000 or red)</li>
+            <input type="text" maxlength="20" value="333333" class="width75 colorfield" name="style[title_fontcolor]" />
+            (ex: FF0000)</li>
           <li>
             <label for="label_width">Label Width:</label>
             <input type="text" maxlength="20" value="110px" class="width75" name="style[label_width]" />
@@ -802,8 +825,8 @@ if (!class_exists('CustomContactForms')) {
             (ex: 10px, 10pt, 1em)</li>
           <li>
             <label for="label_fontcolor">Label Font Color:</label>
-            <input type="text" maxlength="20" value="#333333" class="width75" name="style[label_fontcolor]" />
-            (ex: #FF0000 or red)</li>
+            <input type="text" maxlength="20" value="333333" class="width75 colorfield" name="style[label_fontcolor]" />
+            (ex: FF0000)</li>
           <li>
             <label for="input_width">Text Field Width:</label>
             <input type="text" maxlength="20" value="200px" class="width75" name="style[input_width]" />
@@ -822,8 +845,8 @@ if (!class_exists('CustomContactForms')) {
             (ex: 10px, 10pt, 1em</li>
           <li>
             <label for="field_fontcolor">Field Font Color:</label>
-            <input type="text" maxlength="20" value="#333333" class="width75" name="style[field_fontcolor]" />
-            (ex: 100px or 100%)</li>
+            <input type="text" maxlength="20" value="333333" class="width75 colorfield" name="style[field_fontcolor]" />
+            (ex: 333333)</li>
           <li>
             <label for="field_borderstyle">Field Border Style:</label>
             <select class="width75" name="style[field_borderstyle]"><?php echo str_replace('<option>solid</option>', '<option selected="selected">solid</option>', $border_style_options); ?></select>
@@ -838,14 +861,21 @@ if (!class_exists('CustomContactForms')) {
             (ex: 5px or 1em)</li>
           <li>
             <label for="textarea_backgroundcolor">Textarea Background Color:</label>
-            <input type="text" maxlength="20" value="#ffffff" class="width75" name="style[textarea_backgroundcolor]" />
-            (ex: #FF0000 or red)</li>
-          
+            <input type="text" maxlength="20" value="ffffff" class="width75 colorfield" name="style[textarea_backgroundcolor]" />
+            (ex: FF0000)</li>
+          <li>
+            <label for="success_popover_fontcolor">Success Popover Font Color:</label>
+            <input type="text" maxlength="20" value="333333" class="width75 colorfield" name="style[success_popover_fontcolor]" />
+            (ex: 333333)</li>
+          <li>
+            <label for="success_popover_title_fontsize">Success Popover Title Font Size:</label>
+            <input type="text" maxlength="20" value="12px" class="width75" name="style[success_popover_title_fontsize]" />
+            (ex: 12px, 1em, 100%)</li>
         </ul>
         <ul class="style_right">
           <li>
             <label for="input_width">Field Border Color:</label>
-            <input type="text" maxlength="20" value="#333333" class="width75" name="style[field_bordercolor]" />
+            <input type="text" maxlength="20" value="333333" class="width75 colorfield" name="style[field_bordercolor]" />
             (ex: 100px or 100%)</li>
           <li>
             <label for="form_borderstyle">Form Border Style:</label>
@@ -853,8 +883,8 @@ if (!class_exists('CustomContactForms')) {
             </li>
           <li>
             <label for="form_bordercolor">Form Border Color:</label>
-            <input type="text" maxlength="20" value="#333333" class="width75" name="style[form_bordercolor]" />
-            (ex: #00000 or red)</li>
+            <input type="text" maxlength="20" value="333333" class="width75 colorfield" name="style[form_bordercolor]" />
+            (ex: 000000)</li>
           <li>
             <label for="form_borderwidth">Form Border Width:</label>
             <input type="text" maxlength="20" value="1px" class="width75" name="style[form_borderwidth]" />
@@ -881,12 +911,12 @@ if (!class_exists('CustomContactForms')) {
             (ex: 10px, 10pt, 1em</li>
           <li>
             <label for="submit_fontcolor">Button Font Color:</label>
-            <input type="text" maxlength="20" value="#333333" class="width75" name="style[submit_fontcolor]" />
-            (ex: #FF0000 or red)</li>
+            <input type="text" maxlength="20" value="333333" class="width75 colorfield" name="style[submit_fontcolor]" />
+            (ex: FF0000)</li>
           <li>
             <label for="field_backgroundcolor">Field Background Color:</label>
-            <input type="text" maxlength="20" value="#efefef" class="width75" name="style[field_backgroundcolor]" />
-            (ex: #FF0000 or red)</li>
+            <input type="text" maxlength="20" value="efefef" class="width75 colorfield" name="style[field_backgroundcolor]" />
+            (ex: FF0000)</li>
           <li>
             <label for="form_padding">Form Padding:</label>
             <input type="text" maxlength="20" value="5px" class="width75" name="style[form_padding]" />
@@ -901,8 +931,16 @@ if (!class_exists('CustomContactForms')) {
             (ex: 30px, 20%, or auto)</li>
           <li>
             <label for="success_popover_bordercolor">Success Popover Border Color:</label>
-            <input type="text" maxlength="20" value="#efefef" class="width75" name="style[success_popover_bordercolor]" />
-            (ex: #FF0000)</li>
+            <input type="text" maxlength="20" value="efefef" class="width75 colorfield" name="style[success_popover_bordercolor]" />
+            (ex: FF0000)</li>
+          <li>
+            <label for="success_popover_fontsize">Success Popover Font Size:</label>
+            <input type="text" maxlength="20" value="12px" class="width75" name="style[success_popover_fontsize]" />
+            (ex: 12px, 1em, 100%)</li>
+          <li>
+            <label for="success_popover_title_fontsize">Success Popover Title Font Size:</label>
+            <input type="text" maxlength="20" value="12px" class="width75" name="style[success_popover_title_fontsize]" />
+            (ex: 12px, 1em, 100%)</li>
           <li>
             <input type="submit" value="Create Style" name="style_create" />
           </li>
@@ -930,12 +968,12 @@ if (!class_exists('CustomContactForms')) {
 		?>
 		<tr class="<?php if ($i % 2 == 0) echo 'evenrow'; ?>">
         <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
-        	<td><label>Slug:</label> <input type="text" maxlength="30" value="<?php echo $style->style_slug; ?>" name="style[style_slug]" /><br />
+        	<td><label>* Slug:</label> <input type="text" maxlength="30" value="<?php echo $style->style_slug; ?>" name="style[style_slug]" /><br />
             <label>Font Family:</label><input type="text" maxlength="20" value="<?php echo $style->form_fontfamily; ?>" name="style[form_fontfamily]" /><br />
-            <label>Textarea Background<br />Color:</label><input type="text" maxlength="20" value="<?php echo $style->textarea_backgroundcolor; ?>" name="style[textarea_backgroundcolor]" /><br />
-            <label>Success Popover<br />Border Color:</label><input type="text" maxlength="20" value="<?php echo $style->success_popover_bordercolor; ?>" name="style[success_popover_bordercolor]" /><br />
+            <label>Textarea Background<br />Color:</label><input class="colorfield" type="text" maxlength="20" value="<?php echo $style->textarea_backgroundcolor; ?>" name="style[textarea_backgroundcolor]" /><br />
+            <label>Success Popover<br />Border Color:</label><input class="colorfield" type="text" maxlength="20" value="<?php echo $style->success_popover_bordercolor; ?>" name="style[success_popover_bordercolor]" /><br />
             <input type="submit" class="submit-styles" name="style_edit" value="Update Style" /><br />
-            <input type="submit" class="submit-styles" class="delete_button" name="style_delete" value="Delete Style" />
+            <input type="submit" class="submit-styles delete_button" name="style_delete" value="Delete Style" />
             </td>
             
             <td>
@@ -943,15 +981,16 @@ if (!class_exists('CustomContactForms')) {
             <label>Text Field Width:</label><input type="text" maxlength="20" value="<?php echo $style->input_width; ?>" name="style[input_width]" /><br />
             <label>Textarea Width:</label><input type="text" maxlength="20" value="<?php echo $style->textarea_width; ?>" name="style[textarea_width]" /><br />
             <label>Textarea Height:</label><input type="text" maxlength="20" value="<?php echo $style->textarea_height; ?>" name="style[textarea_height]" /><br />
-            <label>Dropdown Width:</label><input type="text" maxlength="20" value="<?php echo $style->dropdown_width; ?>" name="style[dropdown_width]" />
-            <label>Label Margin:</label><input type="text" maxlength="20" value="<?php echo $style->label_margin; ?>" name="style[label_margin]" />
+            <label>Dropdown Width:</label><input type="text" maxlength="20" value="<?php echo $style->dropdown_width; ?>" name="style[dropdown_width]" /><br />
+            <label>Label Margin:</label><input type="text" maxlength="20" value="<?php echo $style->label_margin; ?>" name="style[label_margin]" /><br />
             </td>
             <td>
             <label>Label Width:</label><input type="text" maxlength="20" value="<?php echo $style->label_width; ?>" name="style[label_width]" /><br />
             <label>Button Width:</label><input type="text" maxlength="20" value="<?php echo $style->submit_width; ?>" name="style[submit_width]" /><br />
             <label>Button Height:</label><input type="text" maxlength="20" value="<?php echo $style->submit_height; ?>" name="style[submit_height]" /><br />
-            <label>Field Background Color:</label><input type="text" maxlength="20" value="<?php echo $style->field_backgroundcolor; ?>" name="style[field_backgroundcolor]" /><br />
+            <label>Field Background Color:</label><input class="colorfield" type="text" maxlength="20" value="<?php echo $style->field_backgroundcolor; ?>" name="style[field_backgroundcolor]" /><br />
             <label>Title Margin:</label><input type="text" maxlength="20" value="<?php echo $style->title_margin; ?>" name="style[title_margin]" /><br />
+            <label>Success Popover<br />Title Font Size:</label><input type="text" maxlength="20" value="<?php echo $style->success_popover_title_fontsize; ?>" name="style[success_popover_title_fontsize]" />
             </td>
             
             <td>
@@ -960,21 +999,24 @@ if (!class_exists('CustomContactForms')) {
             <label>Field Font Size:</label><input type="text" maxlength="20" value="<?php echo $style->field_fontsize; ?>" name="style[field_fontsize]" /><br />
             <label>Button Font Size:</label><input type="text" maxlength="20" value="<?php echo $style->submit_fontsize; ?>" name="style[submit_fontsize]" /><br />
             <label>Form Padding:</label><input type="text" maxlength="20" value="<?php echo $style->form_padding; ?>" name="style[form_padding]" /><br />
+            <label>Success Popover<br />Font Size:</label><input type="text" maxlength="20" value="<?php echo $style->success_popover_fontsize; ?>" name="style[success_popover_fontsize]" />
             </td>
             
             <td>
-            <label>Title Font Color:</label><input type="text" maxlength="20" value="<?php echo $style->title_fontcolor; ?>" name="style[title_fontcolor]" /><br />
-            <label>Label Font Color:</label><input type="text" maxlength="20" value="<?php echo $style->label_fontcolor; ?>" name="style[label_fontcolor]" /><br />
-            <label>Field Font Color:</label><input type="text" maxlength="20" value="<?php echo $style->field_fontcolor; ?>" name="style[field_fontcolor]" /><br />
-            <label>Button Font Color:</label><input type="text" maxlength="20" value="<?php echo $style->submit_fontcolor; ?>" name="style[submit_fontcolor]" /><br />
+            <label>Title Font Color:</label><input class="colorfield" type="text" maxlength="20" value="<?php echo $style->title_fontcolor; ?>" name="style[title_fontcolor]" /><br />
+            <label>Label Font Color:</label><input class="colorfield" type="text" maxlength="20" value="<?php echo $style->label_fontcolor; ?>" name="style[label_fontcolor]" /><br />
+            <label>Field Font Color:</label><input class="colorfield" type="text" maxlength="20" value="<?php echo $style->field_fontcolor; ?>" name="style[field_fontcolor]" /><br />
+            <label>Button Font Color:</label><input class="colorfield" type="text" maxlength="20" value="<?php echo $style->submit_fontcolor; ?>" name="style[submit_fontcolor]" /><br />
             <label>Form Margin:</label><input type="text" maxlength="20" value="<?php echo $style->form_margin; ?>" name="style[form_margin]" /><br />
+            <label>Success Popover<br />Font Color:</label><input class="colorfield" type="text" maxlength="20" value="<?php echo $style->success_popover_fontcolor; ?>" name="style[success_popover_fontcolor]" /><br />
             </td>
             
             <td><label>Form Border Style:</label><select name="style[form_borderstyle]"><?php echo str_replace('<option>'.$style->form_borderstyle.'</option>', '<option selected="selected">'.$style->form_borderstyle.'</option>', $border_style_options); ?></select><br />
             <label>Form Border Width:</label><input type="text" maxlength="20" value="<?php echo $style->form_borderwidth; ?>" name="style[form_borderwidth]" /><br />
-            <label>Form Border Color:</label><input type="text" maxlength="20" value="<?php echo $style->form_bordercolor; ?>" name="style[form_bordercolor]" /><br />
-            <label>Field Border Color:</label><input type="text" maxlength="20" value="<?php echo $style->field_bordercolor; ?>" name="style[field_bordercolor]" />
-            <label>Field Border Style:</label><select name="style[field_borderstyle]"><?php echo str_replace('<option>'.$style->field_borderstyle.'</option>', '<option selected="selected">'.$style->field_borderstyle.'</option>', $border_style_options); ?></select>
+            <label>Form Border Color:</label><input class="colorfield" type="text" maxlength="20" value="<?php echo $style->form_bordercolor; ?>" name="style[form_bordercolor]" /><br />
+            <label>Field Border Color:</label><input class="colorfield" type="text" maxlength="20" value="<?php echo $style->field_bordercolor; ?>" name="style[field_bordercolor]" /><br />
+            <label>Field Border Style:</label><select name="style[field_borderstyle]"><?php echo str_replace('<option>'.$style->field_borderstyle.'</option>', '<option selected="selected">'.$style->field_borderstyle.'</option>', $border_style_options); ?></select><br />
+            <label>Success Popover<br />Title Font Color:</label><input class="colorfield" type="text" maxlength="20" value="<?php echo $style->success_popover_title_fontcolor; ?>" name="style[success_popover_title_fontcolor]" /><br />
             <input name="sid" type="hidden" value="<?php echo $style->id; ?>" />
             </td>
          
@@ -1147,8 +1189,7 @@ the field names you want required by commas. Remember to use underscores instead
 			if (!ereg("^(([A-Za-z0-9!#$%&'*+/=?^_`{|}~-][A-Za-z0-9!#$%&'*+/=?^_`{|}~\.-]{0,63})|(\"[^(\\|\")]{0,62}\"))$", $local_array[$i])) {
 			  return false;
 			}
-		  }
-		  if (!ereg("^\[?[0-9\.]+\]?$", $email_array[1])) {
+		  } if (!ereg("^\[?[0-9\.]+\]?$", $email_array[1])) {
 			$domain_array = explode(".", $email_array[1]);
 			if (sizeof($domain_array) < 2) return false;
 			for ($i = 0; $i < sizeof($domain_array); $i++) {
@@ -1182,9 +1223,10 @@ the field names you want required by commas. Remember to use underscores instead
 				$field = parent::selectField($field_id, '');
 				$req = ($field->field_required == 1 or $field->field_slug == 'ishuman') ? '* ' : '';
 				$req_long = ($field->field_required == 1) ? ' (required)' : '';
-				$input_id = 'id="'.parent::decodeOption($field->field_slug, 1, 1).'"';
+				$input_id = 'id="'.parent::decodeOption($field->field_slug, 1, 1).'-'.$form_key.'"';
 				$field_value = parent::decodeOption($field->field_value, 1, 1);
-				$instructions = (empty($field->field_instructions)) ? '' : 'title="' . $field->field_instructions . $req_long . '" class="tooltip-field"';
+				$instructions = (empty($field->field_instructions)) ? '' : 'title="' . $field->field_instructions . $req_long . '" class="ccf-tooltip-field"';
+				//if ($is_sidebar && $admin_options[enable_widget_tooltips] == 0) $instructions = '';
 				if ($admin_options[enable_widget_tooltips] == 0 && $is_sidebar) $instructions = '';
 				if ($_SESSION[fields][$field->field_slug]) {
 					if ($admin_options[remember_field_values] == 1)
@@ -1221,7 +1263,7 @@ the field names you want required by commas. Remember to use underscores instead
 					foreach ($options as $option_id) {
 						$option = parent::selectFieldOption($option_id);
 						$option_sel = ($field->field_value == $option->option_slug) ? ' checked="checked"' : '';
-						$field_options .= '<input'.$option_sel.' type="radio" '.$instructions.' name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.parent::decodeOption($option->option_value, 1, 1).'"'.$code_type.'> <label class="select" for="'.parent::decodeOption($field->field_slug, 1, 1).'">' . parent::decodeOption($option->option_label, 1, 1) . '</label>' . "\n";
+						$field_options .= '<div><input'.$option_sel.' type="radio" '.$instructions.' name="'.parent::decodeOption($field->field_slug, 1, 1).'" value="'.parent::decodeOption($option->option_value, 1, 1).'"'.$code_type.'> <label class="select" for="'.parent::decodeOption($field->field_slug, 1, 1).'">' . parent::decodeOption($option->option_label, 1, 1) . '</label></div>' . "\n";
 					}
 					$field_label = (!empty($field->field_label)) ? '<label for="'.parent::decodeOption($field->field_slug, 1, 1).'">'. $req .parent::decodeOption($field->field_label, 1, 1).'</label>' : '';
 					if (!empty($options)) $out .= '<div>'."\n".$field_label."\n".$field_options."\n".'</div>' . "\n";
@@ -1233,17 +1275,18 @@ the field names you want required by commas. Remember to use underscores instead
 			
 			if ($form->form_style != 0) {
 				$form_styles .= '<style type="text/css">' . "\n";
-				$form_styles .= '#' . $form_id . " { width: ".$style->form_width."; padding:".$style->form_padding."; margin:".$style->form_margin."; border:".$style->form_borderwidth." ".$style->form_borderstyle." ".$style->form_bordercolor."; font-family:".$style->form_fontfamily."; }\n";
+				$form_styles .= '#' . $form_id . " { width: ".$style->form_width."; padding:".$style->form_padding."; margin:".$style->form_margin."; border:".$style->form_borderwidth." ".$style->form_borderstyle." #".parent::formatStyle($style->form_bordercolor)."; font-family:".$style->form_fontfamily."; }\n";
 				$form_styles .= '#' . $form_id . " div { margin-bottom:6px }\n";
-				$form_styles .= '#' . $form_id . " h4 { padding:0; margin:".$style->title_margin." ".$style->title_margin." ".$style->title_margin." 0; color:".$style->title_fontcolor."; font-size:".$style->title_fontsize."; } \n";
-				$form_styles .= '#' . $form_id . " label { padding:0; margin:".$style->label_margin." ".$style->label_margin." ".$style->label_margin." 0; display:block; color:".$style->label_fontcolor."; width:".$style->label_width."; font-size:".$style->label_fontsize."; } \n";
+				$form_styles .= '#' . $form_id . " div div { margin:0; padding:0; }\n";
+				$form_styles .= '#' . $form_id . " h4 { padding:0; margin:".$style->title_margin." ".$style->title_margin." ".$style->title_margin." 0; color:#".parent::formatStyle($style->title_fontcolor)."; font-size:".$style->title_fontsize."; } \n";
+				$form_styles .= '#' . $form_id . " label { padding:0; margin:".$style->label_margin." ".$style->label_margin." ".$style->label_margin." 0; display:block; color:#".parent::formatStyle($style->label_fontcolor)."; width:".$style->label_width."; font-size:".$style->label_fontsize."; } \n";
+				$form_styles .= '#' . $form_id . " div div input { margin-bottom:2px; line-height:normal; }";
 				$form_styles .= '#' . $form_id . " input[type=checkbox] { margin:0; }";
 				$form_styles .= '#' . $form_id . " label.checkbox, #" . $form_id . " label.radio, #" . $form_id . " label.select { display:inline; } \n";
-				$form_styles .= '#' . $form_id . " input[type=text], #" . $form_id . " select { color:".$style->field_fontcolor."; margin:0; width:".$style->input_width."; font-size:".$style->field_fontsize."; background-color:".$style->field_backgroundcolor."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
+				$form_styles .= '#' . $form_id . " input[type=text], #" . $form_id . " select { color:#".parent::formatStyle($style->field_fontcolor)."; margin:0; width:".$style->input_width."; font-size:".$style->field_fontsize."; background-color:#".parent::formatStyle($style->field_backgroundcolor)."; border:1px ".$style->field_borderstyle." #".parent::formatStyle($style->field_bordercolor)."; } \n";
 				$form_styles .= '#' . $form_id . " select { width:".$style->dropdown_width."; }\n";
-				//$form_styles .= '#' . $form_id . " input[type=radio] { width:".$style->dropdown_width."; }\n";
-				$form_styles .= '#' . $form_id . " .submit { color:".$style->submit_fontcolor."; width:".$style->submit_width."; height:".$style->submit_height."; font-size:".$style->submit_fontsize."; } \n";
-				$form_styles .= '#' . $form_id . " textarea { color:".$style->field_fontcolor."; width:".$style->textarea_width."; margin:0; background-color:".$style->textarea_backgroundcolor."; height:".$style->textarea_height."; font-size:".$style->field_fontsize."; border:1px ".$style->field_borderstyle." ".$style->field_bordercolor."; } \n";
+				$form_styles .= '#' . $form_id . " .submit { color:#".parent::formatStyle($style->submit_fontcolor)."; width:".$style->submit_width."; height:".$style->submit_height."; font-size:".$style->submit_fontsize."; } \n";
+				$form_styles .= '#' . $form_id . " textarea { color:#".parent::formatStyle($style->field_fontcolor)."; width:".$style->textarea_width."; margin:0; background-color:#".parent::formatStyle($style->textarea_backgroundcolor)."; height:".$style->textarea_height."; font-size:".$style->field_fontsize."; border:1px ".$style->field_borderstyle." #".parent::formatStyle($style->field_bordercolor)."; } \n";
 				$form_styles .= '</style>' . "\n";
 			}
 			
@@ -1292,17 +1335,23 @@ the field names you want required by commas. Remember to use underscores instead
 				?>
                 <style type="text/css">
 					<!--
-					#ccf-form-success { border-color:<?php echo $style->success_popover_bordercolor; ?>; }
-					#ccf-form-success h5 { background-color:<?php echo $style->success_popover_bordercolor; ?>; }
+					#ccf-form-success { border-color:#<?php echo parent::formatStyle($style->success_popover_bordercolor); ?>; }
+					#ccf-form-success div { background-color:#<?php echo parent::formatStyle($style->success_popover_bordercolor); ?>; }
+					#ccf-form-success div h5 { color:#<?php echo parent::formatStyle($style->success_popover_title_fontcolor); ?>; font-size:<?php echo $style->success_popover_title_fontsize; ?>; }
+					#ccf-form-success div a { color:#<?php echo parent::formatStyle($style->success_popover_title_fontcolor); ?>; }
+					#ccf-form-success p { font-size:<?php echo $style->success_popover_fontsize; ?>; color:#<?php echo parent::formatStyle($style->success_popover_fontcolor); ?>; }
 					-->
 				</style>
                 <?php
 			}
 		?>
         	<div id="ccf-form-success">
-            	<h5><?php echo $success_title; ?></h5>
+            	<div>
+            		<h5><?php echo $success_title; ?></h5>
+                	<a href="javascript:void(0)" class="close">[close]</a>
+                </div>
                 <p><?php echo $success_message; ?></p>
-                <a href="javascript:void(0)" class="close">[close]</a>
+                
             </div>
 
         <?php
@@ -1438,8 +1487,5 @@ if (isset($customcontact)) {
 	add_filter('the_content', array(&$customcontact, 'contentFilter'));
 	add_action('widgets_init', 'CCFWidgetInit');
 	add_action('admin_menu', 'CustomContactForms_ap');
-}	
-//add_action('wp_footer', array(&$customcontact, 'insertFormSuccessCode'), 1);
-				
-			
+}			
 ?>

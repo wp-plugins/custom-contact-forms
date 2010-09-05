@@ -98,7 +98,7 @@ if (!class_exists('CustomContactFormsDB')) {
 		}
 		
 		function formatStyle($style) {
-			return str_replace(';', '', $style);
+			return str_replace('#', '', str_replace(';', '', $style));
 		}
 		
 		function updateTables() {
@@ -131,17 +131,22 @@ if (!class_exists('CustomContactFormsDB')) {
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `textarea_backgroundcolor` VARCHAR( 20 ) NOT NULL DEFAULT '#efefef'");
 			if (!$this->columnExists('success_popover_bordercolor', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `success_popover_bordercolor` VARCHAR( 20 ) NOT NULL DEFAULT '#efefef'");
-			
 			if (!$this->columnExists('dropdown_width', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `dropdown_width` VARCHAR( 20 ) NOT NULL DEFAULT 'auto'");
-			
+			if (!$this->columnExists('success_popover_fontsize', $this->styles_table))
+				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `success_popover_fontsize` VARCHAR( 20 ) NOT NULL DEFAULT '12px'");
+			if (!$this->columnExists('success_popover_title_fontsize', $this->styles_table))
+				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `success_popover_title_fontsize` VARCHAR( 20 ) NOT NULL DEFAULT '1.3em'");
+			if (!$this->columnExists('success_popover_fontcolor', $this->styles_table))
+				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `success_popover_fontcolor` VARCHAR( 20 ) NOT NULL DEFAULT '#333333'");
+			if (!$this->columnExists('success_popover_title_fontcolor', $this->styles_table))
+				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `success_popover_title_fontcolor` VARCHAR( 20 ) NOT NULL DEFAULT '#333333'");
 			if (!$this->columnExists('field_instructions', $this->fields_table))
 				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `field_instructions` TEXT NOT NULL");
 			if (!$this->columnExists('field_options', $this->fields_table))
 				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `field_options` VARCHAR( 300 ) NOT NULL");
 			if (!$this->columnExists('field_required', $this->fields_table))
 				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `field_required` INT( 1 ) NOT NULL DEFAULT '0'");
-		
 		}
 		
 		function insertFixedFields() {
@@ -271,8 +276,10 @@ if (!class_exists('CustomContactFormsDB')) {
 			if (!empty($test) and $test->id != $sid) // if style_slug is different then make sure it is unique
 				return false;
 			$style[style_slug] = $this->formatSlug($style[style_slug]);
-			$style = array_map(array(&$this, 'encodeOption'), $style);
-			
+			foreach ($style as $key => $value) {
+				if ($key != 'style_slug')
+					$style[$key] = $this->formatStyle($this->encodeOption($value));
+			}
 			$wpdb->update($this->styles_table, $style, array('id' => $sid));
 			return true;
 		}
