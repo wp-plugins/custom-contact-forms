@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form. <a href="options-general.php?page=custom-contact-forms">Settings</a>
-	Version: 3.5.1
+	Version: 3.5.2
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
@@ -22,16 +22,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 require_once('custom-contact-forms-db.php');
-require_once('custom-contact-forms-mailer.php');
-require_once('custom-contact-forms-images.php');
 if (!class_exists('CustomContactForms')) {
 	class CustomContactForms extends CustomContactFormsDB {
 		var $adminOptionsName = 'customContactFormsAdminOptions';
-		var $widgetOptionsName = 'widget_customContactForms';
 		var $version = '3.5.1';
 		var $form_errors;
 		var $error_return;
-		var $gets;
 		var $current_form;
 		var $current_thank_you_message;
 		var $fixed_fields = array('customcontactforms_submit' => '', 
@@ -70,7 +66,6 @@ if (!class_exists('CustomContactForms')) {
 			return $customcontactAdminOptions;
 		}
 		function init() {
-			$this->storeGets();
 			if (!is_admin()) {
 				$this->startSession();
 				$this->processForms();
@@ -122,12 +117,6 @@ if (!class_exists('CustomContactForms')) {
 			$this->form_errors[$key] = $message;
 		}
 		
-		function storeGets() {
-			foreach ($_GET as $k => $v) {
-				$this->gets[$k] = $v;
-			}
-		}
-		
 		function getFormError($key) {
 			return $this->form_errors[$key];
 		}
@@ -136,23 +125,115 @@ if (!class_exists('CustomContactForms')) {
 			return $this->form_errors;
 		}
 		
-		function insertInstallPopover() {
+		function insertUsagePopover() {
 			?>
-            <div id="ccf-install-popover">
-            	<div>
-                	<h5>Welcome to Custom Contact Forms</h5>
+            <div id="ccf-usage-popover">
+            	<div class="popover-header">
+                	<h5>How to Use Custom Contact Forms</h5>
                 	<a href="javascript:void(0)" class="close">[close]</a>
                 </div>
-            	<p>herrro!</p>
+                <div class="popover-body">
+                    <p>CCF is an extremely intuitive plugin allowing you to create any type of contact form you can image. CCF is very user friendly but with possibilities comes completexity. It is recommend that you click the button below to add default fields, field options, and forms. 
+                    The default content will help you get a feel for the amazing things you can accomplish with this plugin. This popover only shows up automatically the first time you visit the admin page; <b>if you want to view this popover again, click the "Show Plugin Usage Popover"</b> in the instruction area of the admin page.</p>
+                    <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+                    <input type="submit" class="insert-default-content-button" value="Insert Default Content" name="insert_default_content" />
+                    </form>
+                    <p>Below is a basic usage outline of the four pillars of this plugin: fields, field options, styles, and forms. Also explained below is the Custom HTML Feature which allows you to write the form HTML yourself and use the plugin simply as a form processor; this is great if you are a web developer with HTML experience.</p>
+                    <ul>
+                        <li>
+                        	<h3>Fields</h3>
+                            <p>Fields are the actual input boxes that users enter their information inside. There are six types of fields that you can attach to your forms.</p>
+                            <ul>
+                                <li><span>Text:</span>
+                                <div><input type="text" class="width200" value="This is a text field" /></div></li>
+                                <li><span>Textarea:</span>
+                                <div><textarea class="width2000">This is a text field</textarea></div></li>
+                                <li><span>Dropdown:</span>
+                                <div><select><option>This is a dropdown field</option><option>Field Option 2!</option><option>Field Option 3!</option><option>Field Option 4!</option><option>Unlimited # of options allowed</option></select></div></li>
+                                <li><span>Radio:</span>
+                                <div><input type="radio" selected="selected" /> A radio field <input type="radio" selected="selected" /> Field Option 2 <input type="radio" selected="selected" /> Field Option 3</div></li>
+                                <li><span>Checkbox:</span>
+                                <div><input type="checkbox" value="1" /> This is a checkbox field</div></li>
+                                <li><span>(advanced) Hidden:</span> These fields are hidden (obviously), they allow you to pass hidden information with your forms. Great for using other form processors like Aweber or InfusionSoft.</li>
+                            </ul>
+                            <p>There are a bunch of different options that you can use when creating a field, <span class="red">*</span> denotes something required:</p>
+                            <ul>
+                            	<li><span class="red">*</span> <span>Slug:</span> A slug is simply a way to identify your field. It can only contain underscores, letters, and numbers and must be unique.</li>
+                                <li><span>Field Label:</span> The field label is displayed next to the field and is visible to the user.</li>
+                                <li><span class="red">*</span> <span>Field Type:</span> The six field types you can choose from are explained above.</li>
+                                <li><span>Initial Value:</span> This is the initial value of the field. If you set the type as checkbox, it is recommend you set this to what the checkbox is implying. For example if I were creating the checkbox "Are you human?", I would set the initial value to "Yes". If you set the field type as "Dropdown" or "Radio", you should enter the slug of the field option you would like initially selected.</li>
+                            	<li><span>Max Length:</span> If a field is required and a user leaves it blank, the plugin will display an error message explainging the problem.</li>
+                                <li><span>Required Field:</span> If a field is required and a user leaves it blank, the plugin will display an error message explainging the problem. The user will then have to go back and fill in the field.</li>
+                                <li><span>Field Instructions:</span> If this is filled out, a stylish tooltip popover displaying this text will show when the field is selected. This will only work if JQuery is enabled in general options.</li>
+                            	<li><span>Field Options:</span> After you create a field, if it's type is radio or dropdown, you can attach field options to the field. Field options are explained next.
+                            </ul>
+                            <p>The last important thing related to fields are <span>Fixed Fields</span>. Fixed Fields are special fields that come already created within the plugin such as a captcha spam blockers and email field. Fixed Fields do special things that you wouldn't be able to accomplish with normal fields; they cannot be deleted or created. If you use the fixedEmail fixed field, as opposed to creating your own email field. the uesrs email will be checked to make sure it is valid, if it isn't a form error will be displayed.</p>
+                        </li>
+                        <li>
+                        	<h3>Field Options</h3>
+                        	<p>In the field section above, look at the radio or dropdown fields. See how they have multiple options within the field? Those are called Field Options. Field Options have their own manager. There are only three things you must fill in to create a field option.</p>
+                            <ul>
+                            	<li><span class="red">*</span> <span>Slug:</span> Used to identify this option, solely for admin purposes; must be unique, and contain only letters, numbers, and underscores. Example: "slug_one".</li>
+                                <li><span class="red">*</span> <span>Option Label:</span> This is what is shown to the user in the dropdown or radio field.</li>
+                                <li><span>Option Value:</span> This is the actual value of the option which isn't shown to the user. This can be the same thing as the label. An example pairing of label => value is: "The color green" => "green" or "Yes" => "1". The option value is behind the scences; unseen by the user, but when a user fills out the form, the option value is what is actually sent in the email to you. For dropdown fields the option value is optional, <span>for radio fields it is required</span>.</li>
+                            </ul>
+                            <p>Once you create field options, you can attach them (in the field manager) to radio and dropdown fields (that are already created). It is important to remember that after you create a dropdown or radio field, they will not work until you attach one or more field options.</p>
+                        </li>
+                        <li>
+                            <h3>Forms</h3>
+                            <p>Forms bring everything together. Each form you create in the form manager shows a code to display that form in posts/pages as well has theme files. The post/page form display code looks like: [customcontact id=FORMID]. There are a number of parameters that you can fill out when creating and managing each of your forms.</p>
+                            <ul>
+                                <li><span class="red">*</span> <span>Slug:</span> A slug is simply a way to identify your form. It can only contain underscores, letters, and numbers and must be unique. Example "my_contact_form"</li>
+                                <li><span>Form Title:</span>The form title is heading text shown at the top of the form to users. Here's an example: "My Contact Form".</li>
+                                <li><span class="red">*</span> <span>Form Method:</span> If you don't know what this is leave it as Post. This allows you to change the way a form sends user information.</li>
+                                <li><span>Form Action:</span> This allows you to process your forms using 3rd party services or your own scripts. If you don't know what this is, then leave it blank. This is useful if you use a service like Aweber or InfusionSoft.</li>
+                                <li><span>Form Style:</span> This allows you to apply styles you create in the style manager to your forms. If you haven't created a custom style yet, just choose "Default".</li>
+                                <li><span>Submit Button Text:</span> Here, you can specify the text that shows on the submit button.</li>
+                                <li><span>Custom Code:</span> If unsure, leave blank. This field allows you to insert custom HTML directly after the starting form tag.</li>
+                                <li><span>Form Destination Email:</span> Specify the email that should receive all form submissions. If you leave this blank it will revert to the default specified in general settings.</li>
+                                <li><span>Form Success Message:</span> Will be displayed in a popover after the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.</li>
+                                <li><span>Form Success Message Title:</span> Will be displayed in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.</li>
+                                <li><span>Custom Success URL:</span> If this is filled out, users will be sent to this page when they successfully fill out the specified form. If it is left blank, a popover showing the form's "success message" will be displayed on form success.</li>
+                            </ul>
+                            <p>The form success message and success title apply to a popover that fades in after someone successfully completes a form (that does not have a custom success URL provided). The image below will help to give you a feel to how the popover will look and where the title and message actually show up.</p>
+                            <div class="ccf-success-popover-example"></div>
+                            <p>After creating a form you are given the option to attach fields to that specific form. Forms are useless until you attach fields.</p>
+                        </li>
+                        <li>
+                        	<h3>Style Manager</h3>
+                            <p>The style manager allows you to customize the appearance of forms without any knowledge of CSS. There are a ton of parameters you can fill out with each style and all of them are pretty self-explanitory. After you create a style, you need to go to the form manager and set the form style to the new style you created (the slug will be what shows in the Form Style dropdown).</p>
+                        	<p>The image below will help you better understand how each style option will change your forms.</p>
+                            <div class="ccf-style-example"></div>
+                        </li>
+                        <li>
+                        	<h3>Custom HTML Forms Feature (advanced)</h3>
+                            <p>If you know HTML and simply want to use this plugin to process form requests, this feature is for you. The following HTML is a the framework to which you must adhere. In order for your form to work you MUST do the following:</p>
+                            <ul>
+                            	<li>Keep the form action/method the same (yes the action is supposed to be empty)</li>
+                            	<li>Include all the hidden fields shown below</li>
+                            	<li>Provide a hidden field with a success message or thank you page (both hidden fields are included below, you must choose one or the other and fill in the value part of the input field appropriately)</li>
+                            </ul>
+                            <p>Just to be clear, you don't edit the code in the Custom HTML Forms feature within the admin panel. Instead, you copy the code in to the page, post, or theme file you want to display a form, then edit the code to look how you want following the guidelines above.</p>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <?php
 		}
 		
 		function printAdminPage() {
 			$admin_options = $this->getAdminOptions();
-			//if ($admin_options[show_install_popover] == 1)
-				//add_action('admin_footer', array(&$this, 'insertInstallPopover'));
-			if ($_POST[form_create]) {
+			if ($admin_options[show_install_popover] == 1) {
+				$admin_options[show_install_popover] = 0;
+				?>
+                <script type="text/javascript" language="javascript">
+					$j(document).ready(function() {
+						showCCFUsagePopover();
+					});
+				</script>
+                <?php
+				update_option($this->adminOptionsName, $admin_options);
+			} if ($_POST[form_create]) {
 				parent::insertForm($_POST[form]);
 			} elseif ($_POST[field_create]) {
 				parent::insertField($_POST[field]);
@@ -179,6 +260,8 @@ if (!class_exists('CustomContactForms')) {
 				parent::updateField($_POST[field], $_POST[fid]);
 			} elseif ($_POST[field_delete]) {
 				parent::deleteField($_POST[fid]);
+			} elseif ($_POST[insert_default_content]) {
+				parent::insertDefaultContent();
 			} elseif ($_POST[form_delete]) {
 				parent::deleteForm($_POST[fid]);
 			} elseif ($_POST[form_edit]) {
@@ -208,7 +291,7 @@ if (!class_exists('CustomContactForms')) {
 				parent::insertFieldOption($_POST[option]);
 			}
 			$styles = parent::selectAllStyles();
-			$style_options = '<option value="0">None</option>';
+			$style_options = '<option value="0">Default</option>';
 			foreach ($styles as $style)
 				$style_options .= '<option value="'.$style->id.'">'.$style->style_slug.'</option>';
 			?>
@@ -239,7 +322,7 @@ if (!class_exists('CustomContactForms')) {
           <li>
             <label for="field_slug">* Slug (Name):</label>
             <input name="field[field_slug]" type="text" maxlength="50" /><br />
-            (A slug is simply a way to identify your form. It can only contain underscores, letters, and numbers and must be unique.)</li>
+            (A slug is simply a way to identify your field. It can only contain underscores, letters, and numbers and must be unique.)</li>
           <li>
             <label for="field_label">Field Label:</label>
             <input name="field[field_label]" type="text" maxlength="100" /><br />
@@ -289,7 +372,7 @@ if (!class_exists('CustomContactForms')) {
       <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
         <ul>
           <li>
-            <label for="form[form_name]">* Form Slug:</label>
+            <label for="form[form_slug]">* Form Slug:</label>
             <input type="text" maxlength="100" name="form[form_slug]" /><br />
             (Must be unique and contain only underscores and alphanumeric characters.)</li>
           <li>
@@ -785,16 +868,26 @@ if (!class_exists('CustomContactForms')) {
   <div id="instructions" class="postbox">
     <h3 class="hndle"><span>Instructions</span></h3>
     <div class="inside">
+      <p><b>The default content will help you get a better feel of ways this plugin can be used and is the best way to learn.</b></p>
+   	  <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+      <div class="ccf-center">
+      	<input type="submit" value="Insert Default Content" name="insert_default_content" />
+      </div>
+      </form>
       <p>1. Create a form.</p>
-      <p>2. Create fields and attach those fields to the forms of your choice. <b>* Attach the fields in the order that you want them to show up in the form. If you mess up you can detach and reattach them.</b></p>
+      <p>2. Create fields and attach those fields to the forms of your choice. <span class="red bold">*</span> Attach the fields in the order that you want them to show up in the form. If you mess up you can detach and reattach them. Create field options in the field option manager; field options should be attached to radio and dropdown fields.</p>
       <p>3. Display those forms in posts and pages by inserting the code: [customcontact form=<b>FORMID</b>]. Replace <b>FORMID</b> with the id listed to the left of the form slug next to the form of your choice above. You can also display forms in theme files; the code for this is provided within each forms admin section.</p>
       <p>4. Prevent spam by attaching the fixed field, captcha or ishuman. Captcha requires users to type in a number shown on an image. Ishuman requires users to check a box to prove they aren't a spam bot.</p>
       <p>5. Add a form to your sidebar, by dragging the Custom Contact Form widget in to your sidebar.</p>
       <p>6. Configure the General Settings appropriately; this is important if you want to receive your web form messages!</p>
       <p>7. Create form styles to change your forms appearances. The image below explains how each style field can change the look of your forms.</p>
       <p>8. (advanced) If you are confident in your HTML and CSS skills, you can use the <a href="#custom-html">Custom HTML Forms feature</a> as a framework and write your forms from scratch. This allows you to use this plugin simply to process your form requests. The Custom HTML Forms feature will process and email any form variables sent to it regardless of whether they are created in the fields manager.</p>
-      <div id="style-example"></div>
-      <div id="success-popover-example"></div>
+      <p><span class="red bold">*</span> These instructions briefly tell you in which order you should use forms, fields, field options, and styles. <b>If you want to read in detail about using forms, fields, field options, styles and the rest of this plugin, click the button below.</b></p>
+      <div class="ccf-center">
+      	<input type="button" class="usage-popover-button" value="View Plugin Usage Popover" />
+      </div>
+      <div class="ccf-style-example"></div>
+      <div class="ccf-success-popover-example"></div>
     </div>
   </div>
   <a name="create-styles"></a>
@@ -1309,6 +1402,7 @@ the field names you want required by commas. Remember to use underscores instead
 		
 		function contactAuthor($name, $email, $website, $message, $type) {
 			if (empty($message)) return false;
+			require_once('custom-contact-forms-mailer.php');
 			$admin_options = $this->getAdminOptions();
 			$body = "Name: $name\n";
 			$body .= "Email: $email\n";
@@ -1383,6 +1477,7 @@ the field names you want required by commas. Remember to use underscores instead
 					$this->setFormError($err, 'You left the "' . $err . '" field blank.');
 				$errors = $this->getAllFormErrors();
 				if (empty($errors)) {
+					require_once('custom-contact-forms-mailer.php');
 					$body .= "\n" . 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
 					$mailer = new CustomContactFormsMailer($_POST[destination_email], $admin_options[default_from_email], $admin_options[default_form_subject], stripslashes($body), $admin_options[wp_mail_function]);
 					$mailer->send();
@@ -1435,6 +1530,7 @@ the field names you want required by commas. Remember to use underscores instead
 				}
 				$errors = $this->getAllFormErrors();
 				if (empty($errors)) {
+					require_once('custom-contact-forms-mailer.php');
 					unset($_SESSION['captcha_' . $_POST[fid]]);
 					unset($_SESSION[fields]);
 					$body .= 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
@@ -1487,5 +1583,6 @@ if (isset($customcontact)) {
 	add_filter('the_content', array(&$customcontact, 'contentFilter'));
 	add_action('widgets_init', 'CCFWidgetInit');
 	add_action('admin_menu', 'CustomContactForms_ap');
-}			
+	add_action('admin_footer', array(&$customcontact, 'insertUsagePopover'));
+}
 ?>

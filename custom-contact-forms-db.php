@@ -174,7 +174,7 @@ if (!class_exists('CustomContactFormsDB')) {
 			$form[form_slug] = $this->formatSlug($form[form_slug]);
 			$form = array_map(array(&$this, 'encodeOption'), $form);
 			$wpdb->insert($this->forms_table, $form);
-			return true;
+			return $wpdb->insert_id;
 		}
 		
 		function insertField($field) {
@@ -186,7 +186,7 @@ if (!class_exists('CustomContactFormsDB')) {
 					$field[$key] = $this->encodeOption($value);
 			}
 			$wpdb->insert($this->fields_table, $field);
-			return true;
+			return $wpdb->insert_id;
 		}
 		
 		function insertFieldOption($option) {
@@ -195,7 +195,7 @@ if (!class_exists('CustomContactFormsDB')) {
 			$option[option_slug] = $this->formatSlug($option[option_slug]);
 			$option = array_map(array(&$this, 'encodeOption'), $option);
 			$wpdb->insert($this->field_options_table, $option);
-			return true;
+			return $wpdb->insert_id;
 		}
 		
 		function insertStyle($style) {
@@ -207,7 +207,7 @@ if (!class_exists('CustomContactFormsDB')) {
 					$style[$key] = $this->formatStyle($this->encodeOption($value));
 			}
 			$wpdb->insert($this->styles_table, $style);
-			return true;
+			return $wpdb->insert_id;
 		}
 		
 		
@@ -284,30 +284,34 @@ if (!class_exists('CustomContactFormsDB')) {
 			return true;
 		}
 		
-		function deleteForm($fid) {
+		function deleteForm($fid, $slug = NULL) {
 			global $wpdb;
-			$wpdb->query("DELETE FROM " . $this->forms_table . " WHERE id='$fid'");
+			$where_params = ($slug == NULL) ? "id='$fid'" : "form_slug='$slug'";
+			$wpdb->query("DELETE FROM " . $this->forms_table . ' WHERE ' . $where_params);
 			return true;
 		}
 		
-		function deleteField($fid) {
+		function deleteField($fid, $slug = NULL) {
 			global $wpdb;
 			$this->dettachFieldAll($fid);
-			$wpdb->query("DELETE FROM " . $this->fields_table . " WHERE id='$fid'");
+			$where_params = ($slug == NULL) ? "id='$fid'" : "field_slug='$slug'";
+			$wpdb->query("DELETE FROM " . $this->fields_table . ' WHERE ' . $where_params);
 			return false;
 		}
 		
-		function deleteStyle($sid) {
+		function deleteStyle($sid, $slug = NULL) {
 			global $wpdb;
 			$this->dettachStyleAll($sid);
-			$wpdb->query("DELETE FROM " . $this->styles_table . " WHERE id='$sid'");
+			$where_params = ($slug == NULL) ? "id='$sid'" : "style_slug='$slug'";
+			$wpdb->query("DELETE FROM " . $this->styles_table . ' WHERE ' . $where_params);
 			return true;
 		}
 		
-		function deleteFieldOption($oid) {
+		function deleteFieldOption($oid, $slug = NULL) {
 			global $wpdb;
 			$this->dettachFieldOptionAll($oid);
-			$wpdb->query("DELETE FROM " . $this->field_options_table . " WHERE id='$oid'");
+			$where_params = ($slug == NULL) ? "id='$oid'" : "option_slug='$slug'";
+			$wpdb->query("DELETE FROM " . $this->field_options_table . ' WHERE ' . $where_params);
 			return true;
 		}
 		
@@ -435,7 +439,7 @@ if (!class_exists('CustomContactFormsDB')) {
 		}
 		
 		function formatSlug($slug) {
-			$slug = preg_replace('/[^a-zA-Z0-9\s]/', '', $slug);
+			$slug = preg_replace('/[^a-z_ A-Z0-9\s]/', '', $slug);
 			return str_replace(' ', '_', $slug);	
 		}
 		
@@ -457,6 +461,66 @@ if (!class_exists('CustomContactFormsDB')) {
 		function fieldOptionsSlugExists($slug) {
 			$test = $this->selectFieldOption('', $slug);
 			return (!empty($test));
+		}
+		
+		function insertDefaultContent($overwrite = false) {
+			$field_slugs = array('name' => 'ccf_name', 'message' => 'ccf_message',
+			'website' => 'ccf_website', 'phone' => 'ccf_phone', 'google' => 'ccf_google',
+			'contact_method' => 'ccf_contact_method');
+			$option_slugs = array('email' => 'ccf_email', 'phone' => 'ccf_phone', 'nocontact' => 'ccf_no_contact');
+			$form_slugs = array('contact_form' => 'ccf_contact_form');
+			if ($overwrite) {
+				foreach($field_slugs as $slug) $this->deleteField(0, $slug);
+				foreach($option_slugs as $slug) $this->deleteFieldOption(0, $slug);
+				foreach($form_slugs as $slug) $this->deleteForm(0, $slug);
+			}
+			$name_field = array('field_slug' => $field_slugs[name], 'field_label' => 'Your Name:',
+			'field_required' => 1, 'field_instructions' => 'Please enter your full name.',
+			'field_maxlength' => '100', 'field_type' => 'Text');
+			$message_field = array('field_slug' => $field_slugs[message], 'field_label' => 'Your Message:',
+			'field_required' => 0, 'field_instructions' => 'Enter any message or comment.',
+			'field_maxlength' => 0, 'field_type' => 'Textarea');
+			$website_field = array('field_slug' => $field_slugs[website], 'field_label' => 'Your Website:',
+			'field_required' => 0, 'field_instructions' => 'If you have a website, please enter it here.',
+			'field_maxlength' => 200, 'field_type' => 'Text');
+			$phone_field = array('field_slug' => $field_slugs[phone], 'field_label' => 'Your Phone Number:',
+			'field_required' => 0, 'field_instructions' => 'Please enter your phone number.',
+			'field_maxlength' => 30, 'field_type' => 'Text');
+			$google_field = array('field_slug' => $field_slugs[google], 'field_label' => 'Did you find my website through Google?',
+			'field_required' => 0, 'field_instructions' => 'If you found my website through Google, check this box.',
+			'field_maxlength' => 0, 'field_type' => 'Checkbox');
+			$contact_method_field = array('field_slug' => $field_slugs[contact_method], 'field_label' => 'How should we contact you?',
+			'field_required' => 1, 'field_instructions' => 'By which method we should contact you?',
+			'field_maxlength' => 0, 'field_type' => 'Dropdown');
+			$email_field = $this->selectField(0, 'fixedEmail');
+			$captcha_field = $this->selectField(0, 'captcha');
+			$email_option = array('option_slug' => $option_slugs[email], 'option_label' => 'By Email');
+			$phone_option = array('option_slug' => $option_slugs[phone], 'option_label' => 'By Phone');
+			$nocontact_option = array('option_slug' => $option_slugs[nocontact], 'option_label' => 'Do Not Contact Me');
+			$contact_form = array('form_slug' => $form_slugs[contact_form], 'form_title' => 'Contact Form', 'form_method' => 'Post',
+			'submit_button_text' => 'Send Message', 'form_email' => get_option('admin_email'), 'form_success_message' => 'Thank you for filling out our contact form. We will contact you very soon by the way you specified.',
+			'form_success_title' => 'Thank You!', 'form_style' => 0);
+			$name_field_id = $this->insertField($name_field);
+			$message_field_id = $this->insertField($message_field);
+			$website_field_id = $this->insertField($website_field);
+			$phone_field_id = $this->insertField($phone_field);
+			$google_field_id = $this->insertField($google_field);
+			$contact_method_field_id = $this->insertField($contact_method_field);
+			$email_option_id = $this->insertFieldOption($email_option);
+			$phone_option_id = $this->insertFieldOption($phone_option);
+			$nocontact_option_id = $this->insertFieldOption($nocontact_option);
+			$contact_form_id = $this->insertForm($contact_form);
+			$this->addFieldOptionToField($email_option_id, $contact_method_field_id);
+			$this->addFieldOptionToField($phone_option_id, $contact_method_field_id);
+			$this->addFieldOptionToField($nocontact_option_id, $contact_method_field_id);
+			$this->addFieldToForm($name_field_id, $contact_form_id);
+			$this->addFieldToForm($website_field_id, $contact_form_id);
+			$this->addFieldToForm($email_field->id, $contact_form_id);
+			$this->addFieldToForm($phone_field_id, $contact_form_id);
+			$this->addFieldToForm($google_field_id, $contact_form_id);
+			$this->addFieldToForm($contact_method_field_id, $contact_form_id);
+			$this->addFieldToForm($message_field_id, $contact_form_id);
+			$this->addFieldToForm($captcha_field->id, $contact_form_id);
 		}
 	}
 }

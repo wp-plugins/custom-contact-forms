@@ -1,5 +1,8 @@
+function showCCFUsagePopover() {
+	$j("#ccf-usage-popover").delay(500).fadeIn('slow');	
+}
+
 var $j = jQuery.noConflict();
-//alert('shit');
 $j(document).ready(function(){
 	$j('.form-extra-options').hide();
 	$j('.form-options-expand').prepend('<input type="button" class="form-options-expand-link" value="More Options" />');
@@ -36,8 +39,10 @@ $j(document).ready(function(){
 			.find(".fields-extra-options:first")
 			.toggle();
 	});
-	$j("#ccf-install-popover").delay(500).fadeIn('slow');
-	$j("#ccf-install-popover .close").click(function() {
-		$j("#ccf-install-popover").fadeOut();											  
+	$j('.usage-popover-button').click(function() {
+		showCCFUsagePopover();
+	});
+	$j("#ccf-usage-popover .close").click(function() {
+		$j("#ccf-usage-popover").fadeOut();											  
 	});
 });

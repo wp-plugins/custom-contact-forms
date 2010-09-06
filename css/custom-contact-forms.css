@@ -15,7 +15,7 @@ form.customcontactform div label, form.customcontactform-sidebar div label { dis
 form.customcontactform div label.checkbox, form.customcontactform-sidebar div label.checkbox { display:inline; }
 form.customcontactform div label.select, form.customcontactform-sidebar div label.select { display:inline; margin-right:8px; }
 form.customcontactform div, form.customcontactform-sidebar div {
-	border-bottom: 1px dashed #e1e1e1;
+	/*border-bottom: 1px dashed #e1e1e1;*/
 	padding:.4em 0 .3em 0;
 	width:100%;
 	margin:0 0 6px 0;

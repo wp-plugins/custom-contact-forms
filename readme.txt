@@ -4,7 +4,7 @@ Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
 Tested up to: 3.0.1
-Stable tag: 3.5.1
+Stable tag: 3.5.2
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -37,6 +37,7 @@ Special Features:
 *	Set a __custom thank you page__ for each form or use the built in thank you page popover with a custom thank you message
 *	Choose between XHTML or HTML. All code is clean and valid!
 *	No javascript required
+*	Detailed guide for using the plugin as well as default content to help you understand how to use Custom COntact Forms
 *	Stylish field tooltips powered by jquery
 *	Manage options for your dropdowns and radio fields in an easy to use manager
 *	Popover forms with Jquery (Coming soon!)
@@ -71,6 +72,10 @@ Popover forms will be added in September 2010.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now all the screenshots are from Version 1, thus are quite out-dated. Install the plugin to see what it looks like. You won't regret it. I promise!
 
 == Changelog ==
+
+= 3.5.2 =
+*	custom-contact-forms.php - Plugin Usage popover added, insert default content button
+*	custom-contact-forms-db.php - Insert default content function
 
 = 3.5.1 =
 *	custom-contact-forms.php - Style options added, color picker added, success popover styling bugs fixed
