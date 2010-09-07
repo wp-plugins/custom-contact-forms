@@ -103,6 +103,7 @@ if (!class_exists('CustomContactFormsDB')) {
 		
 		function updateTables() {
 			global $wpdb;
+			$wpdb->show_errors();
 			if (!$this->columnExists('user_field', $this->fields_table))
 				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `user_field` INT( 1 ) NOT NULL DEFAULT '1'");
 			if (!$this->columnExists('form_style', $this->forms_table))
@@ -137,6 +138,8 @@ if (!class_exists('CustomContactFormsDB')) {
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `success_popover_fontsize` VARCHAR( 20 ) NOT NULL DEFAULT '12px'");
 			if (!$this->columnExists('success_popover_title_fontsize', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `success_popover_title_fontsize` VARCHAR( 20 ) NOT NULL DEFAULT '1.3em'");
+			if (!$this->columnExists('success_popover_height', $this->styles_table))
+				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `success_popover_height` VARCHAR( 20 ) NOT NULL DEFAULT '200px'");
 			if (!$this->columnExists('success_popover_fontcolor', $this->styles_table))
 				$wpdb->query("ALTER TABLE `" . $this->styles_table . "` ADD `success_popover_fontcolor` VARCHAR( 20 ) NOT NULL DEFAULT '#333333'");
 			if (!$this->columnExists('success_popover_title_fontcolor', $this->styles_table))
@@ -147,6 +150,8 @@ if (!class_exists('CustomContactFormsDB')) {
 				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `field_options` VARCHAR( 300 ) NOT NULL");
 			if (!$this->columnExists('field_required', $this->fields_table))
 				$wpdb->query("ALTER TABLE `" . $this->fields_table . "` ADD `field_required` INT( 1 ) NOT NULL DEFAULT '0'");
+			$wpdb->show_errors();
+			$wpdb->print_error();
 		}
 		
 		function insertFixedFields() {
@@ -200,6 +205,7 @@ if (!class_exists('CustomContactFormsDB')) {
 		
 		function insertStyle($style) {
 			global $wpdb;
+			$wpdb->show_errors();
 			if (empty($style) or empty($style[style_slug]) or $this->styleSlugExists($this->formatSlug($style[style_slug]))) return false;
 			$style[style_slug] = $this->formatSlug($style[style_slug]);
 			foreach ($style as $key => $value) {
@@ -207,6 +213,7 @@ if (!class_exists('CustomContactFormsDB')) {
 					$style[$key] = $this->formatStyle($this->encodeOption($value));
 			}
 			$wpdb->insert($this->styles_table, $style);
+			$wpdb->print_error();
 			return $wpdb->insert_id;
 		}
 		

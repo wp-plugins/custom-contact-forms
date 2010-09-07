@@ -4,7 +4,7 @@ Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
 Tested up to: 3.0.1
-Stable tag: 3.5.2
+Stable tag: 3.5.3
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -49,6 +49,7 @@ Special Features:
 2. Activate the plugin from your Wordpress Admin Panel
 3. Configure the plugin, create fields, and create forms in the Settings page called Custom Contact Forms
 4. Display those forms in posts and pages by inserting the code: __[customcontact form=FORMID]__
+5. In the instruction section of the plugin. Press the button to insert the default content. The default content contains a very generic form that will help you understand the many ways you can use Custom Contact Forms.
 
 == Configuring and Using the Plugin ==
 1. Create as many forms as you want.
@@ -59,6 +60,8 @@ Special Features:
 6. Configure the General Settings appropriately; this is important if you want to receive your web form messages!
 7. Create form styles to change your forms appearances. The image below explains how each style field can change the look of your forms.
 8. (advanced) If you are confident in your HTML and CSS skills, you can use the Custom HTML Forms feature as a framework and write your forms from scratch. This allows you to use this plugin simply to process your form requests. The Custom HTML Forms feature will process and email any form variables sent to it regardless of whether they are created in the fields manager.
+
+Custom Contact Forms is an extremely intuitive plugin allowing you to create any type of contact form you can image. CCF is very user friendly but with possibilities comes complexity. __It is recommend that you click the button in the instructions section of the plugin to add default fields, field options, and forms.__ The default content will help you get a feel for the amazing things you can accomplish with this plugin. __It is also recommended you click the "Show Plugin Usage Popover"__ in the instruction area of the admin page to read in detail about all parts of the plugin.
 
 == Support ==
 For questions, feature requests, and support concerning the Custom Contact Forms plugin, please email me at:
@@ -72,6 +75,10 @@ Popover forms will be added in September 2010.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now all the screenshots are from Version 1, thus are quite out-dated. Install the plugin to see what it looks like. You won't regret it. I promise!
 
 == Changelog ==
+
+= 3.5.3 =
+*	custom-contact-forms.php - Style popover height option added to style manager. Form title heading not shown if left blank.
+*	custom-contact-forms-db.php - New success popover height column added to styles table
 
 = 3.5.2 =
 *	custom-contact-forms.php - Plugin Usage popover added, insert default content button

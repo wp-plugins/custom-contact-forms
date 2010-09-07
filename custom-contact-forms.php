@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form. <a href="options-general.php?page=custom-contact-forms">Settings</a>
-	Version: 3.5.2
+	Version: 3.5.3
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
@@ -133,7 +133,7 @@ if (!class_exists('CustomContactForms')) {
                 	<a href="javascript:void(0)" class="close">[close]</a>
                 </div>
                 <div class="popover-body">
-                    <p>CCF is an extremely intuitive plugin allowing you to create any type of contact form you can image. CCF is very user friendly but with possibilities comes completexity. It is recommend that you click the button below to add default fields, field options, and forms. 
+                    <p>CCF is an extremely intuitive plugin allowing you to create any type of contact form you can image. CCF is very user friendly but with possibilities comes complexity. It is recommend that you click the button below to add default fields, field options, and forms. 
                     The default content will help you get a feel for the amazing things you can accomplish with this plugin. This popover only shows up automatically the first time you visit the admin page; <b>if you want to view this popover again, click the "Show Plugin Usage Popover"</b> in the instruction area of the admin page.</p>
                     <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
                     <input type="submit" class="insert-default-content-button" value="Insert Default Content" name="insert_default_content" />
@@ -1035,6 +1035,10 @@ if (!class_exists('CustomContactForms')) {
             <input type="text" maxlength="20" value="12px" class="width75" name="style[success_popover_title_fontsize]" />
             (ex: 12px, 1em, 100%)</li>
           <li>
+            <label for="success_popover_height">Success Popover Height:</label>
+            <input type="text" maxlength="20" value="200px" class="width75" name="style[success_popover_height]" />
+            (ex: 200px, 6em, 50%)</li>
+          <li>
             <input type="submit" value="Create Style" name="style_create" />
           </li>
         </ul>
@@ -1076,6 +1080,7 @@ if (!class_exists('CustomContactForms')) {
             <label>Textarea Height:</label><input type="text" maxlength="20" value="<?php echo $style->textarea_height; ?>" name="style[textarea_height]" /><br />
             <label>Dropdown Width:</label><input type="text" maxlength="20" value="<?php echo $style->dropdown_width; ?>" name="style[dropdown_width]" /><br />
             <label>Label Margin:</label><input type="text" maxlength="20" value="<?php echo $style->label_margin; ?>" name="style[label_margin]" /><br />
+            <label>Success Popover<br />Height:</label><input type="text" maxlength="20" value="<?php echo $style->success_popover_height; ?>" name="style[success_popover_height]" /><br />
             </td>
             <td>
             <label>Label Width:</label><input type="text" maxlength="20" value="<?php echo $style->label_width; ?>" name="style[label_width]" /><br />
@@ -1130,13 +1135,7 @@ if (!class_exists('CustomContactForms')) {
         <th scope="col" class="manage-column"></th>
       </tr>
     </tfoot>
-  </table><a name="plugin-news"></a>
-  <div id="plugin-news" class="postbox">
-    <h3 class="hndle"><span>Custom Contact Forms Plugin News</span></h3>
-    <div class="inside">
-		<?php $this->displayPluginNewsFeed(); ?>
-    </div>
-  </div><a name="contact-author"></a>
+  </table><a name="contact-author"></a>
   <div id="contact-author" class="postbox">
     <h3 class="hndle"><span>Report a Bug/Suggest a Feature</span></h3>
     <div class="inside">
@@ -1178,6 +1177,13 @@ the field names you want required by commas. Remember to use underscores instead
 &lt;/form&gt;</textarea>
     </div>
   </div>
+  <a name="plugin-news"></a>
+  <div id="plugin-news" class="postbox">
+    <h3 class="hndle"><span>Custom Contact Forms Plugin News</span></h3>
+    <div class="inside">
+		<?php $this->displayPluginNewsFeed(); ?>
+    </div>
+  </div>
 </div>
 <?php
 		}
@@ -1195,7 +1201,8 @@ the field names you want required by commas. Remember to use underscores instead
 			}
 			$matches = array();
 			preg_match_all('/\[customcontact form=([0-9]+)\]/si', $content, $matches);
-			for ($i = 0; $i < count($matches[0]); $i++) {
+			$matches_count = count($matches[0]);
+			for ($i = 0; $i < $matches_count; $i++) {
 				if (parent::selectForm($matches[1][$i], '') == false) {
 					$form_code = '';
 				} else {
@@ -1306,9 +1313,11 @@ the field names you want required by commas. Remember to use underscores instead
 				$style = parent::selectStyle($form->form_style, '');
 				$style_class = $style->style_slug;
 			}
+			$form_title = parent::decodeOption($form->form_title, 1, 1);
 			$action = (!empty($form->form_action)) ? $form->form_action : get_permalink();
 			$out .= '<form id="'.$form_id.'" method="'.strtolower($form->form_method).'" action="'.$action.'" class="'.$style_class.'">' . "\n";
-			$out .= parent::decodeOption($form->custom_code, 1, 1) . '<h4 id="h4-' . $form->id . '-'.$form_key.'">' . parent::decodeOption($form->form_title, 1, 1) . '</h4>' . "\n";
+			$out .= parent::decodeOption($form->custom_code, 1, 1) . "\n";
+			if (!empty($form_title)) $out .= '<h4 id="h4-' . $form->id . '-' . $form_key . '">' . $form_title . '</h4>' . "\n";
 			$fields = parent::getAttachedFieldsArray($fid);
 			$hiddens = '';
 			$code_type = ($admin_options[code_type] == 'XHTML') ? ' /' : '';
@@ -1319,14 +1328,11 @@ the field names you want required by commas. Remember to use underscores instead
 				$input_id = 'id="'.parent::decodeOption($field->field_slug, 1, 1).'-'.$form_key.'"';
 				$field_value = parent::decodeOption($field->field_value, 1, 1);
 				$instructions = (empty($field->field_instructions)) ? '' : 'title="' . $field->field_instructions . $req_long . '" class="ccf-tooltip-field"';
-				//if ($is_sidebar && $admin_options[enable_widget_tooltips] == 0) $instructions = '';
 				if ($admin_options[enable_widget_tooltips] == 0 && $is_sidebar) $instructions = '';
 				if ($_SESSION[fields][$field->field_slug]) {
 					if ($admin_options[remember_field_values] == 1)
 						$field_value = $_SESSION[fields][$field->field_slug];
-				}
-				
-				if ($field->user_field == 0 && $field->field_slug == 'captcha') {
+				} if ($field->user_field == 0 && $field->field_slug == 'captcha') {
 					$out .= '<div>' . "\n" . $this->getCaptchaCode($form->id) . "\n" . '</div>' . "\n";
 				} elseif ($field->field_type == 'Text') {
 					$maxlength = (empty($field->field_maxlength) or $field->field_maxlength <= 0) ? '' : ' maxlength="'.$field->field_maxlength.'"';
@@ -1429,7 +1435,7 @@ the field names you want required by commas. Remember to use underscores instead
 				?>
                 <style type="text/css">
 					<!--
-					#ccf-form-success { border-color:#<?php echo parent::formatStyle($style->success_popover_bordercolor); ?>; }
+					#ccf-form-success { border-color:#<?php echo parent::formatStyle($style->success_popover_bordercolor); ?>; height:<?php $style->success_popover_height; ?>; }
 					#ccf-form-success div { background-color:#<?php echo parent::formatStyle($style->success_popover_bordercolor); ?>; }
 					#ccf-form-success div h5 { color:#<?php echo parent::formatStyle($style->success_popover_title_fontcolor); ?>; font-size:<?php echo $style->success_popover_title_fontsize; ?>; }
 					#ccf-form-success div a { color:#<?php echo parent::formatStyle($style->success_popover_title_fontcolor); ?>; }
