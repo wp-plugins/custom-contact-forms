@@ -1,0 +1,319 @@
+#customcontactforms-admin {
+	vertical-align:top;
+	margin:1em 0 30px 25px;
+	overflow:visible;
+	min-width:1020px;
+}
+#customcontactforms-admin label { font-weight:bold; }
+#customcontactforms-admin input, textarea, select {
+	font-size:1em;
+}
+#customcontactforms-admin .icon32 {
+	margin:-6px 6px 9px 5px;
+}
+#customcontactforms-admin .inside {
+	padding:5px 10px 10px 10px;
+}
+#customcontactforms-admin h3 {
+	margin:0 0 7px 0;
+	height:25px;
+	padding: 7px 0 0 9px;
+}
+#customcontactforms-admin #instructions {
+	float:left;
+	clear:none;
+	width:436px;
+	margin:20px 1em 1em 1em;
+}
+#customcontactforms-admin #contact-author {
+	float:left;
+	width:380px;
+	margin:5px 1em 1em 6px;
+}
+
+#customcontactforms-admin #custom-html {
+	float:left;
+	width:520px;
+	margin:5px 1em 1em 6px;
+}
+#customcontactforms-admin #custom-html p { margin: 4px 0 4px 0 ; }
+#customcontactforms-admin #custom-html #custom_html_textarea {
+	width:495px;
+	height:220px;
+}
+#customcontactforms-admin #contact-author form label {
+	display:block; font-weight:bold;
+}
+#customcontactforms-admin #instructions p:first-child {
+	padding-top:0;
+	margin-top:0;
+}
+#customcontactforms-admin #general-settings {
+	float:left;
+	clear:both;
+	width:500px;
+	margin:20px 1em 1em 5px;
+}
+
+#customcontactforms-admin #field-options {
+	clear:both;
+	width:1000px;
+	margin:20px 1em 1em 5px;
+}
+
+#customcontactforms-admin #field-options #edit-field-options {
+	float:left;
+	width:500px;
+	font-size:1em;
+	margin: 0 0 5px 0;
+	clear:left;
+}
+#customcontactforms-admin #field-options #edit-field-comments {
+	width:500px;
+	font-size:1em;
+	margin: 8px 5px 5px 480px;
+	clear:left;
+}
+#customcontactforms-admin #field-options ul#edit-field-options li { 
+	margin-bottom:3px;
+}
+#customcontactforms-admin #field-options .option-header {
+	-moz-border-radius:6px;
+	-khtml-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	background-color:#efefef;
+	display:block;
+	border:1px solid #efefef;
+	float:left;
+	border-spacing:0;
+	height:30px;
+	width:480px;
+	font-weight:bold;
+	clear:both;
+	margin:4px 0 8px 0;
+}
+#customcontactforms-admin #field-options .slug, 
+#customcontactforms-admin #field-options .label, 
+#customcontactforms-admin #field-options .option-value, 
+#customcontactforms-admin #field-options .action {
+	width:100px;
+	display:block;
+	float:left;
+	text-align:center;
+	padding:6px 0 0 0;
+}
+#customcontactforms-admin #field-options .action { width:155px; }
+#customcontactforms-admin #field-options .option-value { width:125px; }
+#customcontactforms-admin #field-options .create-field-options-header {
+	-moz-border-radius:6px;
+	-khtml-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	background-color:#efefef;
+	border:1px solid #efefef;
+	border-spacing:0;
+	height:24px;
+	padding:6px 0 0 10px ;
+	margin:4px 0 8px 0;
+	font-weight:bold;
+	margin-left:510px;
+}
+#customcontactforms-admin #field-options #create-field-options {
+	margin-left:520px;
+}
+#customcontactforms-admin #field-options .evenrow-field-options div  { background-color:#f9f9f9; }
+#customcontactforms-admin #field-options .evenrow-field-options { background-color:#f9f9f9; }
+#customcontactforms-admin #general-settings label { font-weight:bold; }
+.ccf-style-example {
+	background:url(../images/style-example.gif) no-repeat top left;
+	width:405px;
+	height:135px;
+	padding-left:20px;
+	margin:10px 0 0 10px;
+	border:0;
+}
+.ccf-success-popover-example {
+	background:url(../images/success-popover-example.gif) no-repeat top left;
+	width:405px;
+	height:135px;
+	padding-left:20px;
+	margin:10px 0 0 10px;
+	border:0;
+}
+#customcontactforms-admin #create-styles {
+	clear:both;
+	width:1000px;
+	margin:20px 1em 1em 5px;
+}
+#customcontactforms-admin #create-styles .style_left { float:left; width:48% }
+#customcontactforms-admin #create-styles .style_right { width:48%; margin-left:51%; clear:none }
+#customcontactforms-admin #plugin-news {
+	clear:both;
+	width:1000px;
+	margin:20px 1em 1em 5px;
+}
+#customcontactforms-admin #plugin-news ul li.first { border-bottom:1px dashed #666; }
+#customcontactforms-admin #manage-styles {
+	margin:1px 1em 1em 5px;
+	width:1000px;
+}
+#customcontactforms-admin #manage-styles label {
+	display:block;
+}
+#customcontactforms-admin #manage-styles input[type=text], #customcontactforms-admin #manage-styles select, #customcontactforms-admin #manage-styles textarea {
+	width:80px;
+}
+
+#customcontactforms-admin #general-settings form div p.descrip {
+	font-style:italic;
+	padding-left:20px;
+}
+#customcontactforms-admin #general-settings form div p.show-widget {
+	margin-top:1em;
+	padding-top:.4em;
+	border-top:1px solid #ccc;
+}
+#customcontactforms-admin #create-fields {
+	float:left;
+	clear:left;
+	width:450px;
+	margin:0 1em 1em 5px;
+}
+#customcontactforms-admin #create-forms {
+	float:left;
+	width:500px;
+	border-left:1px solid #ccc;
+	margin:0 1em 1em 1em;
+}
+#customcontactforms-admin #create-forms .inside div p {
+	font-size:.8em;
+}
+#customcontactforms-admin .manage-h3 {
+	clear:both;
+	margin-top:20px;
+}
+#customcontactforms-admin #manage-fields {
+	width:1000px;
+}
+#customcontactforms-admin #manage-fields .field-instructions { 
+	float:left;
+}
+#customcontactforms-admin #manage-fields .attach-field-options {
+	float:left;
+	padding: 0 0 0 9px;
+	width:320px;
+	clear:none;
+}
+#customcontactforms-admin #manage-fields .dettach-field-options {
+	float:left;
+	padding: 0 0 0 30px;
+	width:300px;
+	clear:none;
+}
+#customcontactforms-admin #manage-forms {
+	width:1000px;
+	margin-right:10px;
+}
+#customcontactforms-admin #manage-fixed-fields {
+	width:1000px;
+}
+#customcontactforms-admin .nobordertop {
+	border-top:none;
+}
+#customcontactforms-admin .borderbottom {
+	border-bottom:2px solid black;
+}
+#customcontactforms-admin .attached_fields {
+	float:left;
+	width:400px;
+}
+#customcontactforms-admin .attach_field {
+	float:left;
+	width:300px;
+}
+#customcontactforms-admin .actions {
+	float:right;
+	width: 80px; padding:0 18px 0 8px;
+}
+#customcontactforms-admin .attach_styles {
+	float:left;
+	width:300px;
+}
+#customcontactforms-admin label span {
+	font-weight:bold;
+}
+
+#customcontactforms-admin #plugin-nav  {
+	clear:both;
+}
+#customcontactforms-admin #plugin-nav { text-align:center; border-bottom:1px #ccc dashed; margin:0 0 10px 0; padding:0 0 6px 0; }
+#customcontactforms-admin #plugin-nav li  {
+	border-right:1px solid #666; display:inline; padding:0 8px 0 3px;
+}
+#customcontactforms-admin #plugin-nav li.last  {
+	border-right:none;
+}
+/* CCF Install Popover -------------------------------- */
+#ccf-usage-popover {
+	display:none;
+	border: 9px solid #efefef;
+	border-spacing:0;
+	width:680px;
+	padding:0px;
+	margin:0;
+	-moz-border-radius:10px;
+	-khtml-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:15px;
+	position:fixed;
+	left:20%;
+	background-color:white;
+	top:20px;
+	bottom:20px;
+}
+#ccf-usage-popover div.popover-header {
+	background-color:#efefef;
+	padding:9px 9px 9px 20px;
+	margin:0 0 15px 0px;
+	height:1.3em;
+}
+#ccf-usage-popover div.popover-header h5 {
+	text-align:left;
+	float:left;
+	margin:0;
+	font-size:1.5em;
+	font-weight:bold;
+}
+#ccf-usage-popover div.popover-header a.close {
+	float:right;
+	display:block;
+	font-size:12px;
+}
+#ccf-usage-popover div.popover-body span { font-weight:bold; }
+#ccf-usage-popover div.popover-body {
+	 text-align:left;
+	 overflow:scroll;
+	 position:absolute;
+	 bottom:0px;
+	 top:2.4em;
+	 padding:3px;
+}
+#ccf-usage-popover div.popover-body ul { margin:5px 0px 5px 8px; padding:0; border-top:1px solid #efefef; }
+#ccf-usage-popover div.popover-body ul ul { margin:0px 0px 2px 30px; padding:0; list-style-type:disc; border-top:none; }
+#ccf-usage-popover div.popover-body ul li { margin-left:20px; }
+#ccf-usage-popover div.popover-body p { padding:8px; font-size:1em; text-align:left; }
+#ccf-usage-popover div.popover-body form { width:100%; text-align:center; }
+#ccf-usage-popover div.popover-body .insert-default-content-button {
+	width:auto;
+	padding:8px;
+	margin:5px auto 5px auto;
+	font-size:1.5em;
+	font-weight:bold;
+	background-color:#f0f0f0;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	-moz-border-radius:6px;
+	-khtml-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+}
