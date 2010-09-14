@@ -246,8 +246,12 @@
 
 #customcontactforms-admin #plugin-nav  {
 	clear:both;
+	max-width:1000px;
+	text-align:center;
+	border-bottom:1px #ccc dashed;
+	margin:0 0 10px 0;
+	padding:0 0 6px 0;
 }
-#customcontactforms-admin #plugin-nav { text-align:center; border-bottom:1px #ccc dashed; margin:0 0 10px 0; padding:0 0 6px 0; }
 #customcontactforms-admin #plugin-nav li  {
 	border-right:1px solid #666; display:inline; padding:0 8px 0 3px;
 }
