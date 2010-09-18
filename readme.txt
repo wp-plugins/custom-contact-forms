@@ -19,7 +19,7 @@ Special Features:
 *	Create __unlimited__ forms
 *	Create __unlimited__ fields
 *	Required Fields (New!)
-*	Create text fields, textareas, checkboxs, radio __(new)__ and dropdown __(new)__ fields!
+*	Create text fields, textareas, checkboxes, radio __(new)__ and dropdown __(new)__ fields!
 *	Custom HTML Forms Feature - if you are a web developer you can write your own form html and __use this plugin simply to process your form requests__. Comes with a few useful features.
 *	__Displays forms in theme files__ as well as pages and posts.
 *	Set a different destination email address for each form
