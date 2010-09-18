@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form. <a href="options-general.php?page=custom-contact-forms">Settings</a>
-	Version: 3.5.5
+	Version: 3.5.6
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
@@ -1416,7 +1416,7 @@ the field names you want required by commas. Remember to use underscores instead
 			$body .= "Message: $message\n";
 			$body .= "Message Type: $type\n";
 			$body .= 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
-			$mailer = new CustomContactFormsMailer('admin@taylorlovett.com', $email, "CCF Message: $type", stripslashes($body), $admin_options[wp_mail_function]);
+			$mailer = new CustomContactFormsMailer('admin@taylorlovett.com', $email, "CCF Message: $type", stripslashes($body), $admin_options[wp_mail_function], $admin_options[default_to_email]);
 			$mailer->send();
 			return true;
 		}
@@ -1501,6 +1501,7 @@ the field names you want required by commas. Remember to use underscores instead
 				$fields = parent::getAttachedFieldsArray($_POST[fid]);
 				$form = parent::selectForm($_POST[fid]);
 				$checks = array();
+				$reply = ($_POST[fixedEmail]) ? $_POST[fixedEmail] : NULL;
 				$cap_name = 'captcha_' . $_POST[fid];
 				foreach ($fields as $field_id) {
 					$field = parent::selectField($field_id, '');
@@ -1542,7 +1543,7 @@ the field names you want required by commas. Remember to use underscores instead
 					unset($_SESSION[fields]);
 					$body .= 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
 					$to_email = (!empty($form->form_email)) ? $form->form_email : $admin_options[default_to_email];
-					$mailer = new CustomContactFormsMailer($to_email, $admin_options[default_from_email], $admin_options[default_form_subject], stripslashes($body), $admin_options[wp_mail_function]);
+					$mailer = new CustomContactFormsMailer($to_email, $admin_options[default_from_email], $admin_options[default_form_subject], stripslashes($body), $admin_options[wp_mail_function], $reply);
 					$mailer->send();
 					if (!empty($form->form_thank_you_page)) {
 						header("Location: " . $form->form_thank_you_page);

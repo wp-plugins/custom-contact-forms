@@ -11,19 +11,22 @@ if (!class_exists('CustomContactFormsMailer')) {
 		var $subject;
 		var $body;
 		var $headers;
+		var $reply_to;
 		var $wp_mail_function;
 	
-		 function CustomContactFormsMailer($to, $from, $subject, $body, $wp_mail_function){
+		 function CustomContactFormsMailer($to, $from, $subject, $body, $wp_mail_function, $reply_to = NULL){
 			$this->to = $to;
 			$this->from = $from;
 			$this->subject = $subject;
 			$this->body = $body;
+			$this->reply_to = $reply_to;
 			$this->wp_mail_function = $wp_mail_function;
 		}
 	
 		function send(){
-		  $this->addHeader('From: '.$this->from."\r\n");
-			$this->addHeader('Reply-To: '.$this->from."\r\n");
+			$reply = ($this->reply_to != NULL) ? $this->reply_to : $this->from;
+		  	$this->addHeader('From: '.$this->from."\r\n");
+			$this->addHeader('Reply-To: '.$reply."\r\n");
 			$this->addHeader('Return-Path: '.$this->from."\r\n");
 			$this->addHeader('X-mailer: ZFmail 1.0'."\r\n");
 			$this->body .= "\n\n\n----------\nSent by Custom Contact Forms\nA WordPress Plugin created by Taylor Lovett\nReport a Bug/Get Support: http://www.taylorlovett.com\n";
