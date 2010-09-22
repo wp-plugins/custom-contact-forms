@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form. <a href="options-general.php?page=custom-contact-forms">Settings</a>
-	Version: 3.5.6
+	Version: 3.5.7
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
@@ -467,7 +467,7 @@ if (!class_exists('CustomContactForms')) {
           </td>
           <td><input type="hidden" name="fid" value="<?php echo $fields[$i]->id; ?>" />
             <span class="fields-options-expand"></span>
-            <input type="submit" name="field_edit" value="Edit" />
+            <input type="submit" name="field_edit" value="Save" />
             <input type="submit" name="field_delete" class="delete_button" value="Delete" /></td>
         
       </tr>
@@ -579,7 +579,7 @@ if (!class_exists('CustomContactForms')) {
           
           <td><input type="hidden" name="fid" value="<?php echo $fields[$i]->id; ?>" />
             <span class="fixed-fields-options-expand"></span>
-            <input type="submit" name="field_edit" value="Edit" /></td>
+            <input type="submit" name="field_edit" value="Save" /></td>
       </tr>
       <tr <?php if ($z % 2 == 0) echo ' class="evenrow"'; ?> style="border:none;">
       	<td class="fixed-fields-extra-options" colspan="7" style="border-bottom:1px solid black;">Field Instructions: <input type="text" name="field[field_instructions]" class="width200" value="<?php echo $fields[$i]->field_instructions; ?>" /> - <?php echo $this->fixed_fields[$fields[$i]->field_slug]; ?></td>
@@ -622,7 +622,7 @@ if (!class_exists('CustomContactForms')) {
 					<td class="label"><input type="text" name="option[option_label]" value="<?php echo $option->option_label; ?>" class="width100" /></td>
 					<td class="option-value"><input type="text" name="option[option_value]" value="<?php echo $option->option_value; ?>" class="width100" /></td>
 					<td class="action">
-                    	<input type="submit" value="Edit" name="edit_field_option" /> 
+                    	<input type="submit" value="Save" name="edit_field_option" /> 
 						<input type="submit"class="delete_button" value="Delete" name="delete_field_option" />
 					</td>
                     <input type="hidden" name="oid" value="<?php echo $option->id; ?>" />
@@ -690,7 +690,7 @@ if (!class_exists('CustomContactForms')) {
           <td><select name="form[form_style]"><?php echo $sty_opt; ?></select></td>
           <td><input type="hidden" name="fid" value="<?php echo $forms[$i]->id; ?>" />
             <span class="form-options-expand"></span>
-            <input type="submit" name="form_edit" value="Edit" />
+            <input type="submit" name="form_edit" value="Save" />
             <input type="submit" name="form_delete" class="delete_button" value="Delete" />
           </td>
       </tr>
@@ -859,7 +859,7 @@ if (!class_exists('CustomContactForms')) {
             On Archives</label>
           </li>
           <li>
-            <input type="submit" value="Update" name="general_settings" />
+            <input type="submit" value="Save Settings" name="general_settings" />
           </li>
         </ul>
       </form>
@@ -1069,7 +1069,7 @@ if (!class_exists('CustomContactForms')) {
             <label>Font Family:</label><input type="text" maxlength="20" value="<?php echo $style->form_fontfamily; ?>" name="style[form_fontfamily]" /><br />
             <label>Textarea Background<br />Color:</label><input class="colorfield" type="text" maxlength="20" value="<?php echo $style->textarea_backgroundcolor; ?>" name="style[textarea_backgroundcolor]" /><br />
             <label>Success Popover<br />Border Color:</label><input class="colorfield" type="text" maxlength="20" value="<?php echo $style->success_popover_bordercolor; ?>" name="style[success_popover_bordercolor]" /><br />
-            <input type="submit" class="submit-styles" name="style_edit" value="Update Style" /><br />
+            <input type="submit" class="submit-styles" name="style_edit" value="Save" /><br />
             <input type="submit" class="submit-styles delete_button" name="style_delete" value="Delete Style" />
             </td>
             
@@ -1314,7 +1314,7 @@ the field names you want required by commas. Remember to use underscores instead
 				$style_class = $style->style_slug;
 			}
 			$form_title = parent::decodeOption($form->form_title, 1, 1);
-			$action = (!empty($form->form_action)) ? $form->form_action : get_permalink();
+			$action = (!empty($form->form_action)) ? $form->form_action : $_SERVER['REQUEST_URI'];
 			$out .= '<form id="'.$form_id.'" method="'.strtolower($form->form_method).'" action="'.$action.'" class="'.$style_class.'">' . "\n";
 			$out .= parent::decodeOption($form->custom_code, 1, 1) . "\n";
 			if (!empty($form_title)) $out .= '<h4 id="h4-' . $form->id . '-' . $form_key . '">' . $form_title . '</h4>' . "\n";
