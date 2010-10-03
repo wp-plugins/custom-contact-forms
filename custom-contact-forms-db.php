@@ -10,6 +10,7 @@ if (!class_exists('CustomContactFormsDB')) {
 		var $fields_table;
 		var $styles_table;
 		var $field_options_table;
+		var $cache = array();
 		function CustomContactFormsDB() {
 			global $wpdb;
 			$table_prefix = $wpdb->prefix;
@@ -164,10 +165,24 @@ if (!class_exists('CustomContactFormsDB')) {
 		
 		}
 		
-		function columnExists($column, $table) {
+		/*function columnExists($column, $table) {
 			global $wpdb;
 			$tests = $wpdb->get_results("SELECT * FROM INFORMATION_SCHEMA.columns WHERE table_name = '$table' AND column_name = '$column' LIMIT 0 , 30");
 			return (!empty($test[0]) && $test[0]->COLUMN_NAME == $column);
+		}*/
+		
+		function columnExists($column, $table) {
+			global $wpdb;
+			if (!is_array($this->cache[$table]))
+				$this->cache[$table] = array();
+			if (empty($this->cache[$table][columns]))
+				$this->cache[$table][columns] = $wpdb->get_results('SHOW COLUMNS FROM ' . $table, ARRAY_A);
+			$col_array = $this->cache[$table][columns];
+			foreach ($col_array as $col) {
+				if ($col[Field] == $column)
+					return true;
+			}
+			return false;
 		}
 		
 		function insertForm($form) {
