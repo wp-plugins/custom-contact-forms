@@ -146,12 +146,11 @@ if (!class_exists('CustomContactFormsDB')) {
 			$ishuman = array('field_slug' => 'ishuman', 'field_label' => 'Check if you are human.', 'field_type' => 'Checkbox', 'field_value' => '1', 'field_maxlength' => '0', 'user_field' => 0, 'field_instructions' => 'This helps us prevent spam.');
 			$fixedEmail = array('field_slug' => 'fixedEmail', 'field_label' => 'Your Email', 'field_type' => 'Text', 'field_value' => '', 'field_maxlength' => '100', 'user_field' => 0, 'field_instructions' => 'Please enter your email address.');
 			if (!$this->fieldSlugExists('captcha'))
-				$this->insertField($captcha);
+				$this->insertField($captcha, true);
 			if (!$this->fieldSlugExists('ishuman'))
-				$this->insertField($ishuman);
+				$this->insertField($ishuman, true);
 			if (!$this->fieldSlugExists('fixedEmail'))
-				$this->insertField($fixedEmail);
-		
+				$this->insertField($fixedEmail, true);
 		}
 		
 		/*function columnExists($column, $table) {
@@ -184,9 +183,9 @@ if (!class_exists('CustomContactFormsDB')) {
 			return $wpdb->insert_id;
 		}
 		
-		function insertField($field) {
+		function insertField($field, $fixed = false) {
 			global $wpdb;
-			if (empty($field) or empty($field[field_slug]) or array_key_exists($this->formatSlug($field[field_slug]), $GLOBALS[ccf_fixed_fields]) or $this->fieldSlugExists($this->formatSlug($field[field_slug])))
+			if (empty($field) or empty($field[field_slug]) or (array_key_exists($this->formatSlug($field[field_slug]), $GLOBALS[ccf_fixed_fields]) && !$fixed) or $this->fieldSlugExists($this->formatSlug($field[field_slug])))
 				return false;
 			$field[field_slug] = $this->formatSlug($field[field_slug]);
 			foreach ($field as $key => $value)

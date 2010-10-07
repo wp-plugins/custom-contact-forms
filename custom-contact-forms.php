@@ -144,6 +144,15 @@ if (!class_exists('CustomContactForms')) {
                 	<a href="javascript:void(0)" class="close">[close]</a>
                 </div>
                 <div class="popover-body">
+                	<ul id="popover-tof">
+                    	<li><a href="#pop-forms">Forms</a></li>
+                        <li><a href="#pop-fields">Fields</a></li>
+                        <li><a href="#pop-field-options">Field Options</a></li>
+                        <li><a href="#pop-styles">Styles</a></li>
+                        <li><a href="#pop-custom-html">Custom HTML Forms</a></li>
+                        <li><a href="#pop-import-export">Import / Export</a></li>
+                        <li><a href="#pop-form-submissions">Form Submissions</a></li>
+                    </ul>
                     <p>CCF is an extremely intuitive plugin allowing you to create any type of contact form you can imagine. CCF is very user friendly but with possibilities comes complexity. It is recommend that you click the button below to create default fields, field options, and forms. 
                     The default content will help you get a feel for the amazing things you can accomplish with this plugin. This popover only shows automatically the first time you visit the admin page; <b>if you want to view this popover again, click the "Show Plugin Usage Popover"</b> in the instruction area of the admin page.</p>
                     <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -152,7 +161,7 @@ if (!class_exists('CustomContactForms')) {
                     <p>Below is a basic usage outline of the four pillars of this plugin: fields, field options, styles, and forms. Another useful part of the plugin is the "Custom HTML Feature" which allows you to write the form HTML yourself using the plugin simply as a form processor; this is great if you are a web developer with HTML experience. Also explained below is the "Saved Form Submissions" feature which displays all form submissions in the admin panel.</p>
                     <ul>
                         <li>
-                        	<h3>Fields</h3>
+                        	<h3>Fields<a name="pop-fields"></a></h3>
                             <p>Fields are the actual input boxes in which users enter their information. There are six types of fields that you can attach to your forms.</p>
                             <ul>
                                 <li><span>Text:</span>
@@ -181,7 +190,7 @@ if (!class_exists('CustomContactForms')) {
                             <p>The last important thing related to fields are <span>Fixed Fields</span>. Fixed Fields are special fields that come already created within the plugin such as the captcha spam blocker and email field. Fixed Fields do special things that you wouldn't be able to accomplish with normally; they cannot be deleted or created. If you use the fixedEmail field, as opposed to creating your own email field. the users email will be checked to make sure it is valid, if it isn't a form error will be displayed.</p>
                         </li>
                         <li>
-                        	<h3>Field Options</h3>
+                        	<h3>Field Options<a name="pop-field-options"></a></h3>
                         	<p>In the field section above, look at the radio or dropdown fields. See how they have multiple options within the field? Those are called Field Options. Field Options have their own manager. There are only three things you must fill in to create a field option.</p>
                             <ul>
                             	<li><span class="red">*</span> <span>Slug:</span> Used to identify the field option, solely for admin purposes; must be unique, and contain only letters, numbers, and underscores. Example: "slug_one".</li>
@@ -191,7 +200,7 @@ if (!class_exists('CustomContactForms')) {
                             <p>Once you create field options, you can attach them (in the field manager) to radio and dropdown fields (that are already created). It is important to remember that after you create a dropdown or radio field, they will not work until you attach one or more field options.</p>
                         </li>
                         <li>
-                            <h3>Forms</h3>
+                            <h3>Forms<a name="pop-forms"></a></h3>
                             <p>Forms bring everything together. Each form you create in the form manager shows a code to display that form in posts/pages as well as theme files. The post/page form display code looks like: [customcontact id=FORMID]. There are a number of parameters that you can fill out when creating and managing each of your forms.</p>
                             <ul>
                                 <li><span class="red">*</span> <span>Slug:</span> A slug is simply a way to identify your form. It can only contain underscores, letters, and numbers and must be unique. Example "my_contact_form"</li>
@@ -211,13 +220,13 @@ if (!class_exists('CustomContactForms')) {
                             <div class="ccf-success-popover-example"></div>
                         </li>
                         <li>
-                        	<h3>Style Manager</h3>
+                        	<h3>Style Manager<a name="pop-styles"></a></h3>
                             <p>The style manager allows you to customize the appearance of forms without any knowledge of CSS. There are a ton of parameters you can fill out with each style and all of them are pretty self-explanitory. After you create a style, you need to go to the form manager and set the form style to the new style you created (the slug will be what shows in the "Form Style" dropdown).</p>
                         	<p>The image below will help you better understand how each style option will change your forms.</p>
                             <div class="ccf-style-example"></div>
                         </li>
                         <li>
-                        	<h3>Custom HTML Forms Feature (advanced)</h3>
+                        	<h3>Custom HTML Forms Feature (advanced)<a name="pop-custom-html"></a></h3>
                             <p>If you know HTML and simply want to use this plugin to process form requests, this feature is for you. The following HTML is a the framework to which you must adhere. In order for your form to work you MUST do the following:</p>
                             <ul>
                             	<li>Keep the form action/method the same (yes the action is supposed to be empty).</li>
@@ -227,8 +236,12 @@ if (!class_exists('CustomContactForms')) {
                             <p>Just to be clear, you don't edit the code in the Custom HTML Forms feature within the admin panel. Instead, you copy the code in to the page, post, or theme file you want to display a form, then edit the code to look how you want following the guidelines provided above.</p>
                         </li>
                         <li>
-                        	<h3>Saved Form Submissions</h3>
+                        	<h3>Saved Form Submissions<a name="pop-form-submissions"></a></h3>
                             <p>This features saves each user form submission. All the fields attached to the form along with the time of submission and form URL are saved in the database and displayed in a stylish format in the admin panel.</p>
+                        </li>
+                        <li>
+                        	<h3>Import / Export<a name="pop-import-export"></a></h3>
+                            <p>Import/export is a new field that allows you to transfer forms, fields, field options, styles and everything else saved by the plugin between Wordpress installations. Clicking the Export All button will create a .SQL file for download. With the .SQL export file you can use the importer within the CCF plugin admin page to import the .SQL file. You can also use PHPMyAdmin or any other MySQL database administration tool to run the import file. Importing a .SQL file will never overwrite any existing data.</p>
                         </li>
                     </ul>
                 </div>
@@ -358,7 +371,6 @@ if (!class_exists('CustomContactForms')) {
 					break;
 				}
 			}
-			
 			$styles = parent::selectAllStyles();
 			$style_options = '<option value="0">Default</option>';
 			foreach ($styles as $style)
