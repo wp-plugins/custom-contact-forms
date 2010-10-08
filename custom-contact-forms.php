@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form. <a href="options-general.php?page=custom-contact-forms">Settings</a>
-	Version: 3.5.8
+	Version: 3.5.9
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
@@ -313,7 +313,10 @@ if (!class_exists('CustomContactForms')) {
     <li><a href="#contact-author">Bug Report</a></li>
     <li><a href="#custom-html">Custom HTML Forms (New!)</a></li>
     <li class="last"><a href="#plugin-news">Plugin News</a></li>
-  </ul><a name="create-fields"></a>
+  </ul>
+  <a class="rate-me" href="http://wordpress.org/extend/plugins/custom-contact-forms" title="Rate This Plugin">We need your help to continue development! Please <span>rate this plugin</span> to show your support.</a>
+  
+  <a name="create-fields"></a>
   <div id="create-fields" class="postbox">
     <h3 class="hndle"><span>Create A Form Field</span></h3>
     <div class="inside">
@@ -1397,7 +1400,7 @@ the field names you want required by commas. Remember to use underscores instead
 			$code_type = ($admin_options[code_type] == 'XHTML') ? ' /' : '';
 			$captcha = parent::selectField('', 'captcha');
 			$instructions = (empty($captcha->field_instructions)) ? '' : 'title="'.$captcha->field_instructions.'" class="tooltip-field"';
-			$out = '<img width="63" height="18" alt="Captcha image for a contact form" id="captcha-image" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/custom-contact-forms/image.php?fid='.$form_id.'"'.$code_type.'> 
+			$out = '<img width="96" height="24" alt="Captcha image for a contact form" id="captcha-image" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/custom-contact-forms/image.php?fid='.$form_id.'"'.$code_type.'> 
 			<div><label for="captcha'.$form_id.'">* '.$captcha->field_label.'</label> <input type="text" '.$instructions.' name="captcha" id="captcha'.$form_id.'" maxlength="20"'.$code_type.'></div>';
 			return $out;
 		}

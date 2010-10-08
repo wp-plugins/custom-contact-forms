@@ -19,6 +19,21 @@
 	height:25px;
 	padding: 7px 0 0 9px;
 }
+#customcontactforms-admin a.rate-me {
+	background-color:#FFFF99;
+	width:920px;
+	border:1px solid #666666;
+	padding:7px;
+	display:block;
+	text-align:center;
+	margin:.5em 0 .8em 5px;
+	-moz-border-radius:11px;
+	-webkit-border-radius:11px;
+	border-radius:11px;
+	-moz-box-shadow:0 0 1px #123;
+	-webkit-box-shadow: 0 0 1px #123;
+	box-shadow:0 0 1px #123;
+}
 #customcontactforms-admin #instructions {
 	float:left;
 	clear:none;
@@ -118,6 +133,21 @@
 	float:left;
 	text-align:center;
 	padding:6px 0 0 0;
+}
+#customcontactforms-admin a.rate-me {
+	background-color:#FFFF99;
+	width:920px;
+	border:1px solid #666666;
+	padding:7px;
+	display:block;
+	text-align:center;
+	margin:.5em 0 .8em 5px;
+	-moz-border-radius:11px;
+	-webkit-border-radius:11px;
+	border-radius:11px;
+	-moz-box-shadow:0 0 1px #123;
+	-webkit-box-shadow: 0 0 1px #123;
+	box-shadow:0 0 1px #123;
 }
 #customcontactforms-admin #field-options .action { width:155px; }
 #customcontactforms-admin #field-options .option-value { width:125px; }
