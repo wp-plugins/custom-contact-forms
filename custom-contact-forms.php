@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form. <a href="options-general.php?page=custom-contact-forms">Settings</a>
-	Version: 3.5.9
+	Version: 3.5.10
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
@@ -1487,7 +1487,7 @@ the field names you want required by commas. Remember to use underscores instead
 				$errors = $this->getAllFormErrors();
 				if (empty($errors)) {
 					require_once('custom-contact-forms-mailer.php');
-					$body .= "\n" . 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
+					$body .= "\n" . 'Form Page: ' . $_SERVER['SERVER_NAME']. $_SERVER['REQUEST_URI'] . "\n" . 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
 					$mailer = new CustomContactFormsMailer($_POST[destination_email], $admin_options[default_from_email], $admin_options[default_form_subject], stripslashes($body), $admin_options[wp_mail_function]);
 					$mailer->send();
 					if ($_POST[thank_you_page])
@@ -1544,7 +1544,7 @@ the field names you want required by commas. Remember to use underscores instead
 					require_once('custom-contact-forms-mailer.php');
 					unset($_SESSION['captcha_' . $_POST[fid]]);
 					unset($_SESSION[fields]);
-					$body .= 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
+					$body .= "\n" . 'Form Page: ' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . "\n" . 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "\n";
 					$to_email = (!empty($form->form_email)) ? $form->form_email : $admin_options[default_to_email];
 					$mailer = new CustomContactFormsMailer($to_email, $admin_options[default_from_email], $admin_options[default_form_subject], stripslashes($body), $admin_options[wp_mail_function], $reply);
 					$mailer->send();
