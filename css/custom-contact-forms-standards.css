@@ -1,0 +1,18 @@
+.width25 { width:25px; } .width50 { width:50px; } .width75 { width:75px; } .width100 { width:100px; }
+.width125 { width:125px; } .width150 { width:150px; } .width175 { width:175px; } .width200 { width:200px; }
+.width225 { width:225px; } .width250 { width:250px; } .width275 { width:275px; } .width300 { width:300px; }
+.ccf-center { text-align:center; }
+.red { color:#F00; }
+.bold { font-weight:bold; }
+.italic { font-style:italic; }
+.ccf-hide { display:none; }
+.hide { display:none; }
+.clear { clear:both; }
+.textcenter { text-align:center; }
+.floatleft { float:left; }
+.floatright { float:right; }
+.form-extra-options-table { margin:0 auto 0 auto; }
+.evenrow { background-color:#f5f5f5; }
+.alignright { text-align:right; }
+.alignleft { text-align:right; }
+.ccf-loading-icon { margin-left: 5px; margin-right:7px; }
