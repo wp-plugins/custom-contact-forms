@@ -65,8 +65,8 @@ form.customcontactform-sidebar div select { width:auto; }
 	display:none;
 }
 
-.ccf-popover .ccf-popover-close { position:absolute; top:1px; right:5px; }
-.tooltip {
+.ccf-popover .ccf-popover-close { position:absolute; top:0px; right:5px; font-size:22px; }
+.ccf-tooltip {
 	background-color:#000;
 	border:1px solid #fff;
 	padding:10px 15px;
@@ -75,8 +75,6 @@ form.customcontactform-sidebar div select { width:auto; }
 	color:#fff;
 	text-align:left;
 	font-size:12px;
-
-	/* outline radius for mozilla/firefox only */
 	-moz-box-shadow:0 0 10px #000;
 	-webkit-box-shadow:0 0 10px #000;
 }
@@ -97,6 +95,9 @@ form.customcontactform-sidebar div select { width:auto; }
 	left:30%;
 	background-color:white;
 	top:30%;
+	-moz-box-shadow:0 0 14px #123;
+	-webkit-box-shadow: 0 0 14px #123;
+	box-shadow:0 0 14px #123;
 }
 #ccf-form-success div {
 	background-color:#efefef;

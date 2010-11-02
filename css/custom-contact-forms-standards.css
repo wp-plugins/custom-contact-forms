@@ -5,6 +5,7 @@
 .red { color:#F00; }
 .bold { font-weight:bold; }
 .italic { font-style:italic; }
+.ccf-hide { display:none; }
 .hide { display:none; }
 .clear { clear:both; }
 .textcenter { text-align:center; }
@@ -12,3 +13,6 @@
 .floatright { float:right; }
 .form-extra-options-table { margin:0 auto 0 auto; }
 .evenrow { background-color:#f5f5f5; }
+.alignright { text-align:right; }
+.alignleft { text-align:right; }
+.ccf-loading-icon { margin-left: 5px; margin-right:7px; }
