@@ -84,11 +84,15 @@ I respond to emails same-day!
 
 == Frequently Asked Questions ==
 
-= I'm not receiving any emails =
-*	Check that the "Email Form Submissions" option is set to yes in General Settings.
-*	Try filling out a form with the "Use Wordpress Mail Function" option set to "No".
+= I'm not receiving any emails. =
+*	Check that the "Email Form Submissions" option is set to "yes" in General Settings.
+*	Try configuring Mail Settings to use SMTP instead of the Wordpress Default
 *	Make sure the "Default From" email you are using within General Settings actually exists on your server.
 *	Try deactivating other plugins to make sure there are no conflicts
+
+= Things like forms, fields, and styles aren't being saved. =
+*	Deactivate and activate the plugin, doing that will recreate tables as well as reinsert all fixed fields
+*	If this doesn't work please email admin@taylorlovett.com so I can fix it
 
 = When I activate Custom Contact Forms, the Javascript for another plugin does not work. =
 *	Disable the "Frontend JQuery" option in General Settings. Custom Contact Forms will still work without JQuery but won't be as pretty.
@@ -103,14 +107,23 @@ Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now a
 
 = 4.0.0 =
 *	custom-contact-forms.php - Saved form submissions manager, form background color added to style manager, import/export feature
-*	custom-contact-forms-user-data.php - Saved form submission
-*	custom-contact-forms-db.php - DB methods reorganized for efficiency
-*	custom-contact-forms-static.php - Methods added/removed for efficiency
+*	custom-contact-forms-static.php - Methods added/removed/reorganized for efficiency 
+*	custom-contact-forms-front.php - Methods added/removed/reorganized for efficiency 
 *	custom-contact-forms-admin.php - Admin code seperated in to a different file
-*	custom-contact-forms-popover.php - Popover code seperated in to a different file
-*	custom-contact-forms-export.php - Functions for importing and exporting
-*	css/custom-contact-forms-admin.css - AJAX abilities added
+*	custom-contact-forms-export.php -
+*	modules/ - Custom Contact Forms has been reorganized heavily to increase effeciency
+*	modules/db/custom-contact-forms-db.php - DB methods reorganized for efficiency moved to modules folder
+*	modules/widget/custom-contact-forms-widget.php - Moved to modules folder
+*	modules/images/custom-contact-forms-images.php - Moved to modules folder
+*	modules/phpmailer/class.phpmailer.php - CCF now uses php mailer and thus supports smtp and will soon support pop3 and sendmail
+*	modules/phpmailer/class.smtp.php
+*	modules/phpmailer/class.pop3.php
+*	modules/usage_popover/custom-contact-forms-usage-popover.php - Popover code seperated in to a different file, moved to modules folder
+*	modules/export/custom-contact-forms-export.php - Functions for importing and exporting
+*	modules/export/custom-contact-forms-user-data.php - Saved form submission
+*	images/button-grad.png, images/white-grad.png
 *	css/custom-contact-forms-standard.css - Classes renamed
+*	css/custom-contact-forms-admin.css - AJAX abilities added
 *	js/custom-contact-forms-admin.js - AJAX abilities added to admin panel
 *	download.php - Allows export file to be downloaded
 *	lang/custom-contact-forms.po - Allows for translation to different languages
