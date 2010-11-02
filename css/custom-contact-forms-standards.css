@@ -5,6 +5,7 @@
 .red { color:#F00; }
 .bold { font-weight:bold; }
 .italic { font-style:italic; }
+.ccf-hide { display:none; }
 .hide { display:none; }
 .clear { clear:both; }
 .textcenter { text-align:center; }

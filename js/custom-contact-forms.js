@@ -8,10 +8,6 @@ function storePopupVar(form_id) {
 var $j = jQuery.noConflict();
 
 $j(document).ready(function(){
-	/*$j('<div></div>')
-			.prependTo('body')
-			.attr('id', 'ccf-popover')
-			.load('wp-content/plugins/custom-contact-forms/custom-contact-forms-popover.php');*/
 	$j('<a></a>')
 		.addClass('ccf-popover-close')
 		.html('[close]')
@@ -33,7 +29,8 @@ $j(document).ready(function(){
 		position: "center right",
 		offset: [-2, 10],
 		effect: "fade",
-		opacity: 0.7
+		opacity: 0.7,
+		tipClass: 'ccf-tooltip'
 	
 	});
 	
