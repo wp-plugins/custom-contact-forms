@@ -261,7 +261,7 @@ if (!class_exists('CustomContactFormsFront')) {
 						if (in_array($key, $req_fields) && !empty($value)) {
 							unset($req_fields[array_search($key, $req_fields)]);
 						}
-						$body .= ucwords(str_replace('_', ' ', $key)) . ': ' . $value . "\n";
+						$body .= ucwords(str_replace('_', ' ', htmlspecialchars($key))) . ': ' . htmlspecialchars($value) . "<br />\n";
 						$data_array[$key] = $value;
 					}
 				} foreach($req_fields as $err)
@@ -271,7 +271,7 @@ if (!class_exists('CustomContactFormsFront')) {
 					require_once('modules/export/custom-contact-forms-user-data.php');
 					$data_object = new CustomContactFormsUserData(array('data_array' => $data_array, 'form_page' => $_SERVER['SERVER_NAME']. $_SERVER['REQUEST_URI'], 'form_id' => 0, 'data_time' => time()));
 					parent::insertUserData($data_object);
-					$body .= "\n" . $lang['form_page'] . $_SERVER['SERVER_NAME']. $_SERVER['REQUEST_URI'] . "\n" . $lang['sender_ip'] . $_SERVER['REMOTE_ADDR'] . "\n";
+					$body .= "<br />\n" . htmlspecialchars($lang['form_page']) . $_SERVER['SERVER_NAME']. $_SERVER['REQUEST_URI'] . "<br />\n" . $lang['sender_ip'] . $_SERVER['REMOTE_ADDR'] . "<br />\n";
 					if ($admin_options['email_form_submissions'] == 1) {
 						require_once('modules/phpmailer/class.phpmailer.php');
 						$mail = new PHPMailer();
@@ -287,10 +287,9 @@ if (!class_exists('CustomContactFormsFront')) {
 								$mail->SMTPAuth = false;
 						}
 						$mail->SetFrom($admin_options['default_from_email'], 'Custom Contact Forms');
-						$mail->AddReplyTo($admin_options['default_from_email'], 'Custom Contact Forms');
 						$mail->AddAddress($_POST['destination_email']);
 						$mail->Subject = $admin_options['default_form_subject'];
-						$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
+						$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
 						$mail->MsgHTML(stripslashes($body));
 						$mail->Send();
 					} if ($_POST['thank_you_page'])
@@ -346,7 +345,7 @@ if (!class_exists('CustomContactFormsFront')) {
 					$field = parent::selectField('', $key);
 					if (!array_key_exists($key, $GLOBALS['ccf_fixed_fields']) or $key == 'fixedEmail') {
 						$mail_field_label = (empty($field->field_label)) ? $field->field_slug : $field->field_label;
-						$body .= $mail_field_label . ': ' . $value . "<br />\n";
+						$body .= htmlspecialchars($mail_field_label) . ': ' . htmlspecialchars($value) . "<br />\n";
 						$data_array[$key] = $value;
 					} if (in_array($key, $checks)) {
 						$checks_key = array_search($key, $checks);
@@ -356,7 +355,7 @@ if (!class_exists('CustomContactFormsFront')) {
 					$field = parent::selectField('', $check_key);
 					$lang['not_checked'] = __('Not Checked', 'custom-contact-forms');
 					$data_array[$check_key] = $lang['not_checked'];
-					$body .= ucwords(str_replace('_', ' ', $field->field_label)) . ': ' . $lang['not_checked'] . "\n";
+					$body .= ucwords(str_replace('_', ' ', htmlspecialchars($field->field_label))) . ': ' . $lang['not_checked'] . "\n";
 				}
 				$errors = $this->getAllFormErrors();
 				if (empty($errors)) {
@@ -366,9 +365,9 @@ if (!class_exists('CustomContactFormsFront')) {
 					$data_object = new CustomContactFormsUserData(array('data_array' => $data_array, 'form_page' => $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], 'form_id' => $form->id, 'data_time' => time()));
 					parent::insertUserData($data_object);
 					if ($admin_options['email_form_submissions'] == '1') {
-						$body .= "<br />\n" . $lang['form_page'] . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . "<br />\n" . $lang['sender_ip'] . $_SERVER['REMOTE_ADDR'] . "<br />\n";
+						$body .= "<br />\n" . htmlspecialchars($lang['form_page']) . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . "<br />\n" . $lang['sender_ip'] . $_SERVER['REMOTE_ADDR'] . "<br />\n";
 						require_once('modules/phpmailer/class.phpmailer.php');
-						$mail = new PHPMailer();
+						$mail = new PHPMailer(false);
 						if ($admin_options['mail_function'] == 'smtp') {
 							$mail->IsSMTP();
 							$mail->Host = $admin_options['smtp_host'];
@@ -380,13 +379,16 @@ if (!class_exists('CustomContactFormsFront')) {
 							} else
 								$mail->SMTPAuth = false;
 						}
-						$mail->SetFrom($admin_options['default_from_email'], 'Custom Contact Forms');
-						$to_email = (!empty($form->form_email)) ? $form->form_email : $admin_options['default_to_email'];
-						$mail->AddAddress($to_email);
-						if ($reply != NULL) $mail->AddReplyTo($reply);
-						else $mail->AddReplyTo($admin_options['default_from_email'], 'Custom Contact Forms');
+						$dest_email_array = $this->getDestinationEmailArray($form->form_email);
+						if (empty($dest_email_array)) $mail->AddAddress($admin_options['default_to_email']);
+						else {
+							foreach ($dest_email_array as $em)
+								$mail->AddAddress($em);
+						}
+						if ($reply != NULL && $this->validEmail($reply)) $mail->SetFrom($reply, 'Custom Contact Forms');
+						else $mail->SetFrom($admin_options['default_from_email'], 'Custom Contact Forms');
 						$mail->Subject = $admin_options['default_form_subject'];
-						$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
+						$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
 						$mail->MsgHTML(stripslashes($body));
 						$mail->Send();
 					} if (!empty($form->form_thank_you_page))
@@ -406,6 +408,16 @@ if (!class_exists('CustomContactFormsFront')) {
 			$out = '<img width="96" height="24" alt="' . __('Captcha image for Custom Contact Forms plugin. You must type the numbers shown in the image', 'custom-contact-forms') . '" id="captcha-image" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/custom-contact-forms/image.php?fid='.$form_id.'"'.$code_type.'> 
 			<div><label for="captcha'.$form_id.'">* '.$captcha->field_label.'</label> <input class="'.$captcha->field_class.'" type="text" '.$instructions.' name="captcha" id="captcha'.$form_id.'" maxlength="20"'.$code_type.'></div>';
 			return $out;
+		}
+		
+		function getDestinationEmailArray($str) {
+			$str = str_replace(',', ';', $str);
+			$email_array = explode(';', $str);
+			$email_array2 = array();
+			foreach ($email_array as $k => $v) {
+				if (!empty($email_array[$k])) $email_array2[] = trim($v);
+			}
+			return $email_array2;
 		}
 	}
 }

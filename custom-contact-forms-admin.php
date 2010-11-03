@@ -888,7 +888,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 						</label>
 						<input maxlength="20" type="text" name="option[option_slug]" />
 						<br />
-						<?php _e("(Used to identify this option, solely for admin purposes; must be unique, and contain only letters, numbers, and underscores. Example: 'slug_one')", 'custom-contact-forms'); ?>
+						<?php _e("Used to identify this option, solely for admin purposes; must be unique, and contain only letters, numbers, and underscores. Example: 'slug_one'", 'custom-contact-forms'); ?>
 					  </li>
 					  <li>
 						<label for="option[option_label]">*
@@ -896,23 +896,20 @@ if (!class_exists('CustomContactFormsAdmin')) {
 						</label>
 						<input type="text" name="option[option_label]" />
 						<br />
-						<?php _e("(This is what is shown to the user in the dropdown or radio field. Example:)", 'custom-contact-forms'); ?>
+						<?php _e("This is what is shown to the user in the dropdown or radio field. Example: 'United States'", 'custom-contact-forms'); ?>
 					  </li>
 					  <li>
 						<label for="option[option_value]">
 						<?php _e("Option Value:", 'custom-contact-forms'); ?>
 						</label>
-						<input type="text" name="option[option_value]" />
+						<input type="text" name="option[option_value]" /> <a href="javascript:void(0)" class="toollink" title="<?php _e("This is the actual value of the option which is not shown to the user. This can be the same thing as the label. An example pairing of label => value is: 'The color green' => 'green' or 'Yes' => '1'.", 'custom-contact-forms'); ?>">(?)</a>
 						<br />
-						<?php _e('(This is the actual value of the option which is not shown to the user. This can be the same thing as the label. An example pairing of label => value is: "The color green" => "green" or "Yes" => "1".)', 'custom-contact-forms'); ?>
+						<?php _e('This is the actual value of the option which is not shown to the user. This can be the same thing as the label. An example pairing of label => value is: "The color green" => "green" or "Yes" => "1".', 'custom-contact-forms'); ?>
 					  </li>
 					  <li>
 						<input type="submit" class="create-button" name="create_field_option" value="<?php _e("Create Field Option", 'custom-contact-forms'); ?>" />
 					  </li>
 					</ul>
-					<p id="edit-field-comments"><b>*</b>
-					  <?php _e("The option value is behind the scences; unseen by the user, but when a user fills out the form, the option value is what is actually sent in the email to you. For dropdown fields the option value is optional, for radio fields it is required.", 'custom-contact-forms'); ?>
-					</p>
 				  </form>
 				</div>
 			  </div>
@@ -975,7 +972,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 							  </select></td>
 							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("This lets you process your forms through alternate scripts. If you use a service like InfusionSoft or Aweber, set this to be the same form action as the code provided to you by that service, otherwise leave this blank.", 'custom-contact-forms'); ?>">(?)</a>
 							  <input class="width100" type="text" name="form[form_action]" value="<?php echo $forms[$i]->form_action; ?>" /></td>
-							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("This email address will recieve form emails (provided that Email Form Submissions is set to Yes in general settings).", 'custom-contact-forms'); ?>">(?)</a>
+							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("Specify the email address(es) that you wish to receive form submission emails (provided that Email Form Submissions is set to Yes in general settings). Seperate multiple email addresses with semi-colons (ex: email1@gmail.com;email2@gmail.com;email3@gmail.com).", 'custom-contact-forms'); ?>">(?)</a>
 							  <input class="width100" type="text" name="form[form_email]" value="<?php echo $forms[$i]->form_email; ?>" /></td>
 							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("This will be displayed as the header in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.", 'custom-contact-forms'); ?>">(?)</a>
 							  <input class="width100" type="text" name="form[form_success_title]" value="<?php echo $forms[$i]->form_success_title; ?>" /></td>

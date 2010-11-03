@@ -240,7 +240,7 @@
           <li><span>
             <?php _e('Form Destination Email:', 'custom-contact-forms'); ?>
             </span>
-            <?php _e("Specify the email that should receive all form submissions. If you leave this blank it will revert to the default specified in general settings.", 'custom-contact-forms'); ?>
+            <?php _e("Specify the email address(es) that should receive all form submissions. Seperate multiple email addresses with semi-colons (ex: email1@gmail.com;email2@gmail.com;email3@gmail.com). If you leave this blank it will revert to the default specified in general settings. You can set forms not to send email in General Settings.", 'custom-contact-forms'); ?>
           </li>
           <li><span>
             <?php _e('Form Success Message:', 'custom-contact-forms'); ?>
