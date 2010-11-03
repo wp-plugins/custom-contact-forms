@@ -105,7 +105,7 @@ Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now a
 = 4.0.1 =
 *	custom-contact-forms.php
 *	custom-contact-forms-admin.php - support for multiple form destination emails added
-*	custom-contact-forms-front.php - Mail bug fixed
+*	custom-contact-forms-front.php - Mail bug fixed, email validation bug fixed
 *	lang/custom-contact-forms.php - Phrases deleted/added
 
 = 4.0.0 =
