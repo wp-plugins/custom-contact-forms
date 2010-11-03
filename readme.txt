@@ -102,6 +102,12 @@ Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now a
 
 == Changelog ==
 
+= 4.0.1 =
+*	custom-contact-forms.php
+*	custom-contact-forms-admin.php - support for multiple form destination emails added
+*	custom-contact-forms-front.php - Mail bug fixed
+*	lang/custom-contact-forms.php - Phrases deleted/added
+
 = 4.0.0 =
 *	custom-contact-forms.php - Saved form submissions manager, form background color added to style manager, import/export feature
 *	custom-contact-forms-user-data.php - Saved form submission
