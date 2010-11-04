@@ -21,8 +21,7 @@ Custom Contact Forms 4.0 will revolutionize the idea of a Wordpress plugin.
 *	__NEW__ - This plugin can now be translated in to different languages.
 *	__NEW__ - Error messages can be customized for each field
 *	Choose between XHTML or HTML. All code is clean and valid!
-*	Create __unlimited__ forms
-*	Create __unlimited__ fields
+*	Create __unlimited__ forms and fields
 *	Required Fields
 *	Custom Contact Forms now uses PHPMailer and thus supports STMP and SSL
 *	__NEW__ Have your contact forms send mail to multiple email addresses
