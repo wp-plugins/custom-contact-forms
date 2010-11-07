@@ -60,6 +60,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 		
 		function contactAuthor($name, $email, $website, $message, $type) {
 			if (empty($message)) return false;
+			require_once('modules/phpmailer/class.phpmailer.php');
 			$mail = new PHPMailer();
 			$body = "Name: $name<br />\n";
 			$body .= "Email: $email<br />\n";
@@ -67,7 +68,6 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			$body .= "Message: $message<br />\n";
 			$body .= "Message Type: $type<br />\n";
 			$body .= 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "<br />\n";
-			require_once('modules/phpmailer/class.phpmailer.php');
 			$admin_options = parent::getAdminOptions();
 			if ($admin_options['mail_function'] == 'smtp') {
 				$mail->IsSMTP();
