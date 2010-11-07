@@ -351,7 +351,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				<li><a href="#create-styles"><?php _e("Create Styles", 'custom-contact-forms'); ?></a></li>
 				<li><a href="#manage-styles"><?php _e("Manage Styles", 'custom-contact-forms'); ?></a></li>
 				<li><a href="#manage-field-options"><?php _e("Manage Field Options", 'custom-contact-forms'); ?></a></li>
-				<li><a href="#contact-author"><?php _e("Suggest a Feature", 'custom-contact-forms'); ?></a></li>
+				<li><a class="red" href="#contact-author"><?php _e("Suggest a Feature", 'custom-contact-forms'); ?></a></li>
 				<li><a href="#contact-author"><?php _e("Bug Report", 'custom-contact-forms'); ?></a></li>
 				<li><a href="#custom-html"><?php _e("Custom HTML Forms", 'custom-contact-forms'); ?></a></li>
 				<li><a href="#import-export"><?php _e("Import / Export (New!)", 'custom-contact-forms'); ?></a></li>

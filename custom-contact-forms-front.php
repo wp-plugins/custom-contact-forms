@@ -158,7 +158,8 @@ if (!class_exists('CustomContactFormsFront')) {
 				$req_long = ($field->field_required == 1) ? ' ' . __('(required)', 'custom-contact-forms') : '';
 				$input_id = 'id="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'-'.$form_key.'"';
 				$field_value = CustomContactFormsStatic::decodeOption($field->field_value, 1, 1);
-				$instructions = (empty($field->field_instructions)) ? '' : 'title="' . $field->field_instructions . $req_long . '" class="ccf-tooltip-field"';
+				$instructions = (empty($field->field_instructions)) ? '' : 'title="' . $field->field_instructions . $req_long . '" ';
+				$tooltip_class = (empty($field->field_instructions)) ? '' : 'ccf-tooltip-field';
 				if ($admin_options['enable_widget_tooltips'] == 0 && $is_sidebar) $instructions = '';
 				if ($_SESSION['fields'][$field->field_slug]) {
 					if ($admin_options['remember_field_values'] == 1)
@@ -169,13 +170,13 @@ if (!class_exists('CustomContactFormsFront')) {
 					$add_reset = ' <input type="reset" '.$instructions.' class="reset-button '.$field->field_class.'" value="' . $field->field_value . '" />';
 				} elseif ($field->field_type == 'Text') {
 					$maxlength = (empty($field->field_maxlength) or $field->field_maxlength <= 0) ? '' : ' maxlength="'.$field->field_maxlength.'"';
-					$out .= '<div>'."\n".'<label for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<input class="'.$field->field_class.'" '.$instructions.' '.$input_id.' type="text" name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'"'.$maxlength.''.$code_type.'>'."\n".'</div>' . "\n";
+					$out .= '<div>'."\n".'<label for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<input class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' '.$input_id.' type="text" name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'"'.$maxlength.''.$code_type.'>'."\n".'</div>' . "\n";
 				} elseif ($field->field_type == 'Hidden') {
 					$hiddens .= '<input type="hidden" name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'" '.$input_id.''.$code_type.'>' . "\n";
 				} elseif ($field->field_type == 'Checkbox') {
-					$out .= '<div>'."\n".'<input class="'.$field->field_class.'" '.$instructions.' type="checkbox" name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" value="'.CustomContactFormsStatic::decodeOption($field->field_value, 1, 1).'" '.$input_id.''.$code_type.'> '."\n".'<label class="checkbox" for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">' . $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'</div>' . "\n";
+					$out .= '<div>'."\n".'<input class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' type="checkbox" name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" value="'.CustomContactFormsStatic::decodeOption($field->field_value, 1, 1).'" '.$input_id.''.$code_type.'> '."\n".'<label class="checkbox" for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">' . $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'</div>' . "\n";
 				} elseif ($field->field_type == 'Textarea') {
-					$out .= '<div>'."\n".'<label for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<textarea class="'.$field->field_class.'" '.$instructions.' '.$input_id.' rows="5" cols="40" name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'.$field_value.'</textarea>'."\n".'</div>' . "\n";
+					$out .= '<div>'."\n".'<label for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<textarea class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' '.$input_id.' rows="5" cols="40" name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'.$field_value.'</textarea>'."\n".'</div>' . "\n";
 				} elseif ($field->field_type == 'Dropdown') {
 					$field_options = '';
 					$options = parent::getAttachedFieldOptionsArray($field->id);
@@ -186,8 +187,8 @@ if (!class_exists('CustomContactFormsFront')) {
 						$field_options .= '<option'.$option_sel.''.$option_value.'>' . $option->option_label . '</option>' . "\n";
 					}
 					if (!empty($options)) {
-						if (!$is_sidebar) $out .= '<div>'."\n".'<select '.$instructions.' '.$input_id.' name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" class="'.$field->field_class.'">'."\n".$field_options.'</select>'."\n".'<label class="checkbox" for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'</div>' . "\n";
-						else  $out .= '<div>'."\n".'<label for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<select class="'.$field->field_class.'" '.$instructions.' '.$input_id.' name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'."\n".$field_options.'</select>'."\n".'</div>' . "\n";
+						if (!$is_sidebar) $out .= '<div>'."\n".'<select '.$instructions.' '.$input_id.' name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" class="'.$field->field_class.' '.$tooltip_class.'">'."\n".$field_options.'</select>'."\n".'<label class="checkbox" for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'</div>' . "\n";
+						else  $out .= '<div>'."\n".'<label for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<select class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' '.$input_id.' name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'."\n".$field_options.'</select>'."\n".'</div>' . "\n";
 					}
 				} elseif ($field->field_type == 'Radio') {
 					$field_options = '';
@@ -195,7 +196,7 @@ if (!class_exists('CustomContactFormsFront')) {
 					foreach ($options as $option_id) {
 						$option = parent::selectFieldOption($option_id);
 						$option_sel = ($field->field_value == $option->option_slug) ? ' checked="checked"' : '';
-						$field_options .= '<div><input'.$option_sel.' class="'.$field->field_class.'" type="radio" '.$instructions.' name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" value="'.CustomContactFormsStatic::decodeOption($option->option_value, 1, 1).'"'.$code_type.'> <label class="select" for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">' . CustomContactFormsStatic::decodeOption($option->option_label, 1, 1) . '</label></div>' . "\n";
+						$field_options .= '<div><input'.$option_sel.' class="'.$field->field_class.' '.$tooltip_class.'" type="radio" '.$instructions.' name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" value="'.CustomContactFormsStatic::decodeOption($option->option_value, 1, 1).'"'.$code_type.'> <label class="select" for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">' . CustomContactFormsStatic::decodeOption($option->option_label, 1, 1) . '</label></div>' . "\n";
 					}
 					$field_label = (!empty($field->field_label)) ? '<label for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>' : '';
 					if (!empty($options)) $out .= '<div>'."\n".$field_label."\n".$field_options."\n".'</div>' . "\n";
@@ -404,9 +405,10 @@ if (!class_exists('CustomContactFormsFront')) {
 			$admin_options = parent::getAdminOptions();
 			$code_type = ($admin_options['code_type'] == 'XHTML') ? ' /' : '';
 			$captcha = parent::selectField('', 'captcha');
-			$instructions = (empty($captcha->field_instructions)) ? '' : 'title="'.$captcha->field_instructions.'" class="tooltip-field"';
+			$instructions = (empty($captcha->field_instructions)) ? '' : 'title="'.$captcha->field_instructions.'" ';
+			$tooltip_class = (empty($captcha->field_instructions)) ? '' : 'ccf-tooltip-field';
 			$out = '<img width="96" height="24" alt="' . __('Captcha image for Custom Contact Forms plugin. You must type the numbers shown in the image', 'custom-contact-forms') . '" id="captcha-image" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/custom-contact-forms/image.php?fid='.$form_id.'"'.$code_type.'> 
-			<div><label for="captcha'.$form_id.'">* '.$captcha->field_label.'</label> <input class="'.$captcha->field_class.'" type="text" '.$instructions.' name="captcha" id="captcha'.$form_id.'" maxlength="20"'.$code_type.'></div>';
+			<div><label for="captcha'.$form_id.'">* '.$captcha->field_label.'</label> <input class="'.$captcha->field_class.' '.$tooltip_class.'" type="text" '.$instructions.' name="captcha" id="captcha'.$form_id.'" maxlength="20"'.$code_type.'></div>';
 			return $out;
 		}
 		
