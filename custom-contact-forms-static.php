@@ -14,6 +14,13 @@ if (!class_exists('CustomContactFormsStatic')) {
 			if (!session_id()) session_start();
 		}
 		
+		function redirect($location) {
+			if (!empty($location)) {
+				wp_redirect($location);
+				exit();
+			}
+		}
+		
 		function getWPTablePrefix() {
 			global $wpdb;
 			return $wpdb->prefix;

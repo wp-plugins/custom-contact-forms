@@ -4,7 +4,7 @@ Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
 Tested up to: 3.0.1
-Stable tag: 4.0.2
+Stable tag: 4.0.3
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -18,7 +18,7 @@ Custom Contact Forms 4.0 will revolutionize the idea of a Wordpress plugin.
 
 *	__NEW__ - All form submissions saved and displayed in admin panel as well as emailed to you
 *	__NEW__ - Import and export forms/fields/styles/etc. with ease!
-*	__NEW__ - This plugin can now be translated in to different languages.
+*	__NEW__ - This plugin can now be translated in to different languages - UTF8 character encoding.
 *	__NEW__ - Error messages can be customized for each field
 *	Choose between XHTML or HTML. All code is clean and valid!
 *	Create __unlimited__ forms and fields
@@ -100,6 +100,13 @@ We are planning to add popover forms and file attachments soon.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now all the screenshots are from Version 1, thus are quite out-dated. Install the plugin to see what it looks like. You won't regret it. I promise!
 
 == Changelog ==
+
+= 4.0.3 =
+*	custom-contact-forms-front.php - PHPMailer bug fixed, form redirect fixed
+*	custom-contact-forms-static.php - Form redirect function added
+*	custom-contact-forms-admin.php - redirects fixed, phpmailer bug fixed
+*	widget/phpmailer - deleted
+*	widget/db/custom-contact-forms-db.php - table charsets changed to UTF8
 
 = 4.0.2 =
 *	custom-contact-forms-front.php - Field instructions bug fixed

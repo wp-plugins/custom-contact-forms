@@ -187,8 +187,7 @@ if (!class_exists('CustomContactFormsFront')) {
 						$field_options .= '<option'.$option_sel.''.$option_value.'>' . $option->option_label . '</option>' . "\n";
 					}
 					if (!empty($options)) {
-						if (!$is_sidebar) $out .= '<div>'."\n".'<select '.$instructions.' '.$input_id.' name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" class="'.$field->field_class.' '.$tooltip_class.'">'."\n".$field_options.'</select>'."\n".'<label class="checkbox" for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'</div>' . "\n";
-						else  $out .= '<div>'."\n".'<label for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<select class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' '.$input_id.' name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'."\n".$field_options.'</select>'."\n".'</div>' . "\n";
+						$out .= '<div>'."\n".'<label for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<select class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' '.$input_id.' name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'."\n".$field_options.'</select>'."\n".'</div>' . "\n";
 					}
 				} elseif ($field->field_type == 'Radio') {
 					$field_options = '';
@@ -274,8 +273,9 @@ if (!class_exists('CustomContactFormsFront')) {
 					parent::insertUserData($data_object);
 					$body .= "<br />\n" . htmlspecialchars($lang['form_page']) . $_SERVER['SERVER_NAME']. $_SERVER['REQUEST_URI'] . "<br />\n" . $lang['sender_ip'] . $_SERVER['REMOTE_ADDR'] . "<br />\n";
 					if ($admin_options['email_form_submissions'] == 1) {
-						require_once('modules/phpmailer/class.phpmailer.php');
-						$mail = new PHPMailer();
+						if (!class_exists('PHPMailer'))
+							require_once(ABSPATH . "wp-includes/class-phpmailer.php"); 
+						$mail = new PHPMailer(false);
 						if ($admin_options['mail_function'] == 'smtp') {
 							$mail->IsSMTP();
 							$mail->Host = $admin_options['smtp_host'];
@@ -287,14 +287,15 @@ if (!class_exists('CustomContactFormsFront')) {
 							} else
 								$mail->SMTPAuth = false;
 						}
-						$mail->SetFrom($admin_options['default_from_email'], 'Custom Contact Forms');
+						$mail->From = $admin_options['default_from_email'];
+						$mail->FromName = 'Custom Contact Forms';
 						$mail->AddAddress($_POST['destination_email']);
 						$mail->Subject = $admin_options['default_form_subject'];
 						$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
 						$mail->MsgHTML(stripslashes($body));
 						$mail->Send();
 					} if ($_POST['thank_you_page'])
-						wp_redirect($_POST['thank_you_page']);
+						CustomContactFormsStatic::redirect($_POST['thank_you_page']);
 					$this->current_thank_you_message = (!empty($_POST['success_message'])) ? $_POST['success_message'] : $admin_options['form_success_message'];
 					$this->current_form = 0;
 					add_action('wp_footer', array(&$this, 'insertFormSuccessCode'), 1);
@@ -367,7 +368,8 @@ if (!class_exists('CustomContactFormsFront')) {
 					parent::insertUserData($data_object);
 					if ($admin_options['email_form_submissions'] == '1') {
 						$body .= "<br />\n" . htmlspecialchars($lang['form_page']) . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . "<br />\n" . $lang['sender_ip'] . $_SERVER['REMOTE_ADDR'] . "<br />\n";
-						require_once('modules/phpmailer/class.phpmailer.php');
+						if (!class_exists('PHPMailer'))
+							require_once(ABSPATH . "wp-includes/class-phpmailer.php"); 
 						$mail = new PHPMailer(false);
 						if ($admin_options['mail_function'] == 'smtp') {
 							$mail->IsSMTP();
@@ -386,14 +388,18 @@ if (!class_exists('CustomContactFormsFront')) {
 							foreach ($dest_email_array as $em)
 								$mail->AddAddress($em);
 						}
-						if ($reply != NULL && $this->validEmail($reply)) $mail->SetFrom($reply, 'Custom Contact Forms');
-						else $mail->SetFrom($admin_options['default_from_email'], 'Custom Contact Forms');
+						$mail->FromName = 'Custom Contact Forms';
+						if ($reply != NULL && $this->validEmail($reply)) {
+							$mail->From = $reply;
+						} else {
+							$mail->From = $admin_options['default_from_email'];
+						}
 						$mail->Subject = $admin_options['default_form_subject'];
 						$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
 						$mail->MsgHTML(stripslashes($body));
 						$mail->Send();
 					} if (!empty($form->form_thank_you_page))
-						wp_redirect($form->form_thank_you_page);
+						CustomContactFormsStatic::redirect($form->form_thank_you_page);
 					$this->current_form = $form->id;
 					add_action('wp_footer', array(&$this, 'insertFormSuccessCode'), 1);
 				}

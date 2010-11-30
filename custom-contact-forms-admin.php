@@ -37,7 +37,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				$transit = new CustomContactFormsExport(parent::getAdminOptionsName());
 				$transit->exportAll();
 				$file = $transit->exportToFile();
-				wp_redirect(WP_PLUGIN_URL . '/custom-contact-forms/download.php?location=export/' . $file);
+				CustomContactFormsStatic::redirect(WP_PLUGIN_URL . '/custom-contact-forms/download.php?location=export/' . $file);
 			}
 		}
 		
@@ -54,14 +54,15 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				$settings['import_saved_submissions'] = ($_POST['ccf_import_saved_submissions'] == 1) ? true : false;
 				$settings['mode'] = ($_POST['ccf_clear_import']) ? 'clear_import' : 'merge_import';
 				$transit->importFromFile($_FILES['import_file'], $settings);
-				wp_redirect('options-general.php?page=custom-contact-forms');
+				CustomContactFormsStatic::redirect('options-general.php?page=custom-contact-forms');
 			}
 		}
 		
 		function contactAuthor($name, $email, $website, $message, $type) {
 			if (empty($message)) return false;
-			require_once('modules/phpmailer/class.phpmailer.php');
-			$mail = new PHPMailer();
+			if (!class_exists('PHPMailer'))
+				require_once(ABSPATH . "wp-includes/class-phpmailer.php");
+			$mail = new PHPMailer(false);
 			$body = "Name: $name<br />\n";
 			$body .= "Email: $email<br />\n";
 			$body .= "Website: $website<br />\n";
