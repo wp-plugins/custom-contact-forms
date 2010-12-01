@@ -81,7 +81,8 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				} else
 					$mail->SMTPAuth = false;
 			}
-			$mail->SetFrom($email, 'Custom Contact Forms');
+			$mail->From = $email;
+			$mail->FromName = 'Custom Contact Forms';
 			$mail->AddAddress('admin@taylorlovett.com');
 			$mail->Subject = "CCF Message: $type";
 			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
