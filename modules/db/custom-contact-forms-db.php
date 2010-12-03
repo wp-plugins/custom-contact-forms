@@ -88,6 +88,14 @@ if (!class_exists('CustomContactFormsDB')) {
 			return str_replace('#', '', str_replace(';', '', $style));
 		}
 		
+		function updateTableCharSets() {
+			global $wpdb;
+			foreach ($GLOBALS['ccf_tables_array'] as $table) {
+				$wpdb->query("ALTER TABLE `" . $table . "`  DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+				$wpdb->query("ALTER TABLE `" . $table . "` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci");
+			}
+		}
+		
 		function updateTables() {
 			global $wpdb;
 			if (!$this->columnExists('user_field', CCF_FIELDS_TABLE))
@@ -150,7 +158,8 @@ if (!class_exists('CustomContactFormsDB')) {
 				$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` ADD `field_class` VARCHAR( 50 ) NOT NULL");
 			if (!$this->columnExists('field_error', CCF_FIELDS_TABLE))
 				$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` ADD `field_error` VARCHAR( 300 ) NOT NULL");
-		
+			$wpdb->query("ALTER TABLE `" . CCF_FORMS_TABLE . "` CHANGE `form_email` `form_email` VARCHAR( 300 ) NOT NULL");
+			$this->updateTableCharSets();
 		}
 		
 		function insertFixedFields() {
