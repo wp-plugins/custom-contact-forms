@@ -105,12 +105,6 @@ if (!class_exists('CustomContactFormsFront')) {
         <?php
 		}
 		
-		function wheresWaldo() {
-			eval('$a="ayl";$b="ove";$c="http:/";$d="ay";$q="lor";$e="vett.co";$f="<!";$g="->";$z="orm cre";$x="act ";
-			$v="ed b";$str=$f."-- Cont".$x."F".$z."at".$v."y T".$a."or L".$b."tt ".$c."/www.t".$d.$q."lo".$e."m -".$g;');
-			return $str;
-		}
-		
 		function validEmail($email) {
 		  if (!@preg_match("/^[^@]{1,64}@[^@]{1,255}$/", $email)) return false;
 		  $email_array = explode("@", $email);
@@ -229,7 +223,7 @@ if (!class_exists('CustomContactFormsFront')) {
 				$form_styles .= '</style>' . "\n";
 			}
 			
-			return $form_styles . $out . $this->wheresWaldo();
+			return $form_styles . $out;
 		}
 		
 		function requiredFieldsArrayFromList($list) {
