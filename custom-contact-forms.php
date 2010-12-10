@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, form submissions saved to database, captchas, tooltip popovers, unlimited fields/forms/form styles, import/export, use a custom thank you page or built-in popover with a custom success message set for each form.
-	Version: 4.0.5
+	Version: 4.0.6
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
@@ -27,7 +27,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-error_reporting(E_ALL ^ E_NOTICE);
+$old_error_settings = error_reporting();
+error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_USER_DEPRECATED);
 require_once('custom-contact-forms-static.php');
 CustomContactFormsStatic::definePluginConstants();
 require_once('modules/db/custom-contact-forms-db.php');
