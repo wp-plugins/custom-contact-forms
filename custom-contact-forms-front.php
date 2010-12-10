@@ -141,7 +141,7 @@ if (!class_exists('CustomContactFormsFront')) {
 			$action = (!empty($form->form_action)) ? $form->form_action : $_SERVER['REQUEST_URI'];
 			$out .= '<form id="'.$form_id.'" method="'.strtolower($form->form_method).'" action="'.$action.'" class="'.$style_class.'">' . "\n";
 			$out .= CustomContactFormsStatic::decodeOption($form->custom_code, 1, 1) . "\n";
-			if (!empty($form_title)) $out .= '<h4 id="h4-' . $form->id . '-' . $form_key . '">' . $form_title . '</h4>' . "\n";
+			if (!empty($form_title) && !$is_sidebar) $out .= '<h4 id="h4-' . $form->id . '-' . $form_key . '">' . $form_title . '</h4>' . "\n";
 			$fields = parent::getAttachedFieldsArray($fid);
 			$hiddens = '';
 			$code_type = ($admin_options['code_type'] == 'XHTML') ? ' /' : '';
