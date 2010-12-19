@@ -367,6 +367,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			    <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
                 <img alt="Donate to Custom Contact Forms plugin" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
               </form>
+			  <a class="genesis" href="https://www.e-junkie.com/ecom/gb.php?ii=717791&c=ib&aff=125082&cl=10214">Custom Contact Forms works best with any of the 20+ <span>Genesis</span> Wordpress child themes. The <span>Genesis Framework</span> empowers you to quickly and easily build incredible websites with WordPress.</a>
 
               </a> <a name="create-fields"></a>
 			  <div id="create-fields" class="postbox">
