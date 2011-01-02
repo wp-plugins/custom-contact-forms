@@ -85,6 +85,7 @@ form.customcontactform-sidebar div select { width:auto; }
 	border-spacing:0;
 	width:480px;
 	height:200px;
+	z-index:10000;
 	padding:0px;
 	margin:0;
 	-moz-border-radius:10px;

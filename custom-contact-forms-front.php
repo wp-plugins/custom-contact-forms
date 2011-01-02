@@ -17,8 +17,8 @@ if (!class_exists('CustomContactFormsFront')) {
 		}
 	
 		function insertFrontEndStyles() {
-            wp_register_style('CCFStandardsCSS', WP_PLUGIN_URL . '/custom-contact-forms/css/custom-contact-forms-standards.css');
-           	wp_register_style('CCFFormsCSS', WP_PLUGIN_URL . '/custom-contact-forms/css/custom-contact-forms.css');
+            wp_register_style('CCFStandardsCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-standards.css');
+           	wp_register_style('CCFFormsCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms.css');
            	wp_enqueue_style('CCFStandardsCSS');
 			wp_enqueue_style('CCFFormsCSS');
 		}
@@ -27,8 +27,8 @@ if (!class_exists('CustomContactFormsFront')) {
 			$admin_options = parent::getAdminOptions();
 			if ($admin_options['enable_jquery'] == 1) {
 				wp_enqueue_script('jquery');
-				wp_enqueue_script('jquery-tools', WP_PLUGIN_URL . '/custom-contact-forms/js/jquery.tools.min.js');
-				wp_enqueue_script('ccf-main', WP_PLUGIN_URL . '/custom-contact-forms/js/custom-contact-forms.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-resizable'), '1.0');
+				wp_enqueue_script('jquery-tools', plugins_url() . '/custom-contact-forms/js/jquery.tools.min.js');
+				wp_enqueue_script('ccf-main', plugins_url() . '/custom-contact-forms/js/custom-contact-forms.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-resizable'), '1.0');
 			}
 		}
 		
@@ -83,7 +83,7 @@ if (!class_exists('CustomContactFormsFront')) {
 				?>
                 <style type="text/css">
 					<!--
-					#ccf-form-success { border-color:#<?php echo parent::formatStyle($style->success_popover_bordercolor); ?>; height:<?php $style->success_popover_height; ?>; }
+					#ccf-form-success { z-index:10000; border-color:#<?php echo parent::formatStyle($style->success_popover_bordercolor); ?>; height:<?php $style->success_popover_height; ?>; }
 					#ccf-form-success div { background-color:#<?php echo parent::formatStyle($style->success_popover_bordercolor); ?>; }
 					#ccf-form-success div h5 { color:#<?php echo parent::formatStyle($style->success_popover_title_fontcolor); ?>; font-size:<?php echo $style->success_popover_title_fontsize; ?>; }
 					#ccf-form-success div a { color:#<?php echo parent::formatStyle($style->success_popover_title_fontcolor); ?>; }

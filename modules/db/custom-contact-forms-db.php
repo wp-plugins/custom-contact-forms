@@ -158,7 +158,9 @@ if (!class_exists('CustomContactFormsDB')) {
 				$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` ADD `field_class` VARCHAR( 50 ) NOT NULL");
 			if (!$this->columnExists('field_error', CCF_FIELDS_TABLE))
 				$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` ADD `field_error` VARCHAR( 300 ) NOT NULL");
-			$wpdb->query("ALTER TABLE `" . CCF_FORMS_TABLE . "` CHANGE `form_email` `form_email` VARCHAR( 300 ) NOT NULL");
+			$wpdb->query("ALTER TABLE `" . CCF_FORMS_TABLE . "` CHANGE `form_email` `form_email` TEXT NOT NULL");
+			$wpdb->query("ALTER TABLE `" . CCF_FORMS_TABLE . "` CHANGE `form_fields` `form_fields` TEXT NOT NULL");
+			$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` CHANGE `field_label` `field_label` TEXT NOT NULL");
 			$this->updateTableCharSets();
 		}
 		

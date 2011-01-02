@@ -37,7 +37,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				$transit = new CustomContactFormsExport(parent::getAdminOptionsName());
 				$transit->exportAll();
 				$file = $transit->exportToFile();
-				CustomContactFormsStatic::redirect(WP_PLUGIN_URL . '/custom-contact-forms/download.php?location=export/' . $file);
+				CustomContactFormsStatic::redirect(plugins_url() . '/custom-contact-forms/download.php?location=export/' . $file);
 			}
 		}
 		
@@ -143,9 +143,9 @@ if (!class_exists('CustomContactFormsAdmin')) {
 		}
 		
 		function insertBackEndStyles() {
-            wp_register_style('CCFStandardsCSS', WP_PLUGIN_URL . '/custom-contact-forms/css/custom-contact-forms-standards.css');
-            wp_register_style('CCFAdminCSS', WP_PLUGIN_URL . '/custom-contact-forms/css/custom-contact-forms-admin.css');
-			wp_register_style('CCFColorPickerCSS', WP_PLUGIN_URL . '/custom-contact-forms/css/colorpicker.css');
+            wp_register_style('CCFStandardsCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-standards.css');
+            wp_register_style('CCFAdminCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-admin.css');
+			wp_register_style('CCFColorPickerCSS', plugins_url() . '/custom-contact-forms/css/colorpicker.css');
             wp_enqueue_style('CCFStandardsCSS');
 			wp_enqueue_style('CCFAdminCSS');
 			wp_enqueue_style('CCFColorPickerCSS');
@@ -163,23 +163,23 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				var click_to_confirm = "<?php _e('Click to Confirm', 'custom-contact-forms'); ?>";
 				var delete_confirm = "<?php _e('Are you sure you want to delete this', 'custom-contact-forms'); ?>";
 				var error = "<?php _e('An error has occured. Please try again later.', 'custom-contact-forms'); ?>";
-				var ccf_plugin_dir = "<?php echo WP_PLUGIN_URL . '/custom-contact-forms'; ?>";
+				var ccf_plugin_dir = "<?php echo plugins_url() . '/custom-contact-forms'; ?>";
 				var ccf_file = "<?php echo get_option('siteurl') . '/wp-admin/options-general.php?page=custom-contact-forms'; ?>";
 			</script>
 			<?php
 			wp_enqueue_script('jquery');
 			wp_enqueue_script('jquery-ui-core');
 			wp_enqueue_script('jquery-ui-tabs');
-			wp_enqueue_script('jquery-tools', WP_PLUGIN_URL . '/custom-contact-forms/js/jquery.tools.min.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), '1.0');
-			wp_enqueue_script('ccf-admin-inc', WP_PLUGIN_URL . '/custom-contact-forms/js/custom-contact-forms-admin-inc.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), '1.0');
-			wp_enqueue_script('ccf-admin', WP_PLUGIN_URL . '/custom-contact-forms/js/custom-contact-forms-admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), '1.0');
+			wp_enqueue_script('jquery-tools', plugins_url() . '/custom-contact-forms/js/jquery.tools.min.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), '1.0');
+			wp_enqueue_script('ccf-admin-inc', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-admin-inc.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), '1.0');
+			wp_enqueue_script('ccf-admin', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), '1.0');
 			if ($admin_options['admin_ajax'] == 1)
-				wp_enqueue_script('ccf-admin-ajax', WP_PLUGIN_URL . '/custom-contact-forms/js/custom-contact-forms-admin-ajax.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), '1.0');
-			wp_enqueue_script('ccf-colorpicker', WP_PLUGIN_URL . '/custom-contact-forms/js/colorpicker.js');
-			wp_enqueue_script('ccf-eye', WP_PLUGIN_URL . '/custom-contact-forms/js/eye.js');
-			wp_enqueue_script('ccf-utils', WP_PLUGIN_URL . '/custom-contact-forms/js/utils.js');
-			wp_enqueue_script('ccf-layout', WP_PLUGIN_URL . '/custom-contact-forms/js/layout.js?ver=1.0.2');
-			wp_enqueue_script('ccf-pagination', WP_PLUGIN_URL . '/custom-contact-forms/js/jquery.pagination.js');
+				wp_enqueue_script('ccf-admin-ajax', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-admin-ajax.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), '1.0');
+			wp_enqueue_script('ccf-colorpicker', plugins_url() . '/custom-contact-forms/js/colorpicker.js');
+			wp_enqueue_script('ccf-eye', plugins_url() . '/custom-contact-forms/js/eye.js');
+			wp_enqueue_script('ccf-utils', plugins_url() . '/custom-contact-forms/js/utils.js');
+			wp_enqueue_script('ccf-layout', plugins_url() . '/custom-contact-forms/js/layout.js?ver=1.0.2');
+			wp_enqueue_script('ccf-pagination', plugins_url() . '/custom-contact-forms/js/jquery.pagination.js');
 		}
 		
 		function printAdminPage() {
@@ -359,16 +359,22 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				<li><a href="#import-export"><?php _e("Import / Export (New!)", 'custom-contact-forms'); ?></a></li>
 				<li class="last"><a href="#plugin-news"><?php _e("Plugin News", 'custom-contact-forms'); ?></a></li>
 			  </ul>
-			  <form class="rate-me" action="https://www.paypal.com/cgi-bin/webscr" method="post">
-                <input type="hidden" name="cmd" value="_s-xclick">
-                <input type="hidden" name="hosted_button_id" value="TXYVDCH955V28">
-                <a href="http://wordpress.org/extend/plugins/custom-contact-forms" title="<?php _e("Rate This Plugin", 'custom-contact-forms'); ?>">
-                <?php _e("We need your help to continue development! Please <span>rate this plugin</span> to show your support.", 'custom-contact-forms'); ?></a>
-			    <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-                <img alt="Donate to Custom Contact Forms plugin" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-              </form>
-			  <a class="genesis" href="https://www.e-junkie.com/ecom/gb.php?ii=717791&c=ib&aff=125082&cl=10214">Custom Contact Forms works best with any of the 20+ <span>Genesis</span> Wordpress child themes. The <span>Genesis Framework</span> empowers you to quickly and easily build incredible websites with WordPress.</a>
-
+			  
+			  <a class="genesis" href="http://www.shareasale.com/r.cfm?b=241369&u=481196&m=28169&urllink=&afftrack=">Custom Contact Forms works best with any of the 20+ <span>Genesis</span> Wordpress child themes. The <span>Genesis Framework</span> empowers you to quickly and easily build incredible websites with WordPress.</a>
+			
+			<form class="blog-horizontal-form" method="post" action="http://www.aweber.com/scripts/addlead.pl">
+            	<input type="hidden" name="meta_web_form_id" value="1578604781" />
+				<input type="hidden" name="meta_split_id" value="" />
+				<input type="hidden" name="listname" value="ccf-plugin" />
+				<input type="hidden" name="redirect" value="http://www.taylorlovett.com/wordpress-plugins/tutorials-offers-tips/" id="redirect_5832e41084448adb07da67a35dc83c27" />
+				<input type="hidden" name="meta_adtracking" value="CCF_-_Wordpress_Plugins_Horizontal" />
+				<input type="hidden" name="meta_message" value="1" />
+				<input type="hidden" name="meta_required" value="name,email" />
+				<span>WordPress Plugin Offers & Exclusive Tutorials</span>
+                <input type="text" name="name" value="Your Name" onclick="value=''" />
+                <input type="text" name="email" value="Your Email" onclick="value=''" />
+                <input type="submit" value="Sign Up for Free" />
+            </form>
               </a> <a name="create-fields"></a>
 			  <div id="create-fields" class="postbox">
 				<h3 class="hndle"><span>
@@ -916,7 +922,16 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				  </form>
 				</div>
 			  </div>
+			  <form class="rate-me" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                <input type="hidden" name="cmd" value="_s-xclick">
+                <input type="hidden" name="hosted_button_id" value="TXYVDCH955V28">
+                <a href="http://wordpress.org/extend/plugins/custom-contact-forms" title="<?php _e("Rate This Plugin", 'custom-contact-forms'); ?>">
+                <?php _e("We need your help to continue development! Please <span>rate this plugin</span> to show your support.", 'custom-contact-forms'); ?></a>
+			    <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                <img alt="Donate to Custom Contact Forms plugin" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+              </form>
 			  <a name="manage-forms"></a>
+			  
 			  <h3 class="manage-h3">
 				<?php _e("Manage Forms", 'custom-contact-forms'); ?>
 			  </h3>
@@ -2046,7 +2061,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 &lt;input type=&quot;hidden&quot; name=&quot;destination_email&quot; value=&quot;<?php echo $admin_options['default_to_email']; ?>&quot; /&gt;
 &lt;input type=&quot;hidden&quot; name=&quot;required_fields&quot; value=&quot;field_name1, field_name2&quot; /&gt;
 
-&lt;!-- <?php _e("Build your form in here. It is recommended you only use this feature if you are experienced with HTML. 
+&lt;!-- <?php _e("Paste all this code into a page or post and edit it to your liking. It is recommended you only use this feature if you are experienced with HTML. 
 The success_message field will add a popover containing the message when the form is completed successfully, the thank_you_page field will force 
 the user to be redirected to that specific page on successful form completion. The required_fields hidden field is optional; to use it seperate 
 the field names you want required by commas. Remember to use underscores instead of spaces in field names!", 'custom-contact-forms'); ?> --&gt;

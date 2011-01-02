@@ -32,6 +32,25 @@
 	line-height:normal;
 }
 #customcontactforms-admin  .genesis span { color:red; font-weight:bold; }
+
+#customcontactforms-admin form.blog-horizontal-form {
+	background-color:#FFFEEB;
+	width:920px;
+	border:1px solid #cccccc;
+	padding:7px;
+	display:block;
+	height:30px;
+	text-align:center;
+	margin:.5em 0 .8em 5px;
+	-moz-border-radius:11px;
+	-webkit-border-radius:11px;
+	border-radius:11px;
+}
+
+#customcontactforms-admin form.blog-horizontal-form span { font-weight:bold; padding-right:4px; }
+
+
+
 #customcontactforms-admin input[type=button] {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;

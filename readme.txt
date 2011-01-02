@@ -4,7 +4,7 @@ Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
 Tested up to: 3.0.1
-Stable tag: 4.0.7
+Stable tag: 4.0.8
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -56,6 +56,7 @@ Restrictions/Requirements:
 *	Works with Wordpress 2.8.1+, WPMU, and BuddyPress (Wordpress 3.0+ is highly recommended)
 *	PHP 5
 *	PHP register_globals and safe_mode should be set to "Off" (this is done in your php.ini file)
+*	Your theme must call wp_head() and wp_footer()
 
 == Installation ==
 1. Upload to /wp-content/plugins
@@ -89,9 +90,16 @@ I respond to emails same-day!
 *	Try filling out a form with the "Use Wordpress Mail Function" option set to "No".
 *	Make sure the "Default From" email you are using within General Settings actually exists on your server.
 *	Try deactivating other plugins to make sure there are no conflicts
+*	If there is still a problem, contact your host. This plugin utilizes existing mail functionality on your server, it doesn't create any new functions. If there is a problem, then it is with Wordpress or your host.
 
-= When I activate Custom Contact Forms, the Javascript for another plugin does not work. =
+= When I activate Custom Contact Forms, the Javascript for another plugin or my theme does not work. =
 *	Disable the "Frontend JQuery" option in General Settings. Custom Contact Forms will still work without JQuery but won't be as pretty.
+
+= I need even more customization in my forms. What can I do? =
+*	Use the Custom HTML Forms Feature (see admin panel) which allows you to write the HTML/CSS for each of your forms.
+
+= The form success popover is not showing up. =
+*	The form success popover is included in wp_footer. If your theme does not call wp_footer(), it will not work.
 
 == Upgrade Notice ==
 We are planning to add popover forms and file attachments soon.
@@ -100,6 +108,10 @@ We are planning to add popover forms and file attachments soon.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now all the screenshots are from Version 1, thus are quite out-dated. Install the plugin to see what it looks like. You won't regret it. I promise!
 
 == Changelog ==
+
+= 4.0.8 =
+*	custom-contact-forms-admin.php - Admin panel updated, WP_PLUGIN_URL to plugins_url()
+*	custom-contact-forms-front.php - WP_PLUGIN_URL to plugins_url()
 
 = 4.0.7 =
 *	custom-contact-forms-admin.php - Admin panel updated
