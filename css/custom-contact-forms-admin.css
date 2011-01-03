@@ -4,7 +4,7 @@
 	overflow:visible;
 	min-width:1020px;
 }
-#customcontactforms-admin input[type=submit] {
+#customcontactforms-admin input[type=submit], #ccf-usage-popover input[type=submit] {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
 	-moz-background-origin:padding;
@@ -416,6 +416,7 @@
 	left:50%;
 	background-color:white;
 	top:20px;
+	z-index:10000;
 	bottom:20px;
 	-moz-box-shadow:0 0 14px #123;
 	-webkit-box-shadow: 0 0 14px #123;

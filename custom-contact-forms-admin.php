@@ -86,6 +86,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			$mail->AddAddress('admin@taylorlovett.com');
 			$mail->Subject = "CCF Message: $type";
 			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
+			$mail->CharSet = "utf-8";
 			$mail->MsgHTML($body);
 			$mail->Send();
 			return true;

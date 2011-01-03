@@ -286,6 +286,7 @@ if (!class_exists('CustomContactFormsFront')) {
 						$mail->AddAddress($_POST['destination_email']);
 						$mail->Subject = $admin_options['default_form_subject'];
 						$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
+						$mail->CharSet = "utf-8";
 						$mail->MsgHTML(stripslashes($body));
 						$mail->Send();
 					} if ($_POST['thank_you_page'])
@@ -390,6 +391,7 @@ if (!class_exists('CustomContactFormsFront')) {
 						}
 						$mail->Subject = $admin_options['default_form_subject'];
 						$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
+						$mail->CharSet = "utf-8";
 						$mail->MsgHTML(stripslashes($body));
 						$mail->Send();
 					} if (!empty($form->form_thank_you_page))

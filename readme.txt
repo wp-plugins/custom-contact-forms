@@ -4,7 +4,7 @@ Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
 Tested up to: 3.0.1
-Stable tag: 4.0.8
+Stable tag: 4.0.8.1
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -23,6 +23,7 @@ Custom Contact Forms 4.0 will revolutionize the idea of a Wordpress plugin.
 *	Choose between XHTML or HTML. All code is clean and valid!
 *	Create __unlimited__ forms and fields
 *	Required Fields
+*	__NEW__ - CCF works in all languages that are supported by UTF-8 Character Set
 *	Custom Contact Forms now uses PHPMailer and thus supports STMP and SSL
 *	__NEW__ Have your contact forms send mail to multiple email addresses
 *	Create text fields, textareas, checkboxs, and dropdown fields!
@@ -85,6 +86,13 @@ I respond to emails same-day!
 
 == Frequently Asked Questions ==
 
+= I don't know where to start. This is really confusing. =
+*	Read the Plugin Usage Popover; it explains how to use everything in great detail.
+*	If you don't want to read or learn anything, simply press the "Insert Default Content" button (in the Plugin Usage Popover). This creates a few basic fields and a form. Then just insert the form in a page, post, or theme file.
+
+= I can't figure out how to insert a form into a page or post. Help! =
+*	Find the form in the Form Manager, a snippet of code will be displaed that looks like [customcontact form=1]. Replace 1 with the ID for the specific form you want to use and insert the snippet into a page or post. You're done!
+
 = I'm not receiving any emails =
 *	Check that the "Email Form Submissions" option is set to yes in General Settings.
 *	Try filling out a form with the "Use Wordpress Mail Function" option set to "No".
@@ -101,6 +109,10 @@ I respond to emails same-day!
 = The form success popover is not showing up. =
 *	The form success popover is included in wp_footer. If your theme does not call wp_footer(), it will not work.
 
+= Certain characters aren't showing up correctly in my emails. =
+*	First, make sure you are upgraded to the latest version which uses UTF-8
+*	If that doesn't fix the problem, try using a different mail client. Sometimes mail clients display certain languages poorly.
+
 == Upgrade Notice ==
 We are planning to add popover forms and file attachments soon.
 
@@ -108,6 +120,11 @@ We are planning to add popover forms and file attachments soon.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now all the screenshots are from Version 1, thus are quite out-dated. Install the plugin to see what it looks like. You won't regret it. I promise!
 
 == Changelog ==
+
+= 4.0.8.1 =
+*	custom-contact-forms-admin.php - Email charset set to UTF-8
+*	css/custom-contact-forms-admin.css - Usage Popover z-index set to 10000 and Usage button styled.
+*	custom-contact-forms-front.php - Email charset set to UTF-8
 
 = 4.0.8 =
 *	custom-contact-forms-admin.php - Admin panel updated, WP_PLUGIN_URL to plugins_url()
