@@ -127,6 +127,7 @@ Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now a
 *	js/custom-contact-forms-admin-inc.js - JQuery conflict issue fixed
 *	js/custom-contact-forms-admin-ajax.js - JQuery conflict issue fixed
 *	custom-contact-forms-admin.php - JQuery conflict issue fixed
+*	custom-contact-forms-front.php - Unnecessary JQuery dependencies removed
 
 = 4.0.8.1 =
 *	custom-contact-forms-admin.php - Email charset set to UTF-8
