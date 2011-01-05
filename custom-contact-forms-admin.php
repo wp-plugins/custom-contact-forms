@@ -189,7 +189,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				$admin_options['show_install_popover'] = 0;
 				?>
                 <script type="text/javascript" language="javascript">
-					$j(document).ready(function() {
+					jQuery(document).ready(function() {
 						showCCFUsagePopover();
 					});
 				</script>

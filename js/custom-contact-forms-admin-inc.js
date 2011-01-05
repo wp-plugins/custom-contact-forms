@@ -1,13 +1,11 @@
-var $j = jQuery.noConflict();
-
 function showCCFUsagePopover() {
-	$j("#ccf-usage-popover").fadeIn('slow');	
+	jQuery("#ccf-usage-popover").fadeIn('slow');	
 }
 
-(function($j) {
+(function(jQuery) {
   var cache = [];
   // Arguments are image paths relative to the current page.
-  $j.preloadImages = function() {
+  jQuery.preloadImages = function() {
     var args_len = arguments.length;
     for (var i = args_len; i--;) {
       var cacheImage = document.createElement('img');
@@ -19,43 +17,43 @@ function showCCFUsagePopover() {
 
 var fx = {
 	"initModal" : function() {
-		if ($j(".modal-window").length == 0) {
-			return $j("<div>")
+		if (jQuery(".modal-window").length == 0) {
+			return jQuery("<div>")
 				.addClass("modal-window")
 				.appendTo("body");
 		} else {
-			return $j(".modal-window");
+			return jQuery(".modal-window");
 		}
 	},
 	
 	"initDebugWindow" : function() {
-		if ($j(".debug-window").length == 0) {
-			debug = $j("<div>").addClass("debug-window").appendTo("body");
+		if (jQuery(".debug-window").length == 0) {
+			debug = jQuery("<div>").addClass("debug-window").appendTo("body");
 			debug.click(function() { debug.remove(); });
 			return debug;
 		} else {
-			return $j(".debug-window");
+			return jQuery(".debug-window");
 		}
 	},
 	
 	"initSaveBox" : function(text) {
-		if ($j(".save-box").length == 0) {
-			box = $j("<div>").addClass("save-box").appendTo("body");
-			$j("<a>")
+		if (jQuery(".save-box").length == 0) {
+			box = jQuery("<div>").addClass("save-box").appendTo("body");
+			jQuery("<a>")
 				.attr("href", "#")
 				.addClass("save-box-close-btn")
 				.html("&times;")
-				.click(function(event) { event.preventDefault(); $j(".save-box").fadeOut("slow"); })
+				.click(function(event) { event.preventDefault(); jQuery(".save-box").fadeOut("slow"); })
 				.appendTo(box);
-			$j("<p>").html(text + ' <img src="' + ccf_plugin_dir + '/images/wpspin_light.gif" />').appendTo(".save-box");
+			jQuery("<p>").html(text + ' <img src="' + ccf_plugin_dir + '/images/wpspin_light.gif" />').appendTo(".save-box");
 			return box;
 		} else {
-			return $j(".save-box");
+			return jQuery(".save-box");
 		}
 	},
 	
 	"boxOut": function(event) {
 		if (event != undefined) event.preventDefault();
-		$j(".modal-window").fadeOut("slow", function() { $j(this).remove(); });
+		jQuery(".modal-window").fadeOut("slow", function() { jQuery(this).remove(); });
 	}
 };
