@@ -28,7 +28,7 @@ if (!class_exists('CustomContactFormsFront')) {
 			if ($admin_options['enable_jquery'] == 1) {
 				wp_enqueue_script('jquery');
 				wp_enqueue_script('jquery-tools', plugins_url() . '/custom-contact-forms/js/jquery.tools.min.js');
-				wp_enqueue_script('ccf-main', plugins_url() . '/custom-contact-forms/js/custom-contact-forms.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-resizable'), '1.0');
+				wp_enqueue_script('ccf-main', plugins_url() . '/custom-contact-forms/js/custom-contact-forms.js', array('jquery'), '1.0');
 			}
 		}
 		
