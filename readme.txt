@@ -4,7 +4,7 @@ Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
 Tested up to: 3.0.4
-Stable tag: 4.0.9
+Stable tag: 4.0.9.1
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -101,7 +101,7 @@ I respond to emails same-day!
 *	If there is still a problem, contact your host. This plugin utilizes existing mail functionality on your server, it doesn't create any new functions. If there is a problem, then it is with Wordpress or your host.
 
 = When I activate Custom Contact Forms, the Javascript for another plugin or my theme does not work. =
-*	Disable the "Frontend JQuery" option in General Settings. Custom Contact Forms will still work without JQuery but won't be as pretty.
+*	Disable the "Frontend jQuery" option in General Settings. Custom Contact Forms will still work without JQuery but won't be as pretty.
 
 = I need even more customization in my forms. What can I do? =
 *	Use the Custom HTML Forms Feature (see admin panel) which allows you to write the HTML/CSS for each of your forms.
@@ -120,6 +120,10 @@ We are planning to add popover forms and file attachments soon.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now all the screenshots are from Version 1, thus are quite out-dated. Install the plugin to see what it looks like. You won't regret it. I promise!
 
 == Changelog ==
+
+= 4.0.9.1 =
+*	custom-contact-forms-admin.php - Minor display changes
+*	css/custom-contact-forms-admin.css - Minor display changes to field options
 
 = 4.0.9 =
 *	js/custom-contact-forms.js - JQuery conflict issue fixed

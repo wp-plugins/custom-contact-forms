@@ -371,7 +371,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				<input type="hidden" name="meta_adtracking" value="CCF_-_Wordpress_Plugins_Horizontal" />
 				<input type="hidden" name="meta_message" value="1" />
 				<input type="hidden" name="meta_required" value="name,email" />
-				<span>WordPress Plugin Offers & Exclusive Tutorials</span>
+				<span>WP Blogging Tips, Downloads, SEO Tricks & Exclusive Tutorials</span>
                 <input type="text" name="name" value="Your Name" onclick="value=''" />
                 <input type="text" name="email" value="Your Email" onclick="value=''" />
                 <input type="submit" value="Sign Up for Free" />
@@ -824,7 +824,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				</tfoot>
 			  </table>
 			  <a name="manage-field-options"></a>
-			  <div id="field-options" class="postbox">
+			  <div id="manage-field-options" class="postbox">
 				<h3 class="hndle"><span>
 				  <?php _e("Manage Field Options (for Dropdown and Radio Fields)", 'custom-contact-forms'); ?>
 				  </span></h3>
@@ -886,12 +886,16 @@ if (!class_exists('CustomContactFormsAdmin')) {
 					  <?php _e("Action", 'custom-contact-forms'); ?>
 					</div>
 				  </div>
+                </div>
+              </div>
+              <div id="create-field-options" class="postbox">
+				<h3 class="hndle"><span>
+				  <?php _e("Create Field Options", 'custom-contact-forms'); ?>
+				  </span></h3>
+				<div class="inside">
 				  <form method="post" action="<?php echo $_SERVER['REQUEST_URI']?>">
 					<input type="hidden" name="object_type" value="field_option" />
-					<div class="create-field-options-header">
-					  <?php _e("Create a Field Option", 'custom-contact-forms'); ?>
-					</div>
-					<ul id="create-field-options">
+					<ul>
 					  <li>
 						<label for="option[option_slug]">*
 						<?php _e("Option Slug:", 'custom-contact-forms'); ?>

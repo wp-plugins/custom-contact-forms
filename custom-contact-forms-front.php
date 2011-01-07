@@ -13,12 +13,16 @@ if (!class_exists('CustomContactFormsFront')) {
 
 		function frontInit() {
 			CustomContactFormsStatic::startSession();
+			$this->registerFrontEndStyles();
 			$this->processForms();
+		}
+		
+		function registerFrontEndStyles() {
+			wp_register_style('CCFStandardsCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-standards.css');
+           	wp_register_style('CCFFormsCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms.css');
 		}
 	
 		function insertFrontEndStyles() {
-            wp_register_style('CCFStandardsCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-standards.css');
-           	wp_register_style('CCFFormsCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms.css');
            	wp_enqueue_style('CCFStandardsCSS');
 			wp_enqueue_style('CCFFormsCSS');
 		}

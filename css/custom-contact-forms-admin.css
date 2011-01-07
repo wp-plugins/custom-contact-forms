@@ -118,6 +118,7 @@
 	padding:7px;
 	display:block;
 	height:30px;
+	clear:both;
 	text-align:center;
 	margin:.5em 0 .8em 5px;
 	-moz-border-radius:11px;
@@ -184,28 +185,39 @@
 #customcontactforms-admin #import input[type=checkbox] { margin-left:9px; }
 #customcontactforms-admin #import p { padding:0 0 5px 0; margin:0; }
 
-#customcontactforms-admin #field-options {
-	clear:both;
-	width:1000px;
+
+
+#customcontactforms-admin #create-field-options {
+	float:left;
+	width:440px;
 	margin:20px 1em 1em 5px;
 }
-#customcontactforms-admin #field-options #edit-field-options {
+#customcontactforms-admin #manage-field-options {
+	float:left;
+	clear:left;
+	width:510px;
+	border-left:1px solid #ccc;
+	margin:20px 1em 1em 1em;
+}
+
+
+#customcontactforms-admin #manage-field-options #edit-field-options {
 	float:left;
 	width:500px;
 	font-size:1em;
 	margin: 0 0 5px 0;
 	clear:left;
 }
-#customcontactforms-admin #field-options #edit-field-comments {
+#customcontactforms-admin #manage-field-options #edit-field-comments {
 	width:500px;
 	font-size:1em;
 	margin: 8px 5px 5px 480px;
 	clear:left;
 }
-#customcontactforms-admin #field-options ul#edit-field-options li { 
+#customcontactforms-admin #manage-field-options ul#edit-field-options li { 
 	margin-bottom:3px;
 }
-#customcontactforms-admin #field-options .option-header {
+#customcontactforms-admin #manage-field-options .option-header {
 	-moz-border-radius:6px;
 	-khtml-border-radius:6px;
 	-webkit-border-radius:6px;
@@ -221,19 +233,19 @@
 	clear:both;
 	margin:4px 0 8px 0;
 }
-#customcontactforms-admin #field-options .slug, 
-#customcontactforms-admin #field-options .label, 
-#customcontactforms-admin #field-options .option-value, 
-#customcontactforms-admin #field-options .action {
+#customcontactforms-admin #manage-field-options .slug, 
+#customcontactforms-admin #manage-field-options .label, 
+#customcontactforms-admin #manage-field-options .option-value, 
+#customcontactforms-admin #manage-field-options .action {
 	width:100px;
 	display:block;
 	float:left;
 	text-align:center;
 	padding:6px 0 0 0;
 }
-#customcontactforms-admin #field-options .action { width:155px; }
-#customcontactforms-admin #field-options .option-value { width:125px; }
-#customcontactforms-admin #field-options .create-field-options-header {
+#customcontactforms-admin #manage-field-options .action { width:155px; }
+#customcontactforms-admin #manage-field-options .option-value { width:125px; }
+#customcontactforms-admin #manage-field-options .create-field-options-header {
 	-moz-border-radius:6px;
 	-khtml-border-radius:6px;
 	-webkit-border-radius:6px;
@@ -247,11 +259,9 @@
 	font-weight:bold;
 	margin-left:510px;
 }
-#customcontactforms-admin #field-options #create-field-options {
-	margin-left:520px;
-}
-#customcontactforms-admin #field-options .evenrow-field-options div  { background-color:#f9f9f9; }
-#customcontactforms-admin #field-options .evenrow-field-options { background-color:#f9f9f9; }
+
+#customcontactforms-admin #manage-field-options .evenrow-field-options div  { background-color:#f9f9f9; }
+#customcontactforms-admin #manage-field-options .evenrow-field-options { background-color:#f9f9f9; }
 #customcontactforms-admin #general-settings label { font-weight:bold; }
 .ccf-style-example {
 	background:url(../images/style-example.gif) no-repeat top left;
@@ -457,19 +467,7 @@
 #ccf-usage-popover div.popover-body ul li { margin-left:20px; }
 #ccf-usage-popover div.popover-body p { padding:8px; font-size:1em; text-align:left; }
 #ccf-usage-popover div.popover-body form { width:100%; text-align:center; }
-#ccf-usage-popover div.popover-body .insert-default-content-button {
-	width:auto;
-	padding:8px;
-	margin:5px auto 5px auto;
-	font-size:1.5em;
-	font-weight:bold;
-	background-color:#f0f0f0;
-	font-family:Verdana, Arial, Helvetica, sans-serif;
-	-moz-border-radius:6px;
-	-khtml-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
-}
+
 
 .modal-overlay {
 	position:fixed;
