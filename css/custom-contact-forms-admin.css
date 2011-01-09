@@ -49,6 +49,8 @@
 	line-height:normal;
 }
 
+#customcontactforms-admin form.blog-horizontal-form input[type=text] { width:100px; }
+
 #customcontactforms-admin form.blog-horizontal-form span { font-weight:bold; padding-right:4px; }
 
 
