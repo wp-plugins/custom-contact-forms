@@ -157,7 +157,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			?>
 			<script type="text/javascript" language="javascript">
 				var attaching = "<?php _e('Attaching', 'custom-contact-forms'); ?>";
-				var dettaching = "<?php _e('Dettaching', 'custom-contact-forms'); ?>";
+				var detaching = "<?php _e('Detaching', 'custom-contact-forms'); ?>";
 				var saving = "<?php _e('Saving', 'custom-contact-forms'); ?>";
 				var more_options = "<?php _e('More Options', 'custom-contact-forms'); ?>";
 				var expand = "<?php _e('Expand', 'custom-contact-forms'); ?>";
@@ -237,10 +237,10 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				parent::addFieldToForm($_POST['attach_object_id'], $_POST['fid']);
 			} elseif ($_POST['attach_field_option']) {
 				parent::addFieldOptionToField($_POST['attach_object_id'], $_POST['fid']);
-			} elseif ($_POST['dettach_field']) {
-				parent::dettachField($_POST['dettach_object_id'], $_POST['fid']);
-			} elseif ($_POST['dettach_field_option']) {
-				parent::dettachFieldOption($_POST['dettach_object_id'], $_POST['fid']);
+			} elseif ($_POST['detach_field']) {
+				parent::detachField($_POST['detach_object_id'], $_POST['fid']);
+			} elseif ($_POST['detach_field_option']) {
+				parent::detachFieldOption($_POST['detach_object_id'], $_POST['fid']);
 			}  elseif ($_POST['style_create']) {
 				parent::insertStyle($_POST['style']);
 			}  elseif ($_POST['style_edit']) {
@@ -293,16 +293,16 @@ if (!class_exists('CustomContactFormsAdmin')) {
 							break;
 						}
 					break;
-					case 'dettach':
+					case 'detach':
 						//echo '<div style="margin-left:20px;">';
 						//print_r($_POST);
 						//echo '</div>';
 						switch ($_POST['object_type']) {
 							case 'form':
-								parent::dettachField($_POST['dettach_object_id'], $_POST['dettach_from']);
+								parent::detachField($_POST['detach_object_id'], $_POST['detach_from']);
 							break;
 							case 'field':
-								parent::dettachFieldOption($_POST['dettach_object_id'], $_POST['dettach_from']);
+								parent::detachFieldOption($_POST['detach_object_id'], $_POST['detach_from']);
 							break;
 						}
 					break;
@@ -659,13 +659,13 @@ if (!class_exists('CustomContactFormsAdmin')) {
 						</div>
 					  <?php 
 			if ($show_field_options) { ?>
-					  <div class="dettach-field-options">
+					  <div class="detach-field-options">
 						<?php if (empty($attached_options)) { ?>
-						<select class="onObject<?php echo $fields[$i]->id ?> objectTypeField" name="dettach_object_id">
+						<select class="onObject<?php echo $fields[$i]->id ?> objectTypeField" name="detach_object_id">
 						  <option value="-1">Nothing Attached!</option>
 						</select>
 						<?php } else { ?>
-						<select name="dettach_object_id" class="onObject<?php echo $fields[$i]->id ?> objectTypeField">
+						<select name="detach_object_id" class="onObject<?php echo $fields[$i]->id ?> objectTypeField">
 						  <?php
 			foreach ($attached_options as $option_id) {
 			$option = parent::selectFieldOption($option_id);
@@ -676,10 +676,10 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			?>
 						</select>
 						<?php } ?>
-						<input type="submit" class="dettach-button" name="dettach_field_option" value="<?php _e("Dettach Field Option", 'custom-contact-forms'); ?>" />
+						<input type="submit" class="detach-button" name="detach_field_option" value="<?php _e("Detach Field Option", 'custom-contact-forms'); ?>" />
 						<br />
 						<span class="red bold">*</span>
-						<?php _e("Dettach field options you", 'custom-contact-forms'); ?>
+						<?php _e("Detach field options you", 'custom-contact-forms'); ?>
 						<a href="#create-field-options">
 						<?php _e("create", 'custom-contact-forms'); ?>
 						</a>. </div>
@@ -1005,14 +1005,14 @@ if (!class_exists('CustomContactFormsAdmin')) {
 							  <input type="text" class="width100" name="form[form_thank_you_page]" value="<?php echo $forms[$i]->form_thank_you_page; ?>" /></td>
 						  </tr>
 						  <tr>
-							<td colspan="3"><label for="dettach_object_id"><span>
+							<td colspan="3"><label for="detach_object_id"><span>
 							  <?php _e("Attached Fields:", 'custom-contact-forms'); ?>
 							  </span></label>
 							  <?php
 				$attached_fields = parent::getAttachedFieldsArray($forms[$i]->id);
-				if (empty($attached_fields)) echo '<select class="onObject' . $forms[$i]->id . ' objectTypeForm" name="dettach_object_id"><option value="-1">Nothing Attached!</option></select> ';
+				if (empty($attached_fields)) echo '<select class="onObject' . $forms[$i]->id . ' objectTypeForm" name="detach_object_id"><option value="-1">Nothing Attached!</option></select> ';
 				else {
-					echo '<select name="dettach_object_id" class="onObject' . $forms[$i]->id . ' objectTypeForm">';
+					echo '<select name="detach_object_id" class="onObject' . $forms[$i]->id . ' objectTypeForm">';
 					foreach($attached_fields as $attached_field) {
 						$this_field = parent::selectField($attached_field, '');
 						echo $this_field->field_slug . ' <option value="'.$this_field->id.'">'.$this_field->field_slug.'</option>';
@@ -1020,7 +1020,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 					echo '</select>';
 				}
 			  ?>
-							  <input type="submit" class="dettach-button" value="<?php _e("Dettach Field", 'custom-contact-forms'); ?>" name="dettach_field" />
+							  <input type="submit" class="detach-button" value="<?php _e("Detach Field", 'custom-contact-forms'); ?>" name="detach_field" />
 							  <br />
 							  <span class="red bold">*</span>
 							  <?php _e("Attach fields in the order you want them displayed.", 'custom-contact-forms'); ?>

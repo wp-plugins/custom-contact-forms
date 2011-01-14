@@ -4,7 +4,7 @@ Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
 Tested up to: 3.0.4
-Stable tag: 4.0.9.2
+Stable tag: 4.0.9.5
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -113,6 +113,12 @@ I respond to emails same-day!
 *	First, make sure you are upgraded to the latest version which uses UTF-8
 *	If that doesn't fix the problem, try using a different mail client. Sometimes mail clients display certain languages poorly.
 
+
+= Attached fields and field options are randomly disappearing. =
+*	That bug was fixed in version 4.0.9.5. Please upgrade.
+*	If that still doesn't fix the problem, send me an email.
+
+
 == Upgrade Notice ==
 We are planning to add popover forms and file attachments soon.
 
@@ -120,6 +126,17 @@ We are planning to add popover forms and file attachments soon.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now all the screenshots are from Version 1, thus are quite out-dated. Install the plugin to see what it looks like. You won't regret it. I promise!
 
 == Changelog ==
+
+= 4.0.9.5 =
+*	css/custom-contact-forms-admin.css - Minor display changes
+*	js/custom-contact-forms.js - JQuery conflict issue fixed
+*	js/custom-contact-forms-admin.js - JQuery conflict issue fixed
+*	js/custom-contact-forms-admin-inc.js - JQuery conflict issue fixed
+*	js/custom-contact-forms-admin-ajax.js - JQuery conflict issue fixed
+*	custom-contact-forms-admin.php - Fields disappearing bug problem fixed
+*	custom-contact-forms.php - Fields disappearing bug problem fixed
+*	modules/db/custom-contact-forms-db.php - Fields disappearing bug problem fixed
+
 
 = 4.0.9.2 =
 *	css/custom-contact-forms-admin.css - Minor display changes

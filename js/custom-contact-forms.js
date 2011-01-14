@@ -1,6 +1,7 @@
 // Custom Contact Forms plugin javascript
+$j = jQuery.noConflict();
 
-jQuery(document).ready(function ($) {
+$j(document).ready(function ($) {
 	$('<a></a>')
 		.addClass('ccf-popover-close')
 		.html('[close]')

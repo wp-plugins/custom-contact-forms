@@ -260,7 +260,7 @@
           <li><span>
             <?php _e('Attach Fields:', 'custom-contact-forms'); ?>
             </span>
-            <?php _e("After creating a form you are given the option to attach (and dettach) fields to that specific form. Forms are useless until you attach fields.", 'custom-contact-forms'); ?>
+            <?php _e("After creating a form you are given the option to attach (and detach) fields to that specific form. Forms are useless until you attach fields.", 'custom-contact-forms'); ?>
           </li>
         </ul>
         <p>

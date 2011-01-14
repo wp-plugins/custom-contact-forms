@@ -164,6 +164,22 @@ if (!class_exists('CustomContactFormsDB')) {
 			$this->updateTableCharSets();
 		}
 		
+		function serializeFormFields() {
+			$forms = $this->selectAllForms();
+			foreach ($forms as $form) {
+				$fields = $this->getAttachedFieldsArray($form->id);
+				$this->updateForm(array('form_fields' => $fields), $form->id);
+			}
+		}
+		
+		function serializeFieldOptions() {
+			$fields = $this->selectAllFields();
+			foreach ($fields as $field) {
+				$options = $this->getAttachedFieldOptionsArray($field->id);
+				$this->updateField(array('field_options' => $options), $field->id);
+			}
+		}
+		
 		function insertFixedFields() {
 			$captcha = array('field_slug' => 'captcha', 'field_label' => __('Type the numbers.', 'custom-contact-forms'), 'field_type' => 'Text', 'field_value' => '', 'field_maxlength' => '100', 'user_field' => 0, 'field_instructions' => 'Type the numbers displayed in the image above.');
 			$ishuman = array('field_slug' => 'ishuman', 'field_label' => __('Check if you are human.', 'custom-contact-forms'), 'field_type' => 'Checkbox', 'field_value' => '1', 'field_maxlength' => '0', 'user_field' => 0, 'field_instructions' => 'This helps us prevent spam.');
@@ -260,20 +276,23 @@ if (!class_exists('CustomContactFormsDB')) {
 			return ($wpdb->get_var("show tables like '". CCF_USER_DATA_TABLE . "'") == CCF_USER_DATA_TABLE);
 		}
 		
-		function updateForm($form, $fid) {
+		function updateForm($form, $fid, $skip_encode = array('form_fields')) {
 			global $wpdb;
 			if (!empty($form['form_slug'])) {
 				$test = $this->selectForm('', $this->formatSlug($form['form_slug']));
 				if (!empty($test) and $test->id != $fid) return false;
 				$form['form_slug'] = $this->formatSlug($form['form_slug']);
 			}
+			if (isset($form['form_fields']))
+				$form['form_fields'] = serialize($form['form_fields']);
 			foreach ($form as $key => $value)
-					$form[$key] = CustomContactFormsStatic::encodeOption($value);
+					if (!in_array($key, $skip_encode))
+						$form[$key] = CustomContactFormsStatic::encodeOption($value);
 			$wpdb->update(CCF_FORMS_TABLE, $form, array('id' => $fid));
 			return true;
 		}
 		
-		function updateField($field, $fid) {
+		function updateField($field, $fid, $skip_encode = array('field_options')) {
 			global $wpdb;
 			if (!empty($field['field_slug'])) {
 				$test = $this->selectField('', $this->formatSlug($field['field_slug']));
@@ -281,7 +300,10 @@ if (!class_exists('CustomContactFormsDB')) {
 					return false;
 				$field['field_slug'] = $this->formatSlug($field['field_slug']);
 			}
+			if (isset($field['field_options']))
+				$field['field_options'] = serialize($field['field_options']);
 			foreach ($field as $key => $value)
+				if (!in_array($key, $skip_encode))
 					$field[$key] = CustomContactFormsStatic::encodeOption($value);
 			$wpdb->update(CCF_FIELDS_TABLE, $field, array('id' => $fid));
 			return true;
@@ -323,7 +345,7 @@ if (!class_exists('CustomContactFormsDB')) {
 		
 		function deleteField($fid, $slug = NULL) {
 			global $wpdb;
-			$this->dettachFieldAll($fid);
+			$this->detachFieldAll($fid);
 			$where_params = ($slug == NULL) ? "id='$fid'" : "field_slug='$slug'";
 			$wpdb->query("DELETE FROM " . CCF_FIELDS_TABLE . ' WHERE ' . $where_params);
 			return false;
@@ -337,7 +359,7 @@ if (!class_exists('CustomContactFormsDB')) {
 		
 		function deleteStyle($sid, $slug = NULL) {
 			global $wpdb;
-			$this->dettachStyleAll($sid);
+			$this->detachStyleAll($sid);
 			$where_params = ($slug == NULL) ? "id='$sid'" : "style_slug='$slug'";
 			$wpdb->query("DELETE FROM " . CCF_STYLES_TABLE . ' WHERE ' . $where_params);
 			return true;
@@ -345,7 +367,7 @@ if (!class_exists('CustomContactFormsDB')) {
 		
 		function deleteFieldOption($oid, $slug = NULL) {
 			global $wpdb;
-			$this->dettachFieldOptionAll($oid);
+			$this->detachFieldOptionAll($oid);
 			$where_params = ($slug == NULL) ? "id='$oid'" : "option_slug='$slug'";
 			$wpdb->query("DELETE FROM " . CCF_FIELD_OPTIONS_TABLE . ' WHERE ' . $where_params);
 			return true;
@@ -423,8 +445,8 @@ if (!class_exists('CustomContactFormsDB')) {
 			if (empty($form)) return false;
 			$fields = $this->getAttachedFieldsArray($form_id);
 			if (!in_array($field_id, $fields)) {
-				$new_fields = $form->form_fields . $field_id . ',';
-				$this->updateForm(array('form_fields' => $new_fields), $form_id);
+				$fields[] = $field_id;
+				$this->updateForm(array('form_fields' => $fields), $form_id);
 				return true;
 			}
 			return false;
@@ -437,62 +459,58 @@ if (!class_exists('CustomContactFormsDB')) {
 			if (empty($field)) return false;
 			$options = $this->getAttachedFieldOptionsArray($field_id);
 			if (!in_array($option_id, $options)) {
-				$new_options = $field->field_options . $option_id . ',';
-				$this->updateField(array('field_options' => $new_options), $field_id);
+				$options[] = $option_id;
+				$this->updateField(array('field_options' => $options), $field_id);
 				return true;
 			}
 			return false;
 		}
 		
 		function getAttachedFieldsArray($form_id) {
-			$form = $this->selectForm($form_id, '');
-			$out = explode(',', $form->form_fields);
-			if (!empty($out)) array_pop($out);
-			return $out;
+			$form = $this->selectForm($form_id);
+			$out = unserialize($form->form_fields);
+			return (empty($out)) ? array() : $out;
 		}
 		
 		function getAttachedFieldOptionsArray($field_id) {
 			$field = $this->selectField($field_id);
-			$out = explode(',', $field->field_options);
-			if (!empty($out)) array_pop($out);
-			return $out;
+			$out = unserialize($field->field_options);
+			return (empty($out)) ? array() : $out;
 		}
 		
-		function dettachField($field_id, $form_id) {
+		function detachField($field_id, $form_id) {
 			$fields = $this->getAttachedFieldsArray($form_id);
 			if (!empty($fields) && in_array($field_id, $fields)) {
-				$form = $this->selectForm($form_id);
-				$new_fields = str_replace($field_id . ',', '', $form->form_fields);
-				$this->updateForm(array('form_fields' => $new_fields), $form_id);
+				unset($fields[array_search($field_id, $fields)]);
+				$this->updateForm(array('form_fields' => array_unique($fields)), $form_id);
 				return true;
 			}
 			return false;
 		}
 
-		function dettachFieldOption($option_id, $field_id) {
+		function detachFieldOption($option_id, $field_id) {
 			$options = $this->getAttachedFieldOptionsArray($field_id);
 			if (!empty($options) && in_array($option_id, $options)) {
-				$field = $this->selectField($field_id);
-				$new_options = str_replace($option_id . ',', '', $field->field_options);
-				$this->updateField(array('field_options' => $new_options), $field_id);
+				unset($options[array_search($option_id, $options)]);
+				$this->updateField(array('field_options' => array_unique($options)), $field_id);
 				return true;
 			}
 			return false;
 		}
 				
-		function dettachFieldAll($field_id) {
+		function detachFieldAll($field_id) {
 			$forms = $this->selectAllForms();
 			foreach ($forms as $form)
-				$this->dettachField($field_id, $form->id);
+				$this->detachField($field_id, $form->id);
 		}
 		
-		function dettachFieldOptionAll($option_id) {
+		function detachFieldOptionAll($option_id) {
 			$fields = $this->selectAllFields();
 			foreach ($fields as $field)
-				$this->dettachFieldOption($option_id, $field->id);
+				$this->detachFieldOption($option_id, $field->id);
 		}
 		
-		function dettachStyleAll($style_id) {
+		function detachStyleAll($style_id) {
 			$forms = $this->selectAllForms();
 			foreach ($forms as $form) {
 				if ($form->form_style == $style_id) {
