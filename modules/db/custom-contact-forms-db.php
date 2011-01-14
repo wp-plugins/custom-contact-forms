@@ -167,16 +167,30 @@ if (!class_exists('CustomContactFormsDB')) {
 		function serializeFormFields() {
 			$forms = $this->selectAllForms();
 			foreach ($forms as $form) {
-				$fields = $this->getAttachedFieldsArray($form->id);
-				$this->updateForm(array('form_fields' => $fields), $form->id);
+				$fields = $form->form_fields;
+				$last_char = $fields[strlen($fields)-1];
+				if (preg_match('/(,|[0-9])/si', $last_char)) {
+					$fields = explode(',', $fields);
+					if ($last_char == ',' && !empty($fields)) {
+						array_pop($fields);
+					}
+					$this->updateForm(array('form_fields' => $fields), $form->id);
+				}
 			}
 		}
 		
 		function serializeFieldOptions() {
 			$fields = $this->selectAllFields();
 			foreach ($fields as $field) {
-				$options = $this->getAttachedFieldOptionsArray($field->id);
-				$this->updateField(array('field_options' => $options), $field->id);
+				$options = $field->field_options;
+				$last_char = $options[strlen($options)-1];
+				if (preg_match('/(,|[0-9])/si', $last_char)) {
+					$options = explode(',', $options);
+					if ($last_char == ',' && !empty($options)) {
+						array_pop($options);
+					}
+					$this->updateField(array('field_options' => $options), $field->id);
+				}
 			}
 		}
 		
