@@ -1,10 +1,9 @@
-
-$j(document).ready(function(){
+jQuery(document).ready(function(){
 							
-	$j('.form-extra-options').hide();
-	$j('.form-options-expand').prepend('<input type="button" class="form-options-expand-link" value="' + more_options + '" />');
-	$j('.form-options-expand-link').click(function() {
-		$j(this)
+	jQuery('.form-extra-options').hide();
+	jQuery('.form-options-expand').prepend('<input type="button" class="form-options-expand-link" value="' + more_options + '" />');
+	jQuery('.form-options-expand-link').click(function() {
+		jQuery(this)
 			.parent()
 			.parent()
 			.parent()
@@ -13,10 +12,10 @@ $j(document).ready(function(){
 			.toggle();
 	});
 	
-	$j('.submission-content').hide();
-	$j('.submission-content-expand').prepend('<input type="button" class="submission-content-expand-button" value="' + expand + '" />');
-	$j('.submission-content-expand-button').click(function() {
-		$j(this)
+	jQuery('.submission-content').hide();
+	jQuery('.submission-content-expand').prepend('<input type="button" class="submission-content-expand-button" value="' + expand + '" />');
+	jQuery('.submission-content-expand-button').click(function() {
+		jQuery(this)
 		.parent()
 		.parent()
 		.parent()
@@ -25,10 +24,10 @@ $j(document).ready(function(){
 		.toggle();
 	});
 	
-	$j('.fixed-fields-extra-options').hide();
-	$j('.fixed-fields-options-expand').prepend('<input type="button" class="fixed-fields-options-expand-link" value="' + more_options + '" />');
-	$j('.fixed-fields-options-expand-link').click(function() {
-		$j(this)
+	jQuery('.fixed-fields-extra-options').hide();
+	jQuery('.fixed-fields-options-expand').prepend('<input type="button" class="fixed-fields-options-expand-link" value="' + more_options + '" />');
+	jQuery('.fixed-fields-options-expand-link').click(function() {
+		jQuery(this)
 			.parent()
 			.parent()
 			.parent()
@@ -37,10 +36,10 @@ $j(document).ready(function(){
 			.toggle();
 	});
 	
-	$j('.fields-extra-options').hide();
-	$j('.fields-options-expand').prepend('<input type="button" class="fields-options-expand-link" value="' + more_options + '" />');
-	$j('.fields-options-expand-link').click(function() {
-		$j(this)
+	jQuery('.fields-extra-options').hide();
+	jQuery('.fields-options-expand').prepend('<input type="button" class="fields-options-expand-link" value="' + more_options + '" />');
+	jQuery('.fields-options-expand-link').click(function() {
+		jQuery(this)
 			.parent()
 			.parent()
 			.parent()
@@ -48,14 +47,14 @@ $j(document).ready(function(){
 			.find(".fields-extra-options:first")
 			.toggle();
 	});
-	$j('.usage-popover-button').click(function() {
+	jQuery('.usage-popover-button').click(function() {
 		showCCFUsagePopover();
 	});
-	$j("#ccf-usage-popover .close").click(function() {
-		$j("#ccf-usage-popover").fadeOut();											  
+	jQuery("#ccf-usage-popover .close").click(function() {
+		jQuery("#ccf-usage-popover").fadeOut();											  
 	});
 	
-	$j("a[title].toollink").tooltip({
+	jQuery("a[title].toollink").tooltip({
 		position: "bottom left",
 		offset: [-2, 10],
 		effect: "fade",
