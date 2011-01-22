@@ -1,0 +1,59 @@
+#ccf-dashboard { 
+	width:100%;
+	margin:0 0 15px 0;
+}
+#ccf-dashboard  tr { margin:0; }
+#ccf-dashboard  td { margin:0; padding: 3px;}
+#ccf-dashboard  tr.even { background-color:#f0f0f0; }
+
+#ccf-dashboard  .ccf-view-submission {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	background:#F2F2F2 url(../images/white-grad.png) repeat-x scroll left top;
+	text-shadow:0 1px 0 #FFFFFF;
+}
+
+#ccf-dashboard  .view-submission-popover {
+	display:none;
+	z-index:20000;
+	border: 9px solid #efefef;
+	border-spacing:0;
+	width:680px;
+	padding:0px;
+	margin:0 0 0 -340px;
+	-moz-border-radius:10px;
+	-khtml-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:15px;
+	position:fixed;
+	left:50%;
+	background-color:white;
+	top:20px;
+	padding:20px;
+	bottom:20px;
+	-moz-box-shadow:0 0 14px #123;
+	-webkit-box-shadow: 0 0 14px #123;
+	box-shadow:0 0 14px #123;
+}
+#ccf-dashboard  .view-submission-popover  .close {
+	position:absolute;
+	top:5px;
+	right:5px;
+	font-size:25px;
+	color:#000;
+}
+#ccf-dashboard  .view-submission-popover div.top  { height:40px; }
+#ccf-dashboard  .view-submission-popover div.top .right { float:right; width:40%; }
+#ccf-dashboard  .view-submission-popover div.top .right p { margin:3px; padding:0; }
+#ccf-dashboard  .view-submission-popover div.top .right span { font-weight:bold; }
+#ccf-dashboard  .view-submission-popover div.top .left { float:left; font-size:2em; width:60%; }
+#ccf-dashboard  .view-submission-popover ul {
+	min-height:30px;
+	width:95%;
+	margin:3px auto 2px auto;
+}
+#ccf-dashboard  .view-submission-popover .separate { clear:both; width:100%; border-bottom:1px solid #ccc; height:1px; margin:3px; }
+#ccf-dashboard  .view-submission-popover ul li {  float:left; margin-right:9px; }
+#ccf-dashboard  .view-submission-popover ul li p { display:block; }
+#ccf-dashboard  .view-submission-popover ul li div { font-weight:bold; border-bottom:1px solid #666; padding:2px; text-align:left; }
