@@ -79,10 +79,9 @@ Restrictions/Requirements:
 Custom Contact Forms is an extremely intuitive plugin allowing you to create any type of contact form you can image. CCF is very user friendly but with possibilities comes complexity. __It is recommend that you click the button in the instructions section of the plugin to add default fields, field options, and forms.__ The default content will help you get a feel for the amazing things you can accomplish with this plugin. __It is also recommended you click the "Show Plugin Usage Popover"__ in the instruction area of the admin page to read in detail about all parts of the plugin.
 
 == Support ==
-For questions, feature requests, and support concerning the Custom Contact Forms plugin, please email me at:
-admin@taylorlovett.com
+For questions, feature requests, and support concerning the Custom Contact Forms plugin, please visit:
+http://www.taylorlovett.com/wordpress-plugins
 
-I respond to emails same-day!
 
 == Frequently Asked Questions ==
 
