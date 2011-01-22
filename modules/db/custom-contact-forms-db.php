@@ -391,6 +391,13 @@ if (!class_exists('CustomContactFormsDB')) {
 			return (in_array(strtolower($role), $form_access_array));
 		}
 		
+		function getRolesArray() {
+			global $wp_roles;
+			$out = $wp_roles->get_names();
+			$out[] = __('Non-Registered User', 'custom-contact-forms');
+			return $out;
+		}
+		
 		function getFormAccessArray($form_access_string) {
 			$arr = unserialize(strtolower($form_access_string));
 			if ($arr == false || empty($form_access_string)) $arr = array();

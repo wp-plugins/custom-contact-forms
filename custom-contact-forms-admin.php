@@ -163,13 +163,6 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			wp_enqueue_style('CCFColorPickerCSS');
 		}
 		
-		function getRolesArray() {
-			global $wp_roles;
-			$out = $wp_roles->get_names();
-			$out[] = 'Non-Registered User';
-			return $out;
-		}
-		
 		function insertAdminScripts() {
 			$js_version = '1.0.18';
 			$admin_options = parent::getAdminOptions();
@@ -452,6 +445,8 @@ if (!class_exists('CustomContactFormsAdmin')) {
 						<input type="hidden" name="object_type" value="field" />
 						<input type="submit" value="<?php _e("Create Field", 'custom-contact-forms'); ?>" name="object_create" class="create-button" />
 					  </li>
+					  <li class="attach"><span class="ccf-red">*</span> <?php _e('If this is a dropdown or radio field, you should go to the field manager below to attach field options after you create it.', 'custom-contact-forms'); ?></li>
+					  
 					</ul>
 				  </form>
 				</div>
@@ -480,24 +475,6 @@ if (!class_exists('CustomContactFormsAdmin')) {
 						<?php _e("This text is displayed above the form as the heading.", 'custom-contact-forms'); ?>
 					  </li>
 					  <li>
-						<label for="object[form_method]">*
-						<?php _e("Form Method:", 'custom-contact-forms'); ?>
-						</label>
-						<select name="object[form_method]">
-						  <option>Post</option>
-						  <option>Get</option>
-						</select>
-						<?php _e("If unsure, leave as is.", 'custom-contact-forms'); ?>
-					  </li>
-					  <li>
-						<label for="object[form_action]">
-						<?php _e("Form Action:", 'custom-contact-forms'); ?>
-						</label>
-						<input type="text" name="object[form_action]" value="" />
-						<br />
-						<?php _e("If unsure, leave blank. Enter a URL here, if and only if you want to process your forms somewhere else, for example with a service like Aweber or InfusionSoft.", 'custom-contact-forms'); ?>
-					  </li>
-					  <li>
 						<label for="object[form_action]">
 						<?php _e("Form Style:", 'custom-contact-forms'); ?>
 						</label>
@@ -512,20 +489,28 @@ if (!class_exists('CustomContactFormsAdmin')) {
 						<input type="text" maxlength="200" name="object[submit_button_text]" />
 					  </li>
 					  <li>
-						<label for="object[custom_code]">
-						<?php _e("Custom Code:", 'custom-contact-forms'); ?>
-						</label>
-						<input type="text" name="object[custom_code]" />
-						<br />
-						<?php _e("If unsure, leave blank. This field allows you to insert custom HTML directly after the starting form tag.", 'custom-contact-forms'); ?>
-					  </li>
-					  <li>
 						<label for="object[form_email]">
 						<?php _e("Form Destination Email:", 'custom-contact-forms'); ?>
 						</label>
 						<input type="text" name="object[form_email]" />
 						<br />
 						<?php _e("Will receive all submissions from this form; if left blank it will use the default specified in general settings.", 'custom-contact-forms'); ?>
+					  </li>
+					  <li>
+						<label for="object[form_email_subject]">
+						<?php _e("Form Email Subject:", 'custom-contact-forms'); ?>
+						</label>
+						<input type="text" name="object[form_email_subject]" />
+						<br />
+						<?php _e("When submitted and configured accordingly, the form will send an email with this subject.", 'custom-contact-forms'); ?>
+					  </li>
+					  <li>
+						<label for="object[form_email_name]">
+						<?php _e("Form Email Subject:", 'custom-contact-forms'); ?>
+						</label>
+						<input type="text" name="object[form_email_name]" />
+						<br />
+						<?php _e("When submitted and configured accordingly, the form will send an email with this as the email 'from name'.", 'custom-contact-forms'); ?>
 					  </li>
 					  <li>
 						<label for="object[form_success_message]">
@@ -555,7 +540,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 					  <label for="form_access"><?php _e('Who Can View This Form:', ''); ?></label>
                             
                             <?php
-							$roles = $this->getRolesArray();
+							$roles = parent::getRolesArray();
 							$i = 0;
 							foreach ($roles as $role) {
 								if ($i == 3) echo '<br />';
@@ -567,12 +552,14 @@ if (!class_exists('CustomContactFormsAdmin')) {
 								<?php
 								$i++;
 							}
-							?>
+							?><br />
+							<?php _e('Choose which types of users should be able to view this form.', 'custom-contact-forms'); ?>
 					  </li>
 					  <li>
 						<input type="hidden" name="object_type" value="form" />
 						<input type="submit" class="create-button" value="<?php _e("Create Form", 'custom-contact-forms'); ?>" name="object_create" />
 					  </li>
+					  <li class="attach"><span class="ccf-red">*</span> <?php _e('You should got to the form manager below to attach fields to this form after you create it.', 'custom-contact-forms'); ?></li>
 					</ul>
 				  </form>
 				</div>
@@ -1039,7 +1026,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
                             <label for="form_access">Can View Form:</label>
                             
                             <?php
-							$roles = $this->getRolesArray();
+							$roles = parent::getRolesArray();
 							$access_array = parent::getFormAccessArray($forms[$i]->form_access);
 							foreach ($roles as $role) {
 								?>

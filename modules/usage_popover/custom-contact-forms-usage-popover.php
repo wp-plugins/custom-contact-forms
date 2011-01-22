@@ -180,14 +180,14 @@
           <?php _e("The last important thing related to fields are <span>Fixed Fields</span>. Fixed Fields are special fields that come already created within the plugin such as the captcha spam blocker and email field. Fixed Fields do special things that you wouldn't be able to accomplish with normally; they cannot be deleted or created. If you use the fixedEmail field, as opposed to creating your own email field. the users email will be checked to make sure it is valid, if it isn't a form error will be displayed.", 'custom-contact-forms'); ?>
         </p>
 		<ul>
-		  <li><span><?php _e('fixedEmail:', 'custom-contact-forms'); ?> <?php _e("When attached to a form and set to required, this field will validate a user's email addresses. If a user's email is not valid, an error will be thrown.", 'custom-contact-forms'); ?></span></li>
-		  <li><span><?php _e('captcha:', 'custom-contact-forms'); ?> <?php _e('This field helps prevent spam by prompting users to copy numbers displayed on an image. If a user copies the numbers incorrectly, the form will throw an error.', 'custom-contact-forms'); ?></span></li>
-		  <li><span><?php _e('fixedWebsite:', 'custom-contact-forms'); ?> <?php _e("When attached to a form and set to required, this field will validate a user's website. If a user's website is not valid, an error will be thrown.", 'custom-contact-forms'); ?></span></li>
-		  <li><span><?php _e('emailSubject:', 'custom-contact-forms'); ?> <?php _e("This lets a user enter in an email subject that will carry over as the subject of the email sent to you on form completion", 'custom-contact-forms'); ?></span></li>
-		  <li><span><?php _e('usaStates:', 'custom-contact-forms'); ?> <?php _e("This field displays a dropdown of all the states in the US.", 'custom-contact-forms'); ?></span></li>
-		  <li><span><?php _e('allCountries:', 'custom-contact-forms'); ?> <?php _e("This field displays a dropdown of all the countries in the world.", 'custom-contact-forms'); ?></span></li>
-		  <li><span><?php _e('resetButton:', 'custom-contact-forms'); ?> <?php _e("Attaching this field adds a reset button right next to the submit button in your form.", 'custom-contact-forms'); ?></span></li>
-		  <li><span><?php _e('ishuman:', 'custom-contact-forms'); ?> <?php _e("This field helps prevent spam by prompting users to check a box to verify that they are human.", ''); ?></span></li>
+		  <li><span><?php _e('fixedEmail:', 'custom-contact-forms'); ?></span> <?php _e("When attached to a form and set to required, this field will validate a user's email addresses. If a user's email is not valid, an error will be shown.", 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('captcha:', 'custom-contact-forms'); ?></span> <?php _e('This field helps prevent spam by prompting users to copy numbers displayed on an image. If a user copies the numbers incorrectly, the form will show an error.', 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('fixedWebsite:', 'custom-contact-forms'); ?></span> <?php _e("When attached to a form and set to required, this field will validate a user's website. If a user's website is not valid, an error will be shown.", 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('emailSubject:', 'custom-contact-forms'); ?></span> <?php _e("This lets a user enter in an email subject that will carry over as the subject of the email sent to you on form completion", 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('usaStates:', 'custom-contact-forms'); ?></span> <?php _e("This field displays a dropdown of all the states in the US.", 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('allCountries:', 'custom-contact-forms'); ?></span> <?php _e("This field displays a dropdown of all the countries in the world.", 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('resetButton:', 'custom-contact-forms'); ?></span> <?php _e("Attaching this field adds a reset button right next to the submit button in your form.", 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('ishuman:', 'custom-contact-forms'); ?></span> <?php _e("This field helps prevent spam by prompting users to check a box to verify that they are human. If the box is left unchecked, an error will be displayed and the user will have to go back.", ''); ?></li>
 		</ul>
       </li>
       <li>

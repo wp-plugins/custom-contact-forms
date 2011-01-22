@@ -185,8 +185,10 @@ if (!class_exists('CustomContactFormsActivateDB')) {
 				$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` ADD `field_class` VARCHAR( 50 ) NOT NULL");
 			if (!$this->columnExists('field_error', CCF_FIELDS_TABLE))
 				$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` ADD `field_error` VARCHAR( 300 ) NOT NULL");
-			if (!$this->columnExists('form_access', CCF_FORMS_TABLE))
+			if (!$this->columnExists('form_access', CCF_FORMS_TABLE)) {
+				$this->makeAllFormsAccesible();
 				$wpdb->query("ALTER TABLE `" . CCF_FORMS_TABLE . "` ADD `form_access` TEXT NOT NULL");
+			}
 			if (!$this->columnExists('form_email_subject', CCF_FORMS_TABLE))
 				$wpdb->query("ALTER TABLE `" . CCF_FORMS_TABLE . "` ADD `form_email_subject` VARCHAR(250) NOT NULL");
 			if (!$this->columnExists('form_email_name', CCF_FORMS_TABLE))
@@ -246,6 +248,13 @@ if (!class_exists('CustomContactFormsActivateDB')) {
 					return true;
 			}
 			return false;
+		}
+		
+		function makeAllFormsAccesible() {
+			$forms = parent::selectAllForms();
+			foreach ($forms as $form) {
+				parent::updateForm(array('form_access' => parent::getRolesArray()), $form->id);
+			}
 		}
 	}
 }

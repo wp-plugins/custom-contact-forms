@@ -311,6 +311,7 @@
 	font-size:.8em;
 }
 #customcontactforms-admin #create-forms .role{ display:inline; padding-left:5px; }
+#customcontactforms-admin #create-fields .attach, #customcontactforms-admin #create-forms .attach { margin-top:6px; }
 #customcontactforms-admin .manage-h3 {
 	clear:both;
 	margin-top:20px;
