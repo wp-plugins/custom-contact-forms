@@ -209,7 +209,6 @@ if (!class_exists('CustomContactFormsAdmin')) {
 		
 		function handleAdminPostRequests() {
 			$out = array('success' => true);
-			//print_r($_POST);
 			if ($_POST['object_create']) {
 				if ($_POST['object_type'] == 'form') parent::insertForm($_POST['object']);
 				elseif ($_POST['object_type'] == 'field') parent::insertField($_POST['object']);
@@ -228,7 +227,6 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				if ($_POST['object_type'] == 'form') {
 					parent::detachField($_POST['detach_object_id'], $_POST['object_id']);
 				} elseif ($_POST['object_type'] == 'field') {
-					//echo $_POST['detach_object_id'].",". $_POST['object_id'];
 					parent::detachFieldOption($_POST['detach_object_id'], $_POST['object_id']);
 				}
 				return $out;
@@ -506,7 +504,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 					  </li>
 					  <li>
 						<label for="object[form_email_name]">
-						<?php _e("Form Email Subject:", 'custom-contact-forms'); ?>
+						<?php _e("Form Email Name:", 'custom-contact-forms'); ?>
 						</label>
 						<input type="text" name="object[form_email_name]" />
 						<br />
@@ -1023,7 +1021,8 @@ if (!class_exists('CustomContactFormsAdmin')) {
 							  <label for="objects[<?php echo $i; ?>][values][custom_code]"><?php _e("Custom Code:", 'custom-contact-forms'); ?></label>
 							  <input name="objects[<?php echo $i; ?>][values][custom_code]" type="text" value="<?php echo $forms[$i]->custom_code; ?>" /></td>
 							<a href="javascript:void(0)" class="toollink" title="<?php _e("If you want to show this form to only certain types of users, you can uncheck boxes accordingly. To show this form to anyone, check all the boxes.", 'custom-contact-forms'); ?>">(?)</a> 
-                            <label for="form_access">Can View Form:</label>
+                            <input name="objects[<?php echo $i; ?>][values][form_access_update]" type="hidden" value="1" /></td>
+							<label for="form_access">Can View Form:</label>
                             
                             <?php
 							$roles = parent::getRolesArray();

@@ -47,7 +47,7 @@ if (!class_exists('CustomContactFormsDefaultDB')) {
 			$nocontact_option = array('option_slug' => $option_slugs['nocontact'], 'option_label' => __('Do Not Contact Me', 'custom-contact-forms'));
 			$contact_form = array('form_slug' => $form_slugs['contact_form'], 'form_title' => __('Contact Form', 'custom-contact-forms'), 'form_method' => 'Post',
 			'submit_button_text' => __('Send Message', 'custom-contact-forms'), 'form_email' => get_option('admin_email'), 'form_success_message' => __('Thank you for filling out our contact form. We will contact you very soon by the way you specified.', 'custom-contact-forms'),
-			'form_success_title' => __('Thank You!', 'custom-contact-forms'), 'form_style' => 0);
+			'form_success_title' => __('Thank You!', 'custom-contact-forms'), 'form_access' => parent::getRolesArray(), 'form_style' => 0);
 			$name_field_id = parent::insertField($name_field);
 			$message_field_id = parent::insertField($message_field);
 			$phone_field_id = parent::insertField($phone_field);

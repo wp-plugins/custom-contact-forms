@@ -83,8 +83,11 @@ if (!class_exists('CustomContactFormsDB')) {
 				if (!empty($test) and $test->id != $fid) return false;
 				$form['form_slug'] = $this->formatSlug($form['form_slug']);
 			}
-			if (!empty($form['form_access']))
+			if (!empty($form['form_access_update'])) {
 				$form['form_access'] = serialize($form['form_access']);
+				unset($form['form_access_update']);
+			} elseif (!empty($form['form_access'])) unset($form['form_access']);
+			
 			if (isset($form['form_fields']))
 				$form['form_fields'] = serialize(array_unique($form['form_fields']));
 			foreach ($form as $key => $value)
