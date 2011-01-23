@@ -37,7 +37,7 @@
 #customcontactforms-admin .loading-img {
 	display:none;
 }
-#customcontactforms-admin input[type=submit] {
+#customcontactforms-admin input[type=submit], #ccf-usage-popover input[type=submit] {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
 	-moz-background-origin:padding;
@@ -464,17 +464,7 @@
 #ccf-usage-popover div.popover-body p { padding:8px; font-size:1em; text-align:left; }
 #ccf-usage-popover div.popover-body form { width:100%; text-align:center; }
 #ccf-usage-popover div.popover-body .insert-default-content-button {
-	width:auto;
-	padding:8px;
 	margin:5px auto 5px auto;
-	font-size:1.5em;
-	font-weight:bold;
-	background-color:#f0f0f0;
-	font-family:Verdana, Arial, Helvetica, sans-serif;
-	-moz-border-radius:6px;
-	-khtml-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
 }
 
 .modal-overlay {
