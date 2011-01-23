@@ -126,23 +126,27 @@ if (!class_exists('CustomContactFormsFront')) {
 		}
 		
 		function validEmail($email) {
-		  if (!@preg_match("/^[^@]{1,64}@[^@]{1,255}$/", $email)) return false;
-		  $email_array = explode("@", $email);
-		  $local_array = explode(".", $email_array[0]);
-		  for ($i = 0; $i < sizeof($local_array); $i++) {
-			if (!@preg_match("/^(([A-Za-z0-9!#$%&'*+\/=?^_`{|}~-][A-Za-z0-9!#$%&'*+\/=?^_`{|}~\.-]{0,63})|(\"[^(\\|\")]{0,62}\"))$/", $local_array[$i])) {
-			  return false;
+			if (!@preg_match("/^[^@]{1,64}@[^@]{1,255}$/", $email)) return false;
+			$email_array = explode("@", $email);
+			$local_array = explode(".", $email_array[0]);
+			for ($i = 0; $i < sizeof($local_array); $i++) {
+				if (!@preg_match("/^(([A-Za-z0-9!#$%&'*+\/=?^_`{|}~-][A-Za-z0-9!#$%&'*+\/=?^_`{|}~\.-]{0,63})|(\"[^(\\|\")]{0,62}\"))$/", $local_array[$i])) {
+					return false;
+				}
+			} if (!@preg_match("/^\[?[0-9\.]+\]?$/", $email_array[1])) {
+				$domain_array = explode(".", $email_array[1]);
+				if (sizeof($domain_array) < 2) return false;
+				for ($i = 0; $i < sizeof($domain_array); $i++) {
+					if (!@preg_match("/^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|([A-Za-z0-9]+))$/", $domain_array[$i])) {
+						return false;
+					}
+				}
 			}
-		  } if (!@preg_match("/^\[?[0-9\.]+\]?$/", $email_array[1])) {
-			$domain_array = explode(".", $email_array[1]);
-			if (sizeof($domain_array) < 2) return false;
-			for ($i = 0; $i < sizeof($domain_array); $i++) {
-			  if (!@preg_match("/^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|([A-Za-z0-9]+))$/", $domain_array[$i])) {
-				return false;
-			  }
-			}
-		  }
-		  return true;
+			return true;
+		}
+		
+		function validWebsite($website) {
+			return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url);
 		}
 		
 		function getFormCode($form, $is_widget_form = false) {
@@ -427,6 +431,8 @@ if (!class_exists('CustomContactFormsFront')) {
 								$mail->SMTPAuth = false;
 						}
 						$dest_email_array = $this->getDestinationEmailArray($form->form_email);
+						$from_name = (empty($admin_options['default_from_name'])) ? 'Custom Contact Forms' : $admin_options['default_from_name'];
+						if (!empty($form->form_email_name)) $from_name = $form->form_email_name;
 						if (empty($dest_email_array)) $mail->AddAddress($admin_options['default_to_email']);
 						else {
 							foreach ($dest_email_array as $em)
@@ -439,8 +445,8 @@ if (!class_exists('CustomContactFormsFront')) {
 							$mail->From = $admin_options['default_from_email'];
 							$mail->FromName = $from_name;
 						}
-						$from_name = (empty($admin_options['default_from_name'])) ? 'Custom Contact Forms' : $admin_options['default_from_name'];
 						$mail->Subject = ($fixed_subject != NULL) ? $fixed_subject : $admin_options['default_form_subject'];
+						if (!empty($form->form_email_subject)) $mail->Subject = $form->form_email_subject;
 						$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
 						$mail->CharSet = "utf-8";
 						$mail->MsgHTML(stripslashes($body));

@@ -752,7 +752,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			?>
 					  <?php } ?>
 					</td>
-					<td><?php if ($fields[$i]->field_slug == 'fixedEmail' || $fields[$i]->field_slug == 'usaStates' || $fields[$i]->field_slug == 'allCountries') { ?>
+					<td><?php if ($fields[$i]->field_slug == 'fixedEmail' || $fields[$i]->field_slug == 'emailSubject' || $fields[$i]->field_slug == 'fixedWebsite' || $fields[$i]->field_slug == 'usaStates' || $fields[$i]->field_slug == 'allCountries') { ?>
 					  <select name="objects[<?php echo $i; ?>][values][field_required]">
 						<option value="1">
 						<?php _e("Yes", 'custom-contact-forms'); ?>

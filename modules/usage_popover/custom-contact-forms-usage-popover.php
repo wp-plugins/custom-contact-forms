@@ -10,6 +10,9 @@
       <li><a href="#pop-fields">
         <?php _e('Fields', 'custom-contact-forms'); ?>
         </a></li>
+	  <li><a href="#pop-fixed-fields">
+        <?php _e('Fixed Fields', 'custom-contact-forms'); ?>
+        </a></li>
       <li><a href="#pop-field-options">
         <?php _e('Field Options', 'custom-contact-forms'); ?>
         </a></li>
@@ -177,7 +180,7 @@
 		<h3><?php _e('Fixed Fields', 'custom-contact-forms'); ?>
           <a name="pop-fixed-fields"></a></h3>
         <p>
-          <?php _e("The last important thing related to fields are <span>Fixed Fields</span>. Fixed Fields are special fields that come already created within the plugin such as the captcha spam blocker and email field. Fixed Fields do special things that you wouldn't be able to accomplish with normally; they cannot be deleted or created. If you use the fixedEmail field, as opposed to creating your own email field. the users email will be checked to make sure it is valid, if it isn't a form error will be displayed.", 'custom-contact-forms'); ?>
+          <?php _e("The last important thing related to fields are <span>Fixed Fields</span>. Fixed Fields are special fields that come already created within the plugin such as the captcha spam blocker and email field. Fixed Fields do special things that you wouldn't be able to accomplish with normal fields; they cannot be deleted or created. For example, if you use the fixedEmail field, as opposed to creating your own email field. the users email will be checked to make sure it is valid, if it isn't a form error will be displayed. Below is a list of fixed fields and their descriptions.", 'custom-contact-forms'); ?>
         </p>
 		<ul>
 		  <li><span><?php _e('fixedEmail:', 'custom-contact-forms'); ?></span> <?php _e("When attached to a form and set to required, this field will validate a user's email addresses. If a user's email is not valid, an error will be shown.", 'custom-contact-forms'); ?></li>
