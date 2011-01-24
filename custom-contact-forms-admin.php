@@ -1020,8 +1020,8 @@ if (!class_exists('CustomContactFormsAdmin')) {
 							  <a href="javascript:void(0)" class="toollink" title="<?php _e("This field allows you to insert HTML directly after the starting <form> tag.", 'custom-contact-forms'); ?>">(?)</a> 
 							  <label for="objects[<?php echo $i; ?>][values][custom_code]"><?php _e("Custom Code:", 'custom-contact-forms'); ?></label>
 							  <input name="objects[<?php echo $i; ?>][values][custom_code]" type="text" value="<?php echo $forms[$i]->custom_code; ?>" /></td>
-							<a href="javascript:void(0)" class="toollink" title="<?php _e("If you want to show this form to only certain types of users, you can uncheck boxes accordingly. To show this form to anyone, check all the boxes.", 'custom-contact-forms'); ?>">(?)</a> 
-                            <input name="objects[<?php echo $i; ?>][values][form_access_update]" type="hidden" value="1" /></td>
+							<input name="objects[<?php echo $i; ?>][values][form_access_update]" type="hidden" value="1" /></td>
+							<a href="javascript:void(0)" class="toollink" title="<?php _e("If you want to show this form to only certain types of users, you can uncheck boxes accordingly. To show this form to anyone, check all the boxes. This will only take effect if the 'Form Access Manager' is enabled in general settings.", 'custom-contact-forms'); ?>">(?)</a> 
 							<label for="form_access">Can View Form:</label>
                             
                             <?php
@@ -2035,6 +2035,18 @@ the field names you want required by commas. Remember to use underscores instead
 					  <li class="descrip">
 						<?php _e("When a form is filled out incorrectly, this message will be displayed followed by the individual field error messages.", 'custom-contact-forms'); ?>
 					  </li>
+					  <li>
+						<label for="code_type">
+						<?php _e("Use Code Type:", 'custom-contact-forms'); ?>
+						</label>
+						<select name="settings[code_type]">
+						  <option>XHTML</option>
+						  <option <?php if ($admin_options['code_type'] == 'HTML') echo 'selected="selected"'; ?>>HTML</option>
+						</select>
+					  </li>
+					  <li class="descrip">
+						<?php _e("This lets you switch the form code between HTML and XHTML.", 'custom-contact-forms'); ?>
+					  </li>
 					</ul>
 					<ul class="gright">
 					  <li>
@@ -2101,18 +2113,6 @@ the field names you want required by commas. Remember to use underscores instead
 						</select>
 					  </li>
 					  <li>
-						<label for="code_type">
-						<?php _e("Use Code Type:", 'custom-contact-forms'); ?>
-						</label>
-						<select name="settings[code_type]">
-						  <option>XHTML</option>
-						  <option <?php if ($admin_options['code_type'] == 'HTML') echo 'selected="selected"'; ?>>HTML</option>
-						</select>
-					  </li>
-					  <li class="descrip">
-						<?php _e("This lets you switch the form code between HTML and XHTML.", 'custom-contact-forms'); ?>
-					  </li>
-					  <li>
 						<label for="admin_ajax">
 						<?php _e("Fancy Admin AJAX Abilities:", 'custom-contact-forms'); ?>
 						</label>
@@ -2120,7 +2120,7 @@ the field names you want required by commas. Remember to use underscores instead
 						  <option value="1">
 						  <?php _e("Enabled", 'custom-contact-forms'); ?>
 						  </option>
-						  <option <?php if ($admin_options['admin_ajax'] == 0) echo 'selected="selected"'; ?>>
+						  <option value="0" <?php if ($admin_options['admin_ajax'] == 0) echo 'selected="selected"'; ?>>
 						  <?php _e("Disabled", 'custom-contact-forms'); ?>
 						  </option>
 						</select>
@@ -2135,7 +2135,23 @@ the field names you want required by commas. Remember to use underscores instead
 						<input name="settings[default_form_bad_permissions]" value="<?php echo $admin_options['default_form_bad_permissions']; ?>" type="text" />
 					  </li>
 					  <li class="descrip">
-						<?php _e("When someone doesn't have the proper permissions to use a form, this message is displayed in place of the form.", 'custom-contact-forms'); ?>
+						<?php _e("When someone doesn't have the proper permissions to use a form, this message is displayed in place of the form. You control who can view each form with the form access manager which is located inside the form manager.", 'custom-contact-forms'); ?>
+					  </li>
+					  <li>
+						<label for="enable_form_access_manager">
+						<?php _e("Enabled Form Access Manager:", 'custom-contact-forms'); ?>
+						</label>
+						<select name="settings[enable_form_access_manager]">
+						  <option value="0">
+						  <?php _e("Disabled", 'custom-contact-forms'); ?>
+						  </option>
+						  <option value="1" <?php if ($admin_options['enable_form_access_manager'] == 1) echo 'selected="selected"'; ?>>
+						  <?php _e("Enabled", 'custom-contact-forms'); ?>
+						  </option>
+						</select>
+					  </li>
+					  <li class="descrip">
+						<?php _e("The form access manager within each form allows you to control who can view your form. However, that will take effect on any of your forms unless this is enabled.", 'custom-contact-forms'); ?>
 					  </li>
 					  <li class="show-widget"><b>
 						<?php _e("Show Sidebar Widget:", 'custom-contact-forms'); ?>

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: custom-contact-forms\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-24 01:22-0500\n"
-"PO-Revision-Date: 2011-01-24 01:22-0500\n"
+"POT-Creation-Date: 2011-01-24 15:40-0500\n"
+"PO-Revision-Date: 2011-01-24 15:40-0500\n"
 "Last-Translator: Taylor Lovett <sdfds@sfs.com>\n"
 "Language-Team: TaylorLovett.com <admin@taylorlovett.com>\n"
 "MIME-Version: 1.0\n"
@@ -160,8 +160,8 @@ msgstr ""
 #: ../custom-contact-forms-admin.php:868
 #: ../custom-contact-forms-admin.php:921
 #: ../custom-contact-forms-admin.php:1955
-#: ../custom-contact-forms-admin.php:2067
-#: ../custom-contact-forms-admin.php:2099
+#: ../custom-contact-forms-admin.php:2079
+#: ../custom-contact-forms-admin.php:2111
 msgid "No"
 msgstr ""
 
@@ -172,8 +172,8 @@ msgstr ""
 #: ../custom-contact-forms-admin.php:868
 #: ../custom-contact-forms-admin.php:921
 #: ../custom-contact-forms-admin.php:1952
-#: ../custom-contact-forms-admin.php:2064
-#: ../custom-contact-forms-admin.php:2096
+#: ../custom-contact-forms-admin.php:2076
+#: ../custom-contact-forms-admin.php:2108
 msgid "Yes"
 msgstr ""
 
@@ -402,7 +402,7 @@ msgstr ""
 
 #: ../custom-contact-forms-admin.php:744
 #: ../custom-contact-forms-admin.php:775
-#: ../custom-contact-forms-admin.php:2190
+#: ../custom-contact-forms-admin.php:2206
 msgid "None"
 msgstr ""
 
@@ -572,8 +572,8 @@ msgstr ""
 msgid "Custom Code:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1023
-msgid "If you want to show this form to only certain types of users, you can uncheck boxes accordingly. To show this form to anyone, check all the boxes."
+#: ../custom-contact-forms-admin.php:1024
+msgid "If you want to show this form to only certain types of users, you can uncheck boxes accordingly. To show this form to anyone, check all the boxes. This will only take effect if the 'Form Access Manager' is enabled in general settings."
 msgstr ""
 
 #: ../custom-contact-forms-admin.php:1043
@@ -1072,15 +1072,17 @@ msgstr ""
 
 #: ../custom-contact-forms-admin.php:1977
 #: ../custom-contact-forms-admin.php:2020
-#: ../custom-contact-forms-admin.php:2080
+#: ../custom-contact-forms-admin.php:2092
 #: ../custom-contact-forms-admin.php:2121
+#: ../custom-contact-forms-admin.php:2149
 msgid "Enabled"
 msgstr ""
 
 #: ../custom-contact-forms-admin.php:1980
 #: ../custom-contact-forms-admin.php:2023
-#: ../custom-contact-forms-admin.php:2083
+#: ../custom-contact-forms-admin.php:2095
 #: ../custom-contact-forms-admin.php:2124
+#: ../custom-contact-forms-admin.php:2146
 msgid "Disabled"
 msgstr ""
 
@@ -1129,48 +1131,48 @@ msgstr ""
 msgid "When a form is filled out incorrectly, this message will be displayed followed by the individual field error messages."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2042
-msgid "Default Form Success Message Title:"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:2047
-msgid "If someone fills out a form for which a success message title is not provided and a custom success page is not provided, the plugin will show a popover using this field as the window title."
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:2051
-msgid "Default Form Success Message:"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:2056
-msgid "If someone fills out a form for which a success message is not provided and a custom success page is not provided, the plugin will show a popover containing this message."
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:2060
-msgid "Remember Field Values:"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:2072
-msgid "Selecting yes will make form fields remember how they were last filled out."
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:2076
-msgid "Tooltips in Widget:"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:2088
-msgid "Enabling this shows tooltips containing field instructions on forms in the widget."
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:2092
-msgid "Hide Plugin Author Link in Code:"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:2105
+#: ../custom-contact-forms-admin.php:2040
 msgid "Use Code Type:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2113
+#: ../custom-contact-forms-admin.php:2048
 msgid "This lets you switch the form code between HTML and XHTML."
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:2054
+msgid "Default Form Success Message Title:"
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:2059
+msgid "If someone fills out a form for which a success message title is not provided and a custom success page is not provided, the plugin will show a popover using this field as the window title."
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:2063
+msgid "Default Form Success Message:"
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:2068
+msgid "If someone fills out a form for which a success message is not provided and a custom success page is not provided, the plugin will show a popover containing this message."
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:2072
+msgid "Remember Field Values:"
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:2084
+msgid "Selecting yes will make form fields remember how they were last filled out."
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:2088
+msgid "Tooltips in Widget:"
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:2100
+msgid "Enabling this shows tooltips containing field instructions on forms in the widget."
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:2104
+msgid "Hide Plugin Author Link in Code:"
 msgstr ""
 
 #: ../custom-contact-forms-admin.php:2117
@@ -1186,174 +1188,182 @@ msgid "Default Permissions Error:"
 msgstr ""
 
 #: ../custom-contact-forms-admin.php:2138
-msgid "When someone doesn't have the proper permissions to use a form, this message is displayed in place of the form."
+msgid "When someone doesn't have the proper permissions to use a form, this message is displayed in place of the form. You control who can view each form with the form access manager which is located inside the form manager."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2141
-msgid "Show Sidebar Widget:"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:2146
-msgid "On Homepage"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:2150
-msgid "On Pages"
+#: ../custom-contact-forms-admin.php:2142
+msgid "Enabled Form Access Manager:"
 msgstr ""
 
 #: ../custom-contact-forms-admin.php:2154
+msgid "The form access manager within each form allows you to control who can view your form. However, that will take effect on any of your forms unless this is enabled."
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:2157
+msgid "Show Sidebar Widget:"
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:2162
+msgid "On Homepage"
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:2166
+msgid "On Pages"
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:2170
 msgid "On Single Posts"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2159
+#: ../custom-contact-forms-admin.php:2175
 msgid "On Categories"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2163
+#: ../custom-contact-forms-admin.php:2179
 msgid "On Archives"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2167
+#: ../custom-contact-forms-admin.php:2183
 msgid "Update"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2175
+#: ../custom-contact-forms-admin.php:2191
 msgid "Mail Settings"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2179
+#: ../custom-contact-forms-admin.php:2195
 msgid "There are two ways you can send emails: using the PHP mail() function or using SMTP (secure/insecure). If you choose to use the PHP mail() function you can ignore all the other options. For some people Wordpress's default way of sending mail does not work; if for some reason your mail is being sent you should try the SMTP option."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2180
+#: ../custom-contact-forms-admin.php:2196
 msgid "* Send My Emails Using the Following:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2182
+#: ../custom-contact-forms-admin.php:2198
 msgid "Wordpress Default"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2183
+#: ../custom-contact-forms-admin.php:2199
 msgid "SMTP"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2184
+#: ../custom-contact-forms-admin.php:2200
 msgid "(If mail isn't sending, try toggling this option.)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2187
+#: ../custom-contact-forms-admin.php:2203
 msgid "SMTP Host:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2188
+#: ../custom-contact-forms-admin.php:2204
 msgid "SMTP Port:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2189
+#: ../custom-contact-forms-admin.php:2205
 msgid "Encryption:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2191
+#: ../custom-contact-forms-admin.php:2207
 msgid "SSL"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2192
+#: ../custom-contact-forms-admin.php:2208
 msgid "TLS"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2196
+#: ../custom-contact-forms-admin.php:2212
 msgid "SMTP Authentication:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2196
+#: ../custom-contact-forms-admin.php:2212
 msgid "None Needed"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2196
+#: ../custom-contact-forms-admin.php:2212
 msgid "Use SMTP Username/Password"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2197
+#: ../custom-contact-forms-admin.php:2213
 msgid "SMTP Username:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2198
+#: ../custom-contact-forms-admin.php:2214
 msgid "SMTP Password:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2201
+#: ../custom-contact-forms-admin.php:2217
 msgid "Save Mail Sending Options"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2208
+#: ../custom-contact-forms-admin.php:2224
 msgid "Export"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2213
+#: ../custom-contact-forms-admin.php:2229
 msgid ""
 "Preforming a Custom Contact Forms export will create a file of the form \n"
 "\t\t\t\t\t\tccf-export-xxxx.sql on your web server. The file created contains SQL that \n"
 "\t\t\t\t\t\twill recreate all the plugin data on any Wordpress installation. After Custom Contact Forms creates the export file, you will be prompted to download it. You can use this file as a backup in case your Wordpress database gets ruined."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2217
+#: ../custom-contact-forms-admin.php:2233
 msgid "Export All CCF Plugin Content"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2223
+#: ../custom-contact-forms-admin.php:2239
 msgid "Import"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2229
+#: ../custom-contact-forms-admin.php:2245
 msgid "Browse to a CCF .sql export file to import Custom Contact Form data from another Wordpress installation to this one. Pressing the 'Clear and Import' button deletes all current data and then imports the selected file; this will not work for merging to data!. Clearing all CCF data before importing prevents any conflicts from occuring. Before you attempt an import, you should always download a backup, by clicking the 'Export All' button."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2232
+#: ../custom-contact-forms-admin.php:2248
 msgid "Choose What You Want to Use from the Import File:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2238
+#: ../custom-contact-forms-admin.php:2254
 msgid "Use General Settings"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2244
-#: ../custom-contact-forms-admin.php:2262
+#: ../custom-contact-forms-admin.php:2260
+#: ../custom-contact-forms-admin.php:2278
 #: ../modules/usage_popover/custom-contact-forms-usage-popover.php:8
 #: ../modules/usage_popover/custom-contact-forms-usage-popover.php:231
 msgid "Forms"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2250
+#: ../custom-contact-forms-admin.php:2266
 #: ../modules/usage_popover/custom-contact-forms-usage-popover.php:29
 msgid "Form Submissions"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2256
+#: ../custom-contact-forms-admin.php:2272
 #: ../modules/usage_popover/custom-contact-forms-usage-popover.php:11
 #: ../modules/usage_popover/custom-contact-forms-usage-popover.php:52
 msgid "Fields"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2268
+#: ../custom-contact-forms-admin.php:2284
 #: ../modules/usage_popover/custom-contact-forms-usage-popover.php:17
 #: ../modules/usage_popover/custom-contact-forms-usage-popover.php:198
 msgid "Field Options"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2274
+#: ../custom-contact-forms-admin.php:2290
 #: ../modules/usage_popover/custom-contact-forms-usage-popover.php:20
 msgid "Styles"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2280
+#: ../custom-contact-forms-admin.php:2296
 msgid "Choose an Import File:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2284
+#: ../custom-contact-forms-admin.php:2300
 msgid "Clear and Import"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:2286
+#: ../custom-contact-forms-admin.php:2302
 msgid "Yes, I want to do this and have created a backup."
 msgstr ""
 

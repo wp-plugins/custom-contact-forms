@@ -50,24 +50,12 @@ if (!class_exists('CustomContactFormsFront')) {
 				'form' => 0,
 			), $atts));
 			$this_form = parent::selectForm($form);
-			/*$errors = $this->getAllFormErrors();
-			if (!empty($errors)) {
-				$admin_options = parent::getAdminOptions();
-				$out = '<div id="custom-contact-forms-errors"><p>'.$admin_options['default_form_error_header'].'</p><ul>' . "\n";
-				$errors = $this->getAllFormErrors();
-				foreach ($errors as $error) {
-					$out .= '<li>'.$error.'</li>' . "\n";
-				}
-				$err_link = (!empty($this->error_return)) ? '<p><a href="'.$this->error_return.'" title="Go Back">&lt; ' . __('Go Back to Form.', 'custom-contact-forms') . '</a></p>' : '';
-				return $out . '</ul>' . "\n" . $err_link . '</div>';
-			} */
-			if (empty($this_form))
-				return '';
-			elseif (!$this->userCanViewForm($this_form)) {
-				$admin_options = parent::getAdminOptions();
+			if (empty($this_form)) return '';
+			$admin_options = parent::getAdminOptions();
+			if ($admin_options['enable_form_access_manager'] == 1 && !$this->userCanViewForm($this_form))
 				return $admin_options['default_form_bad_permissions'];
-			} else
-				return $this->getFormCode($this_form);
+			
+			return $this->getFormCode($this_form);
 		}
 		
 		function emptyFormErrors() {

@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, form submissions saved to database, captchas, tooltip popovers, unlimited fields/forms/form styles, import/export, use a custom thank you page or built-in popover with a custom success message set for each form.
-	Version: 4.5.0
+	Version: 4.5.1
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
@@ -53,7 +53,7 @@ if (!class_exists('CustomContactForms')) {
 			$customcontactAdminOptions = array('show_widget_home' => 1, 'show_widget_pages' => 1, 'show_widget_singles' => 1, 'show_widget_categories' => 1, 'show_widget_archives' => 1, 'default_to_email' => $admin_email, 'default_from_email' => $admin_email, 'default_from_name' => 'Custom Contact Forms', 'default_form_subject' => __('Someone Filled Out Your Contact Form!', 'custom-contact-forms'), 
 			'remember_field_values' => 0, 'author_link' => 1, 'enable_widget_tooltips' => 1, 'mail_function' => 'default', 'form_success_message_title' => __('Successful Form Submission', 'custom-contact-forms'), 'form_success_message' => __('Thank you for filling out our web form. We will get back to you ASAP.', 'custom-contact-forms'), 'enable_jquery' => 1, 'code_type' => 'XHTML',
 			'show_install_popover' => 0, 'email_form_submissions' => 1, 'enable_dashboard_widget' => 1, 'admin_ajax' => 1, 'smtp_host' => '', 'smtp_encryption' => 'none', 'smtp_authentication' => 0, 'smtp_username' => '', 'smtp_password' => '', 'smtp_port' => '', 'default_form_error_header' => __('You filled out the form incorrectly.', 'custom-contact-forms'), 
-			'default_form_bad_permissions' => __("You don't have the proper permissions to view this form.", 'custom-contact-forms')); // default general settings
+			'default_form_bad_permissions' => __("You don't have the proper permissions to view this form.", 'custom-contact-forms'), 'enable_form_access_manager' => 0); // default general settings
 			$customcontactOptions = get_option($this->getAdminOptionsName());
 			if (!empty($customcontactOptions)) {
 				foreach ($customcontactOptions as $key => $option)

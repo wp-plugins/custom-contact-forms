@@ -4,7 +4,7 @@ Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
 Tested up to: 3.1
-Stable tag: 4.5.0
+Stable tag: 4.5.1
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -122,6 +122,10 @@ We are planning to add popover forms and file attachments soon.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now all the screenshots are from Version 1, thus are quite out-dated. Install the plugin to see what it looks like. You won't regret it. I promise!
 
 == Changelog ==
+= 4.5.1 =
+*	custom-contact-forms.php - enable_form_access_manager option added and defaulted to disabled
+*	custom-contact-forms-admin.php - enable_form_access_manager option added and defaulted to disabled
+*	custom-contact-forms-front.php - enable_form_access_manager option added and defaulted to disabled
 
 = 4.5.0 =
 *	custom-contact-forms.php - Saved form submissions manager, form background color added to style manager, import/export feature
