@@ -50,6 +50,17 @@ if (!class_exists('CustomContactFormsFront')) {
 				'form' => 0,
 			), $atts));
 			$this_form = parent::selectForm($form);
+			/*$errors = $this->getAllFormErrors();
+			if (!empty($errors)) {
+				$admin_options = parent::getAdminOptions();
+				$out = '<div id="custom-contact-forms-errors"><p>'.$admin_options['default_form_error_header'].'</p><ul>' . "\n";
+				$errors = $this->getAllFormErrors();
+				foreach ($errors as $error) {
+					$out .= '<li>'.$error.'</li>' . "\n";
+				}
+				$err_link = (!empty($this->error_return)) ? '<p><a href="'.$this->error_return.'" title="Go Back">&lt; ' . __('Go Back to Form.', 'custom-contact-forms') . '</a></p>' : '';
+				return $out . '</ul>' . "\n" . $err_link . '</div>';
+			} */
 			if (empty($this_form))
 				return '';
 			elseif (!$this->userCanViewForm($this_form)) {
@@ -59,16 +70,22 @@ if (!class_exists('CustomContactFormsFront')) {
 				return $this->getFormCode($this_form);
 		}
 		
+		function emptyFormErrors() {
+			$this->form_errors = array();
+		}
+		
 		function contentFilter($content) {
+			// THIS NEEDS TO REPLACE THE SHORTCODE ONLY ONCE
 			$errors = $this->getAllFormErrors();
 			if (!empty($errors)) {
 				$admin_options = parent::getAdminOptions();
 				$out = '<div id="custom-contact-forms-errors"><p>'.$admin_options['default_form_error_header'].'</p><ul>' . "\n";
-				$errors = $this->getAllFormErrors();
+				//$errors = $this->getAllFormErrors();
 				foreach ($errors as $error) {
 					$out .= '<li>'.$error.'</li>' . "\n";
 				}
 				$err_link = (!empty($this->error_return)) ? '<p><a href="'.$this->error_return.'" title="Go Back">&lt; ' . __('Go Back to Form.', 'custom-contact-forms') . '</a></p>' : '';
+				$this->emptyFormErrors();
 				return $out . '</ul>' . "\n" . $err_link . '</div>';
 			}
 			return $content;
@@ -146,7 +163,7 @@ if (!class_exists('CustomContactFormsFront')) {
 		}
 		
 		function validWebsite($website) {
-			return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url);
+			return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $website);
 		}
 		
 		function getFormCode($form, $is_widget_form = false) {
@@ -393,7 +410,7 @@ if (!class_exists('CustomContactFormsFront')) {
 				foreach ($_POST as $key => $value) {
 					$_SESSION['fields'][$key] = $value;
 					$field = parent::selectField('', $key);
-					if (!array_key_exists($key, $GLOBALS['ccf_fixed_fields']) or $key == 'fixedEmail' or $key == 'usaStates' or $key == 'allCountries') {
+					if (!array_key_exists($key, $GLOBALS['ccf_fixed_fields']) || $key == 'fixedEmail' || $key == 'usaStates' || $key == 'fixedWebsite'|| $key == 'emailSubject' || $key == 'allCountries') {
 						$mail_field_label = (empty($field->field_label)) ? $field->field_slug : $field->field_label;
 						$body .= htmlspecialchars($mail_field_label) . ': ' . htmlspecialchars($value) . "<br />\n";
 						$data_array[$key] = $value;
@@ -431,24 +448,22 @@ if (!class_exists('CustomContactFormsFront')) {
 								$mail->SMTPAuth = false;
 						}
 						$dest_email_array = $this->getDestinationEmailArray($form->form_email);
-						$from_name = (empty($admin_options['default_from_name'])) ? 'Custom Contact Forms' : $admin_options['default_from_name'];
+						$from_name = (empty($admin_options['default_from_name'])) ? __('Custom Contact Forms', 'custom-contact-forms') : $admin_options['default_from_name'];
 						if (!empty($form->form_email_name)) $from_name = $form->form_email_name;
 						if (empty($dest_email_array)) $mail->AddAddress($admin_options['default_to_email']);
 						else {
 							foreach ($dest_email_array as $em)
 								$mail->AddAddress($em);
 						}
-						if ($reply != NULL && $this->validEmail($reply)) {
+						if ($reply != NULL && $this->validEmail($reply))
 							$mail->From = $reply;
-							$mail->FromName = 'Custom Contact Forms';
-						} else {
+						else
 							$mail->From = $admin_options['default_from_email'];
-							$mail->FromName = $from_name;
-						}
-						$mail->Subject = ($fixed_subject != NULL) ? $fixed_subject : $admin_options['default_form_subject'];
-						if (!empty($form->form_email_subject)) $mail->Subject = $form->form_email_subject;
-						$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
-						$mail->CharSet = "utf-8";
+						$mail->FromName = $from_name;
+						$mail->Subject = (!empty($form->form_email_subject)) ? $form->form_email_subject : $admin_options['default_form_subject'];
+						if ($fixed_subject != NULL) $mail->Subject = $fixed_subject;
+						$mail->AltBody = __("To view the message, please use an HTML compatible email viewer.", 'custom-contact-forms');
+						$mail->CharSet = 'utf-8';
 						$mail->MsgHTML(stripslashes($body));
 						$mail->Send();
 					} if (!empty($form->form_thank_you_page)) {

@@ -29,6 +29,14 @@ if (!class_exists('CustomContactFormsDashboard')) {
 			$user_data_array = parent::selectAllUserData();
 			?>
 			<table id="ccf-dashboard" cellpadding="0" cellspacing="0">
+			  <thead>
+				<tr>
+				  <th>Date</th>
+				  <th>Form</th>
+				  <th>Form Location</th>
+				  <th></th>
+				</tr>
+			  </thead>
 			  <tbody>
 			<?php
 			$i = 0;
@@ -42,13 +50,18 @@ if (!class_exists('CustomContactFormsDashboard')) {
 					<?php
 					if ($data->getFormID() > 0) {
 						$data_form = parent::selectForm($data->getFormID());
-						$this_form = $data_form->form_slug;
+						$this_form = (!empty($data_form->form_slug)) ? $data_form->form_slug : __('Form Not Found', 'custom-contact-forms');
 					} else
 						$this_form = __('Custom HTML Form', 'custom-contact-forms');
 					echo $this_form;
 					?>
 					</td>
-					<td class="form-page"><?php echo $data->getFormPage(); ?></td>
+					<td class="form-page">
+					<?php
+					if (strlen($data->getFormPage()) > 30) echo substr($data->getFormPage(), 0, 30) . '...';
+					else echo $data->getFormPage();
+					?>
+					</td>
 					<td>
 						<input class="ccf-view-submission" type="button" value="<?php _e('View', 'custom-contact-forms'); ?>" />
 						<div class="view-submission-popover">

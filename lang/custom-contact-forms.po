@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: custom-contact-forms\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-23 00:59-0500\n"
-"PO-Revision-Date: 2011-01-23 00:59-0500\n"
+"POT-Creation-Date: 2011-01-24 01:22-0500\n"
+"PO-Revision-Date: 2011-01-24 01:22-0500\n"
 "Last-Translator: Taylor Lovett <sdfds@sfs.com>\n"
 "Language-Team: TaylorLovett.com <admin@taylorlovett.com>\n"
 "MIME-Version: 1.0\n"
@@ -1789,20 +1789,20 @@ msgstr ""
 msgid "More import/export methods will be added in the future. Always create a backup before attempting an import! * Note: If you are having problems getting the importer/exporter to work, try CHMODing the import/ and export/ directories to 0777."
 msgstr ""
 
-#: ../modules/widget/custom-contact-forms-dashboard.php:53
+#: ../modules/widget/custom-contact-forms-dashboard.php:66
 msgid "View"
 msgstr ""
 
-#: ../modules/widget/custom-contact-forms-dashboard.php:57
+#: ../modules/widget/custom-contact-forms-dashboard.php:70
 msgid "CCF Saved Form Submission"
 msgstr ""
 
-#: ../modules/widget/custom-contact-forms-dashboard.php:58
+#: ../modules/widget/custom-contact-forms-dashboard.php:71
 msgid "Form Submitted:"
 msgstr ""
 
-#: ../modules/widget/custom-contact-forms-dashboard.php:75
-#: ../modules/widget/custom-contact-forms-dashboard.php:85
+#: ../modules/widget/custom-contact-forms-dashboard.php:88
+#: ../modules/widget/custom-contact-forms-dashboard.php:98
 msgid "View All Submissions"
 msgstr ""
 
