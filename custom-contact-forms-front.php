@@ -44,6 +44,10 @@ if (!class_exists('CustomContactFormsFront')) {
 			return $this->form_errors[$key];
 		}
 		
+		function emptyFormErrors() {
+			$this->form_errors = array();
+		}
+		
 		function getAllFormErrors() {
 			return $this->form_errors;
 		}
