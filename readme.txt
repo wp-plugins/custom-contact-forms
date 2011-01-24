@@ -3,8 +3,8 @@ Contributors: Taylor Lovett
 Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
-Tested up to: 3.0.4
-Stable tag: 4.0.9.2
+Tested up to: 3.1
+Stable tag: 4.5.0
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -12,18 +12,21 @@ Gauranteed to be the most customizable and intuitive contact form plugin for Wor
 
 Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form.
 
-Special Features: 
+Special Features:
 ------------------
-Custom Contact Forms 4.0 will revolutionize the idea of a Wordpress plugin.
+Custom Contact Forms 4.5.0 will revolutionize the idea of a Wordpress plugin.
 
+*	__NEW__ Saved Form Submission dashboard widget!
 *	__NEW__ - All form submissions saved and displayed in admin panel as well as emailed to you
-*	__NEW__ - Import and export forms/fields/styles/etc. with ease!
-*	__NEW__ - This plugin can now be translated in to different languages - UTF8 character encoding.
-*	__NEW__ - Error messages can be customized for each field
+*	__NEW__ - Instantly attach a dropdown with all the countries or all the US States - new fixed fields
+*	Import and export forms/fields/styles/etc. with ease!
+*	This plugin can now be translated in to different languages.
+*	Error messages can be customized for each field
 *	Choose between XHTML or HTML. All code is clean and valid!
-*	Create __unlimited__ forms and fields
+*	Create __unlimited__ forms
+*	Create __unlimited__ fields
 *	Required Fields
-*	__NEW__ - CCF works in all languages that are supported by UTF-8 Character Set
+*	__NEW__ - a dashboard widget that displays the latest form submissions
 *	Custom Contact Forms now uses PHPMailer and thus supports STMP and SSL
 *	__NEW__ Have your contact forms send mail to multiple email addresses
 *	Create text fields, textareas, checkboxs, and dropdown fields!
@@ -51,6 +54,7 @@ Custom Contact Forms 4.0 will revolutionize the idea of a Wordpress plugin.
 *	AJAX enabled admin panel
 *	Assign different CSS classes to each field.
 *	Ability to disable JQuery if it is conflicting with other plugins.
+*	Uses UTF8 character set so non-english characters are easily used!
 
 Restrictions/Requirements:
 -------------------------
@@ -79,10 +83,8 @@ Restrictions/Requirements:
 Custom Contact Forms is an extremely intuitive plugin allowing you to create any type of contact form you can image. CCF is very user friendly but with possibilities comes complexity. __It is recommend that you click the button in the instructions section of the plugin to add default fields, field options, and forms.__ The default content will help you get a feel for the amazing things you can accomplish with this plugin. __It is also recommended you click the "Show Plugin Usage Popover"__ in the instruction area of the admin page to read in detail about all parts of the plugin.
 
 == Support ==
-For questions, feature requests, and support concerning the Custom Contact Forms plugin, please email me at:
-admin@taylorlovett.com
-
-I respond to emails same-day!
+For questions, feature requests, and support concerning the Custom Contact Forms plugin, please visit:
+http://www.taylorlovett.com/wordpress-plugins
 
 == Frequently Asked Questions ==
 
@@ -120,6 +122,28 @@ We are planning to add popover forms and file attachments soon.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now all the screenshots are from Version 1, thus are quite out-dated. Install the plugin to see what it looks like. You won't regret it. I promise!
 
 == Changelog ==
+
+= 4.5.0 =
+*	custom-contact-forms.php - Saved form submissions manager, form background color added to style manager, import/export feature
+*	custom-contact-forms-utils.php - Methods added/removed for efficiency
+*	custom-contact-forms-admin.php - Admin code seperated in to a different file
+*	custom-contact-forms-front.php - Admin code seperated in to a different file
+*	modules/db/custom-contact-forms-db.php - DB methods reorganized for efficiency
+*	modules/db/custom-contact-forms-activate-db.php - DB methods reorganized for efficiency
+*	modules/db/custom-contact-forms-default-db.php - DB methods reorganized for efficiency
+*	modules/usage-popover/custom-contact-forms-popover.php - Popover code seperated in to a different file
+*	modules/export/custom-contact-forms-export.php - Functions for importing and exporting
+*	modules/extra_fields/countries_field.php
+*	modules/extra_fields/date_field.php
+*	modules/extra_fields/states_field.php
+*	modules/widget/custom-contact-forms-dashboard.php
+*	css/custom-contact-forms-admin.css - AJAX abilities added
+*	css/custom-contact-forms-standard.css - Classes renamed
+*	css/custom-contact-forms.css - Classes renamed
+*	css/custom-contact-forms-dashboard.css - Classes renamed
+*	js/custom-contact-forms-dashboard.js - AJAX abilities added to admin panel
+*	lang/custom-contact-forms.po - Allows for translation to different languages
+*	lang/custom-contact-forms.mo - Allows for translation to different languages
 
 = 4.0.9.2 =
 *	css/custom-contact-forms-admin.css - Minor display changes
@@ -174,6 +198,7 @@ Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now a
 *	custom-contact-forms-admin.php - support for multiple form destination emails added
 *	custom-contact-forms-front.php - Mail bug fixed, email validation bug fixed
 *	lang/custom-contact-forms.php - Phrases deleted/added
+
 
 = 4.0.0 =
 *	custom-contact-forms.php - Saved form submissions manager, form background color added to style manager, import/export feature

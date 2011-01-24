@@ -83,6 +83,7 @@ if (!class_exists('CustomContactFormsExport')) {
 				$errors = 0;
 				if ($settings['mode'] == 'clear_import') parent::emptyAllTables();
 				foreach($commands as $command) {
+					
 					if (preg_match('/^[\s]*UPDATE/is', $command)) {
 						if ($settings['import_general_settings']) 
 							if (!parent::query($command)) $errors++;
@@ -94,10 +95,15 @@ if (!class_exists('CustomContactFormsExport')) {
 						if ($settings['import_field_options'] == 0) if ($table_name == CCF_FIELD_OPTIONS_TABLE) $no_query = 1;
 						if ($settings['import_styles'] == 0) if ($table_name == CCF_STYLES_TABLE) $no_query = 1;
 						if ($settings['import_saved_submissions'] == 0) if ($table_name == CCF_USER_DATA_TABLE) $no_query = 1;
-						if ($no_query == 0)
+						if ($no_query == 0) {
 							if (!parent::query($command)) $errors++;
+						}
 					}
 				}
+				ccf_utils::load_module('db/custom-contact-forms-activate-db.php');
+				CustomContactFormsActivateDB::insertFixedFields();
+				parent::serializeAllFormFields();
+				parent::serializeAllFieldOptions();
 				return ($errors == 0) ? true : $errors;
 			}
 			return false;
@@ -105,7 +111,7 @@ if (!class_exists('CustomContactFormsExport')) {
 		
 		function parseMultiQuery($sql, $unescape_semicolons = true, $replace_table_prefix = true) {
 			if (empty($sql)) return false;
-			$prefix = CustomContactFormsStatic::getWPTablePrefix();
+			$prefix = ccf_utils::getWPTablePrefix();
 			$commands = preg_split('/\);[\n\r]*/ims', $sql);
 			foreach ($commands as $k => $v) {
 				if (preg_match('/^[\s]*INSERT INTO/is', $v)) $commands[$k] = $v . ')';
@@ -119,7 +125,7 @@ if (!class_exists('CustomContactFormsExport')) {
 		
 		function generateOptionsUpdateQuery($option_name = NULL) {
 			if ($option_name == NULL) $option_name = $this->option_name;
-			$prefix = CustomContactFormsStatic::getWPTablePrefix();
+			$prefix = ccf_utils::getWPTablePrefix();
 			$options = serialize(get_option($option_name));
 			return 'UPDATE `' . $prefix . "options` SET `option_value`='$options' WHERE `option_name`='$option_name';";
 		}

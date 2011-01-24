@@ -10,6 +10,9 @@
       <li><a href="#pop-fields">
         <?php _e('Fields', 'custom-contact-forms'); ?>
         </a></li>
+	  <li><a href="#pop-fixed-fields">
+        <?php _e('Fixed Fields', 'custom-contact-forms'); ?>
+        </a></li>
       <li><a href="#pop-field-options">
         <?php _e('Field Options', 'custom-contact-forms'); ?>
         </a></li>
@@ -56,14 +59,14 @@
             <?php _e("Text:", 'custom-contact-forms'); ?>
             </span>
             <div>
-              <input type="text" class="width200" value="<?php _e("This is a text field", 'custom-contact-forms'); ?>" />
+              <input type="text" class="ccf-width200" value="<?php _e("This is a text field", 'custom-contact-forms'); ?>" />
             </div>
           </li>
           <li><span>
             <?php _e("Textarea:", 'custom-contact-forms'); ?>
             </span>
             <div>
-              <textarea class="width2000"><?php _e("This is a text field", 'custom-contact-forms'); ?></textarea>
+              <textarea class="ccf-width2000"><?php _e("This is a text field", 'custom-contact-forms'); ?></textarea>
             </div>
           </li>
           <li><span>
@@ -156,15 +159,39 @@
             </span>
             <?php _e("If this is filled out, a stylish tooltip popover displaying this text will show when the field is selected. This will only work if JQuery is enabled in general options.", 'custom-contact-forms'); ?>
           </li>
+		  <li><span>
+            <?php _e("Field Error:", 'custom-contact-forms'); ?>
+            </span>
+            <?php _e("If a user leaves this field blank and the field is required, this error message will be shown. A generic default will show if left blank.", 'custom-contact-forms'); ?>
+          </li>
+		  <li><span>
+            <?php _e("(advanced) Field Class:", 'custom-contact-forms'); ?>
+            </span>
+            <?php _e("This allows you to assign a CSS class to an individual field without affecting anything else. This is a great way to take the customization of your form to the next level.", 'custom-contact-forms'); ?>
+          </li>
           <li><span>
             <?php _e("Field Options:", 'custom-contact-forms'); ?>
             </span>
             <?php _e("After you create a field, if it's field type is radio or dropdown, you can attach field options to the field. Field options are explained in the next section.", 'custom-contact-forms'); ?>
           </li>
         </ul>
+	  </li>
+	  <li>
+		<h3><?php _e('Fixed Fields', 'custom-contact-forms'); ?>
+          <a name="pop-fixed-fields"></a></h3>
         <p>
-          <?php _e("The last important thing related to fields are <span>Fixed Fields</span>. Fixed Fields are special fields that come already created within the plugin such as the captcha spam blocker and email field. Fixed Fields do special things that you wouldn't be able to accomplish with normally; they cannot be deleted or created. If you use the fixedEmail field, as opposed to creating your own email field. the users email will be checked to make sure it is valid, if it isn't a form error will be displayed.", 'custom-contact-forms'); ?>
+          <?php _e("The last important thing related to fields are <span>Fixed Fields</span>. Fixed Fields are special fields that come already created within the plugin such as the captcha spam blocker and email field. Fixed Fields do special things that you wouldn't be able to accomplish with normal fields; they cannot be deleted or created. For example, if you use the fixedEmail field, as opposed to creating your own email field. the users email will be checked to make sure it is valid, if it isn't a form error will be displayed. Below is a list of fixed fields and their descriptions.", 'custom-contact-forms'); ?>
         </p>
+		<ul>
+		  <li><span><?php _e('fixedEmail:', 'custom-contact-forms'); ?></span> <?php _e("When attached to a form and set to required, this field will validate a user's email addresses. If a user's email is not valid, an error will be shown.", 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('captcha:', 'custom-contact-forms'); ?></span> <?php _e('This field helps prevent spam by prompting users to copy numbers displayed on an image. If a user copies the numbers incorrectly, the form will show an error.', 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('fixedWebsite:', 'custom-contact-forms'); ?></span> <?php _e("When attached to a form and set to required, this field will validate a user's website. If a user's website is not valid, an error will be shown.", 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('emailSubject:', 'custom-contact-forms'); ?></span> <?php _e("This lets a user enter in an email subject that will carry over as the subject of the email sent to you on form completion", 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('usaStates:', 'custom-contact-forms'); ?></span> <?php _e("This field displays a dropdown of all the states in the US.", 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('allCountries:', 'custom-contact-forms'); ?></span> <?php _e("This field displays a dropdown of all the countries in the world.", 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('resetButton:', 'custom-contact-forms'); ?></span> <?php _e("Attaching this field adds a reset button right next to the submit button in your form.", 'custom-contact-forms'); ?></li>
+		  <li><span><?php _e('ishuman:', 'custom-contact-forms'); ?></span> <?php _e("This field helps prevent spam by prompting users to check a box to verify that they are human. If the box is left unchecked, an error will be displayed and the user will have to go back.", ''); ?></li>
+		</ul>
       </li>
       <li>
         <h3>
@@ -189,6 +216,11 @@
             </span>
             <?php _e("This is the actual value of the option which isn't shown to the user. This can be the same thing as the label. An example pairing of label => value is: 'The color green' => 'green' or 'Yes' => '1'. The option value is behind the scences; unseen by the user, but when a user fills out the form, the option value is what is actually emailed to you and stored in the database. For dropdown fields the option value is optional, <span>for radio fields it is required</span>.", 'custom-contact-forms'); ?>
           </li>
+		  <li><span>
+            <?php _e("Is Dead Option:", 'custom-contact-forms'); ?>
+            </span> <select><option><?php _e('Please Select:', 'custom-contact-forms'); ?></option><option><?php _e('Option 1', 'custom-contact-forms'); ?></option><option><?php _e('Option 2', 'custom-contact-forms'); ?></option></select><br />
+            <?php _e('Dead options are only useful for required dropdown fields. The first field option "Please Select" would be a useful way to encorporate a dead option. Assume the field is required; if a user submitted that field and left it as "Please Select:", then the form would throw an error and the user would have to go back.', 'custom-contact-forms'); ?>
+		  </li>
         </ul>
         <p>
           <?php _e("Once you create field options, you can attach them (in the field manager) to radio and dropdown fields (that are already created). It is important to remember that after you create a dropdown or radio field, they will not work until you attach one or more field options.", 'custom-contact-forms'); ?>
@@ -256,6 +288,21 @@
             <?php _e('Custom Success URL:', 'custom-contact-forms'); ?>
             </span>
             <?php _e("If this is filled out, users will be sent to this page when they successfully fill out the form. If it is left blank, a popover showing the form's 'success message' will be displayed on successful form submission.", 'custom-contact-forms'); ?>
+          </li>
+		  <li><span>
+            <?php _e('Email From Name:', 'custom-contact-forms'); ?>
+            </span>
+            <?php _e("The email sent to you on form completion will be from this name. If this is left blank, it will default to the 'Default From Name' provided in General Settings.", 'custom-contact-forms'); ?>
+          </li>
+		  <li><span>
+            <?php _e('Email Subject:', 'custom-contact-forms'); ?>
+            </span>
+            <?php _e("This is the subject of the email that will be sent to you on form completion. If this is left blank, it will default to the 'Default Email Subject' provided in General Settings.", 'custom-contact-forms'); ?>
+          </li>
+		  <li><span>
+            <?php _e('Can View Form:', 'custom-contact-forms'); ?>
+            </span>
+            <?php _e("This lets you choose which types of users can view your form. If you want everyone to see the form, check all the boxes. If a user doesn't have access to the form, they will not be able to see it.", 'custom-contact-forms'); ?>
           </li>
           <li><span>
             <?php _e('Attach Fields:', 'custom-contact-forms'); ?>

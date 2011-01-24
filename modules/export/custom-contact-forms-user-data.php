@@ -36,8 +36,8 @@ if (!class_exists('CustomContactFormsUserData')) {
 			$data_array = $this->getDataArray();
 			$encoded_data = '';
 			foreach ($data_array as $key => $value) {
-				$key = CustomContactFormsStatic::encodeOption($key);
-				$value = CustomContactFormsStatic::encodeOption($value);
+				$key = ccf_utils::encodeOption($key);
+				$value = ccf_utils::encodeOption($value);
 				$encoded_data .= 's:'.strlen($key).':"'.$key.'";';
 				$encoded_data .= 's:'.strlen($value).':"'.$value.'";';
 			} 

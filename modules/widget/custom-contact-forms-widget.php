@@ -26,6 +26,7 @@ if (!class_exists('CustomContactFormsWidget')) {
 			echo $before_widget . $before_title . $form_object->form_title . $after_title;
 			echo $custom_contact_front->getFormCode($form_id, true);
 			echo $after_widget;
+
 		}
 		
 		function update($new_instance, $old_instance) {

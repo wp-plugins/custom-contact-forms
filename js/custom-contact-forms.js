@@ -1,24 +1,24 @@
 // Custom Contact Forms plugin javascript
-
-jQuery(document).ready(function ($) {
-	$('<a></a>')
+$j = jQuery.noConflict();
+$j(document).ready(function(){
+	$j('<a></a>')
 		.addClass('ccf-popover-close')
 		.html('[close]')
 		.prependTo('.ccf-popover');
-	$('.ccf-popover').css({'padding' : '10px 14px 10px 10px'});
-	$("a#in").click(function(){
+	$j('.ccf-popover').css({'padding' : '10px 14px 10px 10px'});
+	$j("a#in").click(function(){
 		var sel = ".ccf-popover" + cid;
-		$(".ccf-popover1").fadeIn();
+		$j(".ccf-popover1").fadeIn();
 
 	});
-	$(".ccf-popover-close").click(function(){
-		$(".ccf-popover").hide();
+	$j(".ccf-popover-close").click(function(){
+		$j(".ccf-popover").hide();
 	});
-	$('.show-field-instructions').click(function() {
+	$j('.show-field-instructions').click(function() {
 													  
 	});
 	
-	$(".ccf-tooltip-field").tooltip({
+	$j(".ccf-tooltip-field").tooltip({
 		position: "center right",
 		offset: [-2, 10],
 		effect: "fade",
@@ -27,9 +27,9 @@ jQuery(document).ready(function ($) {
 	
 	});
 	
-	$("#ccf-form-success").delay(500).fadeIn('slow');
-	$("#ccf-form-success .close").click(function() {
-		$("#ccf-form-success").fadeOut();											  
+	$j("#ccf-form-success").delay(500).fadeIn('slow');
+	$j("#ccf-form-success .close").click(function() {
+		$j("#ccf-form-success").fadeOut();											  
 	});
 	
 });

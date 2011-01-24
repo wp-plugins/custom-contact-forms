@@ -12,17 +12,13 @@ if (!class_exists('CustomContactFormsFront')) {
 		var $current_thank_you_message;
 
 		function frontInit() {
-			CustomContactFormsStatic::startSession();
-			$this->registerFrontEndStyles();
+			ccf_utils::startSession();
 			$this->processForms();
-		}
-		
-		function registerFrontEndStyles() {
-			wp_register_style('CCFStandardsCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-standards.css');
-           	wp_register_style('CCFFormsCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms.css');
 		}
 	
 		function insertFrontEndStyles() {
+            wp_register_style('CCFStandardsCSS', WP_PLUGIN_URL . '/custom-contact-forms/css/custom-contact-forms-standards.css');
+           	wp_register_style('CCFFormsCSS', WP_PLUGIN_URL . '/custom-contact-forms/css/custom-contact-forms.css');
            	wp_enqueue_style('CCFStandardsCSS');
 			wp_enqueue_style('CCFFormsCSS');
 		}
@@ -31,9 +27,10 @@ if (!class_exists('CustomContactFormsFront')) {
 			$admin_options = parent::getAdminOptions();
 			if ($admin_options['enable_jquery'] == 1) {
 				wp_enqueue_script('jquery');
-				wp_enqueue_script('jquery-tools', plugins_url() . '/custom-contact-forms/js/jquery.tools.min.js');
-				wp_enqueue_script('ccf-main', plugins_url() . '/custom-contact-forms/js/custom-contact-forms.js', array('jquery'), '1.0');
+				wp_enqueue_script('jquery-tools', WP_PLUGIN_URL . '/custom-contact-forms/js/jquery.tools.min.js');
+				wp_enqueue_script('ccf-main', WP_PLUGIN_URL . '/custom-contact-forms/js/custom-contact-forms.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-resizable'), '1.0');
 			}
+			
 		}
 		
 		function setFormError($key, $message) {
@@ -48,29 +45,65 @@ if (!class_exists('CustomContactFormsFront')) {
 			return $this->form_errors;
 		}
 		
-		function contentFilter($content) {
-			$errors = $this->getAllFormErrors();
+		function shortCodeToForm($atts) {
+			extract(shortcode_atts(array(
+				'form' => 0,
+			), $atts));
+			$this_form = parent::selectForm($form);
+			/*$errors = $this->getAllFormErrors();
 			if (!empty($errors)) {
-				$out = '<div id="custom-contact-forms-errors"><p>'.__('You filled out the form incorrectly.', 'custom-contact-forms').'</p><ul>' . "\n";
+				$admin_options = parent::getAdminOptions();
+				$out = '<div id="custom-contact-forms-errors"><p>'.$admin_options['default_form_error_header'].'</p><ul>' . "\n";
 				$errors = $this->getAllFormErrors();
 				foreach ($errors as $error) {
 					$out .= '<li>'.$error.'</li>' . "\n";
 				}
 				$err_link = (!empty($this->error_return)) ? '<p><a href="'.$this->error_return.'" title="Go Back">&lt; ' . __('Go Back to Form.', 'custom-contact-forms') . '</a></p>' : '';
 				return $out . '</ul>' . "\n" . $err_link . '</div>';
+			} */
+			if (empty($this_form))
+				return '';
+			elseif (!$this->userCanViewForm($this_form)) {
+				$admin_options = parent::getAdminOptions();
+				return $admin_options['default_form_bad_permissions'];
+			} else
+				return $this->getFormCode($this_form);
+		}
+		
+		function emptyFormErrors() {
+			$this->form_errors = array();
+		}
+		
+		function contentFilter($content) {
+			// THIS NEEDS TO REPLACE THE SHORTCODE ONLY ONCE
+			$errors = $this->getAllFormErrors();
+			if (!empty($errors)) {
+				$admin_options = parent::getAdminOptions();
+				$out = '<div id="custom-contact-forms-errors"><p>'.$admin_options['default_form_error_header'].'</p><ul>' . "\n";
+				//$errors = $this->getAllFormErrors();
+				foreach ($errors as $error) {
+					$out .= '<li>'.$error.'</li>' . "\n";
+				}
+				$err_link = (!empty($this->error_return)) ? '<p><a href="'.$this->error_return.'" title="Go Back">&lt; ' . __('Go Back to Form.', 'custom-contact-forms') . '</a></p>' : '';
+				$this->emptyFormErrors();
+				return $out . '</ul>' . "\n" . $err_link . '</div>';
 			}
+			return $content;
+			/*
 			$matches = array();
 			preg_match_all('/\[customcontact form=([0-9]+)\]/si', $content, $matches);
 			$matches_count = count($matches[0]);
 			for ($i = 0; $i < $matches_count; $i++) {
-				if (parent::selectForm($matches[1][$i], '') == false) {
-					$form_code = '';
-				} else {
-					$form_code = $this->getFormCode($matches[1][$i]);
-				}
-				$content = str_replace($matches[0][$i], $form_code, $content);	
+				$this_form = parent::selectForm($matches[1][$i]);
+				if ($this_form == false)
+					$form_replace = '';
+				if (!$this->userCanViewForm($this_form))
+					$form_replace = __("You don't have the proper permissions to view this form.", 'custom-contact-forms');
+				else
+					$form_replace = $this->getFormCode($this_form);
+				$content = str_replace($matches[0][$i], $form_replace, $content);
 			}
-			return $content;
+			return $content;*/
 		}
 		
 		function insertFormSuccessCode() {
@@ -110,43 +143,48 @@ if (!class_exists('CustomContactFormsFront')) {
 		}
 		
 		function validEmail($email) {
-		  if (!@preg_match("/^[^@]{1,64}@[^@]{1,255}$/", $email)) return false;
-		  $email_array = explode("@", $email);
-		  $local_array = explode(".", $email_array[0]);
-		  for ($i = 0; $i < sizeof($local_array); $i++) {
-			if (!@preg_match("/^(([A-Za-z0-9!#$%&'*+\/=?^_`{|}~-][A-Za-z0-9!#$%&'*+\/=?^_`{|}~\.-]{0,63})|(\"[^(\\|\")]{0,62}\"))$/", $local_array[$i])) {
-			  return false;
+			if (!@preg_match("/^[^@]{1,64}@[^@]{1,255}$/", $email)) return false;
+			$email_array = explode("@", $email);
+			$local_array = explode(".", $email_array[0]);
+			for ($i = 0; $i < sizeof($local_array); $i++) {
+				if (!@preg_match("/^(([A-Za-z0-9!#$%&'*+\/=?^_`{|}~-][A-Za-z0-9!#$%&'*+\/=?^_`{|}~\.-]{0,63})|(\"[^(\\|\")]{0,62}\"))$/", $local_array[$i])) {
+					return false;
+				}
+			} if (!@preg_match("/^\[?[0-9\.]+\]?$/", $email_array[1])) {
+				$domain_array = explode(".", $email_array[1]);
+				if (sizeof($domain_array) < 2) return false;
+				for ($i = 0; $i < sizeof($domain_array); $i++) {
+					if (!@preg_match("/^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|([A-Za-z0-9]+))$/", $domain_array[$i])) {
+						return false;
+					}
+				}
 			}
-		  } if (!@preg_match("/^\[?[0-9\.]+\]?$/", $email_array[1])) {
-			$domain_array = explode(".", $email_array[1]);
-			if (sizeof($domain_array) < 2) return false;
-			for ($i = 0; $i < sizeof($domain_array); $i++) {
-			  if (!@preg_match("/^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|([A-Za-z0-9]+))$/", $domain_array[$i])) {
-				return false;
-			  }
-			}
-		  }
-		  return true;
+			return true;
 		}
 		
-		function getFormCode($fid, $is_sidebar = false, $popover = false) {
+		function validWebsite($website) {
+			return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $website);
+		}
+		
+		function getFormCode($form, $is_widget_form = false) {
+			if (empty($form)) return '';
 			$admin_options = parent::getAdminOptions();
-			$form = parent::selectForm($fid, '');
 			$form_key = time();
 			$out = '';
 			$form_styles = '';
-			$style_class = (!$is_sidebar) ? ' customcontactform' : ' customcontactform-sidebar';
+			$style_class = (!$is_widget_form) ? ' customcontactform' : ' customcontactform-sidebar';
 			$form_id = 'form-' . $form->id . '-'.$form_key;
 			if ($form->form_style != 0) {
 				$style = parent::selectStyle($form->form_style, '');
 				$style_class = $style->style_slug;
 			}
-			$form_title = CustomContactFormsStatic::decodeOption($form->form_title, 1, 1);
+			$form_method = (empty($form->form_method)) ? 'post' : strtolower($form->form_method);
+			$form_title = ccf_utils::decodeOption($form->form_title, 1, 1);
 			$action = (!empty($form->form_action)) ? $form->form_action : $_SERVER['REQUEST_URI'];
-			$out .= '<form id="'.$form_id.'" method="'.strtolower($form->form_method).'" action="'.$action.'" class="'.$style_class.'">' . "\n";
-			$out .= CustomContactFormsStatic::decodeOption($form->custom_code, 1, 1) . "\n";
-			if (!empty($form_title) && !$is_sidebar) $out .= '<h4 id="h4-' . $form->id . '-' . $form_key . '">' . $form_title . '</h4>' . "\n";
-			$fields = parent::getAttachedFieldsArray($fid);
+			$out .= '<form id="'.$form_id.'" method="'.$form_method.'" action="'.$action.'" class="'.$style_class.'">' . "\n";
+			$out .= ccf_utils::decodeOption($form->custom_code, 1, 1) . "\n";
+			if (!empty($form_title) && !$is_widget_form) $out .= '<h4 id="h4-' . $form->id . '-' . $form_key . '">' . $form_title . '</h4>' . "\n";
+			$fields = parent::getAttachedFieldsArray($form->id);
 			$hiddens = '';
 			$code_type = ($admin_options['code_type'] == 'XHTML') ? ' /' : '';
 			$add_reset = '';
@@ -154,27 +192,31 @@ if (!class_exists('CustomContactFormsFront')) {
 				$field = parent::selectField($field_id, '');
 				$req = ($field->field_required == 1 or $field->field_slug == 'ishuman') ? '* ' : '';
 				$req_long = ($field->field_required == 1) ? ' ' . __('(required)', 'custom-contact-forms') : '';
-				$input_id = 'id="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'-'.$form_key.'"';
-				$field_value = CustomContactFormsStatic::decodeOption($field->field_value, 1, 1);
+				$input_id = 'id="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'-'.$form_key.'"';
+				$field_value = ccf_utils::decodeOption($field->field_value, 1, 1);
 				$instructions = (empty($field->field_instructions)) ? '' : 'title="' . $field->field_instructions . $req_long . '" ';
 				$tooltip_class = (empty($field->field_instructions)) ? '' : 'ccf-tooltip-field';
-				if ($admin_options['enable_widget_tooltips'] == 0 && $is_sidebar) $instructions = '';
+				if ($admin_options['enable_widget_tooltips'] == 0 && $is_widget_form) $instructions = '';
 				if ($_SESSION['fields'][$field->field_slug]) {
 					if ($admin_options['remember_field_values'] == 1)
 						$field_value = $_SESSION['fields'][$field->field_slug];
 				} if ($field->field_slug == 'captcha') {
-					$out .= '<div>' . "\n" . $this->getCaptchaCode($form->id) . "\n" . '</div>' . "\n";
+					$out .= '<div>' . "\n" . $this->getCaptchaCode($field, $form->id) . "\n" . '</div>' . "\n";
+				} elseif ($field->field_slug == 'usaStates') {
+					$out .= '<div>' . "\n" . $this->getStatesCode($field, $form->id) . "\n" . '</div>' . "\n";
+				} elseif ($field->field_slug == 'allCountries') {
+					$out .= '<div>' . "\n" . $this->getCountriesCode($field, $form->id) . "\n" . '</div>' . "\n";
 				} elseif ($field->field_slug == 'resetButton') {
-					$add_reset = ' <input type="reset" '.$instructions.' class="reset-button '.$field->field_class.'" value="' . $field->field_value . '" />';
+					$add_reset = ' <input type="reset" '.$instructions.' class="reset-button '.$field->field_class.' '.$tooltip_class.'" value="' . $field->field_value . '" />';
 				} elseif ($field->field_type == 'Text') {
 					$maxlength = (empty($field->field_maxlength) or $field->field_maxlength <= 0) ? '' : ' maxlength="'.$field->field_maxlength.'"';
-					$out .= '<div>'."\n".'<label for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<input class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' '.$input_id.' type="text" name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'"'.$maxlength.''.$code_type.'>'."\n".'</div>' . "\n";
+					$out .= '<div>'."\n".'<label for="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<input class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' '.$input_id.' type="text" name="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'"'.$maxlength.''.$code_type.'>'."\n".'</div>' . "\n";
 				} elseif ($field->field_type == 'Hidden') {
-					$hiddens .= '<input type="hidden" name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'" '.$input_id.''.$code_type.'>' . "\n";
+					$hiddens .= '<input type="hidden" name="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'" '.$input_id.''.$code_type.'>' . "\n";
 				} elseif ($field->field_type == 'Checkbox') {
-					$out .= '<div>'."\n".'<input class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' type="checkbox" name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" value="'.CustomContactFormsStatic::decodeOption($field->field_value, 1, 1).'" '.$input_id.''.$code_type.'> '."\n".'<label class="checkbox" for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">' . $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'</div>' . "\n";
+					$out .= '<div>'."\n".'<input class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' type="checkbox" name="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'" value="'.ccf_utils::decodeOption($field->field_value, 1, 1).'" '.$input_id.''.$code_type.'> '."\n".'<label class="checkbox" for="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">' . $req .ccf_utils::decodeOption($field->field_label, 1, 1).'</label>'."\n".'</div>' . "\n";
 				} elseif ($field->field_type == 'Textarea') {
-					$out .= '<div>'."\n".'<label for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<textarea class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' '.$input_id.' rows="5" cols="40" name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'.$field_value.'</textarea>'."\n".'</div>' . "\n";
+					$out .= '<div>'."\n".'<label for="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<textarea class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' '.$input_id.' rows="5" cols="40" name="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">'.$field_value.'</textarea>'."\n".'</div>' . "\n";
 				} elseif ($field->field_type == 'Dropdown') {
 					$field_options = '';
 					$options = parent::getAttachedFieldOptionsArray($field->id);
@@ -182,10 +224,13 @@ if (!class_exists('CustomContactFormsFront')) {
 						$option = parent::selectFieldOption($option_id);
 						$option_sel = ($field->field_value == $option->option_slug) ? ' selected="selected"' : '';
 						$option_value = (!empty($option->option_value)) ? ' value="' . $option->option_value . '"' : '';
+						// Weird way of marking a state dead. TODO: Find another way.
+						$option_value = ($option->option_dead == 1) ? ' value="' . CCF_DEAD_STATE_VALUE . '"' : $option_value;
 						$field_options .= '<option'.$option_sel.''.$option_value.'>' . $option->option_label . '</option>' . "\n";
 					}
 					if (!empty($options)) {
-						$out .= '<div>'."\n".'<label for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<select class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' '.$input_id.' name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'."\n".$field_options.'</select>'."\n".'</div>' . "\n";
+						if (!$is_widget_form) $out .= '<div>'."\n".'<label class="select" for="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<select '.$instructions.' '.$input_id.' name="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'" class="'.$field->field_class.' '.$tooltip_class.'">'."\n".$field_options.'</select>'."\n".'</div>' . "\n";
+						else  $out .= '<div>'."\n".'<label for="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<select class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' '.$input_id.' name="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">'."\n".$field_options.'</select>'."\n".'</div>' . "\n";
 					}
 				} elseif ($field->field_type == 'Radio') {
 					$field_options = '';
@@ -193,13 +238,13 @@ if (!class_exists('CustomContactFormsFront')) {
 					foreach ($options as $option_id) {
 						$option = parent::selectFieldOption($option_id);
 						$option_sel = ($field->field_value == $option->option_slug) ? ' checked="checked"' : '';
-						$field_options .= '<div><input'.$option_sel.' class="'.$field->field_class.' '.$tooltip_class.'" type="radio" '.$instructions.' name="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'" value="'.CustomContactFormsStatic::decodeOption($option->option_value, 1, 1).'"'.$code_type.'> <label class="select" for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">' . CustomContactFormsStatic::decodeOption($option->option_label, 1, 1) . '</label></div>' . "\n";
+						$field_options .= '<div><input'.$option_sel.' class="'.$field->field_class.' '.$tooltip_class.'" type="radio" '.$instructions.' name="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'" value="'.ccf_utils::decodeOption($option->option_value, 1, 1).'"'.$code_type.'> <label class="select" for="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">' . ccf_utils::decodeOption($option->option_label, 1, 1) . '</label></div>' . "\n";
 					}
-					$field_label = (!empty($field->field_label)) ? '<label for="'.CustomContactFormsStatic::decodeOption($field->field_slug, 1, 1).'">'. $req .CustomContactFormsStatic::decodeOption($field->field_label, 1, 1).'</label>' : '';
+					$field_label = (!empty($field->field_label)) ? '<label for="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field->field_label, 1, 1).'</label>' : '';
 					if (!empty($options)) $out .= '<div>'."\n".$field_label."\n".$field_options."\n".'</div>' . "\n";
 				}
 			}
-			$submit_text = (!empty($form->submit_button_text)) ? CustomContactFormsStatic::decodeOption($form->submit_button_text, 1, 0) : 'Submit';
+			$submit_text = (!empty($form->submit_button_text)) ? ccf_utils::decodeOption($form->submit_button_text, 1, 0) : 'Submit';
 			$out .= '<input name="form_page" value="'.$_SERVER['REQUEST_URI'].'" type="hidden"'.$code_type.'>'."\n".'<input type="hidden" name="fid" value="'.$form->id.'"'.$code_type.'>'."\n".$hiddens."\n".'<input type="submit" id="submit-' . $form->id . '-'.$form_key.'" class="submit" value="' . $submit_text . '" name="customcontactforms_submit"'.$code_type.'>';
 			if (!empty($add_reset)) $out .= $add_reset;
 			$out .= "\n" . '</form>';
@@ -259,21 +304,21 @@ if (!class_exists('CustomContactFormsFront')) {
 						if (in_array($key, $req_fields) && !empty($value)) {
 							unset($req_fields[array_search($key, $req_fields)]);
 						}
-						$body .= ucwords(str_replace('_', ' ', htmlspecialchars($key))) . ': ' . htmlspecialchars($value) . "<br />\n";
+						$body .= ucwords(str_replace('_', ' ', htmlspecialchars($key))) . ': ' . htmlspecialchars($value) . "<br /><br />\n";
 						$data_array[$key] = $value;
 					}
 				} foreach($req_fields as $err)
 					$this->setFormError($err, $lang['field_blank'] . '"' . $err . '"');
 				$errors = $this->getAllFormErrors();
 				if (empty($errors)) {
-					require_once('modules/export/custom-contact-forms-user-data.php');
+					ccf_utils::load_module('export/custom-contact-forms-user-data.php');
 					$data_object = new CustomContactFormsUserData(array('data_array' => $data_array, 'form_page' => $_SERVER['SERVER_NAME']. $_SERVER['REQUEST_URI'], 'form_id' => 0, 'data_time' => time()));
 					parent::insertUserData($data_object);
 					$body .= "<br />\n" . htmlspecialchars($lang['form_page']) . $_SERVER['SERVER_NAME']. $_SERVER['REQUEST_URI'] . "<br />\n" . $lang['sender_ip'] . $_SERVER['REMOTE_ADDR'] . "<br />\n";
 					if ($admin_options['email_form_submissions'] == 1) {
 						if (!class_exists('PHPMailer'))
 							require_once(ABSPATH . "wp-includes/class-phpmailer.php"); 
-						$mail = new PHPMailer(false);
+						$mail = new PHPMailer();
 						if ($admin_options['mail_function'] == 'smtp') {
 							$mail->IsSMTP();
 							$mail->Host = $admin_options['smtp_host'];
@@ -287,27 +332,33 @@ if (!class_exists('CustomContactFormsFront')) {
 						}
 						$mail->From = $admin_options['default_from_email'];
 						$mail->FromName = 'Custom Contact Forms';
-						$mail->AddAddress($_POST['destination_email']);
+						$dest_email_array = $this->getDestinationEmailArray($_POST['destination_email']);
+						if (empty($dest_email_array)) $mail->AddAddress($admin_options['default_to_email']);
+						else {
+							foreach ($dest_email_array as $em)
+								$mail->AddAddress($em);
+						}
 						$mail->Subject = $admin_options['default_form_subject'];
 						$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
-						$mail->CharSet = "utf-8";
 						$mail->MsgHTML(stripslashes($body));
 						$mail->Send();
-					} if ($_POST['thank_you_page'])
-						CustomContactFormsStatic::redirect($_POST['thank_you_page']);
+					} if ($_POST['thank_you_page']) {
+						ccf_utils::redirect($_POST['thank_you_page']);
+					}
 					$this->current_thank_you_message = (!empty($_POST['success_message'])) ? $_POST['success_message'] : $admin_options['form_success_message'];
 					$this->current_form = 0;
 					add_action('wp_footer', array(&$this, 'insertFormSuccessCode'), 1);
 				}
 				unset($_POST);
 			} elseif ($_POST['customcontactforms_submit']) {
-				CustomContactFormsStatic::startSession();
+				ccf_utils::startSession();
 				$this->error_return = $_POST['form_page'];
 				$admin_options = parent::getAdminOptions();
 				$fields = parent::getAttachedFieldsArray($_POST['fid']);
 				$form = parent::selectForm($_POST['fid']);
 				$checks = array();
 				$reply = ($_POST['fixedEmail']) ? $_POST['fixedEmail'] : NULL;
+				$fixed_subject = ($_POST['emailSubject']) ? $_POST['emailSubject'] : NULL;
 				$cap_name = 'captcha_' . $_POST['fid'];
 				foreach ($fields as $field_id) {
 					$field = parent::selectField($field_id, '');
@@ -329,9 +380,24 @@ if (!class_exists('CustomContactFormsFront')) {
 								$this->setFormError('fixedEmail', __('The email address you provided is not valid.', 'custom-contact-forms'));
 							else $this->setFormError('fixedEmail', $field->field_error);
 						}
+					} elseif ($field->field_slug == 'fixedWebsite' && $field->field_required == 1 && !empty($_POST['fixedWebsite'])) {
+						if (!$this->validWebsite($_POST['fixedWebsite'])) {
+							if (empty($field->field_error))
+								$this->setFormError('fixedWebsite', __('The website address you provided is not valid.', 'custom-contact-forms'));
+							else $this->setFormError('fixedWebsite', $field->field_error);
+						}
 					} else {
-						if ($field->field_required == 1 && empty($_POST[$field->field_slug])) {
-							$field_error_label = (empty($field->field_label)) ? $field->field_slug : $field->field_label;
+						$field_error_label = (empty($field->field_label)) ? $field->field_slug : $field->field_label;
+						if ($field->field_required == 1 && !empty($_POST[$field->field_slug])) {
+							if ($field->field_type == 'Dropdown' || $field->field_type == 'Radio') {
+								// TODO: find better way to check for a dead state
+								if ($_POST[$field->field_slug] == CCF_DEAD_STATE_VALUE) {
+									if (empty($field->field_error))
+										$this->setFormError($field->field_slug, $lang['field_blank'] . '"'.$field_error_label.'"');
+									else $this->setFormError($field->field_slug, $field->field_error);
+								}
+							}
+						} elseif ($field->field_required == 1 && empty($_POST[$field->field_slug])) {
 							if (empty($field->field_error))
 								$this->setFormError($field->field_slug, $lang['field_blank'] . '"'.$field_error_label.'"');
 							else $this->setFormError($field->field_slug, $field->field_error);
@@ -344,7 +410,7 @@ if (!class_exists('CustomContactFormsFront')) {
 				foreach ($_POST as $key => $value) {
 					$_SESSION['fields'][$key] = $value;
 					$field = parent::selectField('', $key);
-					if (!array_key_exists($key, $GLOBALS['ccf_fixed_fields']) or $key == 'fixedEmail') {
+					if (!array_key_exists($key, $GLOBALS['ccf_fixed_fields']) || $key == 'fixedEmail' || $key == 'usaStates' || $key == 'fixedWebsite'|| $key == 'emailSubject' || $key == 'allCountries') {
 						$mail_field_label = (empty($field->field_label)) ? $field->field_slug : $field->field_label;
 						$body .= htmlspecialchars($mail_field_label) . ': ' . htmlspecialchars($value) . "<br />\n";
 						$data_array[$key] = $value;
@@ -360,7 +426,7 @@ if (!class_exists('CustomContactFormsFront')) {
 				}
 				$errors = $this->getAllFormErrors();
 				if (empty($errors)) {
-					require_once('modules/export/custom-contact-forms-user-data.php');
+					ccf_utils::load_module('export/custom-contact-forms-user-data.php');
 					unset($_SESSION['captcha_' . $_POST['fid']]);
 					unset($_SESSION['fields']);
 					$data_object = new CustomContactFormsUserData(array('data_array' => $data_array, 'form_page' => $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], 'form_id' => $form->id, 'data_time' => time()));
@@ -382,24 +448,27 @@ if (!class_exists('CustomContactFormsFront')) {
 								$mail->SMTPAuth = false;
 						}
 						$dest_email_array = $this->getDestinationEmailArray($form->form_email);
+						$from_name = (empty($admin_options['default_from_name'])) ? __('Custom Contact Forms', 'custom-contact-forms') : $admin_options['default_from_name'];
+						if (!empty($form->form_email_name)) $from_name = $form->form_email_name;
 						if (empty($dest_email_array)) $mail->AddAddress($admin_options['default_to_email']);
 						else {
 							foreach ($dest_email_array as $em)
 								$mail->AddAddress($em);
 						}
-						$mail->FromName = 'Custom Contact Forms';
-						if ($reply != NULL && $this->validEmail($reply)) {
+						if ($reply != NULL && $this->validEmail($reply))
 							$mail->From = $reply;
-						} else {
+						else
 							$mail->From = $admin_options['default_from_email'];
-						}
-						$mail->Subject = $admin_options['default_form_subject'];
-						$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
-						$mail->CharSet = "utf-8";
+						$mail->FromName = $from_name;
+						$mail->Subject = (!empty($form->form_email_subject)) ? $form->form_email_subject : $admin_options['default_form_subject'];
+						if ($fixed_subject != NULL) $mail->Subject = $fixed_subject;
+						$mail->AltBody = __("To view the message, please use an HTML compatible email viewer.", 'custom-contact-forms');
+						$mail->CharSet = 'utf-8';
 						$mail->MsgHTML(stripslashes($body));
 						$mail->Send();
-					} if (!empty($form->form_thank_you_page))
-						CustomContactFormsStatic::redirect($form->form_thank_you_page);
+					} if (!empty($form->form_thank_you_page)) {
+						ccf_utils::redirect($form->form_thank_you_page);
+					}
 					$this->current_form = $form->id;
 					add_action('wp_footer', array(&$this, 'insertFormSuccessCode'), 1);
 				}
@@ -407,15 +476,44 @@ if (!class_exists('CustomContactFormsFront')) {
 			}
 		}
 		
-		function getCaptchaCode($form_id) {
+		function getCaptchaCode($field_object, $form_id) {
 			$admin_options = parent::getAdminOptions();
 			$code_type = ($admin_options['code_type'] == 'XHTML') ? ' /' : '';
-			$captcha = parent::selectField('', 'captcha');
-			$instructions = (empty($captcha->field_instructions)) ? '' : 'title="'.$captcha->field_instructions.'" ';
-			$tooltip_class = (empty($captcha->field_instructions)) ? '' : 'ccf-tooltip-field';
+			if (empty($field_object->field_instructions)) {
+				$instructions = '';
+				$tooltip_class = '';
+			} else {
+				$instructions = 'title="'.$field_object->field_instructions.'"';
+				$tooltip_class = 'ccf-tooltip-field';
+			}
 			$out = '<img width="96" height="24" alt="' . __('Captcha image for Custom Contact Forms plugin. You must type the numbers shown in the image', 'custom-contact-forms') . '" id="captcha-image" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/custom-contact-forms/image.php?fid='.$form_id.'"'.$code_type.'> 
-			<div><label for="captcha'.$form_id.'">* '.$captcha->field_label.'</label> <input class="'.$captcha->field_class.' '.$tooltip_class.'" type="text" '.$instructions.' name="captcha" id="captcha'.$form_id.'" maxlength="20"'.$code_type.'></div>';
+			<div><label for="captcha'.$form_id.'">* '.$field_object->field_label.'</label> <input class="'.$field_object->field_class.' '.$tooltip_class.'" type="text" '.$instructions.' name="captcha" id="captcha'.$form_id.'" maxlength="20"'.$code_type.'></div>';
 			return $out;
+		}
+		
+		function userCanViewForm($form_object) {
+			if (is_user_logged_in()) {
+				global $current_user;
+				$user_roles = $current_user->roles;
+				$user_role = array_shift($user_roles);
+			} else
+				$user_role = 'Non-Registered User';
+			$form_access_array = parent::getFormAccessArray($form_object->form_access);
+			return parent::formHasRole($form_access_array, $user_role);
+		}
+		
+		function getStatesCode($field_object, $form_id) {
+			ccf_utils::load_module('extra_fields/states_field.php');
+			$req = ($field_object->field_required == 1) ? '* ' : '';
+			$states_field = new ccf_states_field($field_object->field_class, $form_id, $field_object->field_value, $field_object->field_instructions);
+			return "\n".'<label class="select" for="'.ccf_utils::decodeOption($field_object->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field_object->field_label, 1, 1).'</label>'.$states_field->getCode();
+		}
+		
+		function getCountriesCode($field_object, $form_id) {
+			ccf_utils::load_module('extra_fields/countries_field.php');
+			$req = ($field_object->field_required == 1) ? '* ' : '';
+			$countries_field = new ccf_countries_field($field_object->field_class, $form_id, $field_object->field_value, $field_object->field_instructions);
+			return '<label class="select" for="'.ccf_utils::decodeOption($field_object->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field_object->field_label, 1, 1).'</label>' . "\n" . $countries_field->getCode();
 		}
 		
 		function getDestinationEmailArray($str) {
