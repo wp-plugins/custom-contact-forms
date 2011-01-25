@@ -179,7 +179,6 @@ if (!class_exists('CustomContactFormsDB')) {
 		
 		function deleteUserData($uid) {
 			global $wpdb;
-			return true;
 			$wpdb->query("DELETE FROM " . CCF_USER_DATA_TABLE . " WHERE id='$uid'");
 			return true;
 		}
@@ -328,12 +327,14 @@ if (!class_exists('CustomContactFormsDB')) {
 			$forms = $this->selectAllForms();
 			foreach ($forms as $form)
 				$this->detachField($field_id, $form->id);
+			return true;
 		}
 		
 		function detachFieldOptionAll($option_id) {
 			$fields = $this->selectAllFields();
 			foreach ($fields as $field)
 				$this->detachFieldOption($option_id, $field->id);
+			return true;
 		}
 		
 		function detachStyleAll($style_id) {
@@ -343,6 +344,7 @@ if (!class_exists('CustomContactFormsDB')) {
 					$this->updateForm(array('form_style' => 0), $form->id);
 				}
 			}
+			return true;
 		}
 		
 		function formatSlug($slug) {

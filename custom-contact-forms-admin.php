@@ -6,6 +6,8 @@
 */
 if (!class_exists('CustomContactFormsAdmin')) {
 	class CustomContactFormsAdmin extends CustomContactForms {
+		var $action_complete = '';
+	
 		function adminInit() {
 			$this->downloadExportFile();
 			$this->runImport();
@@ -58,7 +60,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			}
 		}
 		
-		function contactAuthor($name, $email, $website, $message, $type) {
+		function contactAuthor($name, $email, $website, $message, $type, $host, $ccf_version, $wp_version) {
 			if (empty($message)) return false;
 			if (!class_exists('PHPMailer'))
 				require_once(ABSPATH . "wp-includes/class-phpmailer.php"); 
@@ -66,6 +68,9 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			$body = "Name: $name<br />\n";
 			$body .= "Email: $email<br />\n";
 			$body .= "Website: $website<br />\n";
+			$body .= "CCF Version: $ccf_version<br />\n";
+			$body .= "WP Version: $wp_version<br />\n";
+			$body .= "Host: $host<br />\n";
 			$body .= "Message: $message<br />\n";
 			$body .= "Message Type: $type<br />\n";
 			$body .= 'Sender IP: ' . $_SERVER['REMOTE_ADDR'] . "<br />\n";
@@ -210,24 +215,40 @@ if (!class_exists('CustomContactFormsAdmin')) {
 		function handleAdminPostRequests() {
 			$out = array('success' => true);
 			if ($_POST['object_create']) {
-				if ($_POST['object_type'] == 'form') parent::insertForm($_POST['object']);
-				elseif ($_POST['object_type'] == 'field') parent::insertField($_POST['object']);
-				elseif ($_POST['object_type'] == 'field_option') parent::insertFieldOption($_POST['object']);
-				elseif ($_POST['object_type'] == 'style')  parent::insertStyle($_POST['object']);
+				if ($_POST['object_type'] == 'form') {
+					if (parent::insertForm($_POST['object']) != false)
+						$this->action_complete = __('A new form was successfully created!', 'custom-contact-forms');
+				} elseif ($_POST['object_type'] == 'field') {
+					if (parent::insertField($_POST['object']) != false)
+						$this->action_complete = __('A new field was successful created!', 'custom-contact-forms');
+				} elseif ($_POST['object_type'] == 'field_option') {
+					if (parent::insertFieldOption($_POST['object']) != false)
+						$this->action_complete = __('A new field option was successful created!', 'custom-contact-forms');
+				} elseif ($_POST['object_type'] == 'style')  {
+					if (parent::insertStyle($_POST['object']) != false)
+						$this->action_complete = __('A new style was successful created!', 'custom-contact-forms');
+				}
 				return $out;
 			}
 			
 			if ($_POST['object_attach']) {
-				if ($_POST['object_type'] == 'form') parent::addFieldToForm($_POST['attach_object_id'], $_POST['object_id']);
-				elseif ($_POST['object_type'] == 'field') parent::addFieldOptionToField($_POST['attach_object_id'], $_POST['object_id']);
+				if ($_POST['object_type'] == 'form') {
+					if (parent::addFieldToForm($_POST['attach_object_id'], $_POST['object_id']) != false)
+						$this->action_complete = __('A field was successful attached!', 'custom-contact-forms');
+				} elseif ($_POST['object_type'] == 'field') {
+					if (parent::addFieldOptionToField($_POST['attach_object_id'], $_POST['object_id']) != false)
+						$this->action_complete = __('A field option was successful attached!', 'custom-contact-forms');
+				}
 				return $out;
 			}
 			
 			if ($_POST['object_detach']) {
 				if ($_POST['object_type'] == 'form') {
-					parent::detachField($_POST['detach_object_id'], $_POST['object_id']);
+					if (parent::detachField($_POST['detach_object_id'], $_POST['object_id']) != false)
+						$this->action_complete = __('A field was successful detached!', 'custom-contact-forms');
 				} elseif ($_POST['object_type'] == 'field') {
-					parent::detachFieldOption($_POST['detach_object_id'], $_POST['object_id']);
+					if (parent::detachFieldOption($_POST['detach_object_id'], $_POST['object_id']) != false)
+						$this->action_complete = __('A field option was successful detached!', 'custom-contact-forms');
 				}
 				return $out;
 			}
@@ -256,6 +277,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 							$out['objects'][] = $obj;
 						}
 					}
+					$this->action_complete = __('Your bulk action has been completed!', 'custom-contact-forms');
 				}
 				
 				elseif ($_POST['object_bulk_action'] == 'delete') {
@@ -265,10 +287,13 @@ if (!class_exists('CustomContactFormsAdmin')) {
 							elseif ($obj['object_type'] == 'field') parent::deleteField($obj['object_id']);
 							elseif ($obj['object_type'] == 'field_option') parent::deleteFieldOption($obj['object_id']);
 							elseif ($obj['object_type'] == 'style') parent::deleteStyle($obj['object_id']);
-							elseif ($obj['object_type'] == 'form_submission') parent::deleteUserData($obj['object_id']);
+							elseif ($obj['object_type'] == 'form_submission') {
+								parent::deleteUserData($obj['object_id']);
+							}
 							$out['objects'][] = $obj;
 						}
 					}
+					$this->action_complete = __('Your bulk action has been completed!', 'custom-contact-forms');
 				}
 			}
 			return $out;
@@ -292,10 +317,12 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			//parent::serializeAllFieldOptions();
 			if ($_POST['insert_default_content']) {
 				ccf_utils::load_module('db/custom-contact-forms-default-db.php');
+				$this->action_complete = __('Default content has been inserted!', 'custom-contact-forms');
 				new CustomContactFormsDefaultDB();
 			} elseif ($_POST['contact_author']) {
+				$this->action_complete = __('Your message has been sent!', 'custom-contact-forms');
 				$this_url = (!empty($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : $_SERVER['SERVER_NAME'];
-				$this->contactAuthor($_POST['name'], $_POST['email'], $this_url, $_POST['message'], $_POST['type']);
+				$this->contactAuthor($_POST['name'], $_POST['email'], $this_url, $_POST['message'], $_POST['type'], $_POST['host'], $_POST['ccf-version'], $_POST['wp-version']);
 			} elseif ($_GET['clear_tables'] == 1) {
 				parent::emptyAllTables();
 			}
@@ -340,6 +367,12 @@ if (!class_exists('CustomContactFormsAdmin')) {
                 <input type="text" name="email" value="Your Email" onclick="value=''" />
                 <input type="submit" value="Sign Up for Free" />
             </form>
+			
+			<?php if (!empty($this->action_complete)) { ?>
+			<div class="action-complete">
+				<?php echo $this->action_complete; ?>
+			</div>
+			<?php } ?>
 
               <a name="create-fields"></a>
 			  <div id="create-fields" class="postbox">
@@ -557,7 +590,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 						<input type="hidden" name="object_type" value="form" />
 						<input type="submit" class="create-button" value="<?php _e("Create Form", 'custom-contact-forms'); ?>" name="object_create" />
 					  </li>
-					  <li class="attach"><span class="ccf-red">*</span> <?php _e('You should got to the form manager below to attach fields to this form after you create it.', 'custom-contact-forms'); ?></li>
+					  <li class="attach"><span class="ccf-red">*</span> <?php _e('You should go to the form manager below to attach fields to this form after you create it.', 'custom-contact-forms'); ?></li>
 					</ul>
 				  </form>
 				</div>
@@ -706,10 +739,10 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				</tfoot>
 			  </table>
 			  <select class="bulk-dropdown" name="object_bulk_action">
-				<option value="0">Bulk Actions</option>
-				<option value="edit">Edit</option>
-				<option value="delete">Delete</option>
-			  </select> <input type="submit" name="object_bulk_apply" class="bulk-apply" value="Apply" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" width="16" height="16" class="loading-img" />
+				<option value="0"><?php _e('Bulk Actions', 'custom-contact-forms'); ?></option>
+				<option value="edit"><?php _e('Save', 'custom-contact-forms'); ?></option>
+				<option value="delete"><?php _e('Delete', 'custom-contact-forms'); ?></option>
+			  </select> <input type="submit" name="object_bulk_apply" class="bulk-apply" value="<?php _e('Apply', 'custom-contact-forms'); ?>" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" width="16" height="16" class="loading-img" />
 			  </form>
 			  <a name="manage-fixed-fields"></a>
 			  <h3 class="manage-h3">
@@ -818,9 +851,9 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				</tfoot>
 			  </table>
 			  <select class="bulk-dropdown" name="object_bulk_action">
-				<option value="0">Bulk Actions</option>
-				<option value="edit">Edit</option>
-			  </select> <input type="submit" class="bulk-apply" name="object_bulk_apply" value="Apply" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" width="16" height="16" class="loading-img" />
+				<option value="0"><?php _e('Bulk Actions', 'custom-contact-forms'); ?></option>
+				<option value="edit"><?php _e('Save', 'custom-contact-forms'); ?></option>
+			  </select> <input type="submit" class="bulk-apply" name="object_bulk_apply" value="<?php _e('Apply', 'custom-contact-forms'); ?>" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" width="16" height="16" class="loading-img" />
 			  </form>
 			  <a name="manage-field-options"></a>
 			  <div id="manage-field-options" class="postbox">
@@ -880,7 +913,11 @@ if (!class_exists('CustomContactFormsAdmin')) {
                 ?>
 						</tbody>
                       </table>
-					  <select class="bulk-dropdown" name="object_bulk_action"><option value="0">Bulk Actions</option><option value="edit">Edit</option><option value="delete">Delete</option></select> <input type="submit" class="bulk-apply" name="object_bulk_apply" value="Apply" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" width="16" height="16" class="loading-img" />
+					  <select class="bulk-dropdown" name="object_bulk_action">
+					  <option value="0"><?php _e('Bulk Actions', 'custom-contact-forms'); ?></option>
+				<option value="edit"><?php _e('Save', 'custom-contact-forms'); ?></option>
+				<option value="delete"><?php _e('Delete', 'custom-contact-forms'); ?></option></select> 
+					  <input type="submit" class="bulk-apply" name="object_bulk_apply" value="<?php _e('Apply', 'custom-contact-forms'); ?>" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" width="16" height="16" class="loading-img" />
 					  </form>
 				</div>
 			  </div>
@@ -1021,7 +1058,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 							  <label for="objects[<?php echo $i; ?>][values][custom_code]"><?php _e("Custom Code:", 'custom-contact-forms'); ?></label>
 							  <input name="objects[<?php echo $i; ?>][values][custom_code]" type="text" value="<?php echo $forms[$i]->custom_code; ?>" /></td>
 							<input name="objects[<?php echo $i; ?>][values][form_access_update]" type="hidden" value="1" /></td>
-							<a href="javascript:void(0)" class="toollink" title="<?php _e("If you want to show this form to only certain types of users, you can uncheck boxes accordingly. To show this form to anyone, check all the boxes. This will only take effect if the 'Form Access Manager' is enabled in general settings.", 'custom-contact-forms'); ?>">(?)</a> 
+							<a href="javascript:void(0)" class="toollink" title="<?php _e("If you want to show this form to only certain types of users, you can uncheck boxes accordingly. To show this form to anyone, check all the boxes. This will only take effect if 'Form Access Capabilities' is enabled in general settings.", 'custom-contact-forms'); ?>">(?)</a> 
 							<label for="form_access">Can View Form:</label>
                             
                             <?php
@@ -1109,7 +1146,11 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				  
 				</tfoot>
 			  </table>
-			  <select class="bulk-dropdown" name="object_bulk_action"><option value="0">Bulk Actions</option><option value="edit">Edit</option><option value="delete">Delete</option></select> <input type="submit" name="object_bulk_apply" class="bulk-apply" value="Apply" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" width="16" height="16" class="loading-img" />
+			  <select class="bulk-dropdown" name="object_bulk_action">
+			  <option value="0"><?php _e('Bulk Actions', 'custom-contact-forms'); ?></option>
+				<option value="edit"><?php _e('Save', 'custom-contact-forms'); ?></option>
+				<option value="delete"><?php _e('Delete', 'custom-contact-forms'); ?></option></select> 
+			  <input type="submit" name="object_bulk_apply" class="bulk-apply" value="<?php _e('Apply', 'custom-contact-forms'); ?>" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" width="16" height="16" class="loading-img" />
 			  </form>
               
 			  <a name="create-styles"></a>
@@ -1675,7 +1716,11 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				  </tr>
 				</tfoot>
 			  </table>
-			  <select class="bulk-dropdown" name="object_bulk_action"><option value="0">Bulk Actions</option><option value="edit">Edit</option><option value="delete">Delete</option></select> <input type="submit" name="object_bulk_apply" class="bulk-apply" value="Apply" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" width="16" height="16" class="loading-img" />
+			  <select class="bulk-dropdown" name="object_bulk_action">
+			  <option value="0"><?php _e('Bulk Actions', 'custom-contact-forms'); ?></option>
+				<option value="edit"><?php _e('Save', 'custom-contact-forms'); ?></option>
+				<option value="delete"><?php _e('Delete', 'custom-contact-forms'); ?></option></select> 
+			  <input type="submit" name="object_bulk_apply" class="bulk-apply" value="<?php _e('Apply', 'custom-contact-forms'); ?>" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" width="16" height="16" class="loading-img" />
 			  </form>
 			  <a name="contact-author"></a>
 			  <div id="contact-author" class="postbox">
@@ -1725,6 +1770,18 @@ if (!class_exists('CustomContactFormsAdmin')) {
 						  </option>
 						</select>
 					  </li>
+					  <li>
+						<label for="ccf-version">
+						<?php _e("Version of Custom Contact Forms?", 'custom-contact-forms'); ?>
+						</label>
+						<input id="ccf-version" type="text" name="ccf-version" maxlength="50" />
+					  </li>
+					  <li>
+						<label for="wp-version">
+						<?php _e("Version of WordPress?", 'custom-contact-forms'); ?>
+						</label>
+						<input id="wp-version" type="text" name="wp-version" maxlength="50" />
+					  </li>
 					</ul>
 					<p>
 					  <input type="submit" name="contact_author" value="<?php _e("Send Message", 'custom-contact-forms'); ?>" />
@@ -1767,6 +1824,7 @@ the field names you want required by commas. Remember to use underscores instead
 		}
 		
 		function printFormSubmissionsPage() {
+			$this->handleAdminPostRequests();
 			if ($admin_options['show_install_popover'] == 1) {
 				$admin_options['show_install_popover'] = 0;
 				?>
@@ -1777,9 +1835,10 @@ the field names you want required by commas. Remember to use underscores instead
 				</script>
                 <?php
 				update_option(parent::getAdminOptionsName(), $admin_options);
-			} if ($_POST['form_submission_delete']) {
-				parent::deleteUserData($_POST['uid']);
-			}
+			} /*if ($_POST['form_submission_delete']) {
+				if (parent::deleteUserData($_POST['uid']) != false)
+					$this->action_complete = __('A form submission has be successfully deleted!', 'custom-contact-forms');
+			}*/
 			ccf_utils::load_module('export/custom-contact-forms-user-data.php');
 			$user_data_array = parent::selectAllUserData();
 			?>
@@ -1805,6 +1864,11 @@ the field names you want required by commas. Remember to use underscores instead
                 <input type="text" name="email" value="Your Email" onclick="value=''" />
                 <input type="submit" value="Sign Up for Free" />
             </form>
+			<?php if (!empty($this->action_complete)) { ?>
+			<div class="action-complete">
+				<?php echo $this->action_complete; ?>
+			</div>
+			<?php } ?>
 			  <h3 class="hndle"><span>
 				  <?php _e("Saved Form Submissions", 'custom-contact-forms'); ?>
 				  </span></h3>
@@ -1875,9 +1939,9 @@ the field names you want required by commas. Remember to use underscores instead
 			  </table>
               
 			  <select class="bulk-dropdown" name="object_bulk_action">
-				<option value="0">Bulk Actions</option>
-				<option value="delete">Delete</option>
-			  </select> <input type="submit" class="bulk-apply" name="object_bulk_apply" value="Apply" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" class="loading-img" width="16" height="16" />
+				<option value="0"><?php _e('Bulk Actions', 'custom-contact-forms'); ?></option>
+				<option value="delete"><?php _e('Delete', 'custom-contact-forms'); ?></option>
+			  </select> <input type="submit" class="bulk-apply" name="object_bulk_apply" value="<?php _e('Apply', 'custom-contact-forms'); ?>" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" class="loading-img" width="16" height="16" />
 			  
 			  
 			  
@@ -1906,10 +1970,12 @@ the field names you want required by commas. Remember to use underscores instead
 				$admin_options[show_widget_pages] = $_POST['settings']['show_widget_pages'];
 				$admin_options[show_widget_archives] = $_POST['settings']['show_widget_archives'];
 				$admin_options[show_widget_home] = $_POST['settings']['show_widget_home'];
+				$this->action_complete = __('Your settings have been successfully saved!', 'custom-contact-forms');
 				update_option(parent::getAdminOptionsName(), $admin_options);
 			} elseif ($_POST['configure_mail']) {
 				$_POST['mail_config'] = array_map(array('ccf_utils', 'encodeOption'), $_POST['mail_config']);
 				$admin_options = array_merge($admin_options, $_POST['mail_config']);
+				$this->action_complete = __('Your mail settings have been successfully saved!', 'custom-contact-forms');
 				update_option(parent::getAdminOptionsName(), $admin_options);
 			}
 			ccf_utils::load_module('export/custom-contact-forms-export.php');
@@ -1936,6 +2002,12 @@ the field names you want required by commas. Remember to use underscores instead
                 <input type="text" name="email" value="Your Email" onclick="value=''" />
                 <input type="submit" value="Sign Up for Free" />
             </form>
+			<?php if (!empty($this->action_complete)) { ?>
+			<div class="action-complete">
+				<?php echo $this->action_complete; ?>
+			</div>
+			<?php } ?>
+			
 			  <div id="general-settings" class="postbox">
 				<h3 class="hndle"><span>
 				  <?php _e("General Settings", 'custom-contact-forms'); ?>
@@ -2019,7 +2091,7 @@ the field names you want required by commas. Remember to use underscores instead
 						  <option value="1">
 						  <?php _e("Enabled", 'custom-contact-forms'); ?>
 						  </option>
-						  <option <?php if ($admin_options['enable_dashboard_widget'] == 0) echo 'selected="selected"'; ?>>
+						  <option value="0" <?php if ($admin_options['enable_dashboard_widget'] == 0) echo 'selected="selected"'; ?>>
 						  <?php _e("Disabled", 'custom-contact-forms'); ?>
 						  </option></select>
 					 </li>
@@ -2139,7 +2211,7 @@ the field names you want required by commas. Remember to use underscores instead
 					  </li>
 					  <li>
 						<label for="enable_form_access_manager">
-						<?php _e("Enabled Form Access Manager:", 'custom-contact-forms'); ?>
+						<?php _e("Form Access Capabilities:", 'custom-contact-forms'); ?>
 						</label>
 						<select name="settings[enable_form_access_manager]">
 						  <option value="0">
