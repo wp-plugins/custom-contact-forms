@@ -24,7 +24,7 @@ if (!class_exists('CustomContactFormsWidget')) {
 			extract($args);
 			$form_object = $custom_contact_front->selectForm($form_id);
 			echo $before_widget . $before_title . $form_object->form_title . $after_title;
-			echo $custom_contact_front->getFormCode($form_id, true);
+			echo $custom_contact_front->getFormCode($form_object, true);
 			echo $after_widget;
 
 		}
