@@ -1899,7 +1899,8 @@ the field names you want required by commas. Remember to use underscores instead
 					<td><?php
 			if ($data->getFormID() > 0) {
 			$data_form = parent::selectForm($data->getFormID());
-			echo $data_form->form_slug;
+			$this_form = (!empty($data_form->form_slug)) ? $data_form->form_slug : '-';
+			echo $this_form;
 			} else
 			_e('Custom HTML Form', 'custom-contact-forms');
 			?>
