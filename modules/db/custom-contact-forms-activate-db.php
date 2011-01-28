@@ -168,7 +168,7 @@ if (!class_exists('CustomContactFormsActivateDB')) {
 			if (!$this->columnExists('field_instructions', CCF_FIELDS_TABLE))
 				$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` ADD `field_instructions` TEXT NOT NULL");
 			if (!$this->columnExists('field_options', CCF_FIELDS_TABLE))
-				$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` ADD `field_options` VARCHAR( 300 ) NOT NULL");
+				$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` ADD `field_options` TEXT NOT NULL");
 			if (!$this->columnExists('field_required', CCF_FIELDS_TABLE))
 				$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` ADD `field_required` INT( 1 ) NOT NULL DEFAULT '0'");
 			if (!$this->columnExists('form_backgroundcolor', CCF_STYLES_TABLE))
@@ -199,6 +199,7 @@ if (!class_exists('CustomContactFormsActivateDB')) {
 			$wpdb->query("ALTER TABLE `" . CCF_FORMS_TABLE . "` CHANGE `form_email` `form_email` TEXT NOT NULL");
 			$wpdb->query("ALTER TABLE `" . CCF_FORMS_TABLE . "` CHANGE `form_fields` `form_fields` TEXT NOT NULL");
 			$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` CHANGE `field_label` `field_label` TEXT NOT NULL");
+			$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` CHANGE `field_options` `field_options` TEXT NOT NULL");
 			$this->updateTableCharSets();
 		}
 		

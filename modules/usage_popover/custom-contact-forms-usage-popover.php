@@ -1,9 +1,6 @@
-<div id="ccf-usage-popover">
-  <div class="popover-header">
-    <h5><?php _e('How To Use Custom Contact Forms', 'custom-contact-forms'); ?></h5>
-    <a href="javascript:void(0)" class="close">&times;</a> </div>
+<div id="ccf-usage-popover" title="<?php _e('Plugin Usage Popover', 'custom-contact-forms'); ?>">
   <div class="popover-body">
-    <ul id="popover-tof">
+    <!--<ul id="popover-tof">
       <li><a href="#pop-forms">
         <?php _e('Forms', 'custom-contact-forms'); ?>
         </a></li>
@@ -28,7 +25,7 @@
       <li><a href="#pop-form-submissions">
         <?php _e('Form Submissions', 'custom-contact-forms'); ?>
         </a></li>
-    </ul>
+    </ul>-->
     <h3>
       <?php _e('Introduction', 'custom-contact-forms'); ?>
     </h3>

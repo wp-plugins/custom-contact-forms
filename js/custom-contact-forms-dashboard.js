@@ -3,12 +3,15 @@
 $j = jQuery.noConflict();
 
 $j(document).ready(function() {
-	$j("input.ccf-view-submission").click(function() {
+	
+	$j(".ccf-view-submission").each(function() {
 		var submission_window = $j(this).next();
-		submission_window.find("div.close").click(function() {
-			submission_window.fadeOut("slow");
+		submission_window.dialog({
+			height: 420,
+			width:600,
+			modal: true,
+			autoOpen: false
 		});
-		submission_window.fadeIn("slow");
-		
+		$j(this).click(function() { submission_window.dialog('open'); });
 	});
 });

@@ -15,46 +15,21 @@
 	text-shadow:0 1px 0 #FFFFFF;
 }
 
-#ccf-dashboard  .view-submission-popover {
+#ccf-dashboard  .ccf-view-submission-popover {
 	display:none;
-	z-index:20000;
-	border: 9px solid #efefef;
-	border-spacing:0;
-	width:680px;
-	padding:0px;
-	margin:0 0 0 -340px;
-	-moz-border-radius:10px;
-	-khtml-border-radius:10px;
-	-webkit-border-radius:10px;
-	border-radius:15px;
-	position:fixed;
-	left:50%;
-	background-color:white;
-	top:20px;
-	padding:20px;
-	bottom:20px;
-	-moz-box-shadow:0 0 14px #123;
-	-webkit-box-shadow: 0 0 14px #123;
-	box-shadow:0 0 14px #123;
 }
-#ccf-dashboard  .view-submission-popover  .close {
-	position:absolute;
-	top:5px;
-	right:5px;
-	font-size:25px;
-	color:#000;
-}
-#ccf-dashboard  .view-submission-popover div.top  { height:40px; }
-#ccf-dashboard  .view-submission-popover div.top .right { float:right; width:40%; }
-#ccf-dashboard  .view-submission-popover div.top .right p { margin:3px; padding:0; }
-#ccf-dashboard  .view-submission-popover div.top .right span { font-weight:bold; }
-#ccf-dashboard  .view-submission-popover div.top .left { float:left; font-size:2em; width:60%; }
-#ccf-dashboard  .view-submission-popover ul {
+
+.ccf-view-submission-popover div.top  { height:30px; padding-bottom:7px; }
+.ccf-view-submission-popover div.top .right { float:right; width:40%; }
+.ccf-view-submission-popover div.top .left p { margin:2px; padding:0; }
+.ccf-view-submission-popover div.top .right span, .ccf-view-submission-popover div.top .left span { font-weight:bold; }
+.ccf-view-submission-popover div.top .left { float:left; width:60%; }
+.ccf-view-submission-popover ul {
 	min-height:30px;
 	width:95%;
 	margin:3px auto 2px auto;
 }
-#ccf-dashboard  .view-submission-popover .separate { clear:both; width:100%; border-bottom:1px solid #ccc; height:1px; margin:3px; }
-#ccf-dashboard  .view-submission-popover ul li {  float:left; margin-right:9px; }
-#ccf-dashboard  .view-submission-popover ul li p { display:block; }
-#ccf-dashboard  .view-submission-popover ul li div { font-weight:bold; border-bottom:1px solid #666; padding:2px; text-align:left; }
+.ccf-view-submission-popover .separate { clear:both; width:100%; border-bottom:1px solid #ccc; height:1px; margin:3px; }
+.ccf-view-submission-popover ul li {  float:left; margin-right:9px; }
+.ccf-view-submission-popover ul li p { display:block; }
+.ccf-view-submission-popover ul li div { font-weight:bold; border-bottom:1px solid #666; padding:2px; text-align:left; }

@@ -4,7 +4,7 @@ Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
 Tested up to: 3.1
-Stable tag: 4.5.1.2
+Stable tag: 4.5.2
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -88,6 +88,14 @@ http://www.taylorlovett.com/wordpress-plugins
 
 == Frequently Asked Questions ==
 
+= Something isn't working. Help! =
+*	First try deactivating and reactivating the plugin
+* 	If that doesn't fix the problem, try deleting and reinstalling the plugin
+*	If that doesn't work, you should file a bug report.
+
+= All my fields and field options got detached. What do I do? Will this happen again?
+*	Custom Contact Forms changed the way fields and field options are attached in version 4.5. It won't happen again. Just reattach everything and continue using the plugin.
+
 = I don't know where to start. This is really confusing. =
 *	Read the Plugin Usage Popover; it explains how to use everything in great detail.
 *	If you don't want to read or learn anything, simply press the "Insert Default Content" button (in the Plugin Usage Popover). This creates a few basic fields and a form. Then just insert the form in a page, post, or theme file.
@@ -122,6 +130,13 @@ We are planning to add popover forms and file attachments soon.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now all the screenshots are from Version 1, thus are quite out-dated. Install the plugin to see what it looks like. You won't regret it. I promise!
 
 == Changelog ==
+= 4.5.2 =
+*	custom-contact-forms.php - Template form display function fixed
+*	custom-contact-forms-admin.php - jQuery dialog used for plugin usage popover
+*	modules/db/custom-contact-forms-activate.php - Field options column changed to text
+*	modules/widgets/custom-contact-forms-dashboard.php - jQuery dialog used for popovers
+*	modules/widgets/custom-contact-forms-dashboard.css - jQuery dialog used for popovers
+
 = 4.5.1.2 =
 *	modules/widgets/custom-contact-forms-widget.php - Widget form display bug fixed
 

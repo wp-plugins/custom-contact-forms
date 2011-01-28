@@ -160,16 +160,18 @@ if (!class_exists('CustomContactFormsAdmin')) {
 		}
 		
 		function insertBackEndStyles() {
-            wp_register_style('CCFStandardsCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-standards.css');
-            wp_register_style('CCFAdminCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-admin.css');
-			wp_register_style('CCFColorPickerCSS', plugins_url() . '/custom-contact-forms/css/colorpicker.css');
-            wp_enqueue_style('CCFStandardsCSS');
-			wp_enqueue_style('CCFAdminCSS');
-			wp_enqueue_style('CCFColorPickerCSS');
+            wp_register_style('ccf-standards', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-standards.css');
+            wp_register_style('ccf-jquery-ui', plugins_url() . '/custom-contact-forms/css/jquery-ui.css');
+            wp_register_style('ccf-admin', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-admin.css');
+			wp_register_style('ccf-colorpicker', plugins_url() . '/custom-contact-forms/css/colorpicker.css');
+            wp_enqueue_style('ccf-jquery-ui');
+			wp_enqueue_style('ccf-standards');
+			wp_enqueue_style('ccf-admin');
+			wp_enqueue_style('ccf-colorpicker');
 		}
 		
 		function insertAdminScripts() {
-			$js_version = '1.0.18';
+			$js_version = '1.0.19';
 			$admin_options = parent::getAdminOptions();
 			$js_lang = array(
 				'attaching' => __('Attaching', 'custom-contact-forms'),
@@ -193,13 +195,16 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			wp_enqueue_script('jquery-form');
 			wp_enqueue_script('jquery-ui-core');
 			wp_enqueue_script('jquery-ui-tabs');
+			wp_enqueue_script('jquery-ui-dialog');
 			
-			wp_enqueue_script('jquery-tools', plugins_url() . '/custom-contact-forms/js/jquery.tools.min.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'));
-			wp_enqueue_script('ccf-pagination', plugins_url() . '/custom-contact-forms/js/jquery.pagination.js');
-			wp_enqueue_script('ccf-admin-inc', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-admin-inc.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), $js_version);
-			wp_enqueue_script('ccf-admin', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), $js_version);
+			wp_enqueue_script('jquery-tools', plugins_url() . '/custom-contact-forms/js/jquery.tools.min.js');
+			wp_enqueue_script('jquery-ui-widget', plugins_url() . '/custom-contact-forms/js/jquery.ui.widget.js');
+			//wp_enqueue_script('jquery-ui-dialog', plugins_url() . '/custom-contact-forms/js/jquery.ui.dialog.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'));
+			//wp_enqueue_script('ccf-pagination', plugins_url() . '/custom-contact-forms/js/jquery.pagination.js');
+			wp_enqueue_script('ccf-admin-inc', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-admin-inc.js', $js_version);
+			wp_enqueue_script('ccf-admin', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-admin.js', $js_version);
 			if ($admin_options['admin_ajax'] == 1) {
-				wp_enqueue_script('ccf-admin-ajax', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-admin-ajax.js', array('jquery', 'jquery-tools', 'jquery-ui-core', 'jquery-ui-tabs'), $js_version);
+				wp_enqueue_script('ccf-admin-ajax', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-admin-ajax.js', $js_version);
 				wp_localize_script('ccf-admin-ajax', 'ccfLang', $js_lang);
 				wp_localize_script('ccf-admin-ajax', 'ccfAjax', $js_ajax);
 			}
@@ -306,7 +311,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				?>
                 <script type="text/javascript" language="javascript">
 					$j(document).ready(function() {
-						showCCFUsagePopover();
+						$j("#ccf-usage-popover").dialog('open');
 					});
 				</script>
                 <?php
@@ -1817,8 +1822,7 @@ the field names you want required by commas. Remember to use underscores instead
 &lt;/form&gt;</textarea>
 				</div>
 			  </div>
-			  
-			  
+			  <?php $this->insertUsagePopover(); ?>
 			</div>
 <?php
 		}
@@ -1946,6 +1950,7 @@ the field names you want required by commas. Remember to use underscores instead
 			  
 			  
 			  </form>
+			  <?php $this->insertUsagePopover(); ?>
 			</div>
 			<?php
 		}
@@ -2375,6 +2380,7 @@ the field names you want required by commas. Remember to use underscores instead
 				  </form>
 				</div>
 			  </div>
+			  <?php $this->insertUsagePopover(); ?>
 			</div>
 			<?php
 		}

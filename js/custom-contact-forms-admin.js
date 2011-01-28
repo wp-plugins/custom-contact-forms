@@ -56,12 +56,14 @@ $j(document).ready(function(){
 	});
 	$j('.fields-extra-options').hide();
 	
-	$j('.usage-popover-button').click(function() {
-		showCCFUsagePopover();
+	$j("#ccf-usage-popover").dialog({
+		height: 420,
+		width:600,
+		modal: true,
+		autoOpen: false
 	});
-	$j("#ccf-usage-popover .close").click(function() {
-		$j("#ccf-usage-popover").fadeOut();											  
-	});
+		
+	$j(".usage-popover-button").click(function() { $j("#ccf-usage-popover").dialog('open'); });
 	
 	$j("a[title].toollink").tooltip({
 		position: "bottom left",

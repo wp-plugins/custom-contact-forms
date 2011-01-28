@@ -11,17 +11,23 @@ if (!class_exists('CustomContactFormsDashboard')) {
 		}
 		
 		function isDashboardPage() {
-			return (is_admin() && preg_match('/index\.php$/', $_SERVER['REQUEST_URI']));
+			return (is_admin() && preg_match('/((index\.php)|(wp-admin\/?))$/', $_SERVER['REQUEST_URI']));
 		}
 		
 		function insertDashboardStyles() {
-			wp_register_style('CCFDashboard', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-dashboard.css');
-            wp_enqueue_style('CCFDashboard');
+			wp_register_style('ccf-dashboard', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-dashboard.css');
+            wp_register_style('ccf-jquery-ui', plugins_url() . '/custom-contact-forms/css/jquery-ui.css');
+            wp_enqueue_style('ccf-jquery-ui');
+			wp_enqueue_style('ccf-dashboard');
 		}
 		
 		function insertDashboardScripts() {
-			wp_register_script('CCFDashboardJS', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-dashboard.js');
-            wp_enqueue_script('CCFDashboardJS');
+			wp_enqueue_script('jquery');
+			wp_enqueue_script('jquery-ui-core');
+			wp_enqueue_script('jquery-ui-widget', plugins_url() . '/custom-contact-forms/js/jquery.ui.widget.js');
+			wp_enqueue_script('jquery-ui-dialog');
+			wp_register_script('ccf-dashboard', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-dashboard.js', array('jquery', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-dialog'));
+            wp_enqueue_script('ccf-dashboard');
 		}
 		
 		function display() {
@@ -50,10 +56,11 @@ if (!class_exists('CustomContactFormsDashboard')) {
 					<?php
 					if ($data->getFormID() > 0) {
 						$data_form = parent::selectForm($data->getFormID());
-						$this_form = (!empty($data_form->form_slug)) ? $data_form->form_slug : __('Form Not Found', 'custom-contact-forms');
+						$this_form = (!empty($data_form->form_slug)) ? $data_form->form_slug : '-';
 					} else
 						$this_form = __('Custom HTML Form', 'custom-contact-forms');
-					echo $this_form;
+					if (strlen($this_form) > 13) echo substr($this_form, 0, 13) . '...';
+					else echo $this_form;
 					?>
 					</td>
 					<td class="form-page">
@@ -64,11 +71,16 @@ if (!class_exists('CustomContactFormsDashboard')) {
 					</td>
 					<td>
 						<input class="ccf-view-submission" type="button" value="<?php _e('View', 'custom-contact-forms'); ?>" />
-						<div class="view-submission-popover">
-							<div class="close">&times;</div>
+						<div class="ccf-view-submission-popover" title="<?php _e('CCF Saved Form Submission', 'custom-contact-forms'); ?>">
 							<div class="top">
-								<div class="left"><?php _e('CCF Saved Form Submission', 'custom-contact-forms'); ?></div>
-								<div class="right"><p><span><?php echo date('F j, Y, g:i a', $data->getDataTime()); ?></span></p><p><?php _e('Form Submitted:', 'custom-contact-forms'); ?> <span><?php echo $this_form; ?></span></p></div>
+								<div class="left">
+								<p><?php _e('Form Submitted:', 'custom-contact-forms'); ?> <span><?php echo ($this_form == '-') ? __('Not Found', 'custom-contact-forms') : $this_form; ?></span></p>
+								<p><?php _e('Form Location:', 'custom-contact-forms'); ?> <span>
+								<?php
+									if (strlen($data->getFormPage()) > 70) echo substr($data->getFormPage(), 0, 70) . '...';
+									else echo $data->getFormPage();
+								?></span></p></div>
+								<div class="right"><span><?php echo date('F j, Y, g:i a', $data->getDataTime()); ?></span></div>
 							</div>
 							<div class="separate"></div>
 							<ul>

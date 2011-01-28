@@ -1,9 +1,5 @@
 $j = jQuery.noConflict();
 
-function showCCFUsagePopover() {
-	$j("#ccf-usage-popover").fadeIn('slow');	
-}
-
 (function($j) {
   var cache = [];
   // Arguments are image paths relative to the current page.

@@ -428,53 +428,14 @@
 /* CCF Install Popover -------------------------------- */
 #ccf-usage-popover {
 	display:none;
-	border: 9px solid #efefef;
-	border-spacing:0;
-	width:680px;
-	padding:0px;
-	margin:0 0 0 -340px;
-	-moz-border-radius:10px;
-	-khtml-border-radius:10px;
-	-webkit-border-radius:10px;
-	border-radius:15px;
-	position:fixed;
-	z-index:10000;
-	left:50%;
-	background-color:white;
-	top:20px;
-	bottom:20px;
-	-moz-box-shadow:0 0 14px #123;
-	-webkit-box-shadow: 0 0 14px #123;
-	box-shadow:0 0 14px #123;
 }
 #ccf-usage-popover #popover-tof { text-align:center; border-bottom:1px #ccc dashed; margin:5px 0 10px 0; padding:0 0 6px 0; }
 #ccf-usage-popover #popover-tof li  { display:inline; padding:0 2px 0 3px;
 }
-#ccf-usage-popover div.popover-header {
-	background-color:#efefef;
-	padding:9px 9px 9px 20px;
-	margin:0 0 15px 0px;
-	height:1.3em;
-}
-#ccf-usage-popover div.popover-header h5 {
-	text-align:left;
-	float:left;
-	margin:0;
-	font-size:1.5em;
-	font-weight:bold;
-}
-#ccf-usage-popover div.popover-header a.close {
-	float:right;
-	display:block;
-	font-size:12px;
-}
+
 #ccf-usage-popover div.popover-body span { font-weight:bold; }
 #ccf-usage-popover div.popover-body {
 	 text-align:left;
-	 overflow:scroll;
-	 position:absolute;
-	 bottom:0px;
-	 top:3em;
 	 padding:3px;
 }
 #ccf-usage-popover div.popover-body ul { margin:5px 0px 5px 8px; padding:0; border-top:1px solid #efefef; }
