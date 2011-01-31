@@ -357,7 +357,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				<li><a href="#custom-html"><?php _e("Custom HTML Forms", 'custom-contact-forms'); ?></a></li>
 				<li class="last"><a href="#plugin-news"><?php _e("Plugin News", 'custom-contact-forms'); ?></a></li>
 			  </ul>
-			  <a class="genesis" href="http://www.shareasale.com/r.cfm?b=241369&u=481196&m=28169&urllink=&afftrack=">Custom Contact Forms works best with any of the 20+ <span>Genesis</span> Wordpress child themes. The <span>Genesis Framework</span> empowers you to quickly and easily build incredible websites with WordPress.</a>
+			  <a class="genesis" href="http://www.shareasale.com/r.cfm?b=241369&u=481196&m=28169&urllink=&afftrack="><?php _e('Custom Contact Forms works best with any of the 20+ ', 'custom-contact-forms'); ?><span><?php _e('Genesis', 'custom-contact-forms'); ?></span> <?php _e('Wordpress child themes. The', 'custom-contact-forms'); ?> <span><?php _e('Genesis Framework', 'custom-contact-forms'); ?></span> <?php _e('empowers you to quickly and easily build incredible websites with WordPress.', 'custom-contact-forms'); ?></a>
 			
 			<form class="blog-horizontal-form" method="post" action="http://www.aweber.com/scripts/addlead.pl">
             	<input type="hidden" name="meta_web_form_id" value="1578604781" />
@@ -367,7 +367,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				<input type="hidden" name="meta_adtracking" value="CCF_-_Wordpress_Plugins_Horizontal" />
 				<input type="hidden" name="meta_message" value="1" />
 				<input type="hidden" name="meta_required" value="name,email" />
-				<span>WP Blogging Tips, Downloads, SEO Tricks & Exclusive Tutorials</span>
+				<span><?php _e('WP Blogging Tips, Downloads, SEO Tricks & Exclusive Tutorials', 'custom-contact-forms'); ?></span>
                 <input type="text" name="name" value="Your Name" onclick="value=''" />
                 <input type="text" name="email" value="Your Email" onclick="value=''" />
                 <input type="submit" value="Sign Up for Free" />
@@ -2008,6 +2008,7 @@ the field names you want required by commas. Remember to use underscores instead
                 <input type="text" name="email" value="Your Email" onclick="value=''" />
                 <input type="submit" value="Sign Up for Free" />
             </form>
+			
 			<?php if (!empty($this->action_complete)) { ?>
 			<div class="action-complete">
 				<?php echo $this->action_complete; ?>

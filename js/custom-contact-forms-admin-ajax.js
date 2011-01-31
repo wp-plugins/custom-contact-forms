@@ -121,49 +121,51 @@ $j(document).ready(function() {
 			return true;
 		},
 		success : function(responseText) {
-			for (var i = 0; i < responseText.objects.length; i++) {
-				var this_object = responseText.objects[i];
-				if (responseText.object_bulk_action == 'delete') {
-					
-					form_dom.find(".row-" + this_object.object_type + "-" + this_object.object_id).hide().remove();
-					if (this_object.object_type == "style") {
-						/* delete occurences of this option within style dropdowns. */
-						var style_inputs = $j(".form_style_input");
-						style_inputs.each(function() {
-							this_option = $j(this).find("option[value=" + this_object.object_id + "]");
-							if (this_option.attr("selected") == "selected")
-								$j(this).find("option[value=0]").attr("selected", "selected");
-							this_option.remove();
-						});
-					} else if (this_object.object_type == "field" || this_object.object_type == "field_option") {
-						if (this_object.object_type == "field")
-							var fields_options_input = $j("select.detach-field");
-						else
-							var fields_options_input = $j("select.detach-field-option");
-						fields_options_input.each(function () {
-							var this_obj = $j(this);
-							var this_option = this_obj.find("option[value=" + this_object.object_id + "]");
-							if (this_option.length >=1 && this_obj.find("option").length <= 1) {
-								$j("<option>")
-									.attr("value", "-1")
-									.text(ccfLang.nothing_attached)
-									.prependTo(this_obj);
-							}
-							this_option.remove();
-						});
-						if (this_object.object_type == "field")
-							fields_options_input = $j("select.attach-field option[value=" + this_object.object_id + "]");
-						else
-							fields_options_input = $j("select.attach-field-option option[value=" + this_object.object_id + "]");
+			if (responseText.objects) {
+				for (var i = 0; i < responseText.objects.length; i++) {
+					var this_object = responseText.objects[i];
+					if (responseText.object_bulk_action == 'delete') {
 						
-						fields_options_input.each(function () {
-							$j(this).remove();
-						});
-					}
-				} else if (responseText.object_bulk_action == 'edit') {
-					/* TODO: update field and field option slug dropdowns */
-					if (responseText.objects[i].object_type == "field" || responseText.objects[i].object_type == "field_option") {
-						
+						form_dom.find(".row-" + this_object.object_type + "-" + this_object.object_id).hide().remove();
+						if (this_object.object_type == "style") {
+							/* delete occurences of this option within style dropdowns. */
+							var style_inputs = $j(".form_style_input");
+							style_inputs.each(function() {
+								this_option = $j(this).find("option[value=" + this_object.object_id + "]");
+								if (this_option.attr("selected") == "selected")
+									$j(this).find("option[value=0]").attr("selected", "selected");
+								this_option.remove();
+							});
+						} else if (this_object.object_type == "field" || this_object.object_type == "field_option") {
+							if (this_object.object_type == "field")
+								var fields_options_input = $j("select.detach-field");
+							else
+								var fields_options_input = $j("select.detach-field-option");
+							fields_options_input.each(function () {
+								var this_obj = $j(this);
+								var this_option = this_obj.find("option[value=" + this_object.object_id + "]");
+								if (this_option.length >=1 && this_obj.find("option").length <= 1) {
+									$j("<option>")
+										.attr("value", "-1")
+										.text(ccfLang.nothing_attached)
+										.prependTo(this_obj);
+								}
+								this_option.remove();
+							});
+							if (this_object.object_type == "field")
+								fields_options_input = $j("select.attach-field option[value=" + this_object.object_id + "]");
+							else
+								fields_options_input = $j("select.attach-field-option option[value=" + this_object.object_id + "]");
+							
+							fields_options_input.each(function () {
+								$j(this).remove();
+							});
+						}
+					} else if (responseText.object_bulk_action == 'edit') {
+						/* TODO: update field and field option slug dropdowns */
+						if (responseText.objects[i].object_type == "field" || responseText.objects[i].object_type == "field_option") {
+							
+						}
 					}
 				}
 			}
