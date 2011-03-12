@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, form submissions saved to database, captchas, tooltip popovers, unlimited fields/forms/form styles, import/export, use a custom thank you page or built-in popover with a custom success message set for each form.
-	Version: 4.5.2.1
+	Version: 4.5.2.2
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
@@ -81,7 +81,7 @@ if (!is_admin()) { /* is front */
 		}
 	}
 	add_action('init', array(&$custom_contact_front, 'frontInit'), 1);
-	add_action('wp_print_scripts', array(&$custom_contact_front, 'insertFrontEndScripts'), 1);
+	add_action('wp_enqueue_scripts', array(&$custom_contact_front, 'insertFrontEndScripts'), 1);
 	add_action('wp_print_styles', array(&$custom_contact_front, 'insertFrontEndStyles'), 1);
 	add_shortcode('customcontact', array(&$custom_contact_front, 'shortCodeToForm'));
 	
@@ -108,14 +108,14 @@ if (!is_admin()) { /* is front */
 		$ccf_dashboard = new CustomContactFormsDashboard();
 		if ($ccf_dashboard->isDashboardPage()) {
 			add_action('admin_print_styles', array(&$ccf_dashboard, 'insertDashboardStyles'), 1);
-			add_action('admin_print_scripts', array(&$ccf_dashboard, 'insertDashboardScripts'), 1);
+			add_action('admin_enqueue_scripts', array(&$ccf_dashboard, 'insertDashboardScripts'), 1);
 		}
 		add_action('wp_dashboard_setup', array(&$ccf_dashboard, 'install'));
 	}
 	add_action('init', array(&$custom_contact_admin, 'adminInit'), 1);
 	if ($custom_contact_admin->isPluginAdminPage()) {
 		add_action('admin_print_styles', array(&$custom_contact_admin, 'insertBackEndStyles'), 1);
-		add_action('admin_print_scripts', array(&$custom_contact_admin, 'insertAdminScripts'), 1);
+		add_action('admin_enqueue_scripts', array(&$custom_contact_admin, 'insertAdminScripts'), 1);
 	}
 	add_action('wp_ajax_ccf-ajax', array(&$custom_contact_admin, 'handleAJAX'));
 	add_action('wp_ajax_nopriv_ccf-ajax', array(&$custom_contact_admin, 'handleAJAX'));
