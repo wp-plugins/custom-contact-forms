@@ -4,7 +4,7 @@ Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
 Tested up to: 3.1
-Stable tag: 4.5.2.2
+Stable tag: 4.5.2.3
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 

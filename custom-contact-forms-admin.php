@@ -357,7 +357,8 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				<li><a href="#custom-html"><?php _e("Custom HTML Forms", 'custom-contact-forms'); ?></a></li>
 				<li class="last"><a href="#plugin-news"><?php _e("Plugin News", 'custom-contact-forms'); ?></a></li>
 			  </ul>
-			  <a class="genesis" href="http://www.shareasale.com/r.cfm?b=241369&u=481196&m=28169&urllink=&afftrack="><?php _e('Custom Contact Forms works best with any of the 20+ ', 'custom-contact-forms'); ?><span><?php _e('Genesis', 'custom-contact-forms'); ?></span> <?php _e('Wordpress child themes. The', 'custom-contact-forms'); ?> <span><?php _e('Genesis Framework', 'custom-contact-forms'); ?></span> <?php _e('empowers you to quickly and easily build incredible websites with WordPress.', 'custom-contact-forms'); ?></a>
+			  <div style="text-align:center"><a target="_blank" href="http://www.shareasale.com/r.cfm?b=256143&u=481196&m=25929&urllink=&afftrack="><img src="http://www.shareasale.com/image/25929/728x90.png" alt="Scribe. SEO Made Simple." border="0"></a>
+			  </div><a class="genesis" href="http://www.shareasale.com/r.cfm?b=241369&u=481196&m=28169&urllink=&afftrack="><?php _e('Custom Contact Forms works best with any of the 20+ ', 'custom-contact-forms'); ?><span><?php _e('Genesis', 'custom-contact-forms'); ?></span> <?php _e('Wordpress child themes. The', 'custom-contact-forms'); ?> <span><?php _e('Genesis Framework', 'custom-contact-forms'); ?></span> <?php _e('empowers you to quickly and easily build incredible websites with WordPress.', 'custom-contact-forms'); ?></a>
 			
 			<form class="blog-horizontal-form" method="post" action="http://www.aweber.com/scripts/addlead.pl">
             	<input type="hidden" name="meta_web_form_id" value="1578604781" />
