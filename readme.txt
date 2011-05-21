@@ -3,8 +3,8 @@ Contributors: Taylor Lovett
 Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
-Tested up to: 3.1
-Stable tag: 4.5.2.3
+Tested up to: 3.1.2
+Stable tag: 4.5.3.0
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -14,7 +14,7 @@ Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact 
 
 Special Features:
 ------------------
-Custom Contact Forms 4.5.0 will revolutionize the idea of a Wordpress plugin.
+Custom Contact Forms 4.5.3 will revolutionize the idea of a Wordpress plugin.
 
 *	__NEW__ Saved Form Submission dashboard widget!
 *	__NEW__ - All form submissions saved and displayed in admin panel as well as emailed to you
@@ -93,6 +93,9 @@ http://www.taylorlovett.com/wordpress-plugins
 * 	If that doesn't fix the problem, try deleting and reinstalling the plugin
 *	If that doesn't work, you should file a bug report.
 
+= When I try to do something in the admin panel, all I get is a new page with a -1. =
+*	This is a bug we are currently trying to fix that usually happens in Internet Explorer 8. If you are having this problem, please try using Firefox.
+
 = All my fields and field options got detached. What do I do? Will this happen again?
 *	Custom Contact Forms changed the way fields and field options are attached in version 4.5. It won't happen again. Just reattach everything and continue using the plugin.
 
@@ -130,6 +133,16 @@ We are planning to add popover forms and file attachments soon.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now all the screenshots are from Version 1, thus are quite out-dated. Install the plugin to see what it looks like. You won't regret it. I promise!
 
 == Changelog ==
+
+= 4.5.3.0 =
+*	custom-contact-forms-admin.php - Dashboard widget security bug fixed. Now you can limit which users can see the dashboard widget. Also a quick start guide has been added.
+*	custom-contact-forms.php - Dashboard widget security bug fixed.
+*	modules/widgets/custom-contact-forms-dashboard.php - Dashboard widget security bug fixed. Now you can limit which users can see the dashboard widget.
+*	modules/usage_popover/custom-contact-forms-usage-popover.php - Minor display changes made
+*	modules/usage_popover/custom-contact-forms-quick-start-popover.php - Minor display changes made
+*	js/custom-contact-forms-admin.js - Quick start guide added
+*	css/custom-contact-forms-admin.css - Quick start guide added
+
 
 = 4.5.2.2 =
 *	custom-contact-forms.php - JQuery plugin conflict fixed

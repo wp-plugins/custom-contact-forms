@@ -17,6 +17,10 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			ccf_utils::load_module('usage_popover/custom-contact-forms-usage-popover.php');
 		}
 		
+		function insertQuickStartPopover() {
+			ccf_utils::load_module('usage_popover/custom-contact-forms-quick-start-popover.php');
+		}
+		
 		function isPluginAdminPage() {
 			$pages = array('custom-contact-forms', 'ccf-settings', 'ccf-saved-form-submissions');
 			return (in_array($GLOBALS['ccf_current_page'], $pages));
@@ -129,6 +133,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
             </ul>
 		<?php
 		}
+		
 		
 		function getFieldsForm() {
 			$fields = parent::selectAllFields();
@@ -341,8 +346,9 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				<h2>
 					<?php _e("Custom Contact Forms", 'custom-contact-forms'); ?>
 				</h2>
+             	<input type="button" class="quick-start-button" value="<?php _e("Quick Start Guide", 'custom-contact-forms'); ?>" />
 				<input type="button" class="usage-popover-button" value="<?php _e("Plugin Usage Manual", 'custom-contact-forms'); ?>" />
-			  </div>
+              </div>
 			  <ul id="plugin-nav">
 				<li><a href="#create-fields"><?php _e("Create Fields", 'custom-contact-forms'); ?></a></li>
 				<li><a href="#create-forms"><?php _e("Create Forms", 'custom-contact-forms'); ?></a></li>
@@ -791,7 +797,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			?>
 					  <?php } ?>
 					</td>
-					<td><?php if ($fields[$i]->field_slug == 'fixedEmail' || $fields[$i]->field_slug == 'emailSubject' || $fields[$i]->field_slug == 'fixedWebsite' || $fields[$i]->field_slug == 'usaStates' || $fields[$i]->field_slug == 'allCountries') { ?>
+					<td><?php if ($fields[$i]->field_slug == 'fixedEmail' || $fields[$i]->field_slug == 'emailSubject' || $fields[$i]->field_slug == 'fixedWebsite' || $fields[$i]->field_slug == 'usaStates' || $fields[$i]->field_slug == 'datePicker' || $fields[$i]->field_slug == 'allCountries') { ?>
 					  <select name="objects[<?php echo $i; ?>][values][field_required]">
 						<option value="1">
 						<?php _e("Yes", 'custom-contact-forms'); ?>
@@ -1824,6 +1830,7 @@ the field names you want required by commas. Remember to use underscores instead
 				</div>
 			  </div>
 			  <?php $this->insertUsagePopover(); ?>
+              <?php $this->insertQuickStartPopover(); ?>
 			</div>
 <?php
 		}
@@ -1953,6 +1960,7 @@ the field names you want required by commas. Remember to use underscores instead
 			  
 			  </form>
 			  <?php $this->insertUsagePopover(); ?>
+              <?php $this->insertQuickStartPopover(); ?>
 			</div>
 			<?php
 		}
@@ -2106,6 +2114,24 @@ the field names you want required by commas. Remember to use underscores instead
 					  <li class="descrip">
 						<?php _e("Enabling this will display a widget on your dashboard that shows the latest form submissions.", 'custom-contact-forms'); ?>
 					  </li>
+                      <li>
+						<label for="dashboard_access">
+						<?php _e("Dashboard Widget Accessibility:", 'custom-contact-forms'); ?>
+						</label>
+						<select name="settings[dashboard_access]">
+						  <option value="2">
+						  <?php _e("Only admins can view", 'custom-contact-forms'); ?>
+						  </option>
+                          <option value="1" <?php if ($admin_options['dashboard_access'] == 1) echo 'selected="selected"'; ?>>
+						  <?php _e("All roles except subscribers can view", 'custom-contact-forms'); ?>
+						  </option>
+						  <option value="0" <?php if ($admin_options['dashboard_access'] == 0) echo 'selected="selected"'; ?>>
+						  <?php _e("All roles can view", 'custom-contact-forms'); ?>
+						  </option></select>
+					 </li>
+					  <li class="descrip">
+						<?php _e("If you are using the dashboard widget, this allows you to disallow certain users from viewing it.", 'custom-contact-forms'); ?>
+					  </li>
 					  <li>
 						<label for="default_form_error_header">
 						<?php _e("Default Form Error Header:", 'custom-contact-forms'); ?>
@@ -2115,18 +2141,7 @@ the field names you want required by commas. Remember to use underscores instead
 					  <li class="descrip">
 						<?php _e("When a form is filled out incorrectly, this message will be displayed followed by the individual field error messages.", 'custom-contact-forms'); ?>
 					  </li>
-					  <li>
-						<label for="code_type">
-						<?php _e("Use Code Type:", 'custom-contact-forms'); ?>
-						</label>
-						<select name="settings[code_type]">
-						  <option>XHTML</option>
-						  <option <?php if ($admin_options['code_type'] == 'HTML') echo 'selected="selected"'; ?>>HTML</option>
-						</select>
-					  </li>
-					  <li class="descrip">
-						<?php _e("This lets you switch the form code between HTML and XHTML.", 'custom-contact-forms'); ?>
-					  </li>
+					  
 					</ul>
 					<ul class="gright">
 					  <li>
@@ -2259,6 +2274,18 @@ the field names you want required by commas. Remember to use underscores instead
 						<?php _e("On Archives", 'custom-contact-forms'); ?>
 						</label>
 					  </li>
+                      <li>
+						<label for="code_type">
+						<?php _e("Use Code Type:", 'custom-contact-forms'); ?>
+						</label>
+						<select name="settings[code_type]">
+						  <option>XHTML</option>
+						  <option <?php if ($admin_options['code_type'] == 'HTML') echo 'selected="selected"'; ?>>HTML</option>
+						</select>
+					  </li>
+					  <li class="descrip">
+						<?php _e("This lets you switch the form code between HTML and XHTML.", 'custom-contact-forms'); ?>
+					  </li>
 					  <li>
 						<input type="submit" value="<?php _e("Update", 'custom-contact-forms'); ?>" name="general_settings" />
 					  </li>
@@ -2384,6 +2411,7 @@ the field names you want required by commas. Remember to use underscores instead
 				</div>
 			  </div>
 			  <?php $this->insertUsagePopover(); ?>
+              <?php $this->insertQuickStartPopover(); ?>
 			</div>
 			<?php
 		}
