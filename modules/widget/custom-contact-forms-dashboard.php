@@ -14,6 +14,25 @@ if (!class_exists('CustomContactFormsDashboard')) {
 			return (is_admin() && preg_match('/((index\.php)|(wp-admin\/?))$/', $_SERVER['REQUEST_URI']));
 		}
 		
+		function userCanViewWidget() {
+			$perms = parent::getAdminOptions();
+			$widget_perms = $perms['dashboard_access'];
+			global $current_user;
+			$user_roles = $current_user->roles;
+			if (is_array($user_roles)) {
+				$user_role = @array_shift($user_roles);
+			}
+				
+			if ($widget_perms == 2) {
+				if ($user_role != "Administrator") return false;
+			} else if ($widget_perms == 1) {
+				if ($user_role == "Subscriber" || !in_array($user_role, parent::getRolesArray())) return false;
+			} else {
+				/* all roles are allowed so just return true */
+			}
+			return true;
+		}
+		
 		function insertDashboardStyles() {
 			wp_register_style('ccf-dashboard', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-dashboard.css');
             wp_register_style('ccf-jquery-ui', plugins_url() . '/custom-contact-forms/css/jquery-ui.css');

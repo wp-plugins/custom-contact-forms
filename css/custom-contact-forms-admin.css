@@ -23,9 +23,12 @@
 #customcontactforms-admin .plugin-header input {
 	float:right;
 	display:block;
-	margin:0.83em 0;
-	margin-right:65px;
 	clear:none;
+	margin-top:.9em;
+}
+#customcontactforms-admin .plugin-header input.quick-start-button { color:red; margin-right:65px; }
+#customcontactforms-admin .plugin-header input.usage-popover-button {
+	margin-right:10px;
 }
 #customcontactforms-admin input[type=button] {
 	-moz-background-clip:border;
@@ -37,7 +40,7 @@
 #customcontactforms-admin .loading-img {
 	display:none;
 }
-#customcontactforms-admin input[type=submit], #ccf-usage-popover input[type=submit] {
+#customcontactforms-admin input[type=submit], .ccf-popover input[type=submit] {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
 	-moz-background-origin:padding;
@@ -426,24 +429,24 @@
 	border-right:none;
 }
 /* CCF Install Popover -------------------------------- */
-#ccf-usage-popover {
+.ccf-popover {
 	display:none;
 }
-#ccf-usage-popover #popover-tof { text-align:center; border-bottom:1px #ccc dashed; margin:5px 0 10px 0; padding:0 0 6px 0; }
-#ccf-usage-popover #popover-tof li  { display:inline; padding:0 2px 0 3px;
+.ccf-popover #popover-tof { text-align:center; border-bottom:1px #ccc dashed; margin:5px 0 10px 0; padding:0 0 6px 0; }
+.ccf-popover #popover-tof li  { display:inline; padding:0 2px 0 3px;
 }
 
-#ccf-usage-popover div.popover-body span { font-weight:bold; }
-#ccf-usage-popover div.popover-body {
+.ccf-popover div.popover-body span { font-weight:bold; }
+.ccf-popover div.popover-body {
 	 text-align:left;
 	 padding:3px;
 }
-#ccf-usage-popover div.popover-body ul { margin:5px 0px 5px 8px; padding:0; border-top:1px solid #efefef; }
-#ccf-usage-popover div.popover-body ul ul { margin:0px 0px 2px 30px; padding:0; list-style-type:disc; border-top:none; }
-#ccf-usage-popover div.popover-body ul li { margin-left:20px; }
-#ccf-usage-popover div.popover-body p { padding:8px; font-size:1em; text-align:left; }
-#ccf-usage-popover div.popover-body form { width:100%; text-align:center; }
-#ccf-usage-popover div.popover-body .insert-default-content-button {
+.ccf-popover div.popover-body ul { margin:5px 0px 5px 8px; padding:0; border-top:1px solid #efefef; }
+.ccf-popover div.popover-body ul ul { margin:0px 0px 2px 30px; padding:0; list-style-type:disc; border-top:none; }
+.ccf-popover div.popover-body ul li { margin-left:20px; }
+.ccf-popover div.popover-body p { padding:8px; font-size:1em; text-align:left; }
+.ccf-popover div.popover-body form { width:100%; text-align:center; }
+.ccf-popover div.popover-body .insert-default-content-button {
 	margin:5px auto 5px auto;
 }
 

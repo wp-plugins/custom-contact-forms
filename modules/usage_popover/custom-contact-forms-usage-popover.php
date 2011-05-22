@@ -1,4 +1,4 @@
-<div id="ccf-usage-popover" title="<?php _e('Plugin Usage Popover', 'custom-contact-forms'); ?>">
+<div class="ccf-popover" id="ccf-usage-popover" title="<?php _e('Plugin Usage Popover', 'custom-contact-forms'); ?>">
   <div class="popover-body">
     <!--<ul id="popover-tof">
       <li><a href="#pop-forms">

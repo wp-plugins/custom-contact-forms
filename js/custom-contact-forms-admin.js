@@ -65,6 +65,15 @@ $j(document).ready(function(){
 		
 	$j(".usage-popover-button").click(function() { $j("#ccf-usage-popover").dialog('open'); });
 	
+	$j("#ccf-quick-start-popover").dialog({
+		height: 420,
+		width:600,
+		modal: true,
+		autoOpen: false
+	});
+		
+	$j(".quick-start-button").click(function() { $j("#ccf-quick-start-popover").dialog('open'); });
+	
 	$j("a[title].toollink").tooltip({
 		position: "bottom left",
 		offset: [-2, 10],
