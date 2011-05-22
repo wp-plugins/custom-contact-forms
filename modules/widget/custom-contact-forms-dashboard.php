@@ -21,7 +21,8 @@ if (!class_exists('CustomContactFormsDashboard')) {
 			$user_roles = $current_user->roles;
 			if (is_array($user_roles)) {
 				$user_role = @array_shift($user_roles);
-			}
+			} else
+				$user_role = "";
 				
 			if ($widget_perms == 2) {
 				if ($user_role != "Administrator") return false;
