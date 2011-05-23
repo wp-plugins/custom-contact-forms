@@ -323,8 +323,6 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				update_option(parent::getAdminOptionsName(), $admin_options);
 			}
 			$this->handleAdminPostRequests();
-			//parent::serializeAllFormFields();
-			//parent::serializeAllFieldOptions();
 			if ($_POST['insert_default_content']) {
 				ccf_utils::load_module('db/custom-contact-forms-default-db.php');
 				$this->action_complete = __('Default content has been inserted!', 'custom-contact-forms');
@@ -1859,6 +1857,7 @@ the field names you want required by commas. Remember to use underscores instead
 				<h2>
 					<?php _e("Custom Contact Forms", 'custom-contact-forms'); ?>
 				</h2>
+             	<input type="button" class="quick-start-button" value="<?php _e("Quick Start Guide", 'custom-contact-forms'); ?>" />
 				<input type="button" class="usage-popover-button" value="<?php _e("Plugin Usage Manual", 'custom-contact-forms'); ?>" />
 			  </div>
 			  <a class="genesis" href="http://www.shareasale.com/r.cfm?b=241369&u=481196&m=28169&urllink=&afftrack=">Custom Contact Forms works best with any of the 20+ <span>Genesis</span> Wordpress child themes. The <span>Genesis Framework</span> empowers you to quickly and easily build incredible websites with WordPress.</a>
@@ -2000,6 +1999,7 @@ the field names you want required by commas. Remember to use underscores instead
 				<h2>
 					<?php _e("Custom Contact Forms", 'custom-contact-forms'); ?>
 				</h2>
+             	<input type="button" class="quick-start-button" value="<?php _e("Quick Start Guide", 'custom-contact-forms'); ?>" />
 				<input type="button" class="usage-popover-button" value="<?php _e("Plugin Usage Manual", 'custom-contact-forms'); ?>" />
 			  </div>
 			  <a class="genesis" href="http://www.shareasale.com/r.cfm?b=241369&u=481196&m=28169&urllink=&afftrack=">Custom Contact Forms works best with any of the 20+ <span>Genesis</span> Wordpress child themes. The <span>Genesis Framework</span> empowers you to quickly and easily build incredible websites with WordPress.</a>

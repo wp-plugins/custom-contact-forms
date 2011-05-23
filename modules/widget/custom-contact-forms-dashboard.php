@@ -7,7 +7,9 @@
 if (!class_exists('CustomContactFormsDashboard')) {
 	class CustomContactFormsDashboard extends CustomContactFormsAdmin {
 		function install() {
-			wp_add_dashboard_widget('custom-contact-forms-dashboard', __('Custom Contact Forms - Saved Form Submissions', 'custom-contact-forms'), array(&$this, 'display'));	
+			if (is_user_logged_in() && $this->userCanViewWidget()) {
+				wp_add_dashboard_widget('custom-contact-forms-dashboard', __('Custom Contact Forms - Saved Form Submissions', 'custom-contact-forms'), array(&$this, 'display'));	
+			}
 		}
 		
 		function isDashboardPage() {
@@ -15,15 +17,13 @@ if (!class_exists('CustomContactFormsDashboard')) {
 		}
 		
 		function userCanViewWidget() {
+			global $current_user;
+			if (!isset($current_user) || empty($current_user)) return false;
 			$perms = parent::getAdminOptions();
 			$widget_perms = $perms['dashboard_access'];
-			global $current_user;
 			$user_roles = $current_user->roles;
-			if (is_array($user_roles)) {
-				$user_role = @array_shift($user_roles);
-			} else
-				$user_role = "";
-				
+			$user_role = @array_shift($user_roles);
+			$user_role = @ucwords($user_role);
 			if ($widget_perms == 2) {
 				if ($user_role != "Administrator") return false;
 			} else if ($widget_perms == 1) {
@@ -35,6 +35,7 @@ if (!class_exists('CustomContactFormsDashboard')) {
 		}
 		
 		function insertDashboardStyles() {
+			if (!$this->userCanViewWidget()) return;
 			wp_register_style('ccf-dashboard', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-dashboard.css');
             wp_register_style('ccf-jquery-ui', plugins_url() . '/custom-contact-forms/css/jquery-ui.css');
             wp_enqueue_style('ccf-jquery-ui');
@@ -42,6 +43,7 @@ if (!class_exists('CustomContactFormsDashboard')) {
 		}
 		
 		function insertDashboardScripts() {
+			if (!$this->userCanViewWidget()) return;
 			wp_enqueue_script('jquery');
 			wp_enqueue_script('jquery-ui-core');
 			wp_enqueue_script('jquery-ui-widget', plugins_url() . '/custom-contact-forms/js/jquery.ui.widget.js');

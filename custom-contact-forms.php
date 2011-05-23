@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, form submissions saved to database, captchas, tooltip popovers, unlimited fields/forms/form styles, import/export, use a custom thank you page or built-in popover with a custom success message set for each form.
-	Version: 4.5.3.1
+	Version: 4.5.3.2
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
@@ -106,13 +106,11 @@ if (!is_admin()) { /* is front */
 	if ($admin_options['enable_dashboard_widget'] == 1) {
 		ccf_utils::load_module('widget/custom-contact-forms-dashboard.php');
 		$ccf_dashboard = new CustomContactFormsDashboard();
-		if ($ccf_dashboard->userCanViewWidget()) {
-			if ($ccf_dashboard->isDashboardPage()) {
-				add_action('admin_print_styles', array(&$ccf_dashboard, 'insertDashboardStyles'), 1);
-				add_action('admin_enqueue_scripts', array(&$ccf_dashboard, 'insertDashboardScripts'), 1);
-			}
-			add_action('wp_dashboard_setup', array(&$ccf_dashboard, 'install'));
+		if ($ccf_dashboard->isDashboardPage()) {
+			add_action('admin_print_styles', array(&$ccf_dashboard, 'insertDashboardStyles'), 1);
+			add_action('admin_enqueue_scripts', array(&$ccf_dashboard, 'insertDashboardScripts'), 1);
 		}
+		add_action('wp_dashboard_setup', array(&$ccf_dashboard, 'install'));
 	}
 	add_action('init', array(&$custom_contact_admin, 'adminInit'), 1);
 	if ($custom_contact_admin->isPluginAdminPage()) {
