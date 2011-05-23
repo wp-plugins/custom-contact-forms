@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: custom-contact-forms\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-21 15:51-0500\n"
-"PO-Revision-Date: 2011-05-21 15:51-0500\n"
+"POT-Creation-Date: 2011-05-23 10:56-0500\n"
+"PO-Revision-Date: 2011-05-23 10:57-0500\n"
 "Last-Translator: Taylor Lovett <admin@taylorlovett.com>\n"
 "Language-Team: TaylorLovett.com <admin@taylorlovett.com>\n"
 "MIME-Version: 1.0\n"
@@ -20,1046 +20,1048 @@ msgstr ""
 "X-Poedit-SearchPath-4: ../modules/usage_popover\n"
 "X-Poedit-SearchPath-5: ../modules/widget\n"
 
-#: ../custom-contact-forms-admin.php:347
-#: ../custom-contact-forms-admin.php:1860
-#: ../custom-contact-forms-admin.php:2001
+#: ../custom-contact-forms-admin.php:345
+#: ../custom-contact-forms-admin.php:1858
+#: ../custom-contact-forms-admin.php:2000
 msgid "Custom Contact Forms"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:349
+#: ../custom-contact-forms-admin.php:347
+#: ../custom-contact-forms-admin.php:1860
+#: ../custom-contact-forms-admin.php:2002
 #: ../modules/usage_popover/custom-contact-forms-quick-start-popover.php:1
 msgid "Quick Start Guide"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:350
-#: ../custom-contact-forms-admin.php:1862
+#: ../custom-contact-forms-admin.php:348
+#: ../custom-contact-forms-admin.php:1861
 #: ../custom-contact-forms-admin.php:2003
 msgid "Plugin Usage Manual"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:353
+#: ../custom-contact-forms-admin.php:351
 msgid "Create Fields"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:354
+#: ../custom-contact-forms-admin.php:352
 msgid "Create Forms"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:355
+#: ../custom-contact-forms-admin.php:353
 msgid "Manage Fields"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:356
-#: ../custom-contact-forms-admin.php:761
+#: ../custom-contact-forms-admin.php:354
+#: ../custom-contact-forms-admin.php:759
 msgid "Manage Fixed Fields"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:357
-#: ../custom-contact-forms-admin.php:993
+#: ../custom-contact-forms-admin.php:355
+#: ../custom-contact-forms-admin.php:991
 msgid "Manage Forms"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:358
+#: ../custom-contact-forms-admin.php:356
 msgid "Create Styles"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:359
+#: ../custom-contact-forms-admin.php:357
 msgid "Manage Styles"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:360
-#: ../custom-contact-forms-admin.php:873
+#: ../custom-contact-forms-admin.php:358
+#: ../custom-contact-forms-admin.php:871
 msgid "Manage Field Options"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:361
-#: ../custom-contact-forms-admin.php:1778
+#: ../custom-contact-forms-admin.php:359
+#: ../custom-contact-forms-admin.php:1776
 msgid "Suggest a Feature"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:362
-#: ../custom-contact-forms-admin.php:1775
+#: ../custom-contact-forms-admin.php:360
+#: ../custom-contact-forms-admin.php:1773
 msgid "Bug Report"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:363
+#: ../custom-contact-forms-admin.php:361
 msgid "Custom HTML Forms"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:364
+#: ../custom-contact-forms-admin.php:362
 msgid "Plugin News"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:367
+#: ../custom-contact-forms-admin.php:365
 msgid "Custom Contact Forms works best with any of the 20+ "
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:367
+#: ../custom-contact-forms-admin.php:365
 msgid "Genesis"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:367
+#: ../custom-contact-forms-admin.php:365
 msgid "Wordpress child themes. The"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:367
+#: ../custom-contact-forms-admin.php:365
 msgid "Genesis Framework"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:367
+#: ../custom-contact-forms-admin.php:365
 msgid "empowers you to quickly and easily build incredible websites with WordPress."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:377
+#: ../custom-contact-forms-admin.php:375
 msgid "WP Blogging Tips, Downloads, SEO Tricks & Exclusive Tutorials"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:392
+#: ../custom-contact-forms-admin.php:390
 msgid "Create A Form Field"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:399
+#: ../custom-contact-forms-admin.php:397
 msgid "Field Slug:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:403
+#: ../custom-contact-forms-admin.php:401
 msgid "This is just a unique way for CCF to refer to your field. Must be unique from other slugs and contain only underscores and alphanumeric characters."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:407
+#: ../custom-contact-forms-admin.php:405
 msgid "Field Label:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:411
+#: ../custom-contact-forms-admin.php:409
 msgid "The field label is displayed next to the field and is visible to the user."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:415
+#: ../custom-contact-forms-admin.php:413
 msgid "Field Type:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:428
+#: ../custom-contact-forms-admin.php:426
 msgid "Initial Value:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:433
+#: ../custom-contact-forms-admin.php:431
 msgid ""
 "This is the initial value of the field. If you set the type as checkbox, it is recommend you set this to what the checkbox is implying. For example if I were creating the checkbox \n"
 "\t\t\t\t\t\t'Are you human?', I would set the initial value to 'Yes'."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:435
+#: ../custom-contact-forms-admin.php:433
 msgid "If you set the field type as 'Dropdown' or 'Radio', you should enter the slug of the"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:436
+#: ../custom-contact-forms-admin.php:434
 msgid "Create a Field Option"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:436
+#: ../custom-contact-forms-admin.php:434
 msgid "field option"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:437
+#: ../custom-contact-forms-admin.php:435
 msgid "you would like initially selected."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:441
+#: ../custom-contact-forms-admin.php:439
 msgid "Max Length:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:445
+#: ../custom-contact-forms-admin.php:443
 msgid "0 for no limit; only applies to Text fields"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:449
+#: ../custom-contact-forms-admin.php:447
 msgid "Required Field:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:453
-#: ../custom-contact-forms-admin.php:651
-#: ../custom-contact-forms-admin.php:806
-#: ../custom-contact-forms-admin.php:913
-#: ../custom-contact-forms-admin.php:970
+#: ../custom-contact-forms-admin.php:451
+#: ../custom-contact-forms-admin.php:649
+#: ../custom-contact-forms-admin.php:804
+#: ../custom-contact-forms-admin.php:911
+#: ../custom-contact-forms-admin.php:968
 #: ../custom-contact-forms-admin.php:2043
 #: ../custom-contact-forms-admin.php:2174
 #: ../custom-contact-forms-admin.php:2206
 msgid "No"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:456
-#: ../custom-contact-forms-admin.php:648
-#: ../custom-contact-forms-admin.php:803
-#: ../custom-contact-forms-admin.php:813
-#: ../custom-contact-forms-admin.php:913
-#: ../custom-contact-forms-admin.php:970
+#: ../custom-contact-forms-admin.php:454
+#: ../custom-contact-forms-admin.php:646
+#: ../custom-contact-forms-admin.php:801
+#: ../custom-contact-forms-admin.php:811
+#: ../custom-contact-forms-admin.php:911
+#: ../custom-contact-forms-admin.php:968
 #: ../custom-contact-forms-admin.php:2040
 #: ../custom-contact-forms-admin.php:2171
 #: ../custom-contact-forms-admin.php:2203
 msgid "Yes"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:460
+#: ../custom-contact-forms-admin.php:458
 msgid "If a field is required and a user leaves it blank, the plugin will display an error message (which you can customize using 'Field Error') explaining the problem."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:464
-#: ../custom-contact-forms-admin.php:670
-#: ../custom-contact-forms-admin.php:835
+#: ../custom-contact-forms-admin.php:462
+#: ../custom-contact-forms-admin.php:668
+#: ../custom-contact-forms-admin.php:833
 msgid "Field Instructions:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:468
-#: ../custom-contact-forms-admin.php:668
-#: ../custom-contact-forms-admin.php:833
+#: ../custom-contact-forms-admin.php:466
+#: ../custom-contact-forms-admin.php:666
+#: ../custom-contact-forms-admin.php:831
 msgid "If this is filled out, a tooltip popover displaying this text will show when the field is selected."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:472
-#: ../custom-contact-forms-admin.php:675
-#: ../custom-contact-forms-admin.php:829
+#: ../custom-contact-forms-admin.php:470
+#: ../custom-contact-forms-admin.php:673
+#: ../custom-contact-forms-admin.php:827
 msgid "Field Class:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:476
+#: ../custom-contact-forms-admin.php:474
 msgid "If you manage your own .css stylesheet, you can use this to attach a class to this field. Leaving this blank will do nothing."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:480
-#: ../custom-contact-forms-admin.php:680
-#: ../custom-contact-forms-admin.php:840
+#: ../custom-contact-forms-admin.php:478
+#: ../custom-contact-forms-admin.php:678
+#: ../custom-contact-forms-admin.php:838
 msgid "Field Error:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:484
+#: ../custom-contact-forms-admin.php:482
 msgid "If a user leaves this field blank and the field is required, this error message will be shown. A generic default will show if left blank."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:489
+#: ../custom-contact-forms-admin.php:487
 msgid "Create Field"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:491
+#: ../custom-contact-forms-admin.php:489
 msgid "If this is a dropdown or radio field, you should go to the field manager below to attach field options after you create it."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:500
+#: ../custom-contact-forms-admin.php:498
 msgid "Create A Form"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:507
+#: ../custom-contact-forms-admin.php:505
 msgid "Form Slug:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:511
+#: ../custom-contact-forms-admin.php:509
 msgid "This is just a unique way for CCF to refer to your form. Must be unique from other slugs and contain only underscores and alphanumeric characters."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:515
+#: ../custom-contact-forms-admin.php:513
 msgid "Form Title:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:518
+#: ../custom-contact-forms-admin.php:516
 msgid "This text is displayed above the form as the heading."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:522
+#: ../custom-contact-forms-admin.php:520
 msgid "Form Style:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:527
+#: ../custom-contact-forms-admin.php:525
 msgid "Click to create a style"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:530
+#: ../custom-contact-forms-admin.php:528
 msgid "Submit Button Text:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:536
+#: ../custom-contact-forms-admin.php:534
 msgid "Form Destination Email:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:540
+#: ../custom-contact-forms-admin.php:538
 msgid "Will receive all submissions from this form; if left blank it will use the default specified in general settings."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:544
+#: ../custom-contact-forms-admin.php:542
 msgid "Form Email Subject:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:548
+#: ../custom-contact-forms-admin.php:546
 msgid "When submitted and configured accordingly, the form will send an email with this subject."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:552
+#: ../custom-contact-forms-admin.php:550
 msgid "Form Email Name:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:556
+#: ../custom-contact-forms-admin.php:554
 msgid "When submitted and configured accordingly, the form will send an email with this as the email 'from name'."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:560
+#: ../custom-contact-forms-admin.php:558
 msgid "Form Success Message:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:564
-#: ../custom-contact-forms-admin.php:572
+#: ../custom-contact-forms-admin.php:562
+#: ../custom-contact-forms-admin.php:570
 msgid "Will be displayed in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:568
+#: ../custom-contact-forms-admin.php:566
 msgid "Form Success Message Title:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:576
+#: ../custom-contact-forms-admin.php:574
 msgid "Custom Success URL:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:580
+#: ../custom-contact-forms-admin.php:578
 msgid "If this is filled out, users will be sent to this page when they successfully fill out this form. If it is left blank, a popover showing the form's 'success message' will be displayed on form success."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:583
+#: ../custom-contact-forms-admin.php:581
 msgid "Who Can View This Form:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:599
+#: ../custom-contact-forms-admin.php:597
 msgid "Choose which types of users should be able to view this form."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:603
+#: ../custom-contact-forms-admin.php:601
 msgid "Create Form"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:605
+#: ../custom-contact-forms-admin.php:603
 msgid "You should go to the form manager below to attach fields to this form after you create it."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:612
+#: ../custom-contact-forms-admin.php:610
 msgid "Manage User Fields"
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:617
+#: ../custom-contact-forms-admin.php:741
+#: ../custom-contact-forms-admin.php:766
+#: ../custom-contact-forms-admin.php:853
+#: ../custom-contact-forms-admin.php:880
+#: ../custom-contact-forms-admin.php:889
+#: ../custom-contact-forms-admin.php:999
+#: ../custom-contact-forms-admin.php:1148
+msgid "Slug"
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:618
+#: ../custom-contact-forms-admin.php:742
+#: ../custom-contact-forms-admin.php:767
+#: ../custom-contact-forms-admin.php:854
+#: ../custom-contact-forms-admin.php:881
+#: ../custom-contact-forms-admin.php:890
+msgid "Label"
 msgstr ""
 
 #: ../custom-contact-forms-admin.php:619
 #: ../custom-contact-forms-admin.php:743
 #: ../custom-contact-forms-admin.php:768
 #: ../custom-contact-forms-admin.php:855
-#: ../custom-contact-forms-admin.php:882
-#: ../custom-contact-forms-admin.php:891
-#: ../custom-contact-forms-admin.php:1001
-#: ../custom-contact-forms-admin.php:1150
-msgid "Slug"
+msgid "Type"
 msgstr ""
 
 #: ../custom-contact-forms-admin.php:620
 #: ../custom-contact-forms-admin.php:744
 #: ../custom-contact-forms-admin.php:769
 #: ../custom-contact-forms-admin.php:856
-#: ../custom-contact-forms-admin.php:883
-#: ../custom-contact-forms-admin.php:892
-msgid "Label"
+msgid "Initial Value"
 msgstr ""
 
 #: ../custom-contact-forms-admin.php:621
 #: ../custom-contact-forms-admin.php:745
 #: ../custom-contact-forms-admin.php:770
 #: ../custom-contact-forms-admin.php:857
-msgid "Type"
+msgid "Required"
 msgstr ""
 
 #: ../custom-contact-forms-admin.php:622
 #: ../custom-contact-forms-admin.php:746
 #: ../custom-contact-forms-admin.php:771
 #: ../custom-contact-forms-admin.php:858
-msgid "Initial Value"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:623
-#: ../custom-contact-forms-admin.php:747
-#: ../custom-contact-forms-admin.php:772
-#: ../custom-contact-forms-admin.php:859
-msgid "Required"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:624
-#: ../custom-contact-forms-admin.php:748
-#: ../custom-contact-forms-admin.php:773
-#: ../custom-contact-forms-admin.php:860
 msgid "Maxlength"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:673
-#: ../custom-contact-forms-admin.php:828
+#: ../custom-contact-forms-admin.php:671
+#: ../custom-contact-forms-admin.php:826
 msgid "If you manage a .CSS file for your theme, you could create a class in that file and add it to this field. If the form attaching this field is using a \"Form Style\" other than the default, styles inherited from the \"Field Class\" might be overwritten."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:678
-#: ../custom-contact-forms-admin.php:838
+#: ../custom-contact-forms-admin.php:676
+#: ../custom-contact-forms-admin.php:836
 msgid "This lets you customize the error message displayed when this field is required and left blank."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:710
+#: ../custom-contact-forms-admin.php:708
 msgid "Detach field options you"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:712
-#: ../custom-contact-forms-admin.php:1129
+#: ../custom-contact-forms-admin.php:710
+#: ../custom-contact-forms-admin.php:1127
 msgid "create"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:729
+#: ../custom-contact-forms-admin.php:727
 msgid "Attach field options in the order you want them to display."
 msgstr ""
 
+#: ../custom-contact-forms-admin.php:752
+#: ../custom-contact-forms-admin.php:864
+#: ../custom-contact-forms-admin.php:927
+#: ../custom-contact-forms-admin.php:1160
+#: ../custom-contact-forms-admin.php:1730
+#: ../custom-contact-forms-admin.php:1954
+msgid "Bulk Actions"
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:753
+#: ../custom-contact-forms-admin.php:865
+#: ../custom-contact-forms-admin.php:928
+#: ../custom-contact-forms-admin.php:1161
+#: ../custom-contact-forms-admin.php:1731
+msgid "Save"
+msgstr ""
+
 #: ../custom-contact-forms-admin.php:754
-#: ../custom-contact-forms-admin.php:866
 #: ../custom-contact-forms-admin.php:929
 #: ../custom-contact-forms-admin.php:1162
 #: ../custom-contact-forms-admin.php:1732
 #: ../custom-contact-forms-admin.php:1955
-msgid "Bulk Actions"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:755
-#: ../custom-contact-forms-admin.php:867
-#: ../custom-contact-forms-admin.php:930
-#: ../custom-contact-forms-admin.php:1163
-#: ../custom-contact-forms-admin.php:1733
-msgid "Save"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:756
-#: ../custom-contact-forms-admin.php:931
-#: ../custom-contact-forms-admin.php:1164
-#: ../custom-contact-forms-admin.php:1734
-#: ../custom-contact-forms-admin.php:1956
 msgid "Delete"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:757
-#: ../custom-contact-forms-admin.php:868
-#: ../custom-contact-forms-admin.php:932
-#: ../custom-contact-forms-admin.php:1165
-#: ../custom-contact-forms-admin.php:1735
-#: ../custom-contact-forms-admin.php:1957
+#: ../custom-contact-forms-admin.php:755
+#: ../custom-contact-forms-admin.php:866
+#: ../custom-contact-forms-admin.php:930
+#: ../custom-contact-forms-admin.php:1163
+#: ../custom-contact-forms-admin.php:1733
+#: ../custom-contact-forms-admin.php:1956
 msgid "Apply"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:789
-#: ../custom-contact-forms-admin.php:820
+#: ../custom-contact-forms-admin.php:787
+#: ../custom-contact-forms-admin.php:818
 #: ../custom-contact-forms-admin.php:2313
 msgid "None"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:884
-#: ../custom-contact-forms-admin.php:893
+#: ../custom-contact-forms-admin.php:882
+#: ../custom-contact-forms-admin.php:891
 msgid "Value"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:885
-#: ../custom-contact-forms-admin.php:894
+#: ../custom-contact-forms-admin.php:883
+#: ../custom-contact-forms-admin.php:892
 msgid "Is Dead"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:921
+#: ../custom-contact-forms-admin.php:919
 msgid "No field options have been created."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:939
+#: ../custom-contact-forms-admin.php:937
 msgid "Create A Field Option"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:946
+#: ../custom-contact-forms-admin.php:944
 msgid "Option Slug:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:950
+#: ../custom-contact-forms-admin.php:948
 msgid "Used to identify this option, solely for admin purposes; must be unique, and contain only letters, numbers, and underscores. Example: 'slug_one'"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:954
+#: ../custom-contact-forms-admin.php:952
 msgid "Option Label:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:958
+#: ../custom-contact-forms-admin.php:956
 msgid "This is what is shown to the user in the dropdown or radio field. Example: 'United States'"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:962
+#: ../custom-contact-forms-admin.php:960
 msgid "Option Value:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:964
+#: ../custom-contact-forms-admin.php:962
 msgid "This is the actual value of the option which is not shown to the user. This can be the same thing as the label. An example pairing of label => value is: 'The color green' => 'green' or 'Yes' => '1'."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:966
+#: ../custom-contact-forms-admin.php:964
 msgid "This is the actual value of the option which is not shown to the user. This can be the same thing as the label. An example pairing of label => value is: \"The color green\" => \"green\" or \"Yes\" => \"1\"."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:969
+#: ../custom-contact-forms-admin.php:967
 msgid "Is Dead Option:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:971
+#: ../custom-contact-forms-admin.php:969
 msgid "A dead option is something like 'Please Select One'. This is a useful tool for required dropdown fields. If a dead option is submitted by a user for a required dropdown field, then the user will have to go back and fill out the field again."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:975
+#: ../custom-contact-forms-admin.php:973
 msgid "Create Field Option"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:985
+#: ../custom-contact-forms-admin.php:983
 msgid "Rate This Plugin"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:986
+#: ../custom-contact-forms-admin.php:984
 msgid "We need your help to continue development! Please <span>rate this plugin</span> to show your support."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1000
+#: ../custom-contact-forms-admin.php:998
 msgid "Form Display Code"
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:1000
+#: ../custom-contact-forms-admin.php:1149
+msgid "Destination Email"
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:1001
+#: ../custom-contact-forms-admin.php:1150
+msgid "Title"
 msgstr ""
 
 #: ../custom-contact-forms-admin.php:1002
 #: ../custom-contact-forms-admin.php:1151
-msgid "Destination Email"
+msgid "Button Text"
 msgstr ""
 
 #: ../custom-contact-forms-admin.php:1003
 #: ../custom-contact-forms-admin.php:1152
-msgid "Title"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:1004
-#: ../custom-contact-forms-admin.php:1153
-msgid "Button Text"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:1005
-#: ../custom-contact-forms-admin.php:1154
 msgid "Style"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1038
+#: ../custom-contact-forms-admin.php:1036
 msgid "Method"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1039
+#: ../custom-contact-forms-admin.php:1037
 msgid "Form Action"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1040
+#: ../custom-contact-forms-admin.php:1038
 msgid "Email Subject"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1041
+#: ../custom-contact-forms-admin.php:1039
 msgid "Email From Name"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1042
+#: ../custom-contact-forms-admin.php:1040
 msgid "Success Message Title"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1043
+#: ../custom-contact-forms-admin.php:1041
 msgid "Success Message"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1044
+#: ../custom-contact-forms-admin.php:1042
 msgid "Custom Success URL"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1047
+#: ../custom-contact-forms-admin.php:1045
 msgid "The Form Method is the method by which information is transfer through your form. If you aren't an expert with HTML and PHP, leave this as Post."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1051
+#: ../custom-contact-forms-admin.php:1049
 msgid "This lets you process your forms through alternate scripts. If you use a service like InfusionSoft or Aweber, set this to be the same form action as the code provided to you by that service, otherwise leave this blank."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1053
+#: ../custom-contact-forms-admin.php:1051
 msgid "This is the form email subject sent to the destination email address. If left blank, the default from General Settings will be used."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1055
+#: ../custom-contact-forms-admin.php:1053
 msgid "This is the from name of the email sent on successful form submission. If left blank, the default from General Settings will be used."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1057
+#: ../custom-contact-forms-admin.php:1055
 msgid "This will be displayed as the header in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1059
+#: ../custom-contact-forms-admin.php:1057
 msgid "This will be displayed in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1061
+#: ../custom-contact-forms-admin.php:1059
 msgid "If this is filled out, users will be sent to this thank you page when they successfully fill out this form. If it is left blank, a popover showing the form's 'success message' will be displayed on form success."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1065
+#: ../custom-contact-forms-admin.php:1063
 msgid "The form display code above ([customcontact form=x]) will only work in Wordpress pages and posts. If you want to display this form in a theme file such as page.php, header.php, index.php, category.php, etc, then insert this PHP snippet."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1066
+#: ../custom-contact-forms-admin.php:1064
 msgid "Code to Display Form in Theme Files:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1069
+#: ../custom-contact-forms-admin.php:1067
 msgid "This field allows you to insert HTML directly after the starting <form> tag."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1070
+#: ../custom-contact-forms-admin.php:1068
 msgid "Custom Code:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1073
+#: ../custom-contact-forms-admin.php:1071
 msgid "If you want to show this form to only certain types of users, you can uncheck boxes accordingly. To show this form to anyone, check all the boxes. This will only take effect if 'Form Access Capabilities' is enabled in general settings."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1092
+#: ../custom-contact-forms-admin.php:1090
 msgid "Attached Fields:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1112
+#: ../custom-contact-forms-admin.php:1110
 msgid "Attach fields in the order you want them displayed."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1116
+#: ../custom-contact-forms-admin.php:1114
 msgid "Attach Field:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1127
+#: ../custom-contact-forms-admin.php:1125
 msgid "Attach fixed fields or ones you"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1149
+#: ../custom-contact-forms-admin.php:1147
 msgid "Form Code"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1171
+#: ../custom-contact-forms-admin.php:1169
 msgid "Create A Style for Your Forms"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1175
+#: ../custom-contact-forms-admin.php:1173
 msgid "Use this manager to create styles for your forms. Each field is already filled out with nice look defaults. It is recommended you simply input a slug and click create to see the defaults before you start changing values."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1181
+#: ../custom-contact-forms-admin.php:1179
 msgid "Style Slug:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1184
+#: ../custom-contact-forms-admin.php:1182
 msgid "(Must be unique)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1188
-#: ../custom-contact-forms-admin.php:1586
-#: ../custom-contact-forms-admin.php:1595
+#: ../custom-contact-forms-admin.php:1186
+#: ../custom-contact-forms-admin.php:1584
+#: ../custom-contact-forms-admin.php:1593
 msgid "Title Font Size:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1191
+#: ../custom-contact-forms-admin.php:1189
 msgid "(ex: 10pt, 10px, 1em)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1195
-#: ../custom-contact-forms-admin.php:1634
-#: ../custom-contact-forms-admin.php:1702
+#: ../custom-contact-forms-admin.php:1193
+#: ../custom-contact-forms-admin.php:1632
+#: ../custom-contact-forms-admin.php:1700
 msgid "Title Font Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1198
-#: ../custom-contact-forms-admin.php:1219
-#: ../custom-contact-forms-admin.php:1283
-#: ../custom-contact-forms-admin.php:1384
-#: ../custom-contact-forms-admin.php:1391
-#: ../custom-contact-forms-admin.php:1419
+#: ../custom-contact-forms-admin.php:1196
+#: ../custom-contact-forms-admin.php:1217
+#: ../custom-contact-forms-admin.php:1281
+#: ../custom-contact-forms-admin.php:1382
+#: ../custom-contact-forms-admin.php:1389
+#: ../custom-contact-forms-admin.php:1417
 msgid "(ex: FF0000)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1202
-#: ../custom-contact-forms-admin.php:1559
+#: ../custom-contact-forms-admin.php:1200
+#: ../custom-contact-forms-admin.php:1557
 msgid "Label Width:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1205
+#: ../custom-contact-forms-admin.php:1203
 msgid "(ex: 100px or 20%)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1209
-#: ../custom-contact-forms-admin.php:1600
+#: ../custom-contact-forms-admin.php:1207
+#: ../custom-contact-forms-admin.php:1598
 msgid "Label Font Size:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1212
-#: ../custom-contact-forms-admin.php:1377
+#: ../custom-contact-forms-admin.php:1210
+#: ../custom-contact-forms-admin.php:1375
 msgid "(ex: 10px, 10pt, 1em)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1216
-#: ../custom-contact-forms-admin.php:1639
+#: ../custom-contact-forms-admin.php:1214
+#: ../custom-contact-forms-admin.php:1637
 msgid "Label Font Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1223
-#: ../custom-contact-forms-admin.php:1526
+#: ../custom-contact-forms-admin.php:1221
+#: ../custom-contact-forms-admin.php:1524
 msgid "Text Field Width:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1226
-#: ../custom-contact-forms-admin.php:1233
-#: ../custom-contact-forms-admin.php:1240
-#: ../custom-contact-forms-admin.php:1320
+#: ../custom-contact-forms-admin.php:1224
+#: ../custom-contact-forms-admin.php:1231
+#: ../custom-contact-forms-admin.php:1238
+#: ../custom-contact-forms-admin.php:1318
 msgid "(ex: 100px or 100%)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1230
+#: ../custom-contact-forms-admin.php:1228
 msgid "Textarea Field Width:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1237
+#: ../custom-contact-forms-admin.php:1235
 msgid "Textarea Field Height:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1244
-#: ../custom-contact-forms-admin.php:1605
+#: ../custom-contact-forms-admin.php:1242
+#: ../custom-contact-forms-admin.php:1603
 msgid "Field Font Size:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1247
+#: ../custom-contact-forms-admin.php:1245
 msgid "(ex: 10px, 10pt, 1em"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1251
-#: ../custom-contact-forms-admin.php:1644
+#: ../custom-contact-forms-admin.php:1249
+#: ../custom-contact-forms-admin.php:1642
 msgid "Field Font Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1254
-#: ../custom-contact-forms-admin.php:1290
+#: ../custom-contact-forms-admin.php:1252
+#: ../custom-contact-forms-admin.php:1288
 msgid "(ex: 333333)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1258
-#: ../custom-contact-forms-admin.php:1693
+#: ../custom-contact-forms-admin.php:1256
+#: ../custom-contact-forms-admin.php:1691
 msgid "Field Border Style:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1266
-#: ../custom-contact-forms-admin.php:1654
+#: ../custom-contact-forms-admin.php:1264
+#: ../custom-contact-forms-admin.php:1652
 msgid "Form Margin:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1269
-#: ../custom-contact-forms-admin.php:1276
-#: ../custom-contact-forms-admin.php:1398
-#: ../custom-contact-forms-admin.php:1405
+#: ../custom-contact-forms-admin.php:1267
+#: ../custom-contact-forms-admin.php:1274
+#: ../custom-contact-forms-admin.php:1396
+#: ../custom-contact-forms-admin.php:1403
 msgid "(ex: 5px or 1em)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1273
-#: ../custom-contact-forms-admin.php:1546
+#: ../custom-contact-forms-admin.php:1271
+#: ../custom-contact-forms-admin.php:1544
 msgid "Label Margin:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1280
+#: ../custom-contact-forms-admin.php:1278
 msgid "Textarea Background Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1287
+#: ../custom-contact-forms-admin.php:1285
 msgid "Success Popover Font Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1294
+#: ../custom-contact-forms-admin.php:1292
 msgid "Success Popover Title Font Size:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1297
-#: ../custom-contact-forms-admin.php:1304
-#: ../custom-contact-forms-admin.php:1426
-#: ../custom-contact-forms-admin.php:1449
+#: ../custom-contact-forms-admin.php:1295
+#: ../custom-contact-forms-admin.php:1302
+#: ../custom-contact-forms-admin.php:1424
+#: ../custom-contact-forms-admin.php:1447
 msgid "(ex: 12px, 1em, 100%)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1301
-#: ../custom-contact-forms-admin.php:1590
+#: ../custom-contact-forms-admin.php:1299
+#: ../custom-contact-forms-admin.php:1588
 msgid "Form Background Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1308
+#: ../custom-contact-forms-admin.php:1306
 msgid "Tooltip Background Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1311
+#: ../custom-contact-forms-admin.php:1309
 msgid "(ex: 000000 or black)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1317
-#: ../custom-contact-forms-admin.php:1688
+#: ../custom-contact-forms-admin.php:1315
+#: ../custom-contact-forms-admin.php:1686
 msgid "Field Border Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1324
-#: ../custom-contact-forms-admin.php:1671
+#: ../custom-contact-forms-admin.php:1322
+#: ../custom-contact-forms-admin.php:1669
 msgid "Form Border Style:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1332
-#: ../custom-contact-forms-admin.php:1683
+#: ../custom-contact-forms-admin.php:1330
+#: ../custom-contact-forms-admin.php:1681
 msgid "Form Border Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1335
+#: ../custom-contact-forms-admin.php:1333
 msgid "(ex: 000000)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1339
-#: ../custom-contact-forms-admin.php:1678
+#: ../custom-contact-forms-admin.php:1337
+#: ../custom-contact-forms-admin.php:1676
 msgid "Form Border Width:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1342
+#: ../custom-contact-forms-admin.php:1340
 msgid "(ex: 1px)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1346
-#: ../custom-contact-forms-admin.php:1521
+#: ../custom-contact-forms-admin.php:1344
+#: ../custom-contact-forms-admin.php:1519
 msgid "Form Width:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1349
+#: ../custom-contact-forms-admin.php:1347
 msgid "(ex: 100px or 50%)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1353
+#: ../custom-contact-forms-admin.php:1351
 msgid "Form Font Family:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1356
+#: ../custom-contact-forms-admin.php:1354
 msgid "(ex: Verdana, Tahoma, Arial)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1360
-#: ../custom-contact-forms-admin.php:1564
+#: ../custom-contact-forms-admin.php:1358
+#: ../custom-contact-forms-admin.php:1562
 msgid "Button Width:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1363
+#: ../custom-contact-forms-admin.php:1361
 msgid "(ex: 100px, 30%, auto)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1367
-#: ../custom-contact-forms-admin.php:1569
+#: ../custom-contact-forms-admin.php:1365
+#: ../custom-contact-forms-admin.php:1567
 msgid "Button Height:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1370
+#: ../custom-contact-forms-admin.php:1368
 msgid "(ex: 100px or 30%)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1374
-#: ../custom-contact-forms-admin.php:1610
+#: ../custom-contact-forms-admin.php:1372
+#: ../custom-contact-forms-admin.php:1608
 msgid "Button Font Size:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1381
-#: ../custom-contact-forms-admin.php:1649
+#: ../custom-contact-forms-admin.php:1379
+#: ../custom-contact-forms-admin.php:1647
 msgid "Button Font Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1388
-#: ../custom-contact-forms-admin.php:1574
+#: ../custom-contact-forms-admin.php:1386
+#: ../custom-contact-forms-admin.php:1572
 msgid "Field Background Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1395
-#: ../custom-contact-forms-admin.php:1615
+#: ../custom-contact-forms-admin.php:1393
+#: ../custom-contact-forms-admin.php:1613
 msgid "Form Padding:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1402
-#: ../custom-contact-forms-admin.php:1579
+#: ../custom-contact-forms-admin.php:1400
+#: ../custom-contact-forms-admin.php:1577
 msgid "Title Margin:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1409
-#: ../custom-contact-forms-admin.php:1541
+#: ../custom-contact-forms-admin.php:1407
+#: ../custom-contact-forms-admin.php:1539
 msgid "Dropdown Width:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1412
+#: ../custom-contact-forms-admin.php:1410
 msgid "(ex: 30px, 20%, or auto)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1416
+#: ../custom-contact-forms-admin.php:1414
 msgid "Success Popover Border Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1423
+#: ../custom-contact-forms-admin.php:1421
 msgid "Success Popover Font Size:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1430
+#: ../custom-contact-forms-admin.php:1428
 msgid "Success Popover Height:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1433
+#: ../custom-contact-forms-admin.php:1431
 msgid "(ex: 200px, 6em, 50%)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1437
-#: ../custom-contact-forms-admin.php:1707
+#: ../custom-contact-forms-admin.php:1435
+#: ../custom-contact-forms-admin.php:1705
 msgid "Field Border Roundness:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1440
+#: ../custom-contact-forms-admin.php:1438
 msgid "(ex: 6px, or 0px)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1444
-#: ../custom-contact-forms-admin.php:1514
-#: ../custom-contact-forms-admin.php:1627
+#: ../custom-contact-forms-admin.php:1442
+#: ../custom-contact-forms-admin.php:1512
+#: ../custom-contact-forms-admin.php:1625
 msgid "Tooltip"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1445
-#: ../custom-contact-forms-admin.php:1515
-#: ../custom-contact-forms-admin.php:1628
+#: ../custom-contact-forms-admin.php:1443
+#: ../custom-contact-forms-admin.php:1513
+#: ../custom-contact-forms-admin.php:1626
 msgid "A tooltip is the little box that fades in displaying 'Field Instructions' when a user selects a particular field."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1446
-#: ../custom-contact-forms-admin.php:1622
+#: ../custom-contact-forms-admin.php:1444
+#: ../custom-contact-forms-admin.php:1620
 msgid "Font Size:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1453
+#: ../custom-contact-forms-admin.php:1451
 msgid "Tooltip Font Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1456
+#: ../custom-contact-forms-admin.php:1454
 msgid "(ex: ffffff or white)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1460
+#: ../custom-contact-forms-admin.php:1458
 msgid "Create Style"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1468
+#: ../custom-contact-forms-admin.php:1466
 msgid "Manage Form Styles"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1490
+#: ../custom-contact-forms-admin.php:1488
 msgid "Slug:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1495
+#: ../custom-contact-forms-admin.php:1493
 msgid "Font Family:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1500
+#: ../custom-contact-forms-admin.php:1498
 msgid "Textarea Background"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1502
+#: ../custom-contact-forms-admin.php:1500
 msgid "Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1507
-#: ../custom-contact-forms-admin.php:1551
-#: ../custom-contact-forms-admin.php:1584
-#: ../custom-contact-forms-admin.php:1620
-#: ../custom-contact-forms-admin.php:1659
-#: ../custom-contact-forms-admin.php:1700
+#: ../custom-contact-forms-admin.php:1505
+#: ../custom-contact-forms-admin.php:1549
+#: ../custom-contact-forms-admin.php:1582
+#: ../custom-contact-forms-admin.php:1618
+#: ../custom-contact-forms-admin.php:1657
+#: ../custom-contact-forms-admin.php:1698
 msgid "Success Popover"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1509
+#: ../custom-contact-forms-admin.php:1507
 msgid "Border Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1516
-#: ../custom-contact-forms-admin.php:1661
+#: ../custom-contact-forms-admin.php:1514
+#: ../custom-contact-forms-admin.php:1659
 msgid "Font Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1531
+#: ../custom-contact-forms-admin.php:1529
 msgid "Textarea Width:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1536
+#: ../custom-contact-forms-admin.php:1534
 msgid "Textarea Height:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1553
+#: ../custom-contact-forms-admin.php:1551
 msgid "Height:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1629
+#: ../custom-contact-forms-admin.php:1627
 msgid "Background Color:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1666
+#: ../custom-contact-forms-admin.php:1664
 msgid "Tooltip Font Size:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1740
+#: ../custom-contact-forms-admin.php:1738
 msgid "Report a Bug/Suggest a Feature"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1747
+#: ../custom-contact-forms-admin.php:1745
 msgid "Your Name:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1753
+#: ../custom-contact-forms-admin.php:1751
 msgid "Your Email:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1759
+#: ../custom-contact-forms-admin.php:1757
 msgid "Who Hosts Your Website?"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1765
+#: ../custom-contact-forms-admin.php:1763
 msgid "Your Message:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1771
+#: ../custom-contact-forms-admin.php:1769
 msgid "Purpose of this message:"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1781
+#: ../custom-contact-forms-admin.php:1779
 msgid "Plugin Question"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1787
+#: ../custom-contact-forms-admin.php:1785
 msgid "Version of Custom Contact Forms?"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1793
+#: ../custom-contact-forms-admin.php:1791
 msgid "Version of WordPress?"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1799
+#: ../custom-contact-forms-admin.php:1797
 msgid "Send Message"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1807
+#: ../custom-contact-forms-admin.php:1805
 msgid "Custom HTML Forms (Advanced)"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1811
+#: ../custom-contact-forms-admin.php:1809
 msgid ""
 "If you know HTML and simply want to use this plugin to process form requests, this feature is for you. \n"
 "\t\t\t\t\tThe following HTML is a the framework to which you must adhere. In order for your form to work you MUST do the following: a) Keep the form action/method the same (yes the action is supposed to be empty), b) Include all the hidden fields shown below, c) provide a \n"
 "\t\t\t\t\thidden field with a success message or thank you page (both hidden fields are included below, you must choose one or the other and fill in the value part of the input field appropriately."
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1818
+#: ../custom-contact-forms-admin.php:1816
 msgid "Thank you for filling out our form!"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1823
+#: ../custom-contact-forms-admin.php:1821
 msgid ""
 "Paste all this code into a page or post and edit it to your liking. It is recommended you only use this feature if you are experienced with HTML. The destination_email \n"
 "field specifies where emails will be sent on successful submission; you can have the form send to multiple addresses by separating email's with semi-colons (i.e. email@google.com; email2@google.com). \n"
@@ -1068,26 +1070,26 @@ msgid ""
 "the field names you want required by commas. Remember to use underscores instead of spaces in field names!"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1885
+#: ../custom-contact-forms-admin.php:1884
 msgid "Saved Form Submissions"
+msgstr ""
+
+#: ../custom-contact-forms-admin.php:1891
+#: ../custom-contact-forms-admin.php:1945
+msgid "Date Submitted"
 msgstr ""
 
 #: ../custom-contact-forms-admin.php:1892
 #: ../custom-contact-forms-admin.php:1946
-msgid "Date Submitted"
+msgid "Form Submitted"
 msgstr ""
 
 #: ../custom-contact-forms-admin.php:1893
 #: ../custom-contact-forms-admin.php:1947
-msgid "Form Submitted"
-msgstr ""
-
-#: ../custom-contact-forms-admin.php:1894
-#: ../custom-contact-forms-admin.php:1948
 msgid "Form Page"
 msgstr ""
 
-#: ../custom-contact-forms-admin.php:1913
+#: ../custom-contact-forms-admin.php:1912
 msgid "Custom HTML Form"
 msgstr ""
 
@@ -1429,7 +1431,7 @@ msgid "If you want to quickly and easily create a form and insert it in to your 
 msgstr ""
 
 #: ../modules/usage_popover/custom-contact-forms-quick-start-popover.php:6
-msgid "First insert some default content by clicking the button below. This will create a standard form automatically that, if you wish, you can be customized later."
+msgid "First insert some default content by clicking the button below. This will create a standard form automatically that, if you wish, can be customized later."
 msgstr ""
 
 #: ../modules/usage_popover/custom-contact-forms-quick-start-popover.php:8
@@ -1441,7 +1443,7 @@ msgid "Insert the code, [customcontact form=1], in any page or post. If you want
 msgstr ""
 
 #: ../modules/usage_popover/custom-contact-forms-quick-start-popover.php:12
-msgid "Done! Pretty simple, huh? Custom Contact Forms allows you to create extremely customizable forms, you just have to familiarize yourself with the plugin; this, however, is a great way to get started quickly."
+msgid "Done! Pretty simple, huh? Custom Contact Forms allows you to create extremely customizable forms, you just have to familiarize yourself with the plugin; this guide is a great way to get started quickly but doesn't make use of the myriad of possibilities."
 msgstr ""
 
 #: ../modules/usage_popover/custom-contact-forms-usage-popover.php:1
@@ -1872,24 +1874,24 @@ msgstr ""
 msgid "More import/export methods will be added in the future. Always create a backup before attempting an import! * Note: If you are having problems getting the importer/exporter to work, try CHMODing the import/ and export/ directories to 0777."
 msgstr ""
 
-#: ../modules/widget/custom-contact-forms-dashboard.php:90
+#: ../modules/widget/custom-contact-forms-dashboard.php:95
 msgid "View"
 msgstr ""
 
-#: ../modules/widget/custom-contact-forms-dashboard.php:91
+#: ../modules/widget/custom-contact-forms-dashboard.php:96
 msgid "CCF Saved Form Submission"
 msgstr ""
 
-#: ../modules/widget/custom-contact-forms-dashboard.php:94
+#: ../modules/widget/custom-contact-forms-dashboard.php:99
 msgid "Form Submitted:"
 msgstr ""
 
-#: ../modules/widget/custom-contact-forms-dashboard.php:95
+#: ../modules/widget/custom-contact-forms-dashboard.php:100
 msgid "Form Location:"
 msgstr ""
 
-#: ../modules/widget/custom-contact-forms-dashboard.php:117
-#: ../modules/widget/custom-contact-forms-dashboard.php:127
+#: ../modules/widget/custom-contact-forms-dashboard.php:122
+#: ../modules/widget/custom-contact-forms-dashboard.php:132
 msgid "View All Submissions"
 msgstr ""
 
