@@ -3,8 +3,8 @@ Contributors: Taylor Lovett
 Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
-Tested up to: 3.1.2
-Stable tag: 4.5.3.2
+Tested up to: 3.1.3
+Stable tag: 4.6.0.0
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -19,6 +19,8 @@ Custom Contact Forms 4.5.3 will revolutionize the idea of a Wordpress plugin.
 *	__NEW__ Saved Form Submission dashboard widget!
 *	__NEW__ - All form submissions saved and displayed in admin panel as well as emailed to you
 *	__NEW__ - Instantly attach a dropdown with all the countries or all the US States - new fixed fields
+*	__NEW__ - Option to only include JQuery and CSS and pages that actually use your forms
+*	__NEW__ - Date field that when click displays a stylish calender popover
 *	Import and export forms/fields/styles/etc. with ease!
 *	This plugin can now be translated in to different languages.
 *	Error messages can be customized for each field
@@ -96,7 +98,7 @@ http://www.taylorlovett.com/wordpress-plugins
 = When I try to do something in the admin panel, all I get is a new page with a -1. =
 *	This is a bug we are currently trying to fix that usually happens in Internet Explorer 8. If you are having this problem, please try using Firefox.
 
-= All my fields and field options got detached. What do I do? Will this happen again?
+= All my fields and field options got detached. What do I do? Will this happen again? =
 *	Custom Contact Forms changed the way fields and field options are attached in version 4.5. It won't happen again. Just reattach everything and continue using the plugin.
 
 = I don't know where to start. This is really confusing. =
@@ -133,6 +135,15 @@ We are planning to add popover forms and file attachments soon.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now all the screenshots are from Version 1, thus are quite out-dated. Install the plugin to see what it looks like. You won't regret it. I promise!
 
 == Changelog ==
+= 4.6.0.0 =
+*	custom-contact-forms.php - Dependencies included differently, new general setting options
+*	custom-contact-forms-admin.php - New field type (Date), guidelines inserted in to all pages, new general settings
+*	modules/usage_popover/custom-contact-forms-usage-popover.php - New field type added
+*	custom-contact-forms.php - Dependencies included differently, new field type added, JQuery files included differently
+*	js/custom-contact-forms-datepicker.js - New file
+*	js/jquery.ui.datepicker.js - New file
+
+
 
 = 4.5.3.2 =
 *	modules/widgets/custom-contact-forms-dashboard.php - Bugs fixed

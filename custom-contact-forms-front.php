@@ -15,22 +15,80 @@ if (!class_exists('CustomContactFormsFront')) {
 			ccf_utils::startSession();
 			$this->processForms();
 		}
+		
+		function includeDependencies() {
+			$admin_options = parent::getAdminOptions();
+			$include_defaults = false;
+			$include_datepicker = false;
+			// faster algorithm? this is in O(m*n) n = # of forms and m = # of posts
+			if ($admin_options['form_page_inclusion_only'] == 1) {
+				global $posts;
+				$forms = parent::selectAllForms();
+				$active_forms = array();
+				foreach ($forms as $form) {
+					$form_pages = parent::unserializeFormPageIds($form);
+					foreach ($posts as $i => $p) {
+						if (in_array($p->ID, $form_pages)) {
+							$active_forms[] = $form;
+							break;
+						}
+					}
+				}
+				
+				if (!empty($active_forms)) {
+					$include_defaults = true;
+					if ($admin_options['enable_jquery'] == 1) {
+						foreach ($active_forms as $form) {
+							$fields = parent::getAttachedFieldsArray($form->id);
+							foreach ($fields as $fid) {
+								$field = parent::selectField($fid);
+								if ($field->field_type == 'Date') {
+									$include_datepicker = true;
+									break;
+								}
+							}
+						}
+					}
+				}
+			} else {
+				$include_defaults = true;
+				$include_datepicker = true;
+			}
+			
+			if ($include_defaults) {
+				if ($admin_options['enable_jquery'] == 1) {
+					if ($include_datepicker) {
+						add_action('wp_print_styles', array(&$this, 'insertDatePickerStyles'), 1);
+						add_action('wp_enqueue_scripts', array(&$this, 'insertDatePickerScripts'), 1);
+					}
+					add_action('wp_enqueue_scripts', array(&$this, 'insertFrontEndScripts'), 1);
+				}
+				add_action('wp_print_styles', array(&$this, 'insertFrontEndStyles'), 1);
+			}
+		}
 	
 		function insertFrontEndStyles() {
-            wp_register_style('CCFStandardsCSS', WP_PLUGIN_URL . '/custom-contact-forms/css/custom-contact-forms-standards.css');
-           	wp_register_style('CCFFormsCSS', WP_PLUGIN_URL . '/custom-contact-forms/css/custom-contact-forms.css');
+            wp_register_style('CCFStandardsCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms-standards.css');
+           	wp_register_style('CCFFormsCSS', plugins_url() . '/custom-contact-forms/css/custom-contact-forms.css');
            	wp_enqueue_style('CCFStandardsCSS');
 			wp_enqueue_style('CCFFormsCSS');
 		}
 		
 		function insertFrontEndScripts() { 
-			$admin_options = parent::getAdminOptions();
-			if ($admin_options['enable_jquery'] == 1) {
-				wp_enqueue_script('jquery');
-				wp_enqueue_script('jquery-tools', WP_PLUGIN_URL . '/custom-contact-forms/js/jquery.tools.min.js');
-				wp_enqueue_script('ccf-main', WP_PLUGIN_URL . '/custom-contact-forms/js/custom-contact-forms.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-resizable'), '1.0');
-			}
-			
+			//wp_enqueue_script('jquery');
+			wp_enqueue_script('jquery-tools', plugins_url() . '/custom-contact-forms/js/jquery.tools.min.js');
+			wp_enqueue_script('ccf-main', plugins_url() . '/custom-contact-forms/js/custom-contact-forms.js', '1.0');
+		}
+		
+		function insertDatePickerScripts() {
+			//wp_enqueue_script('jquery-ui-widget'); //, plugins_url() . '/custom-contact-forms/js/jquery.ui.widget.js');
+			wp_enqueue_script('jquery-ui-datepicker', plugins_url() . '/custom-contact-forms/js/jquery.ui.datepicker.js', array('jquery-ui-core', 'jquery-ui-widget'));
+			wp_enqueue_script('ccf-datepicker', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-datepicker.js', '1.0');
+		}
+		
+		function insertDatePickerStyles() {
+			wp_register_style('ccf-jquery-ui', plugins_url() . '/custom-contact-forms/css/jquery-ui.css');
+            wp_enqueue_style('ccf-jquery-ui');
 		}
 		
 		function setFormError($key, $message) {
@@ -199,6 +257,9 @@ if (!class_exists('CustomContactFormsFront')) {
 				} elseif ($field->field_type == 'Text') {
 					$maxlength = (empty($field->field_maxlength) or $field->field_maxlength <= 0) ? '' : ' maxlength="'.$field->field_maxlength.'"';
 					$out .= '<div>'."\n".'<label for="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<input class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' '.$input_id.' type="text" name="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'"'.$maxlength.''.$code_type.'>'."\n".'</div>' . "\n";
+				} elseif ($field->field_type == 'Date') {
+					$maxlength = (empty($field->field_maxlength) or $field->field_maxlength <= 0) ? '' : ' maxlength="'.$field->field_maxlength.'"';
+					$out .= '<div>'."\n".'<label for="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<input class="'.$field->field_class.' ccf-datepicker '.$tooltip_class.'" '.$instructions.' '.$input_id.' type="text" name="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'"'.$maxlength.''.$code_type.'>'."\n".'</div>' . "\n";
 				} elseif ($field->field_type == 'Hidden') {
 					$hiddens .= '<input type="hidden" name="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'" value="'.$field_value.'" '.$input_id.''.$code_type.'>' . "\n";
 				} elseif ($field->field_type == 'Checkbox') {
@@ -236,7 +297,7 @@ if (!class_exists('CustomContactFormsFront')) {
 			$out .= '<input name="form_page" value="'.$_SERVER['REQUEST_URI'].'" type="hidden"'.$code_type.'>'."\n".'<input type="hidden" name="fid" value="'.$form->id.'"'.$code_type.'>'."\n".$hiddens."\n".'<input type="submit" id="submit-' . $form->id . '-'.$form_key.'" class="submit" value="' . $submit_text . '" name="customcontactforms_submit"'.$code_type.'>';
 			if (!empty($add_reset)) $out .= $add_reset;
 			$out .= "\n" . '</form>';
-			if ($admin_options['author_link'] == 1) $out .= "\n".'<a class="ccf-hide" href="http://www.taylorlovett.com" title="Rockville Web Developer, Wordpress Plugins">Wordpress plugin expert and Rockville Web Developer Taylor Lovett</a>';
+			if ($admin_options['author_link'] == 1) $out .= "\n".'<a style="display:none;" href="http://www.taylorlovett.com" title="Rockville Web Developer, Wordpress Plugins">Wordpress plugin expert and Maryland Web Developer Taylor Lovett</a>';
 			
 			if ($form->form_style != 0) {
 				$no_border = array('', '0', '0px', '0%', '0pt', '0em');
@@ -495,6 +556,13 @@ if (!class_exists('CustomContactFormsFront')) {
 			$req = ($field_object->field_required == 1) ? '* ' : '';
 			$states_field = new ccf_states_field($field_object->field_class, $form_id, $field_object->field_value, $field_object->field_instructions);
 			return "\n".'<label class="select" for="'.ccf_utils::decodeOption($field_object->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field_object->field_label, 1, 1).'</label>'.$states_field->getCode();
+		}
+		
+		function getDatePickerCode($field_object, $form_id, $xhtml_code) {
+			ccf_utils::load_module('extra_fields/date_field.php');
+			$req = ($field_object->field_required == 1) ? '* ' : '';
+			$date_field = new ccf_date_field($field_object->field_class, $form_id, $field_object->field_value, $field_object->field_instructions, $xhtml_code);
+			return "\n".'<label for="'.ccf_utils::decodeOption($field_object->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field_object->field_label, 1, 1).'</label>'.$date_field->getCode();
 		}
 		
 		function getCountriesCode($field_object, $form_id) {

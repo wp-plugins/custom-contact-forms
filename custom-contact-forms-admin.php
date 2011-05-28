@@ -414,6 +414,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 						</label>
 						<select name="object[field_type]">
 						  <option>Text</option>
+                          <option>Date</option>
 						  <option>Textarea</option>
 						  <option>Hidden</option>
 						  <option>Checkbox</option>
@@ -629,7 +630,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			for ($i = 0, $z = 0; $i < count($fields); $i++, $z++) {
 			if ($fields[$i]->user_field == 0) { $z--; continue; }
 			$attached_options = parent::getAttachedFieldOptionsArray($fields[$i]->id);
-			$field_types = '<option>Text</option><option>Textarea</option><option>Hidden</option><option>Checkbox</option><option>Radio</option><option>Dropdown</option>';
+			$field_types = '<option>Text</option><option>Date</option><option>Textarea</option><option>Hidden</option><option>Checkbox</option><option>Radio</option><option>Dropdown</option>';
 			$field_types = str_replace('<option>'.$fields[$i]->field_type.'</option>',  '<option selected="selected">'.$fields[$i]->field_type.'</option>', $field_types);
 			
 			?>
@@ -1066,7 +1067,10 @@ if (!class_exists('CustomContactFormsAdmin')) {
 							  <input type="text" class="ccf-width225" value="&lt;?php if (function_exists('serveCustomContactForm')) { serveCustomContactForm(<?php echo $forms[$i]->id; ?>); } ?&gt;" name="theme_code_<?php echo $forms[$i]->id; ?>" />
 							  <a href="javascript:void(0)" class="toollink" title="<?php _e("This field allows you to insert HTML directly after the starting <form> tag.", 'custom-contact-forms'); ?>">(?)</a> 
 							  <label for="objects[<?php echo $i; ?>][values][custom_code]"><?php _e("Custom Code:", 'custom-contact-forms'); ?></label>
-							  <input name="objects[<?php echo $i; ?>][values][custom_code]" type="text" value="<?php echo $forms[$i]->custom_code; ?>" /></td>
+							  <input name="objects[<?php echo $i; ?>][values][custom_code]" type="text" class="ccf-width100" value="<?php echo $forms[$i]->custom_code; ?>" />
+                              <a href="javascript:void(0)" class="toollink" title="<?php _e("Insert the page id's that your form will be used on. This will make it so the plugin will only load JS and CSS files on these select pages. This will improve your site's load time.", 'custom-contact-forms'); ?>">(?)</a> 
+							   <label for="objects[<?php echo $i; ?>][values][form_pages]"><?php _e("Form Pages:", 'custom-contact-forms'); ?></label>
+							  <input name="objects[<?php echo $i; ?>][values][form_pages]" type="text" class="ccf-width75" value="<?php echo $forms[$i]->form_pages; ?>" /></td>
 							<input name="objects[<?php echo $i; ?>][values][form_access_update]" type="hidden" value="1" /></td>
 							<a href="javascript:void(0)" class="toollink" title="<?php _e("If you want to show this form to only certain types of users, you can uncheck boxes accordingly. To show this form to anyone, check all the boxes. This will only take effect if 'Form Access Capabilities' is enabled in general settings.", 'custom-contact-forms'); ?>">(?)</a> 
 							<label for="form_access">Can View Form:</label>
@@ -1827,6 +1831,15 @@ the field names you want required by commas. Remember to use underscores instead
 &lt;/form&gt;</textarea>
 				</div>
 			  </div>
+              <a name="plugin-news"></a>
+			  <div id="plugin-news" class="postbox">
+				<h3 class="hndle"><span>
+				  <?php _e("Custom Contact Forms Plugin News", 'custom-contact-forms'); ?>
+				  </span></h3>
+				<div class="inside">
+				  <?php $this->displayPluginNewsFeed(); ?>
+				</div>
+			  </div>
 			  <?php $this->insertUsagePopover(); ?>
               <?php $this->insertQuickStartPopover(); ?>
 			</div>
@@ -2133,13 +2146,31 @@ the field names you want required by commas. Remember to use underscores instead
 						<?php _e("If you are using the dashboard widget, this allows you to disallow certain users from viewing it.", 'custom-contact-forms'); ?>
 					  </li>
 					  <li>
-						<label for="default_form_error_header">
-						<?php _e("Default Form Error Header:", 'custom-contact-forms'); ?>
+						<label for="code_type">
+						<?php _e("Use Code Type:", 'custom-contact-forms'); ?>
 						</label>
-						<input name="settings[default_form_error_header]" value="<?php echo $admin_options['default_form_error_header']; ?>" type="text" />
+						<select name="settings[code_type]">
+						  <option>XHTML</option>
+						  <option <?php if ($admin_options['code_type'] == 'HTML') echo 'selected="selected"'; ?>>HTML</option>
+						</select>
 					  </li>
 					  <li class="descrip">
-						<?php _e("When a form is filled out incorrectly, this message will be displayed followed by the individual field error messages.", 'custom-contact-forms'); ?>
+						<?php _e("This lets you switch the form code between HTML and XHTML.", 'custom-contact-forms'); ?>
+					  </li>
+                      <li>
+						<label for="form_page_inclusion_only">
+						<?php _e("Restrict Frontend JS and CSS to Form Pages Only:", 'custom-contact-forms'); ?>
+						</label>
+						<select name="settings[form_page_inclusion_only]">
+						  <option value="1">
+						  <?php _e("Yes", 'custom-contact-forms'); ?>
+						  </option>
+						  <option value="0" <?php if ($admin_options['form_page_inclusion_only'] == 0) echo 'selected="selected"'; ?>>
+						  <?php _e("No", 'custom-contact-forms'); ?>
+						  </option></select>
+                      </li>
+					  <li class="descrip">
+						<?php _e("Within each form in the form manager, you can specify the page id's on which that form will be used. If you set this to 'Yes', the plugin will only include CSS and JS files on pages/posts where a CCF form is inserted. If this is set to 'No', CSS and JS files for this plugin will be included on every page of your site except in the admin area.", 'custom-contact-forms'); ?>
 					  </li>
 					  
 					</ul>
@@ -2153,6 +2184,7 @@ the field names you want required by commas. Remember to use underscores instead
 					  <li class="descrip">
 						<?php _e("If someone fills out a form for which a success message title is not provided and a custom success page is not provided, the plugin will show a popover using this field as the window title.", 'custom-contact-forms'); ?>
 					  </li>
+                      
 					  <li>
 						<label for="form_success_message">
 						<?php _e("Default Form Success Message:", 'custom-contact-forms'); ?>
@@ -2161,6 +2193,15 @@ the field names you want required by commas. Remember to use underscores instead
 					  </li>
 					  <li class="descrip">
 						<?php _e("If someone fills out a form for which a success message is not provided and a custom success page is not provided, the plugin will show a popover containing this message.", 'custom-contact-forms'); ?>
+					  </li>
+                      <li>
+						<label for="default_form_error_header">
+						<?php _e("Default Form Error Header:", 'custom-contact-forms'); ?>
+						</label>
+						<input name="settings[default_form_error_header]" value="<?php echo $admin_options['default_form_error_header']; ?>" type="text" />
+					  </li>
+					  <li class="descrip">
+						<?php _e("When a form is filled out incorrectly, this message will be displayed followed by the individual field error messages.", 'custom-contact-forms'); ?>
 					  </li>
 					  <li>
 						<label for="remember_field_values">
@@ -2274,18 +2315,7 @@ the field names you want required by commas. Remember to use underscores instead
 						<?php _e("On Archives", 'custom-contact-forms'); ?>
 						</label>
 					  </li>
-                      <li>
-						<label for="code_type">
-						<?php _e("Use Code Type:", 'custom-contact-forms'); ?>
-						</label>
-						<select name="settings[code_type]">
-						  <option>XHTML</option>
-						  <option <?php if ($admin_options['code_type'] == 'HTML') echo 'selected="selected"'; ?>>HTML</option>
-						</select>
-					  </li>
-					  <li class="descrip">
-						<?php _e("This lets you switch the form code between HTML and XHTML.", 'custom-contact-forms'); ?>
-					  </li>
+                      
 					  <li>
 						<input type="submit" value="<?php _e("Update", 'custom-contact-forms'); ?>" name="general_settings" />
 					  </li>

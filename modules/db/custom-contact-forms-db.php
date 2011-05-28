@@ -270,6 +270,11 @@ if (!class_exists('CustomContactFormsDB')) {
 			return false;
 		}
 		
+		function unserializeFormPageIds($form) {
+			$pids = str_replace(' ', '', $form->form_pages);
+			return explode(',', $pids);
+		}
+		
 		function getAttachedFieldsArray($form_id) {
 			$form = $this->selectForm($form_id);
 			$out = unserialize($form->form_fields);

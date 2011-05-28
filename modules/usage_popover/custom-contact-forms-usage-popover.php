@@ -60,6 +60,13 @@
             </div>
           </li>
           <li><span>
+            <?php _e("Date:", 'custom-contact-forms'); ?>
+            </span>
+            <div>
+              <?php _e("A Date field looks exactly the same as a Text field. But when a user clicks a Date field, a calender popover is displayed allowing a user to easily insert a date in to your form.", 'custom-contact-forms'); ?>
+            </div>
+          </li>
+          <li><span>
             <?php _e("Textarea:", 'custom-contact-forms'); ?>
             </span>
             <div>

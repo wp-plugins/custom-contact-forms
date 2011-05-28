@@ -14,7 +14,7 @@ if (!class_exists('CustomContactFormsDefaultDB')) {
 		
 		function insertDefaultContent($overwrite = false) {
 			$field_slugs = array('name' => 'ccf_name', 'message' => 'ccf_message',
-			'phone' => 'ccf_phone', 'google' => 'ccf_google', 'contact_method' => 'ccf_contact_method');
+			'phone' => 'ccf_phone', 'google' => 'ccf_google', 'date' => 'ccf_schedule_date', 'contact_method' => 'ccf_contact_method');
 			$option_slugs = array('email' => 'ccf_email', 'phone' => 'ccf_phone', 'nocontact' => 'ccf_no_contact', 'pleaseselect' => 'please_select');
 			$form_slugs = array('contact_form' => 'ccf_contact_form');
 			if ($overwrite) {
@@ -25,6 +25,9 @@ if (!class_exists('CustomContactFormsDefaultDB')) {
 			$name_field = array('field_slug' => $field_slugs['name'], 'field_label' => __('Your Name:', 'custom-contact-forms'),
 			'field_required' => 1, 'field_instructions' => __('Please enter your full name.', 'custom-contact-forms'),
 			'field_maxlength' => '100', 'field_type' => 'Text');
+			$date_field = array('field_slug' => $field_slugs['date'], 'field_label' => __('When Should I Contact You:', 'custom-contact-forms'),
+			'field_required' => 0, 'field_instructions' => __('Please choose a date you would like to be contacted.', 'custom-contact-forms'),
+			'field_maxlength' => '100', 'field_type' => 'Date');
 			$message_field = array('field_slug' => $field_slugs['message'], 'field_label' => __('Your Message:', 'custom-contact-forms'),
 			'field_required' => 0, 'field_instructions' => __('Enter any message or comment.', 'custom-contact-forms'),
 			'field_maxlength' => 0, 'field_type' => 'Textarea');
@@ -49,6 +52,7 @@ if (!class_exists('CustomContactFormsDefaultDB')) {
 			'submit_button_text' => __('Send Message', 'custom-contact-forms'), 'form_email' => get_option('admin_email'), 'form_success_message' => __('Thank you for filling out our contact form. We will contact you very soon by the way you specified.', 'custom-contact-forms'),
 			'form_success_title' => __('Thank You!', 'custom-contact-forms'), 'form_access' => parent::getRolesArray(), 'form_style' => 0);
 			$name_field_id = parent::insertField($name_field);
+			$date_field_id = parent::insertField($date_field);
 			$message_field_id = parent::insertField($message_field);
 			$phone_field_id = parent::insertField($phone_field);
 			$google_field_id = parent::insertField($google_field);
@@ -68,6 +72,7 @@ if (!class_exists('CustomContactFormsDefaultDB')) {
 			parent::addFieldToForm($phone_field_id, $contact_form_id);
 			parent::addFieldToForm($google_field_id, $contact_form_id);
 			parent::addFieldToForm($contact_method_field_id, $contact_form_id);
+			parent::addFieldToForm($date_field_id, $contact_form_id);
 			parent::addFieldToForm($message_field_id, $contact_form_id);
 			parent::addFieldToForm($captcha_field->id, $contact_form_id);
 			parent::addFieldToForm($reset_button->id, $contact_form_id);
