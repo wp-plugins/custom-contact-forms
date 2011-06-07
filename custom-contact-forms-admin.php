@@ -176,7 +176,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 		}
 		
 		function insertAdminScripts() {
-			$js_version = '1.0.19';
+			$js_version = '2.0.0';
 			$admin_options = parent::getAdminOptions();
 			$js_lang = array(
 				'attaching' => __('Attaching', 'custom-contact-forms'),
@@ -197,7 +197,8 @@ if (!class_exists('CustomContactFormsAdmin')) {
 							'url' => admin_url('admin-ajax.php'),
 							'nonce' => wp_create_nonce('ccf-ajax-nonce'));
 			wp_enqueue_script('jquery');
-			wp_enqueue_script('jquery-form');
+			wp_deregister_script('jquery-form');
+			wp_register_script('jquery-form', plugins_url() . '/custom-contact-forms/js/jquery.form.js', $js_version);
 			wp_enqueue_script('jquery-ui-core');
 			wp_enqueue_script('jquery-ui-tabs');
 			wp_enqueue_script('jquery-ui-dialog');
@@ -209,7 +210,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			wp_enqueue_script('ccf-admin-inc', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-admin-inc.js', $js_version);
 			wp_enqueue_script('ccf-admin', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-admin.js', $js_version);
 			if ($admin_options['admin_ajax'] == 1) {
-				wp_enqueue_script('ccf-admin-ajax', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-admin-ajax.js', $js_version);
+				wp_enqueue_script('ccf-admin-ajax', plugins_url() . '/custom-contact-forms/js/custom-contact-forms-admin-ajax.js', array('jquery-form'), $js_version);
 				wp_localize_script('ccf-admin-ajax', 'ccfLang', $js_lang);
 				wp_localize_script('ccf-admin-ajax', 'ccfAjax', $js_ajax);
 			}
