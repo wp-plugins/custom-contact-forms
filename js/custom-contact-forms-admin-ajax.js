@@ -238,7 +238,8 @@ $j(document).ready(function() {
 				success: function(data) {
 					pattern = new RegExp('<option value="' + detach_object_id + '">.*?<\/option>', "i");
 					new_options = detach_object_field.html().replace(pattern, '');
-					if (!new_options.match(/<\/option>/)) new_options = '<option value="-1">Nothing Attached!</option>';
+					var patt = /<\/option>/i;
+					if (!new_options.match(patt)) new_options = '<option value="-1">Nothing Attached!</option>';
 					detach_object_field.html(new_options);
 				},
 				error: function() { alert(ccfLang.error); },
