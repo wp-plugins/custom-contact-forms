@@ -108,6 +108,10 @@ http://www.taylorlovett.com/wordpress-plugins
 = I can't figure out how to insert a form into a page or post. Help! =
 *	Find the form in the Form Manager, a snippet of code will be displaed that looks like [customcontact form=1]. Replace 1 with the ID for the specific form you want to use and insert the snippet into a page or post. You're done!
 
+= How can I include jQuery and CSS files only on pages that display a form? =
+*	First go to general settings, set "Restrict Frontend JS and CSS to Form Pages Only" to "Yes".
+*	Now go to the Form Manager, within each of your forms there is a field called "Form Pages". Add the post or page id's where you plan to use that form to the "Form Pages" field.
+
 = I'm not receiving any emails =
 *	Check that the "Email Form Submissions" option is set to yes in General Settings.
 *	Try filling out a form with the "Use Wordpress Mail Function" option set to "No".
