@@ -395,8 +395,305 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			<div id="message" class="updated below-h2">
 				<p><?php echo $this->action_complete; ?></p>
 			</div>
-			<?php } ?>
-			<div id="fields">
+			<?php } ?>  
+              <div id="forms">
+			  <div id="create-forms" class="postbox">
+				<h3 class="hndle"><span>
+				  <?php _e("Create A Form", 'custom-contact-forms'); ?>
+				  </span></h3>
+				<div class="inside">
+				  <form id="ccf-create-form" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+                  <input value="forms" name="selected_tab" type="hidden" />
+					<ul class="left">
+					  <li>
+						<label for="object[form_slug]">*
+						<?php _e("Form Slug:", 'custom-contact-forms'); ?>
+						</label>
+						<input type="text" maxlength="100" name="object[form_slug]" />
+						<br />
+						<?php _e("This is just a unique way for CCF to refer to your form. Must be unique from other slugs and contain only underscores and alphanumeric characters.", 'custom-contact-forms'); ?>
+					  </li>
+					  <li>
+						<label for="object[form_title]">
+						<?php _e("Form Title:", 'custom-contact-forms'); ?>
+						</label>
+						<input type="text" maxlength="200" name="object[form_title]" />
+						<?php _e("This text is displayed above the form as the heading.", 'custom-contact-forms'); ?>
+					  </li>
+					  <li>
+						<label for="object[form_action]">
+						<?php _e("Form Style:", 'custom-contact-forms'); ?>
+						</label>
+						<select name="object[form_style]" class="form_style_input">
+						  <?php echo $style_options; ?>
+						</select></li>
+					  <li>
+						<label for="object[submit_button_text]">
+						<?php _e("Submit Button Text:", 'custom-contact-forms'); ?>
+						</label>
+						<input type="text" maxlength="200" name="object[submit_button_text]" />
+					  </li>
+					  <li>
+						<label for="object[form_email]">
+						<?php _e("Form Destination Email:", 'custom-contact-forms'); ?>
+						</label>
+						<input type="text" name="object[form_email]" />
+						<br />
+						<?php _e("Will receive all submissions from this form; if left blank it will use the default specified in general settings.", 'custom-contact-forms'); ?>
+					  </li>
+					  <li>
+						<label for="object[form_email_subject]">
+						<?php _e("Form Email Subject:", 'custom-contact-forms'); ?>
+						</label>
+						<input type="text" name="object[form_email_subject]" />
+						<br />
+						<?php _e("When submitted and configured accordingly, the form will send an email with this subject.", 'custom-contact-forms'); ?>
+					  </li>
+					  <li>
+						<label for="object[form_email_name]">
+						<?php _e("Form Email Name:", 'custom-contact-forms'); ?>
+						</label>
+						<input type="text" name="object[form_email_name]" />
+						<br />
+						<?php _e("When submitted and configured accordingly, the form will send an email with this as the email 'from name'.", 'custom-contact-forms'); ?>
+					  </li>
+                    </ul>
+                    <ul class="right">
+					  <li>
+						<label for="object[form_success_message]">
+						<?php _e("Form Success Message:", 'custom-contact-forms'); ?>
+						</label>
+						<input type="text" name="object[form_success_message]" />
+						<br />
+						<?php _e("Will be displayed in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.", 'custom-contact-forms'); ?>
+					  </li>
+					  <li>
+						<label for="object[form_success_title]">
+						<?php _e("Form Success Message Title:", 'custom-contact-forms'); ?>
+						</label>
+						<input type="text" name="object[form_success_title]" />
+						<br />
+						<?php _e("Will be displayed in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.", 'custom-contact-forms'); ?>
+					  </li>
+					  <li>
+						<label for="object[form_thank_you_page]">
+						<?php _e("Custom Success URL:", 'custom-contact-forms'); ?>
+						</label>
+						<input type="text" name="object[form_thank_you_page]" />
+						<br />
+						<?php _e("If this is filled out, users will be sent to this page when they successfully fill out this form. If it is left blank, a popover showing the form's 'success message' will be displayed on form success.", 'custom-contact-forms'); ?>
+					  </li>
+					  <li>
+					  <label for="form_access"><?php _e('Who Can View This Form:', ''); ?></label>
+                            
+                            <?php
+							$roles = parent::getRolesArray();
+							$i = 0;
+							foreach ($roles as $role) {
+								if ($i == 3) echo '<br />';
+								?>
+								<div class="role">
+								 <input type="checkbox" checked="checked" name="object[form_access][]" value="<?php echo $role; ?>" /> 
+								 <?php echo $role; ?>
+								</div>
+								<?php
+								$i++;
+							}
+							?><br />
+							<?php _e('Choose which types of users should be able to view this form.', 'custom-contact-forms'); ?>
+					  </li>
+					  <li>
+						<input type="hidden" name="object_type" value="form" />
+						<input type="submit" class="create-button" value="<?php _e("Create Form", 'custom-contact-forms'); ?>" name="object_create" />
+					  </li>
+					  <li class="attach"><span class="ccf-red">*</span> <?php _e('You should go to the form manager to attach fields to this form after you create it.', 'custom-contact-forms'); ?></li>
+					</ul>
+				  </form>
+				</div>
+              </div>
+              
+              <h3 class="manage-h3">
+				<?php _e("Manage Forms", 'custom-contact-forms'); ?>
+			  </h3>
+			  <form class="ccf-edit-ajax" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+              <input type="hidden" name="selected_tab" value="forms" />
+			  <table class="widefat post" id="manage-forms" cellspacing="0">
+				<thead>
+				  <tr>
+					<th scope="col" class="manage-column check-col"><input type="checkbox" class="checkall" /></th>
+					<th scope="col" class="manage-column form-code"><?php _e("Form Display Code", 'custom-contact-forms'); ?></th>
+					<th scope="col" class="manage-column form-slug"><?php _e("Slug", 'custom-contact-forms'); ?></th>
+					<th scope="col" class="manage-column form-slug"><?php _e("Destination Email", 'custom-contact-forms'); ?></th>
+					<th scope="col" class="manage-column form-title"><?php _e("Title", 'custom-contact-forms'); ?></th>
+					<th scope="col" class="manage-column form-button"><?php _e("Button Text", 'custom-contact-forms'); ?></th>
+					<th scope="col" class="manage-column form-style"><?php _e("Style", 'custom-contact-forms'); ?></th>
+					<th scope="col" class="manage-column form-expand"></th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <?php
+			$forms = parent::selectAllForms();
+			for ($i = 0; $i < count($forms); $i++) {
+			$form_methods = '<option>Post</option><option>Get</option>';
+			$form_methods = str_replace('<option>'.$forms[$i]->form_method.'</option>',  '<option selected="selected">'.$forms[$i]->form_method.'</option>', $form_methods);
+			$add_fields = $this->getFieldsForm();
+			$this_style = parent::selectStyle($forms[$i]->form_style, '');
+			$sty_opt = str_replace('<option value="'.$forms[$i]->form_style.'">'.$this_style->style_slug.'</option>', '<option value="'.$forms[$i]->form_style.'" selected="selected">'.$this_style->style_slug.'</option>', $style_options);
+			?>
+				  <tr class="row-form-<?php echo $forms[$i]->id; ?> <?php if ($i % 2 == 0) echo 'ccf-evenrow'; ?>">
+					<td><input type="checkbox" class="object-check" value="1" name="objects[<?php echo $i; ?>][object_do]" /></td>
+					<td><span class="ccf-bold">[customcontact form=<?php echo $forms[$i]->id ?>]</span></td>
+					<td><input type="text" class="ccf-width75" name="objects[<?php echo $i; ?>][values][form_slug]" value="<?php echo $forms[$i]->form_slug; ?>" /></td>
+					<td><input type="text" name="objects[<?php echo $i; ?>][values][form_email]" value="<?php echo $forms[$i]->form_email; ?>" /></td>
+					<td><input type="text" class="ccf-width125" name="objects[<?php echo $i; ?>][values][form_title]" value="<?php echo $forms[$i]->form_title; ?>" /></td>
+					<td><input class="ccf-width100" type="text" name="objects[<?php echo $i; ?>][values][submit_button_text]" value="<?php echo $forms[$i]->submit_button_text; ?>" /></td>
+					<td><select name="objects[<?php echo $i; ?>][values][form_style]" class="form_style_input">
+						<?php echo $sty_opt; ?>
+					  </select></td>
+					<td><input class="object-id" type="hidden" name="objects[<?php echo $i; ?>][object_id]" value="<?php echo $forms[$i]->id; ?>" />
+					  <input type="hidden" class="object-type" name="objects[<?php echo $i; ?>][object_type]" value="form" />
+					  <span class="form-options-expand"></span>
+					</td>
+				  </tr>
+				  <tr class="row-form-<?php echo $forms[$i]->id; ?> <?php if ($i % 2 == 0) echo 'ccf-evenrow'; ?>">
+					<td class="form-extra-options ccf-center" colspan="8"><table class="form-extra-options-table">
+						<tbody>
+						  <tr>
+							<td class="ccf-bold"><?php _e("Method", 'custom-contact-forms'); ?></td>
+							<td class="ccf-bold"><?php _e("Form Action", 'custom-contact-forms'); ?></td>
+							<td class="ccf-bold"><?php _e("Email Subject", 'custom-contact-forms'); ?></td>
+							<td class="ccf-bold"><?php _e("Email From Name", 'custom-contact-forms'); ?></td>
+							<td class="ccf-bold"><?php _e("Success Message Title", 'custom-contact-forms'); ?></td>
+							<td class="ccf-bold"><?php _e("Success Message", 'custom-contact-forms'); ?></td>
+							<td class="ccf-bold"><?php _e("Custom Success URL", 'custom-contact-forms'); ?></td>
+						  </tr>
+						  <tr>
+							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("The Form Method is the method by which information is transfer through your form. If you aren't an expert with HTML and PHP, leave this as Post.", 'custom-contact-forms'); ?>">(?)</a>
+							  <select name="objects[<?php echo $i; ?>][values][form_method]">
+								<?php echo $form_methods; ?>
+							  </select></td>
+							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("This lets you process your forms through alternate scripts. If you use a service like InfusionSoft or Aweber, set this to be the same form action as the code provided to you by that service, otherwise leave this blank.", 'custom-contact-forms'); ?>">(?)</a>
+							  <input class="ccf-width100" type="text" name="objects[<?php echo $i; ?>][values][form_action]" value="<?php echo $forms[$i]->form_action; ?>" /></td>
+							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("This is the form email subject sent to the destination email address. If left blank, the default from General Settings will be used.", 'custom-contact-forms'); ?>">(?)</a>
+							  <input class="ccf-width100" type="text" name="objects[<?php echo $i; ?>][values][form_email_subject]" maxlength="250" value="<?php echo $forms[$i]->form_email_subject; ?>" /></td>
+							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("This is the from name of the email sent on successful form submission. If left blank, the default from General Settings will be used.", 'custom-contact-forms'); ?>">(?)</a>
+							  <input class="ccf-width100" type="text" name="objects[<?php echo $i; ?>][values][form_email_name]" maxlength="100" value="<?php echo $forms[$i]->form_email_name; ?>" /></td>
+							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("This will be displayed as the header in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.", 'custom-contact-forms'); ?>">(?)</a>
+							  <input class="ccf-width100" type="text" name="objects[<?php echo $i; ?>][values][form_success_title]" value="<?php echo $forms[$i]->form_success_title; ?>" /></td>
+							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("This will be displayed in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.", 'custom-contact-forms'); ?>">(?)</a>
+							  <input type="text" name="objects[<?php echo $i; ?>][values][form_success_message]" class="ccf-width100" value="<?php echo $forms[$i]->form_success_message; ?>" /></td>
+							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("If this is filled out, users will be sent to this thank you page when they successfully fill out this form. If it is left blank, a popover showing the form's 'success message' will be displayed on form success.", 'custom-contact-forms'); ?>">(?)</a>
+							  <input type="text" class="ccf-width100" name="objects[<?php echo $i; ?>][values][form_thank_you_page]" value="<?php echo $forms[$i]->form_thank_you_page; ?>" /></td>
+						  </tr>
+						  <tr>
+							<td colspan="7"><a href="javascript:void(0)" class="toollink" title="<?php _e("The form display code above ([customcontact form=x]) will only work in Wordpress pages and posts. If you want to display this form in a theme file such as page.php, header.php, index.php, category.php, etc, then insert this PHP snippet.", 'custom-contact-forms'); ?>">(?)</a> 
+							  <label for="theme_code_<?php echo $forms[$i]->id; ?>"><span><?php _e("Code to Display Form in Theme Files:", 'custom-contact-forms'); ?>
+							  </span></label>
+							  <input type="text" class="ccf-width225" value="&lt;?php if (function_exists('serveCustomContactForm')) { serveCustomContactForm(<?php echo $forms[$i]->id; ?>); } ?&gt;" name="theme_code_<?php echo $forms[$i]->id; ?>" />
+							  <a href="javascript:void(0)" class="toollink" title="<?php _e("This field allows you to insert HTML directly after the starting <form> tag.", 'custom-contact-forms'); ?>">(?)</a> 
+							  <label for="objects[<?php echo $i; ?>][values][custom_code]"><?php _e("Custom Code:", 'custom-contact-forms'); ?></label>
+							  <input name="objects[<?php echo $i; ?>][values][custom_code]" type="text" class="ccf-width100" value="<?php echo $forms[$i]->custom_code; ?>" />
+                              <a href="javascript:void(0)" class="toollink" title="<?php _e("Insert the page id's that your form will be used on. This will make it so the plugin will only load JS and CSS files on these select pages. This will improve your site's load time.", 'custom-contact-forms'); ?>">(?)</a> 
+							   <label for="objects[<?php echo $i; ?>][values][form_pages]"><?php _e("Form Pages:", 'custom-contact-forms'); ?></label>
+							  <input name="objects[<?php echo $i; ?>][values][form_pages]" type="text" class="ccf-width75" value="<?php echo $forms[$i]->form_pages; ?>" /></td>
+							<input name="objects[<?php echo $i; ?>][values][form_access_update]" type="hidden" value="1" /></td>
+							<a href="javascript:void(0)" class="toollink" title="<?php _e("If you want to show this form to only certain types of users, you can uncheck boxes accordingly. To show this form to anyone, check all the boxes. This will only take effect if 'Form Access Capabilities' is enabled in general settings.", 'custom-contact-forms'); ?>">(?)</a>&nbsp;
+							<label for="form_access">Can View Form:</label>&nbsp;
+                            
+                            <?php
+							$roles = parent::getRolesArray();
+							$access_array = parent::getFormAccessArray($forms[$i]->form_access);
+							foreach ($roles as $role) {
+								?>
+								 <input type="checkbox" <?php if (parent::formHasRole($access_array, $role)) { echo 'checked="checked"'; } ?> name="objects[<?php echo $i; ?>][values][form_access][]" value="<?php echo $role; ?>" /> 
+								<?php
+								echo $role;
+							}
+							?>
+						  </tr>
+                          <tr>
+							<td colspan="7">
+							<div class="fattach">
+							<div class="form-detach">
+							<label for="detach_object_id"><span>
+							  <?php _e("Attached Fields:", 'custom-contact-forms'); ?>
+							  </span></label>
+							  <?php
+				$attached_fields = parent::getAttachedFieldsArray($forms[$i]->id);
+				if (empty($attached_fields)) echo '<select class="onObject' . $forms[$i]->id . ' objectTypeForm detach-field detach-object" name="objects['.$i.'][detach]"><option value="-1">Nothing Attached!</option></select> ';
+				else {
+					echo '<select name="objects['.$i.'][detach]" class="onObject' . $forms[$i]->id . ' detach-object detach-field objectTypeForm">';
+					foreach($attached_fields as $attached_field) {
+						$this_field = parent::selectField($attached_field, '');
+						echo $this_field->field_slug . ' <option value="'.$this_field->id.'">'.$this_field->field_slug.'</option>';
+					}
+					echo '</select>';
+				}
+			  ?>
+							  <span class="form-detach-check">
+							  <input type="checkbox" class="detach-check" value="1" name="objects[<?php echo $i; ?>][detach_confirm]" />
+							  <span class="detach-lang">(Check to detach field)</span>
+							  </span>
+							  <br />
+							  <span class="ccf-red ccf-bold">*</span>
+							  <?php _e("Attach fields in the order you want them displayed.", 'custom-contact-forms'); ?>
+							</div>
+							<div class="form-attach">
+							<label for="field_id"><span>
+							  <?php _e("Attach Field:", 'custom-contact-forms'); ?>
+							  </span></label>
+							  <select class="onObject<?php echo $forms[$i]->id; ?> attach-object attach-field objectTypeForm" name="objects[<?php echo $i; ?>][attach]">
+								<?php echo $add_fields; ?>
+							  </select>
+							  <span class="form-attach-check">
+							  <input class="attach-check" type="checkbox" name="objects[<?php echo $i; ?>][attach_confirm]" value="1" />
+							  <span class="attach-lang">((Check to attach field)</span>
+							  </span>
+							  <br />
+							  <span class="ccf-red ccf-bold">*</span>
+							  <?php _e("Attach fixed fields or ones you", 'custom-contact-forms'); ?>
+							  <a href="#create-fields">
+							  <?php _e("create", 'custom-contact-forms'); ?>
+							  </a>. </div></div></td>
+						  </tr>
+						</tbody>
+					  </table></td>
+				  </tr>
+				<?php
+			}
+			$remember_check = ($admin_options['remember_field_values'] == 0) ? 'selected="selected"' : '';
+			$remember_fields = '<option value="1">'.__('Yes', 'custom-contact-forms').'</option><option '.$remember_check.' value="0">'.__('No', 'custom-contact-forms').'</option>';
+			$border_style_options = '<option>solid</option><option>dashed</option>
+			<option>grooved</option><option>double</option><option>dotted</option><option>ridged</option><option>none</option>
+			<option>inset</option><option>outset</option>';
+			?>
+				</tbody>
+				
+				<tfoot>
+				  <tr>
+				  <tr>
+					<th scope="col" class="manage-column check-col"><input type="checkbox" class="checkall" /></th>
+					<th scope="col" class="manage-column form-code"><?php _e("Form Code", 'custom-contact-forms'); ?></th>
+					<th scope="col" class="manage-column form-slug"><?php _e("Slug", 'custom-contact-forms'); ?></th>
+					<th scope="col" class="manage-column form-slug"><?php _e("Destination Email", 'custom-contact-forms'); ?></th>
+					<th scope="col" class="manage-column form-title"><?php _e("Title", 'custom-contact-forms'); ?></th>
+					<th scope="col" class="manage-column form-button"><?php _e("Button Text", 'custom-contact-forms'); ?></th>
+					<th scope="col" class="manage-column form-style"><?php _e("Style", 'custom-contact-forms'); ?></th>
+					<th scope="col" class="manage-column form-expand"></th>
+				  </tr>
+				  </tr>
+				  
+				</tfoot>
+			  </table>
+			  <select class="bulk-dropdown" name="object_bulk_action">
+			  <option value="0"><?php _e('Bulk Actions', 'custom-contact-forms'); ?></option>
+				<option value="edit"><?php _e('Save', 'custom-contact-forms'); ?></option>
+				<option value="delete"><?php _e('Delete', 'custom-contact-forms'); ?></option></select> 
+			  <input type="submit" name="object_bulk_apply" class="bulk-apply" value="<?php _e('Apply', 'custom-contact-forms'); ?>" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" width="16" height="16" class="loading-img" />
+			  </form>
+              </div>
+			  
+			  <div id="fields">
             	
 			  <div id="create-fields" class="postbox">
 				<h3 class="hndle"><span>
@@ -800,305 +1097,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			  </select> <input type="submit" class="bulk-apply" name="object_bulk_apply" value="<?php _e('Apply', 'custom-contact-forms'); ?>" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" width="16" height="16" class="loading-img" />
 			  </form>
               </div>
-			  
-              <div id="forms">
-			  <div id="create-forms" class="postbox">
-				<h3 class="hndle"><span>
-				  <?php _e("Create A Form", 'custom-contact-forms'); ?>
-				  </span></h3>
-				<div class="inside">
-				  <form id="ccf-create-form" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
-                  <input value="forms" name="selected_tab" type="hidden" />
-					<ul class="left">
-					  <li>
-						<label for="object[form_slug]">*
-						<?php _e("Form Slug:", 'custom-contact-forms'); ?>
-						</label>
-						<input type="text" maxlength="100" name="object[form_slug]" />
-						<br />
-						<?php _e("This is just a unique way for CCF to refer to your form. Must be unique from other slugs and contain only underscores and alphanumeric characters.", 'custom-contact-forms'); ?>
-					  </li>
-					  <li>
-						<label for="object[form_title]">
-						<?php _e("Form Title:", 'custom-contact-forms'); ?>
-						</label>
-						<input type="text" maxlength="200" name="object[form_title]" />
-						<?php _e("This text is displayed above the form as the heading.", 'custom-contact-forms'); ?>
-					  </li>
-					  <li>
-						<label for="object[form_action]">
-						<?php _e("Form Style:", 'custom-contact-forms'); ?>
-						</label>
-						<select name="object[form_style]" class="form_style_input">
-						  <?php echo $style_options; ?>
-						</select></li>
-					  <li>
-						<label for="object[submit_button_text]">
-						<?php _e("Submit Button Text:", 'custom-contact-forms'); ?>
-						</label>
-						<input type="text" maxlength="200" name="object[submit_button_text]" />
-					  </li>
-					  <li>
-						<label for="object[form_email]">
-						<?php _e("Form Destination Email:", 'custom-contact-forms'); ?>
-						</label>
-						<input type="text" name="object[form_email]" />
-						<br />
-						<?php _e("Will receive all submissions from this form; if left blank it will use the default specified in general settings.", 'custom-contact-forms'); ?>
-					  </li>
-					  <li>
-						<label for="object[form_email_subject]">
-						<?php _e("Form Email Subject:", 'custom-contact-forms'); ?>
-						</label>
-						<input type="text" name="object[form_email_subject]" />
-						<br />
-						<?php _e("When submitted and configured accordingly, the form will send an email with this subject.", 'custom-contact-forms'); ?>
-					  </li>
-					  <li>
-						<label for="object[form_email_name]">
-						<?php _e("Form Email Name:", 'custom-contact-forms'); ?>
-						</label>
-						<input type="text" name="object[form_email_name]" />
-						<br />
-						<?php _e("When submitted and configured accordingly, the form will send an email with this as the email 'from name'.", 'custom-contact-forms'); ?>
-					  </li>
-                    </ul>
-                    <ul class="right">
-					  <li>
-						<label for="object[form_success_message]">
-						<?php _e("Form Success Message:", 'custom-contact-forms'); ?>
-						</label>
-						<input type="text" name="object[form_success_message]" />
-						<br />
-						<?php _e("Will be displayed in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.", 'custom-contact-forms'); ?>
-					  </li>
-					  <li>
-						<label for="object[form_success_title]">
-						<?php _e("Form Success Message Title:", 'custom-contact-forms'); ?>
-						</label>
-						<input type="text" name="object[form_success_title]" />
-						<br />
-						<?php _e("Will be displayed in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.", 'custom-contact-forms'); ?>
-					  </li>
-					  <li>
-						<label for="object[form_thank_you_page]">
-						<?php _e("Custom Success URL:", 'custom-contact-forms'); ?>
-						</label>
-						<input type="text" name="object[form_thank_you_page]" />
-						<br />
-						<?php _e("If this is filled out, users will be sent to this page when they successfully fill out this form. If it is left blank, a popover showing the form's 'success message' will be displayed on form success.", 'custom-contact-forms'); ?>
-					  </li>
-					  <li>
-					  <label for="form_access"><?php _e('Who Can View This Form:', ''); ?></label>
-                            
-                            <?php
-							$roles = parent::getRolesArray();
-							$i = 0;
-							foreach ($roles as $role) {
-								if ($i == 3) echo '<br />';
-								?>
-								<div class="role">
-								 <input type="checkbox" checked="checked" name="object[form_access][]" value="<?php echo $role; ?>" /> 
-								 <?php echo $role; ?>
-								</div>
-								<?php
-								$i++;
-							}
-							?><br />
-							<?php _e('Choose which types of users should be able to view this form.', 'custom-contact-forms'); ?>
-					  </li>
-					  <li>
-						<input type="hidden" name="object_type" value="form" />
-						<input type="submit" class="create-button" value="<?php _e("Create Form", 'custom-contact-forms'); ?>" name="object_create" />
-					  </li>
-					  <li class="attach"><span class="ccf-red">*</span> <?php _e('You should go to the form manager to attach fields to this form after you create it.', 'custom-contact-forms'); ?></li>
-					</ul>
-				  </form>
-				</div>
-              </div>
               
-              <h3 class="manage-h3">
-				<?php _e("Manage Forms", 'custom-contact-forms'); ?>
-			  </h3>
-			  <form class="ccf-edit-ajax" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
-              <input type="hidden" name="selected_tab" value="forms" />
-			  <table class="widefat post" id="manage-forms" cellspacing="0">
-				<thead>
-				  <tr>
-					<th scope="col" class="manage-column check-col"><input type="checkbox" class="checkall" /></th>
-					<th scope="col" class="manage-column form-code"><?php _e("Form Display Code", 'custom-contact-forms'); ?></th>
-					<th scope="col" class="manage-column form-slug"><?php _e("Slug", 'custom-contact-forms'); ?></th>
-					<th scope="col" class="manage-column form-slug"><?php _e("Destination Email", 'custom-contact-forms'); ?></th>
-					<th scope="col" class="manage-column form-title"><?php _e("Title", 'custom-contact-forms'); ?></th>
-					<th scope="col" class="manage-column form-button"><?php _e("Button Text", 'custom-contact-forms'); ?></th>
-					<th scope="col" class="manage-column form-style"><?php _e("Style", 'custom-contact-forms'); ?></th>
-					<th scope="col" class="manage-column form-expand"></th>
-				  </tr>
-				</thead>
-				<tbody>
-				  <?php
-			$forms = parent::selectAllForms();
-			for ($i = 0; $i < count($forms); $i++) {
-			$form_methods = '<option>Post</option><option>Get</option>';
-			$form_methods = str_replace('<option>'.$forms[$i]->form_method.'</option>',  '<option selected="selected">'.$forms[$i]->form_method.'</option>', $form_methods);
-			$add_fields = $this->getFieldsForm();
-			$this_style = parent::selectStyle($forms[$i]->form_style, '');
-			$sty_opt = str_replace('<option value="'.$forms[$i]->form_style.'">'.$this_style->style_slug.'</option>', '<option value="'.$forms[$i]->form_style.'" selected="selected">'.$this_style->style_slug.'</option>', $style_options);
-			?>
-				  <tr class="row-form-<?php echo $forms[$i]->id; ?> <?php if ($i % 2 == 0) echo 'ccf-evenrow'; ?>">
-					<td><input type="checkbox" class="object-check" value="1" name="objects[<?php echo $i; ?>][object_do]" /></td>
-					<td><span class="ccf-bold">[customcontact form=<?php echo $forms[$i]->id ?>]</span></td>
-					<td><input type="text" class="ccf-width75" name="objects[<?php echo $i; ?>][values][form_slug]" value="<?php echo $forms[$i]->form_slug; ?>" /></td>
-					<td><input type="text" name="objects[<?php echo $i; ?>][values][form_email]" value="<?php echo $forms[$i]->form_email; ?>" /></td>
-					<td><input type="text" class="ccf-width125" name="objects[<?php echo $i; ?>][values][form_title]" value="<?php echo $forms[$i]->form_title; ?>" /></td>
-					<td><input class="ccf-width100" type="text" name="objects[<?php echo $i; ?>][values][submit_button_text]" value="<?php echo $forms[$i]->submit_button_text; ?>" /></td>
-					<td><select name="objects[<?php echo $i; ?>][values][form_style]" class="form_style_input">
-						<?php echo $sty_opt; ?>
-					  </select></td>
-					<td><input class="object-id" type="hidden" name="objects[<?php echo $i; ?>][object_id]" value="<?php echo $forms[$i]->id; ?>" />
-					  <input type="hidden" class="object-type" name="objects[<?php echo $i; ?>][object_type]" value="form" />
-					  <span class="form-options-expand"></span>
-					</td>
-				  </tr>
-				  <tr class="row-form-<?php echo $forms[$i]->id; ?> <?php if ($i % 2 == 0) echo 'ccf-evenrow'; ?>">
-					<td class="form-extra-options ccf-center" colspan="8"><table class="form-extra-options-table">
-						<tbody>
-						  <tr>
-							<td class="ccf-bold"><?php _e("Method", 'custom-contact-forms'); ?></td>
-							<td class="ccf-bold"><?php _e("Form Action", 'custom-contact-forms'); ?></td>
-							<td class="ccf-bold"><?php _e("Email Subject", 'custom-contact-forms'); ?></td>
-							<td class="ccf-bold"><?php _e("Email From Name", 'custom-contact-forms'); ?></td>
-							<td class="ccf-bold"><?php _e("Success Message Title", 'custom-contact-forms'); ?></td>
-							<td class="ccf-bold"><?php _e("Success Message", 'custom-contact-forms'); ?></td>
-							<td class="ccf-bold"><?php _e("Custom Success URL", 'custom-contact-forms'); ?></td>
-						  </tr>
-						  <tr>
-							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("The Form Method is the method by which information is transfer through your form. If you aren't an expert with HTML and PHP, leave this as Post.", 'custom-contact-forms'); ?>">(?)</a>
-							  <select name="objects[<?php echo $i; ?>][values][form_method]">
-								<?php echo $form_methods; ?>
-							  </select></td>
-							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("This lets you process your forms through alternate scripts. If you use a service like InfusionSoft or Aweber, set this to be the same form action as the code provided to you by that service, otherwise leave this blank.", 'custom-contact-forms'); ?>">(?)</a>
-							  <input class="ccf-width100" type="text" name="objects[<?php echo $i; ?>][values][form_action]" value="<?php echo $forms[$i]->form_action; ?>" /></td>
-							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("This is the form email subject sent to the destination email address. If left blank, the default from General Settings will be used.", 'custom-contact-forms'); ?>">(?)</a>
-							  <input class="ccf-width100" type="text" name="objects[<?php echo $i; ?>][values][form_email_subject]" maxlength="250" value="<?php echo $forms[$i]->form_email_subject; ?>" /></td>
-							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("This is the from name of the email sent on successful form submission. If left blank, the default from General Settings will be used.", 'custom-contact-forms'); ?>">(?)</a>
-							  <input class="ccf-width100" type="text" name="objects[<?php echo $i; ?>][values][form_email_name]" maxlength="100" value="<?php echo $forms[$i]->form_email_name; ?>" /></td>
-							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("This will be displayed as the header in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.", 'custom-contact-forms'); ?>">(?)</a>
-							  <input class="ccf-width100" type="text" name="objects[<?php echo $i; ?>][values][form_success_title]" value="<?php echo $forms[$i]->form_success_title; ?>" /></td>
-							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("This will be displayed in a popover when the form is filled out successfully when no custom success page is specified; if left blank it will use the default specified in general settings.", 'custom-contact-forms'); ?>">(?)</a>
-							  <input type="text" name="objects[<?php echo $i; ?>][values][form_success_message]" class="ccf-width100" value="<?php echo $forms[$i]->form_success_message; ?>" /></td>
-							<td><a href="javascript:void(0)" class="toollink" title="<?php _e("If this is filled out, users will be sent to this thank you page when they successfully fill out this form. If it is left blank, a popover showing the form's 'success message' will be displayed on form success.", 'custom-contact-forms'); ?>">(?)</a>
-							  <input type="text" class="ccf-width100" name="objects[<?php echo $i; ?>][values][form_thank_you_page]" value="<?php echo $forms[$i]->form_thank_you_page; ?>" /></td>
-						  </tr>
-						  <tr>
-							<td colspan="7"><a href="javascript:void(0)" class="toollink" title="<?php _e("The form display code above ([customcontact form=x]) will only work in Wordpress pages and posts. If you want to display this form in a theme file such as page.php, header.php, index.php, category.php, etc, then insert this PHP snippet.", 'custom-contact-forms'); ?>">(?)</a> 
-							  <label for="theme_code_<?php echo $forms[$i]->id; ?>"><span><?php _e("Code to Display Form in Theme Files:", 'custom-contact-forms'); ?>
-							  </span></label>
-							  <input type="text" class="ccf-width225" value="&lt;?php if (function_exists('serveCustomContactForm')) { serveCustomContactForm(<?php echo $forms[$i]->id; ?>); } ?&gt;" name="theme_code_<?php echo $forms[$i]->id; ?>" />
-							  <a href="javascript:void(0)" class="toollink" title="<?php _e("This field allows you to insert HTML directly after the starting <form> tag.", 'custom-contact-forms'); ?>">(?)</a> 
-							  <label for="objects[<?php echo $i; ?>][values][custom_code]"><?php _e("Custom Code:", 'custom-contact-forms'); ?></label>
-							  <input name="objects[<?php echo $i; ?>][values][custom_code]" type="text" class="ccf-width100" value="<?php echo $forms[$i]->custom_code; ?>" />
-                              <a href="javascript:void(0)" class="toollink" title="<?php _e("Insert the page id's that your form will be used on. This will make it so the plugin will only load JS and CSS files on these select pages. This will improve your site's load time.", 'custom-contact-forms'); ?>">(?)</a> 
-							   <label for="objects[<?php echo $i; ?>][values][form_pages]"><?php _e("Form Pages:", 'custom-contact-forms'); ?></label>
-							  <input name="objects[<?php echo $i; ?>][values][form_pages]" type="text" class="ccf-width75" value="<?php echo $forms[$i]->form_pages; ?>" /></td>
-							<input name="objects[<?php echo $i; ?>][values][form_access_update]" type="hidden" value="1" /></td>
-							<a href="javascript:void(0)" class="toollink" title="<?php _e("If you want to show this form to only certain types of users, you can uncheck boxes accordingly. To show this form to anyone, check all the boxes. This will only take effect if 'Form Access Capabilities' is enabled in general settings.", 'custom-contact-forms'); ?>">(?)</a>&nbsp;
-							<label for="form_access">Can View Form:</label>&nbsp;
-                            
-                            <?php
-							$roles = parent::getRolesArray();
-							$access_array = parent::getFormAccessArray($forms[$i]->form_access);
-							foreach ($roles as $role) {
-								?>
-								 <input type="checkbox" <?php if (parent::formHasRole($access_array, $role)) { echo 'checked="checked"'; } ?> name="objects[<?php echo $i; ?>][values][form_access][]" value="<?php echo $role; ?>" /> 
-								<?php
-								echo $role;
-							}
-							?>
-						  </tr>
-                          <tr>
-							<td colspan="7">
-							<div class="fattach">
-							<div class="form-detach">
-							<label for="detach_object_id"><span>
-							  <?php _e("Attached Fields:", 'custom-contact-forms'); ?>
-							  </span></label>
-							  <?php
-				$attached_fields = parent::getAttachedFieldsArray($forms[$i]->id);
-				if (empty($attached_fields)) echo '<select class="onObject' . $forms[$i]->id . ' objectTypeForm detach-field detach-object" name="objects['.$i.'][detach]"><option value="-1">Nothing Attached!</option></select> ';
-				else {
-					echo '<select name="objects['.$i.'][detach]" class="onObject' . $forms[$i]->id . ' detach-object detach-field objectTypeForm">';
-					foreach($attached_fields as $attached_field) {
-						$this_field = parent::selectField($attached_field, '');
-						echo $this_field->field_slug . ' <option value="'.$this_field->id.'">'.$this_field->field_slug.'</option>';
-					}
-					echo '</select>';
-				}
-			  ?>
-							  <span class="form-detach-check">
-							  <input type="checkbox" class="detach-check" value="1" name="objects[<?php echo $i; ?>][detach_confirm]" />
-							  <span class="detach-lang">(Check to detach field)</span>
-							  </span>
-							  <br />
-							  <span class="ccf-red ccf-bold">*</span>
-							  <?php _e("Attach fields in the order you want them displayed.", 'custom-contact-forms'); ?>
-							</div>
-							<div class="form-attach">
-							<label for="field_id"><span>
-							  <?php _e("Attach Field:", 'custom-contact-forms'); ?>
-							  </span></label>
-							  <select class="onObject<?php echo $forms[$i]->id; ?> attach-object attach-field objectTypeForm" name="objects[<?php echo $i; ?>][attach]">
-								<?php echo $add_fields; ?>
-							  </select>
-							  <span class="form-attach-check">
-							  <input class="attach-check" type="checkbox" name="objects[<?php echo $i; ?>][attach_confirm]" value="1" />
-							  <span class="attach-lang">((Check to attach field)</span>
-							  </span>
-							  <br />
-							  <span class="ccf-red ccf-bold">*</span>
-							  <?php _e("Attach fixed fields or ones you", 'custom-contact-forms'); ?>
-							  <a href="#create-fields">
-							  <?php _e("create", 'custom-contact-forms'); ?>
-							  </a>. </div></div></td>
-						  </tr>
-						</tbody>
-					  </table></td>
-				  </tr>
-				<?php
-			}
-			$remember_check = ($admin_options['remember_field_values'] == 0) ? 'selected="selected"' : '';
-			$remember_fields = '<option value="1">'.__('Yes', 'custom-contact-forms').'</option><option '.$remember_check.' value="0">'.__('No', 'custom-contact-forms').'</option>';
-			$border_style_options = '<option>solid</option><option>dashed</option>
-			<option>grooved</option><option>double</option><option>dotted</option><option>ridged</option><option>none</option>
-			<option>inset</option><option>outset</option>';
-			?>
-				</tbody>
-				
-				<tfoot>
-				  <tr>
-				  <tr>
-					<th scope="col" class="manage-column check-col"><input type="checkbox" class="checkall" /></th>
-					<th scope="col" class="manage-column form-code"><?php _e("Form Code", 'custom-contact-forms'); ?></th>
-					<th scope="col" class="manage-column form-slug"><?php _e("Slug", 'custom-contact-forms'); ?></th>
-					<th scope="col" class="manage-column form-slug"><?php _e("Destination Email", 'custom-contact-forms'); ?></th>
-					<th scope="col" class="manage-column form-title"><?php _e("Title", 'custom-contact-forms'); ?></th>
-					<th scope="col" class="manage-column form-button"><?php _e("Button Text", 'custom-contact-forms'); ?></th>
-					<th scope="col" class="manage-column form-style"><?php _e("Style", 'custom-contact-forms'); ?></th>
-					<th scope="col" class="manage-column form-expand"></th>
-				  </tr>
-				  </tr>
-				  
-				</tfoot>
-			  </table>
-			  <select class="bulk-dropdown" name="object_bulk_action">
-			  <option value="0"><?php _e('Bulk Actions', 'custom-contact-forms'); ?></option>
-				<option value="edit"><?php _e('Save', 'custom-contact-forms'); ?></option>
-				<option value="delete"><?php _e('Delete', 'custom-contact-forms'); ?></option></select> 
-			  <input type="submit" name="object_bulk_apply" class="bulk-apply" value="<?php _e('Apply', 'custom-contact-forms'); ?>" /> <img src="<?php echo plugins_url(); ?>/custom-contact-forms/images/wpspin_light.gif" width="16" height="16" class="loading-img" />
-			  </form>
-              </div>
-			  
-			  
 			  <div id="field-options">
 			  <div id="manage-field-options" class="postbox">
 				<h3 class="hndle"><span>
