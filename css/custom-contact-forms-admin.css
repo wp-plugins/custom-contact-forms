@@ -599,4 +599,5 @@
     border: 0px solid #AAAAAA;
 }
 
-#message { margin-bottom:9px; height: 196px; width: 95%; }
+#message { margin-bottom:9px; }
+#message-textarea { height: 196px; width: 95%; margin-bottom:9px; }

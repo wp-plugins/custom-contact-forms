@@ -1853,7 +1853,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 						<label for="message">*
 						<?php _e("Your Message:", 'custom-contact-forms'); ?>
 						</label>
-						<textarea id="message" name="message"></textarea>
+						<textarea id="message-textarea" name="message"></textarea>
 					  </li>
                     </ul>
 					<p>
