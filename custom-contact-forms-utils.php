@@ -75,7 +75,8 @@ if (!class_exists('ccf_utils')) {
 							'usaStates' => __("This is a dropdown field showing each state in the US. If you want a state initially selected, enter it in 'Initial Value.'", 'custom-contact-forms'),
 							'datePicker' => __("This field displays a text box that when clicked pops up an interactive calender.'", 'custom-contact-forms'),
 							'allCountries' => __("This is a dropdown field showing countries. If you want a country initially selected, enter it in 'Initial Value.'", 'custom-contact-forms'),
-							'resetButton' => __("This field lets users reset all form fields to their initial values. This will be inserted next to the submit button.", 'custom-contact-forms')
+							'resetButton' => __("This field lets users reset all form fields to their initial values. This will be inserted next to the submit button.", 'custom-contact-forms'),
+							'MAX_FILE_SIZE' => ''
 							);
 		}
 	}

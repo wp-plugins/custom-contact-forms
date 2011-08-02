@@ -24,13 +24,15 @@ if (!class_exists('CustomContactFormsDB')) {
 			return $wpdb->insert_id;
 		}
 		
-		function insertField($field, $fixed = false) {
+		function insertField($field, $fixed = false, $skip_encode = array('field_allowed_file_extensions')) {
 			global $wpdb;
 			if (empty($field) or empty($field['field_slug']) or (array_key_exists($this->formatSlug($field['field_slug']), $GLOBALS['ccf_fixed_fields']) && !$fixed) or $this->fieldSlugExists($this->formatSlug($field['field_slug'])))
 				return false;
 			$field['field_slug'] = $this->formatSlug($field['field_slug']);
+			if (isset($field['field_allowed_file_extensions']))
+				$field['field_allowed_file_extensions'] = $this->formatFileExtensions($field['field_allowed_file_extensions']);
 			foreach ($field as $key => $value)
-				if (!is_array($value))
+				if (!is_array($value) && !in_array($key, $skip_encode))
 					$field[$key] = ccf_utils::encodeOption($value);
 			$wpdb->insert(CCF_FIELDS_TABLE, $field);
 			return $wpdb->insert_id;
@@ -97,7 +99,7 @@ if (!class_exists('CustomContactFormsDB')) {
 			return true;
 		}
 		
-		function updateField($field, $fid, $skip_encode = array('field_options')) {
+		function updateField($field, $fid, $skip_encode = array('field_options', 'field_allowed_file_extensions')) {
 			global $wpdb;
 			if (!empty($field['field_slug'])) {
 				$test = $this->selectField('', $this->formatSlug($field['field_slug']));
@@ -106,6 +108,8 @@ if (!class_exists('CustomContactFormsDB')) {
 				$field['field_slug'] = $this->formatSlug($field['field_slug']);
 			} if (isset($field['field_options']))
 				$field['field_options'] = serialize(array_unique($field['field_options']));
+			if (isset($field['field_allowed_file_extensions']))
+				$field['field_allowed_file_extensions'] = $this->formatFileExtensions($field['field_allowed_file_extensions']);
 			foreach ($field as $key => $value)
 				if (!in_array($key, $skip_encode))
 					$field[$key] = ccf_utils::encodeOption($value);
@@ -355,6 +359,16 @@ if (!class_exists('CustomContactFormsDB')) {
 		function formatSlug($slug) {
 			$slug = preg_replace('/[^a-z_ A-Z0-9\s]/', '', $slug);
 			return str_replace(' ', '_', $slug);	
+		}
+		
+		function formatFileExtensions($str) {
+			$str = str_replace('.', '', $str);
+			$str = str_replace(' ', '', $str);
+			$arr = explode(',', $str);
+			foreach ($arr as $k => $v) {
+				if (empty($v)) unset($arr[$k]);
+			}
+			return serialize($arr);
 		}
 		
 		function fieldSlugExists($slug) {

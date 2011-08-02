@@ -15,7 +15,7 @@ if (!class_exists('CustomContactFormsDefaultDB')) {
 		function insertDefaultContent($overwrite = false) {
 			$field_slugs = array('name' => 'ccf_name', 'message' => 'ccf_message',
 			'phone' => 'ccf_phone', 'google' => 'ccf_google', 'date' => 'ccf_schedule_date', 'contact_method' => 'ccf_contact_method');
-			$option_slugs = array('email' => 'ccf_email', 'phone' => 'ccf_phone', 'nocontact' => 'ccf_no_contact', 'pleaseselect' => 'please_select');
+			$option_slugs = array('email' => 'ccf_email', 'phone' => 'ccf_phone', 'yes' => 'ccf_yes', 'nocontact' => 'ccf_no_contact', 'pleaseselect' => 'please_select');
 			$form_slugs = array('contact_form' => 'ccf_contact_form');
 			if ($overwrite) {
 				foreach($field_slugs as $slug) parent::deleteField(0, $slug);
@@ -48,6 +48,7 @@ if (!class_exists('CustomContactFormsDefaultDB')) {
 			$email_option = array('option_slug' => $option_slugs['email'], 'option_label' => __('By Email', 'custom-contact-forms'));
 			$phone_option = array('option_slug' => $option_slugs['phone'], 'option_label' => __('By Phone', 'custom-contact-forms'));
 			$nocontact_option = array('option_slug' => $option_slugs['nocontact'], 'option_label' => __('Do Not Contact Me', 'custom-contact-forms'));
+			$yes_option = array('option_slug' => $option_slugs['yes'], 'option_label' => __('Yes, I did.', 'custom-contact-forms'));
 			$contact_form = array('form_slug' => $form_slugs['contact_form'], 'form_title' => __('Contact Form', 'custom-contact-forms'), 'form_method' => 'Post',
 			'submit_button_text' => __('Send Message', 'custom-contact-forms'), 'form_email' => get_option('admin_email'), 'form_success_message' => __('Thank you for filling out our contact form. We will contact you very soon by the way you specified.', 'custom-contact-forms'),
 			'form_success_title' => __('Thank You!', 'custom-contact-forms'), 'form_access' => parent::getRolesArray(), 'form_style' => 0);
@@ -58,6 +59,7 @@ if (!class_exists('CustomContactFormsDefaultDB')) {
 			$google_field_id = parent::insertField($google_field);
 			$contact_method_field_id = parent::insertField($contact_method_field);
 			$email_option_id = parent::insertFieldOption($email_option);
+			$yes_option_id = parent::insertFieldOption($yes_option);
 			$pleaseselect_option_id = parent::insertFieldOption($email_option);
 			$phone_option_id = parent::insertFieldOption($phone_option);
 			$nocontact_option_id = parent::insertFieldOption($nocontact_option);
@@ -66,6 +68,7 @@ if (!class_exists('CustomContactFormsDefaultDB')) {
 			parent::addFieldOptionToField($email_option_id, $contact_method_field_id);
 			parent::addFieldOptionToField($phone_option_id, $contact_method_field_id);
 			parent::addFieldOptionToField($nocontact_option_id, $contact_method_field_id);
+			parent::addFieldOptionToField($yes_option_id, $google_field_id);
 			parent::addFieldToForm($name_field_id, $contact_form_id);
 			parent::addFieldToForm($website_field->id, $contact_form_id);
 			parent::addFieldToForm($email_field->id, $contact_form_id);

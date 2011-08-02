@@ -81,4 +81,19 @@ $j(document).ready(function(){
 		tipClass: 'ccf-tooltip',
 		opacity: 1.0							
 	});
+	
+	
+	$j("#customcontactforms-admin #create-fields .field-type-selector").change(function () {
+		$j("#customcontactforms-admin #create-fields .field-type-selector option:selected").each(function () {
+			if ($j(this).text() == "File") {
+				$j("#customcontactforms-admin #create-fields .file-fields").fadeIn("slow");
+			} else {
+				$j("#customcontactforms-admin #create-fields .file-fields").hide();	
+			}
+		});
+	}).trigger('change');
+
+	var $tabs = $j( "#customcontactforms-admin #ccf-tabs" ).tabs();
+	if (ccfLang.selected_tab != 0) $tabs.tabs('select', '#' + ccfLang.selected_tab);
+	
 });

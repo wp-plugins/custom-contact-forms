@@ -67,6 +67,13 @@
             </div>
           </li>
           <li><span>
+            <?php _e("File:", 'custom-contact-forms'); ?>
+            </span>
+            <div>
+              <input type="file" class="ccf-width200" /> <?php _e("This is a file field. Attaching on of these to your forms allows users to send files to you (files are also stored on your server). You can set a max upload size as well as limit the allowed file types.", 'custom-contact-forms'); ?>
+            </div>
+          </li>
+          <li><span>
             <?php _e("Textarea:", 'custom-contact-forms'); ?>
             </span>
             <div>

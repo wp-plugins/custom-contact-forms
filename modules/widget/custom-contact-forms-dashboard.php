@@ -112,14 +112,14 @@ if (!class_exists('CustomContactFormsDashboard')) {
 								?>
 								<li>
 								  <div><?php echo $item_key; ?></div>
-								  <p><?php echo $item_value; ?></p>
+								  <p><?php echo $data->parseUserData($item_value); ?></p>
 								</li>
 								<?php
 								}
 								?>
 							</ul>
 							<div class="separate"></div>
-							<a href="admin.php?page=ccf-saved-form-submissions"><?php _e('View All Submissions', 'custom-contact-forms'); ?></a>
+                            <a class="button" href="admin.php?page=ccf-saved-form-submissions"><?php _e('View All Submissions', 'custom-contact-forms'); ?></a>
 						</div>
 					</td>
 				</tr>

@@ -3,8 +3,8 @@ Contributors: Taylor Lovett
 Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
-Tested up to: 3.1.3
-Stable tag: 4.6.0.1
+Tested up to: 3.2.1
+Stable tag: 4.7.0.0
 
 Gauranteed to be the most customizable and intuitive contact form plugin for Wordpress.
 
@@ -14,14 +14,16 @@ Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact 
 
 Special Features:
 ------------------
-Custom Contact Forms 4.6 will revolutionize the idea of a Wordpress plugin.
+Custom Contact Forms 4.7 will revolutionize the idea of a Wordpress plugin.
 
-*	__NEW__ Saved Form Submission dashboard widget!
-*	__NEW__ - All form submissions saved and displayed in admin panel as well as emailed to you
-*	__NEW__ - Instantly attach a dropdown with all the countries or all the US States - new fixed fields
+*	__NEW__ File Upload Fields
+*	__NEW__ Redesigned admin panel
 *	__NEW__ - Option to only include JQuery and CSS and pages that actually use your forms
 *	__NEW__ - Date field that when click displays a stylish calender popover
+*	Saved Form Submission dashboard widget!
+*	Instantly attach a dropdown with all the countries or all the US States - new fixed fields
 *	Import and export forms/fields/styles/etc. with ease!
+*	All form submissions saved and displayed in admin panel as well as emailed to you
 *	This plugin can now be translated in to different languages.
 *	Error messages can be customized for each field
 *	Choose between XHTML or HTML. All code is clean and valid!
@@ -30,7 +32,7 @@ Custom Contact Forms 4.6 will revolutionize the idea of a Wordpress plugin.
 *	Required Fields
 *	__NEW__ - a dashboard widget that displays the latest form submissions
 *	Custom Contact Forms now uses PHPMailer and thus supports STMP and SSL
-*	__NEW__ Have your contact forms send mail to multiple email addresses
+*	Have your contact forms send mail to multiple email addresses
 *	Create text fields, textareas, checkboxs, and dropdown fields!
 *	Custom HTML Forms Feature - if you are a web developer you can write your own form html and __use this plugin simply to process your form requests__. Comes with a few useful features.
 *	__Displays forms in theme files__ as well as pages and posts.
@@ -60,7 +62,7 @@ Custom Contact Forms 4.6 will revolutionize the idea of a Wordpress plugin.
 
 Restrictions/Requirements:
 -------------------------
-*	Works with Wordpress 2.8.1+, WPMU, and BuddyPress (Wordpress 3.0+ is highly recommended)
+*	Works with Wordpress 2.8.1+
 *	PHP 5
 *	PHP register_globals and safe_mode should be set to "Off" (this is done in your php.ini file)
 *	Your theme must call wp_head() and wp_footer()
@@ -139,6 +141,10 @@ We are planning to add popover forms and file attachments soon.
 Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now all the screenshots are from Version 1, thus are quite out-dated. Install the plugin to see what it looks like. You won't regret it. I promise!
 
 == Changelog ==
+
+= 4.7.0.0 =
+*	All files have been changed!
+
 = 4.6.0.1 =
 *	custom-contact-forms-admin.php - -1 bug fixed in IE
 *	js/jquery.form.js - Updated jquery forms plugin fixes huge IE bug

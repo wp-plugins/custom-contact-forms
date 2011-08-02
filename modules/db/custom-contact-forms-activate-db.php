@@ -198,6 +198,11 @@ if (!class_exists('CustomContactFormsActivateDB')) {
 				$wpdb->query("ALTER TABLE `" . CCF_FIELD_OPTIONS_TABLE . "` ADD `option_dead` INT( 1 ) NOT NULL DEFAULT '0'");
 			if (!$this->columnExists('form_pages', CCF_FORMS_TABLE))
 				$wpdb->query("ALTER TABLE `" . CCF_FORMS_TABLE . "` ADD `form_pages` VARCHAR(400) NOT NULL");
+			if (!$this->columnExists('field_max_upload_size', CCF_FIELDS_TABLE))
+				$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` ADD `field_max_upload_size` INT( 11 ) NOT NULL");
+			if (!$this->columnExists('field_allowed_file_extensions', CCF_FIELDS_TABLE))
+				$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` ADD `field_allowed_file_extensions` TEXT NOT NULL");
+				
 			$wpdb->query("ALTER TABLE `" . CCF_FORMS_TABLE . "` CHANGE `form_email` `form_email` TEXT NOT NULL");
 			$wpdb->query("ALTER TABLE `" . CCF_FORMS_TABLE . "` CHANGE `form_fields` `form_fields` TEXT NOT NULL");
 			$wpdb->query("ALTER TABLE `" . CCF_FIELDS_TABLE . "` CHANGE `field_label` `field_label` TEXT NOT NULL");
