@@ -238,6 +238,9 @@ if (!class_exists('CustomContactFormsFront')) {
 				} elseif ($field->field_slug == 'usaStates') {
 					$field->field_value = $field_value;
 					$out .= '<div>' . "\n" . $this->getStatesCode($field, $form->id) . "\n" . '</div>' . "\n";
+				} elseif ($field->field_slug == 'ishuman') {
+					$field->field_value = $field_value;
+					$out .= '<div>' . "\n" . $this->getIsHumanCode($field, $form->id) . "\n" . '</div>' . "\n";
 				} elseif ($field->field_slug == 'allCountries') {
 					$field->field_value = $field_value;
 					$out .= '<div>' . "\n" . $this->getCountriesCode($field, $form->id) . "\n" . '</div>' . "\n";
@@ -270,7 +273,7 @@ if (!class_exists('CustomContactFormsFront')) {
 						$field_options .= '<option'.$option_sel.''.$option_value.'>' . $option->option_label . '</option>' . "\n";
 					}
 					if (!empty($options)) {
-						if (!$is_widget_form) $out .= '<div>'."\n".'<label class="select" for="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<select '.$instructions.' '.$input_id.' name="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'" class="'.$field->field_class.' '.$tooltip_class.'">'."\n".$field_options.'</select>'."\n".'</div>' . "\n";
+						if (!$is_widget_form) $out .= '<div>'."\n".'<label for="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<select '.$instructions.' '.$input_id.' name="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'" class="'.$field->field_class.' '.$tooltip_class.'">'."\n".$field_options.'</select>'."\n".'</div>' . "\n";
 						else  $out .= '<div>'."\n".'<label for="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field->field_label, 1, 1).'</label>'."\n".'<select class="'.$field->field_class.' '.$tooltip_class.'" '.$instructions.' '.$input_id.' name="'.ccf_utils::decodeOption($field->field_slug, 1, 1).'">'."\n".$field_options.'</select>'."\n".'</div>' . "\n";
 					}
 				} elseif ($field->field_type == 'Radio') {
@@ -409,6 +412,7 @@ if (!class_exists('CustomContactFormsFront')) {
 						if (!class_exists('PHPMailer'))
 							require_once(ABSPATH . "wp-includes/class-phpmailer.php"); 
 						$mail = new PHPMailer();
+						$mail->MailerDebug = false;
 						if ($admin_options['mail_function'] == 'smtp') {
 							$mail->IsSMTP();
 							$mail->Host = $admin_options['smtp_host'];
@@ -547,6 +551,7 @@ if (!class_exists('CustomContactFormsFront')) {
 						if (!class_exists('PHPMailer'))
 							require_once(ABSPATH . "wp-includes/class-phpmailer.php"); 
 						$mail = new PHPMailer(false);
+						$mail->MailerDebug = false;
 						if ($admin_options['mail_function'] == 'smtp') {
 							$mail->IsSMTP();
 							$mail->Host = $admin_options['smtp_host'];
@@ -606,6 +611,21 @@ if (!class_exists('CustomContactFormsFront')) {
 			return $out;
 		}
 		
+		function getIsHumanCode($field_object, $form_id) {
+			$admin_options = parent::getAdminOptions();
+			$code_type = ($admin_options['code_type'] == 'XHTML') ? ' /' : '';
+			if (empty($field_object->field_instructions)) {
+				$instructions = '';
+				$tooltip_class = '';
+			} else {
+				$instructions = 'title="'.$field_object->field_instructions.'"';
+				$tooltip_class = 'ccf-tooltip-field';
+			}
+			$out = '
+			<div><input value="1" class="'.$field_object->field_class.' '.$tooltip_class.'" type="checkbox" '.$instructions.' name="ishuman" id="ishuman-'.$form_id.'"'.$code_type.'> <label for="ishuman-'.$form_id.'" class="checkbox">* '.$field_object->field_label.'</label></div>';
+			return $out;
+		}
+		
 		function userCanViewForm($form_object) {
 			if (is_user_logged_in()) {
 				global $current_user;
@@ -621,7 +641,7 @@ if (!class_exists('CustomContactFormsFront')) {
 			ccf_utils::load_module('extra_fields/states_field.php');
 			$req = ($field_object->field_required == 1) ? '* ' : '';
 			$states_field = new ccf_states_field($field_object->field_class, $form_id, $field_object->field_value, $field_object->field_instructions);
-			return "\n".'<label class="select" for="'.ccf_utils::decodeOption($field_object->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field_object->field_label, 1, 1).'</label>'.$states_field->getCode();
+			return "\n".'<label for="'.ccf_utils::decodeOption($field_object->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field_object->field_label, 1, 1).'</label>'.$states_field->getCode();
 		}
 		
 		function getDatePickerCode($field_object, $form_id, $xhtml_code) {
@@ -635,7 +655,7 @@ if (!class_exists('CustomContactFormsFront')) {
 			ccf_utils::load_module('extra_fields/countries_field.php');
 			$req = ($field_object->field_required == 1) ? '* ' : '';
 			$countries_field = new ccf_countries_field($field_object->field_class, $form_id, $field_object->field_value, $field_object->field_instructions);
-			return '<label class="select" for="'.ccf_utils::decodeOption($field_object->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field_object->field_label, 1, 1).'</label>' . "\n" . $countries_field->getCode();
+			return '<label for="'.ccf_utils::decodeOption($field_object->field_slug, 1, 1).'">'. $req .ccf_utils::decodeOption($field_object->field_label, 1, 1).'</label>' . "\n" . $countries_field->getCode();
 		}
 		
 		function getDestinationEmailArray($str) {

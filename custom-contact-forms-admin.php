@@ -170,7 +170,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 		}
 		
 		function insertAdminScripts() {
-			$js_version = '2.0.1';
+			$js_version = '2.0.4';
 			$admin_options = parent::getAdminOptions();
 			$js_lang = array(
 				'attaching' => __('Attaching', 'custom-contact-forms'),
@@ -209,10 +209,10 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				wp_localize_script('ccf-admin-ajax', 'ccfLang', $js_lang);
 				wp_localize_script('ccf-admin-ajax', 'ccfAjax', $js_ajax);
 			}
-			wp_enqueue_script('ccf-colorpicker', plugins_url() . '/custom-contact-forms/js/colorpicker.js');
+			/*wp_enqueue_script('ccf-colorpicker', plugins_url() . '/custom-contact-forms/js/colorpicker.js');
 			wp_enqueue_script('ccf-eye', plugins_url() . '/custom-contact-forms/js/eye.js');
 			wp_enqueue_script('ccf-utils', plugins_url() . '/custom-contact-forms/js/utils.js');
-			wp_enqueue_script('ccf-layout', plugins_url() . '/custom-contact-forms/js/layout.js?ver=1.0.2');
+			wp_enqueue_script('ccf-layout', plugins_url() . '/custom-contact-forms/js/layout.js?ver=1.0.2');*/
 			wp_localize_script('ccf-admin-inc', 'ccfLang', $js_lang);
 			wp_localize_script('ccf-admin-inc', 'ccfAjax', $js_ajax);
 			wp_localize_script('ccf-admin', 'ccfLang', $js_lang);
@@ -625,7 +625,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 					echo '<select name="objects['.$i.'][detach]" class="onObject' . $forms[$i]->id . ' detach-object detach-field objectTypeForm">';
 					foreach($attached_fields as $attached_field) {
 						$this_field = parent::selectField($attached_field, '');
-						echo $this_field->field_slug . ' <option value="'.$this_field->id.'">'.$this_field->field_slug.'</option>';
+						echo ' <option value="'.$this_field->id.'">'.$this_field->field_slug.'</option>';
 					}
 					echo '</select>';
 				}

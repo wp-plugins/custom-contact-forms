@@ -236,8 +236,10 @@ $j(document).ready(function() {
 				url: ccfAjax.url,
 				data: "nonce=" + ccfLang.nonce + "&action=ccf-ajax&object_detach=1&detach_object_id=" + detach_object_id + "&object_id=" + object_id + "&object_type=" + object_type,
 				success: function(data) {
-					pattern = new RegExp('<option value="' + detach_object_id + '">.*?<\/option>', "i");
+					pattern = new RegExp('<option .*?value="?' + detach_object_id + '"?>.*?<\/option>', "i");
+					//alert('<option value="' + detach_object_id + '">.*?<\/option>');
 					new_options = detach_object_field.html().replace(pattern, '');
+					//alert(new_options);
 					var patt = /<\/option>/i;
 					if (!new_options.match(patt)) new_options = '<option value="-1">Nothing Attached!</option>';
 					detach_object_field.html(new_options);

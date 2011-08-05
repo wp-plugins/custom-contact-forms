@@ -67,6 +67,13 @@ if (!class_exists('CustomContactFormsDashboard')) {
 			  </thead>
 			  <tbody>
 			<?php
+			if (empty($user_data_array)) {
+				?>
+               <tr>
+               	 <td colspan="4"><?php _e('No submissions to display.', 'custom-contact-forms'); ?></td> 
+               </tr>
+                <?php
+			}
 			$i = 0;
 			foreach ($user_data_array as $data_object) {
 				if ($i > 3) break;

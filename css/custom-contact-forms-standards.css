@@ -7,6 +7,7 @@
 .ccf-italic { font-style:italic; }
 .ccf-hide { display:none; }
 .ccf-clear { clear:both; }
+.ccf-center { text-align:center; }
 .ccf-floatleft { float:left; }
 .ccf-floatright { float:right; }
 .form-extra-options-table { margin:0 auto 0 auto; }
