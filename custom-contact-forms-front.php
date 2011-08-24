@@ -77,7 +77,7 @@ if (!class_exists('CustomContactFormsFront')) {
 		}
 		
 		function insertFrontEndScripts() { 
-			//wp_enqueue_script('jquery');
+			wp_enqueue_script('jquery');
 			wp_enqueue_script('jquery-tools', plugins_url() . '/custom-contact-forms/js/jquery.tools.min.js');
 			wp_enqueue_script('ccf-main', plugins_url() . '/custom-contact-forms/js/custom-contact-forms.js', '1.0');
 		}
