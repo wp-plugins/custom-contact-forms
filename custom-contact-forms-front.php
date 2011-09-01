@@ -131,7 +131,7 @@ if (!class_exists('CustomContactFormsFront')) {
 				foreach ($errors as $error) {
 					$out .= '<li>'.$error.'</li>' . "\n";
 				}
-				$err_link = (!empty($this->error_return)) ? '<p><a href="'.$this->error_return.'" title="Go Back">&lt; ' . __('Go Back to Form.', 'custom-contact-forms') . '</a></p>' : '';
+				$err_link = (!empty($this->error_return)) ? '<p><a href="'.$this->error_return.'" title="'.__('Go Back', 'custom-contact-forms').'">&lt; ' . __('Go Back to Form.', 'custom-contact-forms') . '</a></p>' : '';
 				$this->emptyFormErrors();
 				return $out . '</ul>' . "\n" . $err_link . '</div>';
 			}
@@ -347,12 +347,12 @@ if (!class_exists('CustomContactFormsFront')) {
 		
 		function processFileUpload($field) {
 			$errors = array();
-			if (empty($_FILES[$field->field_slug])) $errors[] = __('Any error occured while uploading ' . $field->field_slug . '.', 'custom-contact-forms');
+			if (empty($_FILES[$field->field_slug])) $errors[] = __('An error occured while uploading: ', 'custom-contact-forms') . $field->field_slug;
 			$admin_options = parent::getAdminOptions();
-			if ($field->field_max_upload_size > 0 && $_FILES[$field->field_slug]['size'] > ($field->field_max_upload_size * 1000)) $errors[] = __(basename($_FILES[$field->field_slug]['name']) . ' is too large of a file. The maximum file size for that field is ' . $field->field_max_upload_size . ' KB.', 'custom-contact-forms');
+			if ($field->field_max_upload_size > 0 && $_FILES[$field->field_slug]['size'] > ($field->field_max_upload_size * 1000)) $errors[] = basename($_FILES[$field->field_slug]['name']) . __(' is too large of a file. The maximum file size for that field is ', 'custom-contact-forms') . $field->field_max_upload_size . __(' KB.', 'custom-contact-forms');
 			$allowed_exts = unserialize($field->field_allowed_file_extensions);
 			$ext = preg_replace('/.*\.(.*)/i', '$1', basename($_FILES[$field->field_slug]['name']));
-			if (!in_array($ext, $allowed_exts)) $errors[] = __($ext . ' is an invalid file extension.', 'custom-contact-forms');
+			if (!in_array($ext, $allowed_exts)) $errors[] = $ext . __(' is an invalid file extension.', 'custom-contact-forms');
 			if (!empty($errors)) return $errors;
 			
 			// create necessary directories
@@ -373,7 +373,7 @@ if (!class_exists('CustomContactFormsFront')) {
 			$this->form_uploads[$field->field_slug] = ABSPATH . "wp-content/plugins/custom-contact-forms/uploads/".date("Y")."/".date("m")."/" . $file_name . $file_name_addon . $ext;
 			if(!move_uploaded_file($_FILES[$field->field_slug]['tmp_name'], $target_path)) {
 				// Error!
-				$errors[] = __('Any error occured while uploading ' . $field->field_slug . '.', 'custom-contact-forms');
+				$errors[] = __('An error occured while uploading: ', 'custom-contact-forms') . $field->field_slug;
 			}
 			return $errors;
 		}
