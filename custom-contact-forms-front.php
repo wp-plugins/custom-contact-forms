@@ -230,7 +230,7 @@ if (!class_exists('CustomContactFormsFront')) {
 				$instructions = (empty($field->field_instructions)) ? '' : 'title="' . $field->field_instructions . $req_long . '" ';
 				$tooltip_class = (empty($field->field_instructions)) ? '' : 'ccf-tooltip-field';
 				if ($admin_options['enable_widget_tooltips'] == 0 && $is_widget_form) $instructions = '';
-				if ($_SESSION['ccf_fields'][$field->field_slug]) {
+				if (isset($_SESSION['ccf_fields'][$field->field_slug])) {
 					if ($admin_options['remember_field_values'] == 1)
 						$field_value = $_SESSION['ccf_fields'][$field->field_slug];
 				} if ($field->field_slug == 'captcha') {
@@ -309,7 +309,6 @@ if (!class_exists('CustomContactFormsFront')) {
 			$out .= '<input name="form_page" value="'.$_SERVER['REQUEST_URI'].'" type="hidden"'.$code_type.'>'."\n".'<input type="hidden" name="fid" value="'.$form->id.'"'.$code_type.'>'."\n".$hiddens."\n".'<input type="submit" id="submit-' . $form->id . '-'.$form_key.'" class="submit" value="' . $submit_text . '" name="customcontactforms_submit"'.$code_type.'>';
 			if (!empty($add_reset)) $out .= $add_reset;
 			$out .= "\n" . '</form>';
-			if ($admin_options['author_link'] == 1) $out .= "\n".'<a style="display:none;" href="http://www.taylorlovett.com" title="Rockville Web Developer, Wordpress Plugins">Wordpress plugin expert and Maryland Web Developer Taylor Lovett</a>';
 			
 			if ($form->form_style != 0) {
 				$no_border = array('', '0', '0px', '0%', '0pt', '0em');
@@ -379,14 +378,14 @@ if (!class_exists('CustomContactFormsFront')) {
 		}
 		
 		function processForms() {
-			if ($_POST['ccf_customhtml'] || $_POST['customcontactforms_submit']) {
+			if (isset($_POST['ccf_customhtml']) || isset($_POST['customcontactforms_submit'])) {
 				// BEGIN define common language vars
 				$lang = array();
 				$lang['field_blank'] = __('You left this field blank: ', 'custom-contact-forms');
 				$lang['form_page'] = __('Form Displayed on Page: ', 'custom-contact-forms');
 				$lang['sender_ip'] = __('Sender IP: ', 'custom-contact-forms');
 				// END define common language vars
-			} if ($_POST['ccf_customhtml']) {
+			} if (isset($_POST['ccf_customhtml'])) {
 				$admin_options = parent::getAdminOptions();
 				$fixed_customhtml_fields = array('required_fields', 'success_message', 'thank_you_page', 'destination_email', 'ccf_customhtml');
 				$req_fields = $this->requiredFieldsArrayFromList($_POST['required_fields']);
@@ -444,7 +443,7 @@ if (!class_exists('CustomContactFormsFront')) {
 					add_action('wp_footer', array(&$this, 'insertFormSuccessCode'), 1);
 				}
 				unset($_POST);
-			} elseif ($_POST['customcontactforms_submit']) {
+			} elseif (isset($_POST['customcontactforms_submit'])) {
 				ccf_utils::startSession();
 				$this->error_return = $_POST['form_page'];
 				$admin_options = parent::getAdminOptions();
@@ -453,7 +452,7 @@ if (!class_exists('CustomContactFormsFront')) {
 				$form = parent::selectForm($_POST['fid']);
 				$checks = array();
 				$reply = ($_POST['fixedEmail']) ? $_POST['fixedEmail'] : NULL;
-				$fixed_subject = ($_POST['emailSubject']) ? $_POST['emailSubject'] : NULL;
+				$fixed_subject = (isset($_POST['emailSubject'])) ? $_POST['emailSubject'] : NULL;
 				$cap_name = 'ccf_captcha_' . $_POST['fid'];
 				foreach ($fields as $field_id) {
 					$field = parent::selectField($field_id, '');

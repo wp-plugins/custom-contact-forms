@@ -251,6 +251,8 @@
 	margin:0 0em 1em 10px;
 }
 
+#customcontactforms-admin #create-field-options form ul { margin-top:0; }
+
 #customcontactforms-admin #field-options .evenrow-field-options div  { background-color:#f0f0f0; }
 #customcontactforms-admin #field-options .evenrow-field-options { background-color:#f0f0f0; }
 
@@ -281,8 +283,8 @@
 }
 #customcontactforms-admin #create-styles .inside, 
 #customcontactforms-admin #create-styles form { margin-top:0px; padding-top:0 }
-#customcontactforms-admin #create-styles .style_left { float:left; width:48% }
-#customcontactforms-admin #create-styles .style_right { width:48%; margin-left:51%; clear:none }
+#customcontactforms-admin #create-styles .style_left { float:left; width:48%; margin-top:0; }
+#customcontactforms-admin #create-styles .style_right { width:48%; margin-left:51%; margin-top:0; clear:none }
 #customcontactforms-admin #plugin-news {
 	
 }
@@ -304,8 +306,8 @@
 #customcontactforms-admin #general-settings {
 	
 }
-#customcontactforms-admin #general-settings .gleft { float:left; width:48%; clear:none; }
-#customcontactforms-admin #general-settings .gright { clear:none; float:none; width:48%; margin-left:49%; }
+#customcontactforms-admin #general-settings .gleft { float:left; width:48%; margin-top:0; clear:none; }
+#customcontactforms-admin #general-settings .gright { clear:none; float:none; width:48%;  margin-top:0; margin-left:49%; }
 #customcontactforms-admin #general-settings label { font-weight:bold; }
 #customcontactforms-admin #general-settings form div p.descrip {
 	font-style:italic;
@@ -319,14 +321,14 @@
 #customcontactforms-admin #create-fields {
 	
 }
-#customcontactforms-admin #create-fields .left { float:left; width:48%; }
-#customcontactforms-admin #create-fields .right { margin-left:50%; }
+#customcontactforms-admin #create-fields .left { float:left; width:48%; margin-top:0; }
+#customcontactforms-admin #create-fields .right { margin-left:50%; margin-top:0; }
 #customcontactforms-admin #create-fields .file-fields { display:none; }
 #customcontactforms-admin #create-forms {
 	
 }
-#customcontactforms-admin #create-forms .left { float:left; width:48%; }
-#customcontactforms-admin #create-forms .right { width:48%; margin-left:50%; }
+#customcontactforms-admin #create-forms .left { float:left; width:48%; margin-top:0; }
+#customcontactforms-admin #create-forms .right { width:48%; margin-left:50%; margin-top:0; }
 
 #customcontactforms-admin #create-forms .role{ display:inline; padding-left:5px; }
 #customcontactforms-admin #create-fields .attach, #customcontactforms-admin #create-forms .attach { margin-top:6px; }

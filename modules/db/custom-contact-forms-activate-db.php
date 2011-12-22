@@ -219,11 +219,11 @@ if (!class_exists('CustomContactFormsActivateDB')) {
 		}
 		
 		function insertFixedFields() {
-			$captcha = array('field_slug' => 'captcha', 'field_label' => __('Type the numbers.', 'custom-contact-forms'), 'field_type' => 'Text', 'field_value' => '', 'field_maxlength' => '100', 'user_field' => 0, 'field_instructions' => 'Type the numbers displayed in the image above.');
-			$ishuman = array('field_slug' => 'ishuman', 'field_label' => __('Check if you are human.', 'custom-contact-forms'), 'field_type' => 'Checkbox', 'field_value' => '1', 'field_maxlength' => '0', 'user_field' => 0, 'field_instructions' => 'This helps us prevent spam.');
-			$fixedEmail = array('field_slug' => 'fixedEmail', 'field_required' => 1, 'field_label' => __('Your Email', 'custom-contact-forms'), 'field_type' => 'Text', 'field_value' => '', 'field_maxlength' => '100', 'user_field' => 0, 'field_instructions' => 'Please enter your email address.');
-			$fixedWebsite = array('field_slug' => 'fixedWebsite', 'field_required' => 1, 'field_label' => __('Your Website', 'custom-contact-forms'), 'field_type' => 'Text', 'field_value' => '', 'field_maxlength' => '200', 'user_field' => 0, 'field_instructions' => 'Please enter your website.');
-			$emailSubject = array('field_slug' => 'emailSubject', 'field_required' => 1, 'field_label' => __('Email Subject', 'custom-contact-forms'), 'field_type' => 'Text', 'field_value' => '', 'field_maxlength' => '200', 'user_field' => 0, 'field_instructions' => 'Please enter a subject for the email.');
+			$captcha = array('field_slug' => 'captcha', 'field_label' => __('Type the numbers.', 'custom-contact-forms'), 'field_type' => 'Text', 'field_value' => '', 'field_maxlength' => '100', 'user_field' => 0, 'field_instructions' => __('Type the numbers displayed in the image above.', 'custom-contact-forms'));
+			$ishuman = array('field_slug' => 'ishuman', 'field_label' => __('Check if you are human.', 'custom-contact-forms'), 'field_type' => 'Checkbox', 'field_value' => '1', 'field_maxlength' => '0', 'user_field' => 0, 'field_instructions' => __('This helps us prevent spam.', 'custom-contact-forms'));
+			$fixedEmail = array('field_slug' => 'fixedEmail', 'field_required' => 1, 'field_label' => __('Your Email', 'custom-contact-forms'), 'field_type' => 'Text', 'field_value' => '', 'field_maxlength' => '100', 'user_field' => 0, 'field_instructions' => __('Please enter your email address.', 'custom-contact-forms'));
+			$fixedWebsite = array('field_slug' => 'fixedWebsite', 'field_required' => 1, 'field_label' => __('Your Website', 'custom-contact-forms'), 'field_type' => 'Text', 'field_value' => '', 'field_maxlength' => '200', 'user_field' => 0, 'field_instructions' => __('Please enter your website.', 'custom-contact-forms'));
+			$emailSubject = array('field_slug' => 'emailSubject', 'field_required' => 1, 'field_label' => __('Email Subject', 'custom-contact-forms'), 'field_type' => 'Text', 'field_value' => '', 'field_maxlength' => '200', 'user_field' => 0, 'field_instructions' => __('Please enter a subject for the email.', 'custom-contact-forms'));
 			$reset = array('field_slug' => 'resetButton', 'field_type' => 'Reset', 'field_value' => __('Reset Form', 'custom-contact-forms'), 'user_field' => 0);
 			$states = array('field_slug' => 'usaStates', 'field_label' => __('Select a State', 'custom-contact-forms'), 'field_type' => 'Dropdown', 'user_field' => 0);
 			$countries = array('field_slug' => 'allCountries', 'field_label' => __('Select a Country', 'custom-contact-forms'), 'field_type' => 'Dropdown', 'user_field' => 0);
@@ -247,7 +247,7 @@ if (!class_exists('CustomContactFormsActivateDB')) {
 		
 		function columnExists($column, $table) {
 			global $wpdb;
-			if (!is_array($this->cache[$table]))
+			if (isset($this->cache[$table]) && !is_array($this->cache[$table]))
 				$this->cache[$table] = array();
 			if (empty($this->cache[$table]['columns']))
 				$this->cache[$table]['columns'] = $wpdb->get_results('SHOW COLUMNS FROM ' . $table, ARRAY_A);

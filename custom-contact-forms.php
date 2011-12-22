@@ -3,7 +3,7 @@
 	Plugin Name: Custom Contact Forms
 	Plugin URI: http://taylorlovett.com/wordpress-plugins
 	Description: Guaranteed to be 1000X more customizable and intuitive than Fast Secure Contact Forms or Contact Form 7. Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, form submissions saved to database, captchas, tooltip popovers, unlimited fields/forms/form styles, import/export, use a custom thank you page or built-in popover with a custom success message set for each form.
-	Version: 4.7.0.4
+	Version: 4.7.0.5
 	Author: Taylor Lovett
 	Author URI: http://www.taylorlovett.com
 */
@@ -59,7 +59,7 @@ if (!class_exists('CustomContactForms')) {
 				foreach ($customcontactOptions as $key => $option)
 					$customcontactAdminOptions[$key] = $option;
 			}
-			update_option($this->getAdminOptionsName, $customcontactAdminOptions);
+			update_option($this->getAdminOptionsName(), $customcontactAdminOptions);
 			return $customcontactAdminOptions;
 		}
 	}
@@ -88,7 +88,7 @@ if (!is_admin()) { /* is front */
 	
 	add_filter('the_content', array(&$custom_contact_front, 'contentFilter'));
 } else { /* is admin */
-	$GLOBALS['ccf_current_page'] = ($_GET['page']) ? $_GET['page'] : '';
+	$GLOBALS['ccf_current_page'] = (isset($_GET['page'])) ? $_GET['page'] : '';
 	require_once('custom-contact-forms-admin.php');
 	$custom_contact_admin = new CustomContactFormsAdmin();
 	if (!function_exists('CustomContactForms_ap')) {
@@ -104,7 +104,7 @@ if (!is_admin()) { /* is front */
 		}
 	}
 	$admin_options = $custom_contact_admin->getAdminOptions();
-	if ($admin_options['enable_dashboard_widget'] == 1) {
+	if (isset($admin_options['enable_dashboard_widget']) && $admin_options['enable_dashboard_widget'] == 1) {
 		ccf_utils::load_module('widget/custom-contact-forms-dashboard.php');
 		$ccf_dashboard = new CustomContactFormsDashboard();
 		if ($ccf_dashboard->isDashboardPage()) {

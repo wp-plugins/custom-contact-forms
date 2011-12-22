@@ -37,7 +37,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 		}
 		
 		function downloadExportFile() {
-			if ($_POST['ccf_export']) {
+			if (isset($_POST['ccf_export'])) {
 				//chmod('modules/export/', 0777);
 				ccf_utils::load_module('export/custom-contact-forms-export.php');
 				$transit = new CustomContactFormsExport(parent::getAdminOptionsName());
@@ -48,7 +48,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 		}
 		
 		function runImport() {
-			if ($_POST['ccf_clear_import'] || $_POST['ccf_merge_import']) {
+			if (isset($_POST['ccf_clear_import']) || isset($_POST['ccf_merge_import'])) {
 				//chmod('modules/export/', 0777);
 				ccf_utils::load_module('export/custom-contact-forms-export.php');
 				$transit = new CustomContactFormsExport(parent::getAdminOptionsName());
@@ -181,7 +181,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				'more_options' => __('More Options', 'custom-contact-forms'),
 				'expand' => __('Expand', 'custom-contact-forms'),
 				'click_to_confirm' => __('Click to Confirm', 'custom-contact-forms'),
-				'selected_tab' => ($_POST['selected_tab']) ? $_POST['selected_tab'] : 0,
+				'selected_tab' => (isset($_POST['selected_tab'])) ? $_POST['selected_tab'] : 0,
 				'delete_confirm' => __('Are you sure you want to delete this', 'custom-contact-forms'),
 				'error' => __('An error has occured. Please try again later.', 'custom-contact-forms'),
 				'nothing_to_show' => __('Nothing to show.', 'custom-contact-forms'),
@@ -220,7 +220,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 		
 		function handleAdminPostRequests() {
 			$out = array('success' => true);
-			if ($_POST['object_create']) {
+			if (isset($_POST['object_create'])) {
 				if ($_POST['object_type'] == 'form') {
 					if (parent::insertForm($_POST['object']) != false)
 						$this->action_complete = __('A new form was successfully created!', 'custom-contact-forms');
@@ -237,7 +237,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				return $out;
 			}
 			
-			if ($_POST['object_attach']) {
+			if (isset($_POST['object_attach'])) {
 				if ($_POST['object_type'] == 'form') {
 					if (parent::addFieldToForm($_POST['attach_object_id'], $_POST['object_id']) != false)
 						$this->action_complete = __('A field was successful attached!', 'custom-contact-forms');
@@ -248,7 +248,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				return $out;
 			}
 			
-			if ($_POST['object_detach']) {
+			if (isset($_POST['object_detach'])) {
 				if ($_POST['object_type'] == 'form') {
 					if (parent::detachField($_POST['detach_object_id'], $_POST['object_id']) != false)
 						$this->action_complete = __('A field was successful detached!', 'custom-contact-forms');
@@ -263,19 +263,19 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				$out['object_bulk_action'] = $_POST['object_bulk_action'];
 				if ($_POST['object_bulk_action'] == 'edit') {
 					foreach ($_POST['objects'] as $obj) {
-						if ($obj['object_do'] == 1) {
+						if (isset($obj['object_do']) && $obj['object_do'] == 1) {
 							if ($obj['object_type'] == 'form') {
 								parent::updateForm($obj['values'], $obj['object_id']);
-								if ($obj['detach_confirm'] == 1 && $obj['detach'] > 0) {
+								if (isset($obj['detach_confirm']) && $obj['detach_confirm'] == 1 && $obj['detach'] > 0) {
 									parent::detachField($obj['detach'], $obj['object_id']);
-								} if ($obj['attach_confirm'] == 1 && $obj['attach'] > 0) {
+								} if (isset($obj['attach_confirm']) && $obj['attach_confirm'] == 1 && $obj['attach'] > 0) {
 									parent::addFieldToForm($obj['attach'], $obj['object_id']);
 								}
 							} elseif ($obj['object_type'] == 'field') {
 								parent::updateField($obj['values'], $obj['object_id']);
-								if ($obj['detach_confirm'] == 1 && $obj['detach'] > 0) {
+								if (isset($obj['detach_confirm']) && $obj['detach_confirm'] == 1 && $obj['detach'] > 0) {
 									parent::detachFieldOption($obj['detach'], $obj['object_id']);
-								} if ($obj['attach_confirm'] == 1 && $obj['attach'] > 0) {
+								} if (isset($obj['attach_confirm']) && $obj['attach_confirm'] == 1 && $obj['attach'] > 0) {
 									parent::addFieldOptionToField($obj['attach'], $obj['object_id']);
 								}
 							} elseif ($obj['object_type'] == 'field_option') parent::updateFieldOption($obj['values'], $obj['object_id']);
@@ -288,7 +288,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				
 				elseif ($_POST['object_bulk_action'] == 'delete') {
 					foreach ($_POST['objects'] as $obj) {
-						if ($obj['object_do'] == 1) {
+						if (isset($obj['object_do']) && $obj['object_do'] == 1) {
 							if ($obj['object_type'] == 'form') parent::deleteForm($obj['object_id']);
 							elseif ($obj['object_type'] == 'field') parent::deleteField($obj['object_id']);
 							elseif ($obj['object_type'] == 'field_option') parent::deleteFieldOption($obj['object_id']);
@@ -334,15 +334,15 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				update_option(parent::getAdminOptionsName(), $admin_options);
 			}
 			$this->handleAdminPostRequests();
-			if ($_POST['insert_default_content']) {
+			if (isset($_POST['insert_default_content'])) {
 				ccf_utils::load_module('db/custom-contact-forms-default-db.php');
 				$this->action_complete = __('Default content has been inserted!', 'custom-contact-forms');
 				new CustomContactFormsDefaultDB();
-			} elseif ($_POST['contact_author']) {
+			} elseif (isset($_POST['contact_author'])) {
 				$this->action_complete = __('Your message has been sent!', 'custom-contact-forms');
 				$this_url = (!empty($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : $_SERVER['SERVER_NAME'];
 				$this->contactAuthor($_POST['name'], $_POST['email'], $this_url, $_POST['message'], $_POST['type'], $_POST['host'], $_POST['ccf-version'], $_POST['wp-version']);
-			} elseif ($_GET['clear_tables'] == 1) {
+			} elseif (isset($_GET['clear_tables']) && $_GET['clear_tables'] == 1) {
 				parent::emptyAllTables();
 			}
 			$styles = parent::selectAllStyles();
@@ -538,7 +538,10 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			$form_methods = str_replace('<option>'.$forms[$i]->form_method.'</option>',  '<option selected="selected">'.$forms[$i]->form_method.'</option>', $form_methods);
 			$add_fields = $this->getFieldsForm();
 			$this_style = parent::selectStyle($forms[$i]->form_style, '');
-			$sty_opt = str_replace('<option value="'.$forms[$i]->form_style.'">'.$this_style->style_slug.'</option>', '<option value="'.$forms[$i]->form_style.'" selected="selected">'.$this_style->style_slug.'</option>', $style_options);
+			if ($this_style != NULL)
+				$sty_opt = str_replace('<option value="'.$forms[$i]->form_style.'">'.$this_style->style_slug.'</option>', '<option value="'.$forms[$i]->form_style.'" selected="selected">'.$this_style->style_slug.'</option>', $style_options);
+			else
+				$sty_opt = $style_options;
 			?>
 				  <tr class="row-form-<?php echo $forms[$i]->id; ?> <?php if ($i % 2 == 0) echo 'ccf-evenrow'; ?>">
 					<td><input type="checkbox" class="object-check" value="1" name="objects[<?php echo $i; ?>][object_do]" /></td>
@@ -632,7 +635,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			  ?>
 							  <span class="form-detach-check">
 							  <input type="checkbox" class="detach-check" value="1" name="objects[<?php echo $i; ?>][detach_confirm]" />
-							  <span class="detach-lang">(Check to detach field)</span>
+							  <span class="detach-lang"><?php _e('(Check to detach field)', 'custom-contact-forms'); ?></span>
 							  </span>
 							  <br />
 							  <span class="ccf-red ccf-bold">*</span>
@@ -647,7 +650,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 							  </select>
 							  <span class="form-attach-check">
 							  <input class="attach-check" type="checkbox" name="objects[<?php echo $i; ?>][attach_confirm]" value="1" />
-							  <span class="attach-lang">((Check to attach field)</span>
+							  <span class="attach-lang"><?php _e("(Check to attach field)", "custom-contact-forms"); ?></span>
 							  </span>
 							  <br />
 							  <span class="ccf-red ccf-bold">*</span>
@@ -1909,7 +1912,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 		
 		function printFormSubmissionsPage() {
 			$this->handleAdminPostRequests();
-			if ($admin_options['show_install_popover'] == 1) {
+			if (isset($admin_options['show_install_popover']) && $admin_options['show_install_popover'] == 1) {
 				$admin_options['show_install_popover'] = 0;
 				?>
                 <script type="text/javascript" language="javascript">
@@ -2051,17 +2054,17 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				</script>
                 <?php
 				update_option(parent::getAdminOptionsName(), $admin_options);
-			} if ($_POST['general_settings']) {
+			} if (isset($_POST['general_settings'])) {
 				$_POST['settings'] = array_map(array('ccf_utils', 'encodeOption'), $_POST['settings']);
 				$admin_options = array_merge($admin_options, $_POST['settings']);
-				$admin_options[show_widget_categories] = $_POST['settings']['show_widget_categories'];
-				$admin_options[show_widget_singles] = $_POST['settings']['show_widget_singles'];
-				$admin_options[show_widget_pages] = $_POST['settings']['show_widget_pages'];
-				$admin_options[show_widget_archives] = $_POST['settings']['show_widget_archives'];
-				$admin_options[show_widget_home] = $_POST['settings']['show_widget_home'];
+				$admin_options['show_widget_categories'] = $_POST['settings']['show_widget_categories'];
+				$admin_options['show_widget_singles'] = $_POST['settings']['show_widget_singles'];
+				$admin_options['show_widget_pages'] = $_POST['settings']['show_widget_pages'];
+				$admin_options['show_widget_archives'] = $_POST['settings']['show_widget_archives'];
+				$admin_options['show_widget_home'] = $_POST['settings']['show_widget_home'];
 				$this->action_complete = __('Your settings have been successfully saved!', 'custom-contact-forms');
 				update_option(parent::getAdminOptionsName(), $admin_options);
-			} elseif ($_POST['configure_mail']) {
+			} elseif (isset($_POST['configure_mail'])) {
 				$_POST['mail_config'] = array_map(array('ccf_utils', 'encodeOption'), $_POST['mail_config']);
 				$admin_options = array_merge($admin_options, $_POST['mail_config']);
 				$this->action_complete = __('Your mail settings have been successfully saved!', 'custom-contact-forms');
@@ -2336,7 +2339,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 						</select>
 					  </li>
 					  <li class="descrip">
-						<?php _e("The form access manager within each form allows you to control who can view your form. However, that will take effect on any of your forms unless this is enabled.", 'custom-contact-forms'); ?>
+						<?php _e("The form access manager within each form allows you to control who can view your form. However, that will not take effect on any of your forms unless this is enabled.", 'custom-contact-forms'); ?>
 					  </li>
                       <li>
 						<label for="max_file_upload_size">

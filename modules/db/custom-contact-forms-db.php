@@ -86,7 +86,7 @@ if (!class_exists('CustomContactFormsDB')) {
 				$form['form_slug'] = $this->formatSlug($form['form_slug']);
 			}
 			if (!empty($form['form_access_update'])) {
-				$form['form_access'] = serialize($form['form_access']);
+				if (isset($form['form_access'])) $form['form_access'] = serialize($form['form_access']);
 				unset($form['form_access_update']);
 			} elseif (!empty($form['form_access'])) unset($form['form_access']);
 			
@@ -423,7 +423,8 @@ if (!class_exists('CustomContactFormsDB')) {
 		}
 		
 		function getFormAccessArray($form_access_string) {
-			$arr = unserialize(strtolower($form_access_string));
+			$arr = unserialize($form_access_string);
+			if (!empty($arr)) $arr = array_map('strtolower', $arr);
 			if ($arr == false || empty($form_access_string)) $arr = array();
 			return $arr;
 		}
