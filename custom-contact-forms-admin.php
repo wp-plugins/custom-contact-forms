@@ -10,6 +10,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 	
 		function adminInit() {
 			$this->downloadExportFile();
+			$this->downloadCSVExportFile();
 			$this->runImport();
 		}
 		
@@ -43,6 +44,22 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				$transit = new CustomContactFormsExport(parent::getAdminOptionsName());
 				$transit->exportAll();
 				$file = $transit->exportToFile();
+				ccf_utils::redirect(plugins_url() . '/custom-contact-forms/download.php?location=export/' . $file);
+			}
+		}
+		
+		function downloadCSVExportFile() {
+			if (isset($_POST['ccf_export_all_csv'])) {
+				ccf_utils::load_module('export/custom-contact-forms-export.php');
+				$transit = new CustomContactFormsExport(parent::getAdminOptionsName());
+				$transit->exportSavedFormSubmissionsToCSV();
+				$file = $transit->exportCSVToFile();
+				ccf_utils::redirect(plugins_url() . '/custom-contact-forms/download.php?location=export/' . $file);
+			} elseif (isset($_POST['ccf_export_form_csv']) && isset($_POST['csv_form_id']) && !empty($_POST['csv_form_id'])) {
+				ccf_utils::load_module('export/custom-contact-forms-export.php');
+				$transit = new CustomContactFormsExport(parent::getAdminOptionsName());
+				$transit->exportSavedFormSubmissionsToCSV($_POST['csv_form_id']);
+				$file = $transit->exportCSVToFile();
 				ccf_utils::redirect(plugins_url() . '/custom-contact-forms/download.php?location=export/' . $file);
 			}
 		}
@@ -170,7 +187,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 		}
 		
 		function insertAdminScripts() {
-			$js_version = '2.0.4';
+			$js_version = '2.0.5';
 			$admin_options = parent::getAdminOptions();
 			$js_lang = array(
 				'attaching' => __('Attaching', 'custom-contact-forms'),
@@ -1969,7 +1986,8 @@ if (!class_exists('CustomContactFormsAdmin')) {
 					<th scope="col" class="manage-column ccf-width250"><?php _e("Date Submitted", 'custom-contact-forms'); ?></th>
 					<th scope="col" class="manage-column ccf-width150"><?php _e("Form Submitted", 'custom-contact-forms'); ?></th>
 					<th scope="col" class="manage-column ccf-width250"><?php _e("Form Page", 'custom-contact-forms'); ?></th>
-					<th scope="col" class="manage-column "></th>
+					<th scope="col" class="manage-column ccf-width100"><?php _e("Form ID", 'custom-contact-forms'); ?></th>
+                    <th scope="col" class="manage-column"></th>
 				  </tr>
 				</thead>
 				<tbody>
@@ -1991,6 +2009,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 			?>
 					</td>
 					<td><?php echo $data->getFormPage(); ?> </td>
+                    <td><?php echo $data->getFormID(); ?> </td>
 					<td class="ccf-alignright">
 						<span class="submission-content-expand"></span>
 						<input type="hidden" name="objects[<?php echo $i; ?>][object_type]" value="form_submission" />
@@ -1998,7 +2017,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 					 </td>
 				  </tr>
 				  <tr class="row-form_submission-<?php echo $data_object->id; ?> submission-content <?php if ($i % 2 == 0) echo 'ccf-evenrow'; ?>">
-					<td colspan="5"><ul>
+					<td colspan="6"><ul>
 						<?php
 			$data_array = $data->getDataArray();
 			foreach ($data_array as $item_key => $item_value) {
@@ -2023,6 +2042,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 					<th scope="col" class="manage-column ccf-width250"><?php _e("Date Submitted", 'custom-contact-forms'); ?></th>
 					<th scope="col" class="manage-column ccf-width150"><?php _e("Form Submitted", 'custom-contact-forms'); ?></th>
 					<th scope="col" class="manage-column ccf-width250"><?php _e("Form Page", 'custom-contact-forms'); ?></th>
+                    <th scope="col" class="manage-column ccf-width100"><?php _e("Form ID", 'custom-contact-forms'); ?></th>
 					<th scope="col" class="manage-column"></th>
 				  </tr>
 				</tfoot>
@@ -2423,13 +2443,24 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				  </span></h3>
 				<div class="inside">
 				  <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
-					<p>
-					  <?php _e("Preforming a Custom Contact Forms export will create a file of the form 
+                  
+                  <div class="left">
+                  	<p>
+					  <?php _e("Preforming this export will create a file of the form 
 						ccf-export-xxxx.sql on your web server. The file created contains SQL that 
 						will recreate all the plugin data on any Wordpress installation. After Custom Contact Forms creates the export file, you will be prompted to download it. You can use this file as a backup in case your Wordpress database gets ruined.", 'custom-contact-forms'); ?>
 					</p>
-					<input type="submit" name="ccf_export" value="<?php _e("Export All CCF Plugin Content", 'custom-contact-forms'); ?>" />
-				  </form>
+					<input type="submit" name="ccf_export" value="<?php _e("Export All CCF Plugin Content", 'custom-contact-forms'); ?>" />	
+                  </div>
+                  <div class="right">
+                  	<p><?php _e("You can export your form submissions in to a convienent format. Clicking the button below will prompt you to download a .CSV file that contains all your saved form submissions. Since this export contains multiple forms that are assumed to have different fields, this export will only contain the value of each field and not the name of that field.", 'custom-contact-forms'); ?></p>
+                    	<input type="submit" name="ccf_export_all_csv" value="<?php _e('Export All Saved Form Submissions to CSV', 'custom-contact-forms'); ?>" />
+				  </div>
+                  <div class="divider"></div>
+                  <p><?php _e("You can also export only submissions from certain forms in to CSV format. This CSV export will probably more useful to you because it will contain the name of fields as well as the values. This export works best on forms that have fields that have remained completely constant throughout submission.", 'custom-contact-forms'); ?></p>
+                    	<label for="csv_form_id">Form ID:</label> <input id="csv_form_id" type="text" size="5" name="csv_form_id" /> <input type="submit" name="ccf_export_form_csv" value="<?php _e("Export This Form's Submissions to CSV", 'custom-contact-forms'); ?>" />
+                  
+                  </form>
 				</div>
 			  </div>
 			  <div id="import" class="postbox">

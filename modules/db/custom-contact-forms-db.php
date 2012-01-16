@@ -212,9 +212,10 @@ if (!class_exists('CustomContactFormsDB')) {
 			return $wpdb->get_results("SELECT * FROM " . CCF_STYLES_TABLE . " ORDER BY style_slug ASC");	
 		}
 		
-		function selectAllUserData() {
+		function selectAllUserData($form_id = NULL) {
 			global $wpdb;
-			return $wpdb->get_results("SELECT * FROM " . CCF_USER_DATA_TABLE . " ORDER BY data_time DESC");	
+			$where = ($form_id != NULL) ? " WHERE data_formid = '$form_id' " : '';
+			return $wpdb->get_results("SELECT * FROM " . CCF_USER_DATA_TABLE . " $where ORDER BY data_time DESC");	
 		}
 		
 		function selectForm($fid, $form_slug = '') {

@@ -73,9 +73,10 @@ if (!class_exists('CustomContactFormsUserData')) {
 			return array_shift(explode($n, $h, 2));
 		}
 		
-		function parseUserData($data) {
+		function parseUserData($data, $for_csv = false) {
 			if (preg_match('/\[file[ ]*link=("|&quot;).*?("|&quot;)\].*?\[\/[ ]*file\]/is', $data)) {
-				$data = preg_replace('/\[file[ ]*link=("|&quot;)(.*?)("|&quot;)\](.*?)\[\/[ ]*file\]/is', '<a href="$2" title="'.__('View File Upload', 'custom-contact-forms').'">$4</a>', $data);
+				if ($for_csv) $data = preg_replace('/\[file[ ]*link=("|&quot;)(.*?)("|&quot;)\](.*?)\[\/[ ]*file\]/is', '$2', $data);
+				else $data = preg_replace('/\[file[ ]*link=("|&quot;)(.*?)("|&quot;)\](.*?)\[\/[ ]*file\]/is', '<a href="$2" title="'.__('View File Upload', 'custom-contact-forms').'">$4</a>', $data);
 			}
 			return $data;
 		}

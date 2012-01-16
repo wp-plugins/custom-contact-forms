@@ -218,6 +218,11 @@
 #customcontactforms-admin #import, #customcontactforms-admin #export {
 	
 }
+
+#customcontactforms-admin .divider { border-top: 1px solid #CCC; margin-top:6px; margin-bottom:12px; }
+#customcontactforms-admin #export .left { float:left; width:49%; }
+#customcontactforms-admin #export .right { margin-left:51%; }
+#customcontactforms-admin #export span { font-weight:bold; }
 #customcontactforms-admin #export input { margin:7px; }
 #customcontactforms-admin #export p { padding:0; margin:0; }
 #customcontactforms-admin #import .choose_import { font-size:1.1em; clear:both; font-weight:bold; }

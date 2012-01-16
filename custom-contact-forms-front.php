@@ -451,13 +451,13 @@ if (!class_exists('CustomContactFormsFront')) {
 				$post_time = time();
 				$form = parent::selectForm($_POST['fid']);
 				$checks = array();
-				$reply = ($_POST['fixedEmail']) ? $_POST['fixedEmail'] : NULL;
+				$reply = (isset($_POST['fixedEmail'])) ? $_POST['fixedEmail'] : NULL;
 				$fixed_subject = (isset($_POST['emailSubject'])) ? $_POST['emailSubject'] : NULL;
 				$cap_name = 'ccf_captcha_' . $_POST['fid'];
 				foreach ($fields as $field_id) {
 					$field = parent::selectField($field_id, '');
 					 if ($field->field_slug == 'ishuman') {
-						if ($_POST['ishuman'] != 1) {
+						if (isset($_POST['ishuman']) && $_POST['ishuman'] != 1) {
 							if (empty($field->field_error))
 								$this->setFormError('ishuman', __('Only humans can use this form.', 'custom-contact-forms'));
 							else $this->setFormError('ishuman', $field->field_error);

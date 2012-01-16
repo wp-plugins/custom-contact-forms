@@ -103,7 +103,7 @@ form.customcontactform-sidebar div select { width:auto; }
 }
 #ccf-form-success div {
 	background-color:#efefef;
-	padding:9px 9px 9px 20px;
+	padding:4px 9px 9px 20px;
 	margin:0 0 15px 0px;
 	height:1.3em;
 }
@@ -112,10 +112,10 @@ form.customcontactform-sidebar div select { width:auto; }
 	float:left;
 	margin:0;
 	padding:0;
-	font-size:1.5em;
+	font-size:16px;
 	font-weight:bold;
 }
-#ccf-form-success p { padding:8px; margin:0; clear:both; font-size:1.1em; text-align:center; }
+#ccf-form-success p { padding:8px; margin:0; clear:both; font-size:14px; text-align:center; }
 #ccf-form-success div a.close {
 	float:right;
 	display:block;
