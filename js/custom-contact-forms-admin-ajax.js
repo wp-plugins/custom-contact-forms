@@ -269,9 +269,18 @@ $j(document).ready(function() {
 		var attached_list = $j(this).parentsUntil('td').find(".attached ul");
 		var attach_object_id = attach_object_field.attr("value");
 		var attach_object_text = attach_object_field.find("option[value=" + attach_object_id + "]:eq(0)").first().text();
-		pattern = new RegExp('<li class=".*?field' + attach_object_id + '.*?">', "i");
-		str = attached_list.html();
-		if (!str.match(pattern)) {
+		var already_attached = false;
+		
+		attached_list.find("li").each(function() {
+			var classes = $j(this).attr("class").split(' ');
+			$j.each(classes, function(index, cls) {
+				if (cls == "field" + attach_object_id) {
+					already_attached = true;
+				}
+			});
+		});
+		
+		if (!already_attached) {
 			var new_li = $j("<li>").html(attach_object_text).addClass("field" + attach_object_id).addClass("ui-state-default").appendTo(attached_list);
 			var new_span = $j("<span>").html("&times;").prependTo(new_li);
 			new_span.click(function() { $j(this).parent().hide().remove(); });

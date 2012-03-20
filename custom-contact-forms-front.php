@@ -458,7 +458,7 @@ if (!class_exists('CustomContactFormsFront')) {
 				foreach ($fields as $field_id) {
 					$field = parent::selectField($field_id, '');
 					 if ($field->field_slug == 'ishuman') {
-						if (isset($_POST['ishuman']) && $_POST['ishuman'] != 1) {
+						if (!isset($_POST['ishuman']) || (isset($_POST['ishuman']) && $_POST['ishuman'] != 1)) {
 							if (empty($field->field_error))
 								$this->setFormError('ishuman', __('Only humans can use this form.', 'custom-contact-forms'));
 							else $this->setFormError('ishuman', $field->field_error);
