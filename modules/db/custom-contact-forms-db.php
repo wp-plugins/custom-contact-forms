@@ -87,6 +87,7 @@ if (!class_exists('CustomContactFormsDB')) {
 			}
 			if (!empty($form['form_access_update'])) {
 				if (isset($form['form_access'])) $form['form_access'] = serialize($form['form_access']);
+				else $form['form_access'] = serialize(array());
 				unset($form['form_access_update']);
 			} elseif (!empty($form['form_access'])) unset($form['form_access']);
 			

@@ -351,7 +351,8 @@ if (!class_exists('CustomContactFormsFront')) {
 			if ($field->field_max_upload_size > 0 && $_FILES[$field->field_slug]['size'] > ($field->field_max_upload_size * 1000)) $errors[] = basename($_FILES[$field->field_slug]['name']) . __(' is too large of a file. The maximum file size for that field is ', 'custom-contact-forms') . $field->field_max_upload_size . __(' KB.', 'custom-contact-forms');
 			$allowed_exts = unserialize($field->field_allowed_file_extensions);
 			$ext = preg_replace('/.*\.(.*)/i', '$1', basename($_FILES[$field->field_slug]['name']));
-			if (!in_array($ext, $allowed_exts)) $errors[] = $ext . __(' is an invalid file extension.', 'custom-contact-forms');
+			if (!empty($allowed_exts))
+				if (!in_array($ext, $allowed_exts)) $errors[] = '.' . $ext . __(' is an invalid file extension.', 'custom-contact-forms');
 			if (!empty($errors)) return $errors;
 			
 			// create necessary directories

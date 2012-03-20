@@ -3,7 +3,6 @@ form.customcontactform, form.customcontactform-sidebar {
 	margin:8px;
 	width:95%;
 	max-width:600px;
-	font-size:11px;
 	padding:4px;
 }
 form.customcontactform-sidebar { width:100%; }
@@ -25,8 +24,6 @@ form.customcontactform div input, form.customcontactform div select, form.custom
 	width:17em;
 	padding:4px;
 	margin:0;
-	font-size:1.3em;
-	font-family:Verdana, Arial, Helvetica, sans-serif;
 	-moz-border-radius:4px;
 	-khtml-border-radius:4px;
 	-webkit-border-radius:4px;
@@ -39,15 +36,16 @@ form.customcontactform div textarea, form.customcontactform-sidebar div textarea
 	width:17em;
 	padding:4px;
 	margin:0;
-	font-size:1.3em;
-	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-family:inherit;
+	font-size:inherit;
 	-moz-border-radius:6px;
 	-khtml-border-radius:6px;
 	-webkit-border-radius:6px;
 	border-radius:6px;
 	height:5em;
 }
-form.customcontactform div select { font-size:1.3em; width:auto; margin-right:9px; min-width:17em; padding:2px; }
+form.customcontactform .submit { padding:3px; }
+form.customcontactform div select { width:auto; margin-right:9px; min-width:17em; padding:2px; }
 form.customcontactform-sidebar div input[type=text], 
 form.customcontactform-sidebar div select, 
 form.customcontactform-sidebar div textarea { width:95%; max-width:16em; margin:2px 0 4px 0; }

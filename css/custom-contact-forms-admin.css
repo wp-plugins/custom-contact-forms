@@ -31,8 +31,14 @@
 	background:#F2F2F2 url(../images/white-grad.png) repeat-x scroll left top;
 	text-shadow:0 1px 0 #FFFFFF;
 }
-#customcontactforms-admin .loading-img {
+#customcontactforms-admin .loading-img, #customcontactforms-admin .loading-img-inner, #customcontactforms-admin .loading-img-field-config {
 	display:none;
+}
+
+#customcontactforms-admin .loading-img-container {
+	width:16px;
+	height:16px;
+	display:inline-block;
 }
 #customcontactforms-admin input[type=submit], .ccf-popover input[type=submit] {
 	-moz-background-clip:border;
@@ -247,12 +253,12 @@
 #customcontactforms-admin #manage-field-options {
 	float:left;
 	clear:left;
-	width:49%;
+	width:59%;
 }
 #customcontactforms-admin #create-field-options {
 	float:left;
 	clear:none;
-	width:49%;
+	width:38%;
 	margin:0 0em 1em 10px;
 }
 
@@ -345,9 +351,41 @@
 	
 }
 #customcontactforms-admin #manage-fields td { border:0; }
-#customcontactforms-admin #manage-fields .row-one { 
-	margin-bottom:0px;
+#customcontactforms-admin #manage-fields .one, #customcontactforms-admin #manage-fields .two { 
+	float:left; width:33%; margin-bottom:10px;
 }
+#customcontactforms-admin #manage-fields .one label , #customcontactforms-admin #manage-fields .two label {
+	float:left; width:100px; padding-right:10px;
+}
+#customcontactforms-admin #manage-fields .three label { padding-right:10px; display:inline-block; }
+#customcontactforms-admin #manage-fields .one textarea, #customcontactforms-admin #manage-fields .two textarea {
+	float:left; width:220px; height:100px;
+}
+#customcontactforms-admin #manage-fields .three { 
+	float:left; width:33%; margin-bottom:10px;
+}
+
+
+
+
+
+#customcontactforms-admin #manage-fixed-fields .one, #customcontactforms-admin #manage-fixed-fields .two { 
+	float:left; width:33%; margin-bottom:10px;
+}
+#customcontactforms-admin #manage-fixed-fields .one label , #customcontactforms-admin #manage-fixed-fields .two label {
+	float:left; width:100px; padding-right:10px;
+}
+#customcontactforms-admin #manage-fixed-fields .three label { padding-right:10px; display:inline-block; }
+#customcontactforms-admin #manage-fixed-fields .one textarea, #customcontactforms-admin #manage-fixed-fields .two textarea {
+	float:left; width:220px; height:100px;
+}
+#customcontactforms-admin #manage-fixed-fields .three { 
+	float:left; width:33%; margin-bottom:10px;
+}
+
+
+
+
 #customcontactforms-admin #manage-fields .row-two { 
 	margin-top:6px;
 }
@@ -366,28 +404,32 @@
 }
 #customcontactforms-admin #manage-forms {
 }
+#customcontactforms-admin   .fattach span { font-weight:bold; }
 #customcontactforms-admin   .fattach  {
-	margin:20px 6px 6px 6px;
+	margin:20px auto 6px auto;
 	clear:both;
-	-moz-border-radius:6px;
-	padding:6px 6px 6px 15px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
-	-moz-box-shadow:0 0 2px #123;
-	-webkit-box-shadow: 0 0 2px #123;
-	box-shadow:0 0 2px #123;
+	padding:6px;
 	background-color:#FFFEEB;
 	display:block;
-	height:56px;
-	width:90%;
+	width:98%;
+	border:1px solid #999;
+	min-height:100px;
 }
-#customcontactforms-admin   .form-attach, #customcontactforms-admin   .field-attach {
-	width:49%; float:left; text-align:left; clear:none;
+#customcontactforms-admin  .fattach .attach {
+	width:49%; float:right; text-align:left; clear:none;
 }
-#customcontactforms-admin  .form-detach, #customcontactforms-admin   .field-detach {
-	width:49%; float:left; text-align:left; clear:none;
+#customcontactforms-admin  .fattach .attached {
+	width:49%; text-align:left; clear:none;
 }
 #customcontactforms-admin #manage-forms td { border:0; }
+#customcontactforms-admin #manage-forms .left { float:left; width:48%; text-align:left; }
+#customcontactforms-admin #manage-forms .right { float:right; width:48%; text-align:left; }
+#customcontactforms-admin #manage-forms .left li, #customcontactforms-admin #manage-forms .right li { clear:both; }
+#customcontactforms-admin #manage-forms .left ul, #customcontactforms-admin #manage-forms .right ul { border:1px solid #999; padding:6px; }
+#customcontactforms-admin #manage-forms .left textarea, #customcontactforms-admin #manage-forms .right textarea { width:250px; height:100px; }
+#customcontactforms-admin #manage-forms .left ul ul { border:0; float:left; }
+#customcontactforms-admin #manage-forms .left label, #customcontactforms-admin #manage-forms .right label { display:block; float:left; width:200px; }
+#customcontactforms-admin #manage-forms .left span, #customcontactforms-admin #manage-forms .right span { font-weight:bold; font-style:italic; }
 #customcontactforms-admin #manage-fixed-fields {
 	
 }
@@ -608,3 +650,17 @@
 
 #message { margin-bottom:9px; }
 #message-textarea { height: 196px; width: 95%; margin-bottom:9px; }
+
+#customcontactforms-admin .widefat { min-width:1060px; }
+
+.widefat thead th:first-of-type {
+	-webkit-border-top-left-radius: 0px;
+	border-top-left-radius: 0px;
+}
+
+.widefat thead th:last-of-type {
+-webkit-border-top-right-radius: 0px;
+border-top-right-radius: 0px;
+}
+
+#customcontactforms-admin .sortable li span { display:block; width:20px; text-align:center; height:18px; padding-right:10px; float:left; }

@@ -84,7 +84,7 @@ if (!class_exists('CustomContactFormsActivateDB')) {
 				$sql2 = "CREATE TABLE `".CCF_FIELDS_TABLE."` (
 						`id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
 						`field_slug` VARCHAR( 50 ) NOT NULL ,
-						`field_label` VARCHAR( 100 ) NOT NULL ,
+						`field_label` VARCHAR( 200 ) NOT NULL ,
 						`field_type` VARCHAR( 25 ) NOT NULL ,
 						`field_value` TEXT NOT NULL ,
 						`field_maxlength` INT ( 5 )  NOT NULL DEFAULT '0',

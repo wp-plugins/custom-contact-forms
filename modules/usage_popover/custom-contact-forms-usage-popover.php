@@ -385,6 +385,8 @@
       <p><?php _e('You can also export data in different ways.', 'custom-contact-forms'); ?></p>
       <ul>
       	<li><b><?php _e('Export All:', 'custom-contact-forms'); ?></b> <?php _e("This exports all custom contact form data including your general settings in SQL format. This is allows you to easily create backups.", 'custom-contact-forms'); ?></li>
+      	<li><b><?php _e('Export All Saved Form Submission to CSV:', 'custom-contact-forms'); ?></b> <?php _e("This exports all your saved form submissions into a .CSV file. Since this export contains multiple forms that are assumed to have different fields, this export will only contain the value of each field and not the name of that field.", 'custom-contact-forms'); ?></li>
+        <li><b><?php _e("Export Specific Form's: Submissions to CSV:", 'custom-contact-forms'); ?></b> <?php _e("This exports a specific form's saved form submissions. This CSV export will probably more useful to you because it will contain the name of fields as well as the values. This export works best on forms that have fields that have remained completely constant throughout submission.", 'custom-contact-forms'); ?></li>
       </ul>
       <p><?php _e('More import/export methods will be added in the future. Always create a backup before attempting an import! * Note: If you are having problems getting the importer/exporter to work, try CHMODing the import/ and export/ directories to 0777.', 'custom-contact-forms'); ?></p>
       </li>

@@ -50,17 +50,41 @@ if (!class_exists('CustomContactFormsDefaultDB')) {
 			$nocontact_option = array('option_slug' => $option_slugs['nocontact'], 'option_label' => __('Do Not Contact Me', 'custom-contact-forms'));
 			$yes_option = array('option_slug' => $option_slugs['yes'], 'option_label' => __('Yes, I did.', 'custom-contact-forms'));
 			$contact_form = array('form_slug' => $form_slugs['contact_form'], 'form_title' => __('Contact Form', 'custom-contact-forms'), 'form_method' => 'Post',
-			'submit_button_text' => __('Send Message', 'custom-contact-forms'), 'form_email' => get_option('admin_email'), 'form_success_message' => __('Thank you for filling out our contact form. We will contact you very soon by the way you specified.', 'custom-contact-forms'),
+			'submit_button_text' => __('Send Message', 'custom-contact-forms'), 'form_email' => get_option('admin_email'), 'form_success_message' => __('Thank you for filling out our contact form. We will be contacting you very soon.', 'custom-contact-forms'),
 			'form_success_title' => __('Thank You!', 'custom-contact-forms'), 'form_access' => parent::getRolesArray(), 'form_style' => 0);
 			$name_field_id = parent::insertField($name_field);
+			if (empty($name_field_id)) {
+				$f = parent::selectField('', $name_field['field_slug']);
+				$name_field_id = $f->id;
+			}
 			$date_field_id = parent::insertField($date_field);
+			if (empty($date_field_id)) {
+				$f = parent::selectField('', $date_field['field_slug']);
+				$date_field_id = $f->id;
+			}
 			$message_field_id = parent::insertField($message_field);
+			if (empty($message_field_id)) {
+				$f = parent::selectField('', $message_field['field_slug']);
+				$message_field_id = $f->id;
+			}
 			$phone_field_id = parent::insertField($phone_field);
+			if (empty($phone_field_id)) {
+				$f = parent::selectField('', $phone_field['field_slug']);
+				$phone_field_id = $f->id;
+			}
 			$google_field_id = parent::insertField($google_field);
+			if (empty($google_field_id)) {
+				$f = parent::selectField('', $google_field['field_slug']);
+				$google_field_id = $f->id;
+			}
 			$contact_method_field_id = parent::insertField($contact_method_field);
+			if (empty($contact_method_field_id)) {
+				$f = parent::selectField('', $contact_method_field['field_slug']);
+				$contact_method_field_id = $f->id;
+			}
 			$email_option_id = parent::insertFieldOption($email_option);
 			$yes_option_id = parent::insertFieldOption($yes_option);
-			$pleaseselect_option_id = parent::insertFieldOption($email_option);
+			$pleaseselect_option_id = parent::insertFieldOption($pleaseselect_option);
 			$phone_option_id = parent::insertFieldOption($phone_option);
 			$nocontact_option_id = parent::insertFieldOption($nocontact_option);
 			$contact_form_id = parent::insertForm($contact_form);
