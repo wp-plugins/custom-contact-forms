@@ -4,7 +4,7 @@ Donate link: http://www.taylorlovett.com
 Tags: contact form, web form, custom contact form, custom forms, captcha form, contact fields, form mailers
 Requires at least: 2.8.1
 Tested up to: 3.4.1
-Stable tag: 5.1.0.0
+Stable tag: 5.1.0.1
 
 A customizable and intuitive contact form plugin for Wordpress.
 
@@ -15,7 +15,6 @@ Customize every aspect of your forms without any knowledge of CSS: borders, padd
 Special Features:
 ------------------
 
-*	__NEW__ ReCaptcha added for spam prevention
 *	__NEW__ Rearrange fields with a drag-and-drop interface
 *	__NEW__ Export form submissions to .CSV
 *	__NEW__ File Upload Fields
@@ -143,28 +142,9 @@ Visit http://www.taylorlovett.com/wordpress-plugins for screenshots. Right now a
 
 == Changelog ==
 
-= 5.1.0.0 =
-*	custom-contact-forms-admin.php
-*	custom-contact-forms-front.php
-*	images/help.png
-*	images/audio.png
-*	images/recaptcha-logo-white.png
-*	images/refresh.png
-*	modules/usage_popover/custom-contact-forms-usage-popover.php
-*	modules/db/custom-contact-forms-activate-db.php
-*	modules/extra_fields/states_field.php
-*	modules/extra_fields/languages_field.php
-*	modules/extra_fields/recaptcha_field.php
-*	modules/extra_fields/countries_field.php
-*	modules/recaptcha
-*	modules/recaptcha/recaptchalib.php
-*	custom-contact-forms-utils.php
-*	readme.txt
-*	js/custom-contact-forms.js
-*	js/custom-contact-forms-admin-ajax.js
-*	custom-contact-forms.php
-*	css/custom-contact-forms.css
-
+= 5.0.0.1 =
+*   custom-contact-forms-admin.php - Small UI updates
+*   css/custom-contact-forms-admin.css - New admin styles
 
 = 5.0.0.1 =
 *	ishuman fixed field bug fixed

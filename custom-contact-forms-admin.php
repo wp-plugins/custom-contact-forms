@@ -361,6 +361,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
 				<li><a href="#advanced"><?php _e("Advanced", 'custom-contact-forms'); ?></a></li>
 				<li><a href="#news"><?php _e("News", 'custom-contact-forms'); ?></a></li>
 			  </ul>
+			  <a class="gravity" href="https://www.e-junkie.com/ecom/gb.php?cl=54585&c=ib&aff=125082">Are you looking for a more customizable, reliable, and secure contact form solution for WordPress? Try <span>Gravity Forms</span>.</a>
 			  <a class="genesis" href="http://www.shareasale.com/r.cfm?b=241369&u=481196&m=28169&urllink=&afftrack="><?php _e('Custom Contact Forms works best with any of the 20+ ', 'custom-contact-forms'); ?><span><?php _e('Genesis', 'custom-contact-forms'); ?></span> <?php _e('Wordpress child themes. The', 'custom-contact-forms'); ?> <span><?php _e('Genesis Framework', 'custom-contact-forms'); ?></span> <?php _e('empowers you to quickly and easily build incredible websites with WordPress.', 'custom-contact-forms'); ?></a>
 			
 			<form class="blog-horizontal-form" method="post" action="http://www.aweber.com/scripts/addlead.pl">
@@ -1983,6 +1984,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
                 	<a href="javascript:void(0)" class="quick-start-button">Quick Start Guide</a> - <a href="javascript:void(0)" class="usage-popover-button">Plugin Usage Manual</a>
               	</div>
               </div>
+			  <a class="gravity" href="https://www.e-junkie.com/ecom/gb.php?cl=54585&c=ib&aff=125082">Are you looking for a more customizable, reliable, and secure contact form solution for WordPress? Try <span>Gravity Forms</span>.</a>
 			  <a class="genesis" href="http://www.shareasale.com/r.cfm?b=241369&u=481196&m=28169&urllink=&afftrack=">Custom Contact Forms works best with any of the 20+ <span>Genesis</span> Wordpress child themes. The <span>Genesis Framework</span> empowers you to quickly and easily build incredible websites with WordPress.</a>
 			
 			<form class="blog-horizontal-form" method="post" action="http://www.aweber.com/scripts/addlead.pl">
@@ -2131,6 +2133,7 @@ if (!class_exists('CustomContactFormsAdmin')) {
                 	<a href="javascript:void(0)" class="quick-start-button">Quick Start Guide</a> - <a href="javascript:void(0)" class="usage-popover-button">Plugin Usage Manual</a>
               	</div>
               </div>
+			  <a class="gravity" href="https://www.e-junkie.com/ecom/gb.php?cl=54585&c=ib&aff=125082">Are you looking for a more customizable, reliable, and secure contact form solution for WordPress? Try <span>Gravity Forms</span>.</a>
 			  <a class="genesis" href="http://www.shareasale.com/r.cfm?b=241369&u=481196&m=28169&urllink=&afftrack=">Custom Contact Forms works best with any of the 20+ <span>Genesis</span> Wordpress child themes. The <span>Genesis Framework</span> empowers you to quickly and easily build incredible websites with WordPress.</a>
 			
 			<form class="blog-horizontal-form" method="post" action="http://www.aweber.com/scripts/addlead.pl">
