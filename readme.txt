@@ -10,7 +10,7 @@ A customizable and intuitive contact form plugin for Wordpress.
 
 == Description ==
 
-__Attention:__ Custom Contact Forms really needs support from developers. We need code contribution to make this plugin better. Please fork the plugin on [Github](https://github.com/tlovett1/custom-contact-forms) and create push requests!
+__Attention:__ Custom Contact Forms really needs support from developers. We need code contribution to make this plugin better. Please fork the plugin on [Github](https://github.com/tlovett1/custom-contact-forms)!
 
 Customize every aspect of your forms without any knowledge of CSS: borders, padding, sizes, colors. Ton's of great features. Required fields, captchas, tooltip popovers, unlimited fields/forms/form styles, use a custom thank you page or built-in popover with a custom success message set for each form.
 
