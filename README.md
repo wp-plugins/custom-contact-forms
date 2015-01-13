@@ -3,6 +3,9 @@ Custom Contact Forms [![Build Status](https://travis-ci.org/tlovett1/custom-cont
 
 Build beautiful custom forms the WordPress way.
 
+__Note: Version 6.0 breaks backwards compatibility. This means you will need to rebuild your forms when upgrading to 6.0.
+It's worth it; I promise!__
+
 ## Purpose
 
 The problem of form creation in WordPress has been tackled many different ways. Custom Contact forms handles forms the
@@ -17,10 +20,16 @@ Install the plugin in WordPress, you can download a
 [zip via Github](https://github.com/tlovett1/custom-contact-forms/archive/master.zip) and upload it using the WP
 plugin uploader.
 
-## Form Management
+## Usage
 
 You can create and manage forms within a post by clicking the `Add Form` button next to the `Add Media`
-button. You can also create and manage forms by clicking the `Forms` menu item in the administration panel.
+button:
+
+![Add a form in a post](https://tlovett1.files.wordpress.com/2015/01/add-form-post.png)
+
+Select or create a new form and click `Insert into post`:
+
+![Insert a form into a post](https://tlovett1.files.wordpress.com/2015/01/insert-form.png)
 
 ### Form Settings
 
