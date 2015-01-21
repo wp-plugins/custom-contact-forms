@@ -28,7 +28,11 @@ class CCF_Form_Manager {
 	 * @return string
 	 */
 	public function filter_mce_css( $css ) {
-		if ( ! defined( WP_DEBUG ) || ! WP_DEBUG ) {
+		if ( ! apply_filters( 'ccf_enable_tinymce_previews', true ) ) {
+			return $css;
+		}
+
+		if ( defined( SCRIPT_DEBUG ) && SCRIPT_DEBUG ) {
 			$css_path = '/build/css/form-mce.css';
 		} else {
 			$css_path = '/build/css/form-mce.min.css';
@@ -1214,7 +1218,7 @@ class CCF_Form_Manager {
 
 		if ( 'post.php' == $pagenow || 'post-new.php' == $pagenow ) {
 
-			if ( ! defined( WP_DEBUG ) || ! WP_DEBUG ) {
+			if ( defined( SCRIPT_DEBUG ) && SCRIPT_DEBUG ) {
 				$js_manager_path = '/build/js/form-manager.js';
 				$js_mce_path = '/js/form-mce.js';
 				$css_path = '/build/css/form-manager.css';
@@ -1269,7 +1273,7 @@ class CCF_Form_Manager {
 
 			wp_enqueue_style( 'ccf-form-manager', plugins_url( $css_path, dirname( __FILE__ ) ) );
 
-			if ( 'ccf_form' != get_post_type() ) {
+			if ( apply_filters( 'ccf_enable_tinymce_previews', true ) && 'ccf_form' !== get_post_type() ) {
 				wp_enqueue_script( 'ccf-form-mce', plugins_url( $js_mce_path, dirname( __FILE__ ) ), array( 'mce-view', 'jquery', 'ccf-form-manager' ), '1.0', true );
 			}
 		}
