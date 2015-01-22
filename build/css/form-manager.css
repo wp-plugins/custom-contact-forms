@@ -279,6 +279,9 @@
         padding: 5px; }
         .ccf-main-modal .ccf-form-pane .left-sidebar .fields .field .right, .ccf-main-modal .ccf-form-pane .left-sidebar .fields .field .preview, .ccf-main-modal .ccf-form-pane .left-sidebar .structure-fields .field .right, .ccf-main-modal .ccf-form-pane .left-sidebar .structure-fields .field .preview, .ccf-main-modal .ccf-form-pane .left-sidebar .special-fields .field .right, .ccf-main-modal .ccf-form-pane .left-sidebar .special-fields .field .preview {
           display: none; }
+      .ccf-main-modal .ccf-form-pane .left-sidebar .explain {
+        margin-top: 5px;
+        font-style: italic; }
     .ccf-main-modal .ccf-form-pane .form-content {
       box-sizing: border-box;
       position: absolute;
@@ -319,7 +322,11 @@
         .ccf-main-modal .ccf-form-pane .right-sidebar label .required {
           color: red; }
       .ccf-main-modal .ccf-form-pane .right-sidebar .field-error input {
-        border-color: #ff0000; }
+        border-color: #ff0000;
+        border-width: 2px; }
+      .ccf-main-modal .ccf-form-pane .right-sidebar .field-duplicate-slug input {
+        border-color: #ffe6a5;
+        border-width: 2px; }
       .ccf-main-modal .ccf-form-pane .right-sidebar input[type=text] {
         width: 100%;
         display: block;
