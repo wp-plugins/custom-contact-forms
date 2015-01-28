@@ -14,7 +14,7 @@
 		delete object.modified_tz;
 	};
 
-	wp.ccf.utils.template = function ( template ) {
+	wp.ccf.utils.template = _.memoize( function( id ) {
 		// Use WordPress style Backbone template syntax
 		var options = {
 			evaluate:    /<#([\s\S]+?)#>/g,
@@ -22,8 +22,8 @@
 			escape:      /\{\{([^\}]+?)\}\}(?!\})/g
 		};
 
-		return _.template( template, null, options );
-	};
+		return _.template( document.getElementById( id ).innerHTML, null, options );
+	});
 
 	wp.ccf.utils.insertFormShortcode = function( form ) {
 		var existingForm = wp.ccf.forms.findWhere( { ID: form.get( 'ID' ) } );
@@ -74,12 +74,32 @@
 		return false;
 	};
 
+	wp.ccf.utils.isFieldEmailConfirm = function( value ) {
+		if ( typeof value.email !== 'undefined' || typeof value.confirm !== 'undefined' ) {
+			return true;
+		}
+
+		return false;
+	};
+
 	wp.ccf.utils.isFieldAddress = function( value ) {
 		if ( typeof value.street !== 'undefined' && typeof value.city !== 'undefined' && typeof value.zipcode !== 'undefined' && typeof value.line_two !== 'undefined' ) {
 			return true;
 		}
 
 		return false;
+	};
+
+	wp.ccf.utils.getPrettyFieldEmailConfirm = function( value ) {
+		if ( value.email ) {
+			return value.email;
+		}
+
+		if ( value.confirm ) {
+			return value.confirm;
+		}
+
+		return '-';
 	};
 
 	wp.ccf.utils.getPrettyFieldDate = function( value ) {

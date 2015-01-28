@@ -13,6 +13,11 @@ WordPress media manager modal. CCF does not have as many features as some of it'
 you with just what you need. Custom Contact Forms is a legacy plugin name. The plugin can handle all types of forms not
 just contact forms.
 
+## Requirements
+
+* WordPress 3.9+
+* PHP 5.2.4+
+
 ## Installation
 
 Install the plugin in WordPress, you can download a
@@ -42,10 +47,20 @@ Each form has a number of settings that you should understand.
   * `Completion Message` - If you choose to show a message, you can customize the message to be shown.
   * `Redirect URL` - If you choose to perform a redirect, you can customize the redirect URL.
 
-* `Send email notifications` - When a form is completed you can show a message or perform a browser redirect
+### Form Notifications
 
-  * `Completion Message` - If you choose to show a message, you can customize the message to be shown.
-  * `Redirect URL` - If you choose to perform a redirect, you can customize the redirect URL.
+* `Send email notifications` - When a form is completed, you can have an email sent with submission information.
+
+  If email notifications are turned on, you can configure the following:
+
+  * `"To" Email Addresses` - Enter email addresses here that should receive the notification. Multiple email addresses
+  should be comma separated.
+  * `"From" Email Address Type` - This allows you to set what email address the notification is sent from. `WordPress
+  Default` will use the default WordPress email address. `Custom Email` will allow you to manually type in a from
+  address. `Form Field` will allow you to choose an email field within the form to dynamically pull a from email
+  address.
+
+
 
 ### Fields
 
@@ -132,6 +147,18 @@ Scroll to the `Submissions` meta box. Click one the eye icon to view more inform
 In the `Submissions` meta box, you can add and remove columns. Click the cog icon at the top of the meta box to open
 the screen options panel. In this panel you can check which columns you would like to see in the table.
 
+## Frequently Asked Questions
+
+* __My form(s) will not save. What's wrong?__
+
+  You most likely have a theme or plugin conflict. Try deactivating other plugins and activating a default theme. If
+  forms still won't save, please create an issue.
+
+* __When I save, delete, or edit a form, I get a HTTP 501 error. What should I do?__
+
+  CCF uses RESTful HTTP verbs such as PUT and DELETE. If your web server does not support those HTTP requests, the
+  plugin will not work. You will need to contact your host to resolve this.
+
 ## Development
 
 #### Setup
@@ -190,3 +217,9 @@ Coming soon.
 #### Issues
 If you identify any errors or have an idea for improving the plugin, please
 [open an issue](https://github.com/tlovett1/custom-contact-forms/issues?state=open).
+
+## License
+
+Custom Contact Forms is free software; you can redistribute it and/or modify it under the terms of the [GNU General
+Public License](http://www.gnu.org/licenses/gpl-2.0.html) as published by the Free Software Foundation; either version 2 of the License, or (at your option) any
+later version.
