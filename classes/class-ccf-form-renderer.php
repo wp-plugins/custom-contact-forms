@@ -60,6 +60,9 @@ class CCF_Form_Renderer {
 			'hour' => esc_html__( 'This is not a valid hour.', 'custom-contact-forms' ),
 			'date' => esc_html__( 'This date is not valid.', 'custom-contact-forms' ),
 			'minute' => esc_html__( 'This is not a valid minute.', 'custom-contact-forms' ),
+			'fileExtension' => esc_html__( 'This is not an allowed file extension', 'custom-contact-forms' ),
+			'fileSize' => esc_html__( 'This file is bigger than', 'custom-contact-forms' ),
+			'unknown' => esc_html__( 'An unknown error occured.', 'custom-contact-forms' ),
 			'website' => esc_html__( "This is not a valid URL. URL's must start with http(s)://", 'custom-contact-forms' ),
 		);
 		wp_localize_script( 'ccf-form', 'ccfSettings', apply_filters( 'ccf_localized_form_messages', $localized ) );
@@ -121,10 +124,25 @@ class CCF_Form_Renderer {
 
 			<?php
 		} else {
+			$contains_file = false;
+
+			$fields_html = '';
+
+			foreach ( $fields as $field_id ) {
+				$field_id = (int) $field_id;
+
+				$type = esc_attr( get_post_meta( $field_id, 'ccf_field_type', true ) );
+
+				if ( 'file' === $type ) {
+					$contains_file = true;
+				}
+
+				$fields_html .= apply_filters( 'ccf_field_html', CCF_Field_Renderer::factory()->render_router( $type, $field_id, $form_id ), $type, $field_id );
+			}
 			?>
 
 			<div class="ccf-form-wrapper form-id-<?php echo (int) $form_id; ?>" data-form-id="<?php echo (int) $form_id; ?>">
-				<form class="ccf-form" method="post" action="" data-form-id="<?php echo (int) $form_id; ?>">
+				<form <?php if ( $contains_file ) : ?>enctype="multipart/form-data"<?php endif; ?> novalidate class="ccf-form" method="post" action="" data-form-id="<?php echo (int) $form_id; ?>">
 
 					<?php $title = get_the_title( $form_id ); if ( ! empty( $title ) && apply_filters( 'ccf_show_form_title', true, $form_id ) ) : ?>
 						<div class="form-title">
@@ -138,19 +156,8 @@ class CCF_Form_Renderer {
 						</div>
 					<?php endif; ?>
 
-					<?php
+					<?php echo $fields_html; ?>
 
-					foreach ( $fields as $field_id ) {
-						$field_id = (int) $field_id;
-
-						$type = esc_attr( get_post_meta( $field_id, 'ccf_field_type', true ) );
-
-						$field_html = apply_filters( 'ccf_field_html', CCF_Field_Renderer::factory()->render_router( $type, $field_id, $form_id ), $type, $field_id );
-
-						echo $field_html;
-					}
-
-					?>
 					<div class="form-submit">
 						<input type="submit" class="ccf-submit-button" value="<?php echo esc_attr( get_post_meta( $form_id, 'ccf_form_buttonText', true ) ); ?>">
 						<img class="loading-img" src="<?php echo esc_url( site_url( '/wp-admin/images/wpspin_light.gif' ) ); ?>">
@@ -162,6 +169,8 @@ class CCF_Form_Renderer {
 					<input type="hidden"  name="ccf_form" value="1">
 					<input type="hidden" name="form_nonce" value="<?php echo wp_create_nonce( 'ccf_form' ); ?>">
 				</form>
+
+				<iframe onload="wp.ccf.iframeOnload( <?php echo (int) $form_id; ?> );" class="ccf-form-frame" id="ccf_form_frame_<?php echo (int) $form_id; ?>" name="ccf_form_frame_<?php echo (int) $form_id; ?>"></iframe>
 			</div>
 
 			<?php

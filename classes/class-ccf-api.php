@@ -50,6 +50,10 @@ class CCF_API extends WP_JSON_Posts {
 				'sanitize' => 'sanitize_text_field',
 				'escape' => 'esc_html',
 			),
+			'description' => array(
+				'sanitize' => 'sanitize_text_field',
+				'escape' => 'esc_html',
+			),
 			'value' => array(
 				'sanitize' => 'sanitize_text_field',
 				'escape' => 'esc_html',
@@ -97,6 +101,14 @@ class CCF_API extends WP_JSON_Posts {
 			'html' => array(
 				'sanitize' => 'wp_kses_post',
 				'escape' => 'wp_kses_post',
+			),
+			'maxFileSize' => array(
+				'sanitize' => 'intval',
+				'escape' => 'intval',
+			),
+			'fileExtensions' => array(
+				'sanitize' => 'sanitize_text_field',
+				'escape' => 'esc_html',
 			),
 		) );
 
@@ -177,13 +189,14 @@ class CCF_API extends WP_JSON_Posts {
 	}
 
 	/**
-	 * Delete all submissions associated with a post.
+	 * Delete all submissionws associated with a post.
 	 *
 	 * @param int $form_id
 	 * @since 6.0
 	 */
 	public function delete_submission( $form_id ) {
 		$submissions = get_children( array( 'post_parent' => $form_id, 'numberposts' => apply_filters( 'ccf_max_submissions', 5000, get_post( $form_id ) ) ) );
+
 		if ( ! empty( $submissions ) ) {
 			foreach ( $submissions as $submission ) {
 				wp_delete_post( $submission->ID, true );

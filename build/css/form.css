@@ -1,5 +1,7 @@
 .ccf-form-wrapper {
   margin: 20px 0; }
+  .ccf-form-wrapper .ccf-form-frame {
+    display: none; }
   .ccf-form-wrapper .ccf-clear {
     clear: both; }
   .ccf-form-wrapper .form-title {
@@ -18,20 +20,24 @@
     opacity: 0;
     float: none;
     margin: 0 0 0 6px; }
+  .ccf-form-wrapper .field-description {
+    font-size: 85%;
+    clear: left;
+    margin-top: 6px; }
+  .ccf-form-wrapper .error {
+    color: #ff0000;
+    float: right;
+    font-size: 85%;
+    margin-top: 3px; }
+    .ccf-form-wrapper .error.match-error, .ccf-form-wrapper .error.email-error, .ccf-form-wrapper .error.unknown-error {
+      float: none; }
+    .ccf-form-wrapper .error.right-error {
+      float: right; }
   .ccf-form-wrapper .field {
     margin-bottom: 24px;
     clear: both; }
-    .ccf-form-wrapper .field[data-field-type="recaptcha"] .error, .ccf-form-wrapper .field[data-field-type="dropdown"] .error, .ccf-form-wrapper .field[data-field-type="radio"] .error, .ccf-form-wrapper .field[data-field-type="checkboxes"] .error, .ccf-form-wrapper .field[data-field-type="date"] .error {
+    .ccf-form-wrapper .field[data-field-type="recaptcha"] .error, .ccf-form-wrapper .field[data-field-type="file"] .error, .ccf-form-wrapper .field[data-field-type="dropdown"] .error, .ccf-form-wrapper .field[data-field-type="radio"] .error, .ccf-form-wrapper .field[data-field-type="checkboxes"] .error, .ccf-form-wrapper .field[data-field-type="date"] .error {
       float: none; }
-    .ccf-form-wrapper .field .error {
-      color: #ff0000;
-      float: right;
-      font-size: 85%;
-      margin-top: 3px; }
-      .ccf-form-wrapper .field .error.match-error, .ccf-form-wrapper .field .error.email-error {
-        float: none; }
-      .ccf-form-wrapper .field .error.right-error {
-        float: right; }
     .ccf-form-wrapper .field .field-error-input {
       border: 1px solid #ff0000; }
     .ccf-form-wrapper .field label {
@@ -40,6 +46,7 @@
       margin-bottom: 6px;
       font-weight: bold; }
       .ccf-form-wrapper .field label .required {
+        padding-right: .3em;
         color: #ff0000; }
     .ccf-form-wrapper .field input[type="text"], .ccf-form-wrapper .field textarea {
       width: 100%;

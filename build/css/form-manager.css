@@ -89,6 +89,9 @@
       padding: 10px 20px; }
       .ccf-main-modal .field .preview .recaptcha-preview-img {
         margin-top: 7px; }
+      .ccf-main-modal .field .preview .field-description {
+        margin-top: 3px;
+        clear: left; }
       .ccf-main-modal .field .preview .left {
         float: left;
         clear: both;
@@ -260,6 +263,10 @@
     .ccf-main-modal .ccf-form-pane label {
       display: block;
       margin-bottom: 8px; }
+    .ccf-main-modal .ccf-form-pane .explain {
+      margin-top: 5px;
+      font-style: italic;
+      display: block; }
     .ccf-main-modal .ccf-form-pane .left-sidebar {
       box-sizing: border-box;
       background-color: #f3f3f3;
@@ -279,10 +286,6 @@
         padding: 5px; }
         .ccf-main-modal .ccf-form-pane .left-sidebar .fields .field .right, .ccf-main-modal .ccf-form-pane .left-sidebar .fields .field .preview, .ccf-main-modal .ccf-form-pane .left-sidebar .structure-fields .field .right, .ccf-main-modal .ccf-form-pane .left-sidebar .structure-fields .field .preview, .ccf-main-modal .ccf-form-pane .left-sidebar .special-fields .field .right, .ccf-main-modal .ccf-form-pane .left-sidebar .special-fields .field .preview {
           display: none; }
-      .ccf-main-modal .ccf-form-pane .left-sidebar .explain {
-        margin-top: 5px;
-        font-style: italic;
-        display: block; }
     .ccf-main-modal .ccf-form-pane .form-content {
       box-sizing: border-box;
       position: absolute;
@@ -339,7 +342,8 @@
         display: inline-block; }
       .ccf-main-modal .ccf-form-pane .right-sidebar textarea {
         width: 100%;
-        height: 80px; }
+        height: 80px;
+        margin-top: 5px; }
       .ccf-main-modal .ccf-form-pane .right-sidebar .field-html {
         height: 150px;
         width: 100%; }

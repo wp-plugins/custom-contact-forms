@@ -23,7 +23,7 @@
 	 */
 	var _modelDecode = function( excludeKeys ) {
 		for ( var key in this.attributes ) {
-			if ( excludeKeys.indexOf( key ) === -1 ) {
+			if ( _.indexOf( excludeKeys, key ) === -1 ) {
 				var value = this.get( key );
 
 				if ( typeof value === 'string' && value !== '' ) {
@@ -243,7 +243,8 @@
 					slug: '',
 					type: '',
 					required: false,
-					className: ''
+					className: '',
+					description: ''
 				};
 
 				return _.defaults( defaults, this.constructor.__super__.defaults );
@@ -256,6 +257,20 @@
 			defaults: function() {
 				var defaults = {
 					type: 'single-line-text'
+				};
+
+				return _.defaults( defaults, this.constructor.__super__.defaults() );
+			}
+		}
+	);
+
+	wp.ccf.models.Fields.file = wp.ccf.models.Fields.file || wp.ccf.models.StandardField.extend(
+		{
+			defaults: function() {
+				var defaults = {
+					type: 'file',
+					fileExtensions: '',
+					maxFileSize: ccfSettings.maxFileSize
 				};
 
 				return _.defaults( defaults, this.constructor.__super__.defaults() );
