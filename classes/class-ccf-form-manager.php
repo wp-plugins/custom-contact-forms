@@ -1224,7 +1224,7 @@ class CCF_Form_Manager {
 				</div>
 			</td>
 			<td>
-				{{ utils.getPrettyPostDate( form.date ) }}
+				{{ utils.getPrettyPostDate( form.date_gmt ) }}
 			</td>
 			<td>
 				{{ form.author.username }}
@@ -1312,7 +1312,7 @@ class CCF_Form_Manager {
 		<script type="text/html" id="ccf-submission-row-template">
 			<# _.each( currentColumns, function( column ) { #>
 				<# if ( 'date' === column ) { #>
-					<td colspan="1">{{ utils.getPrettyPostDate( submission.date ) }}</td>
+					<td colspan="1">{{ utils.getPrettyPostDate( submission.date_gmt ) }}</td>
 				<# } else { #>
 					<td colspan="1">
 						<# if ( submission.data[column] ) { #>
@@ -1495,6 +1495,7 @@ class CCF_Form_Manager {
 				'nonce' => wp_create_nonce( 'ccf_nonce' ),
 				'adminUrl' => esc_url_raw( admin_url() ),
 				'fieldLabels' => $field_labels,
+				'gmtOffset' => get_option( 'gmt_offset' ),
 				'adminEmail' => sanitize_email( get_option( 'admin_email' ) ),
 				'single' => ( 'ccf_form' === get_post_type() ) ? true : false,
 				'postId' => ( ! empty( $_GET['post'] ) ) ? (int) $_GET['post'] : null,
