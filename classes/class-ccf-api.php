@@ -129,6 +129,164 @@ class CCF_API extends WP_JSON_Posts {
 	}
 
 	/**
+	 * Retrieve a post.
+	 *
+	 * @uses get_post()
+	 * @since 6.4.9
+	 * @param int $id Post ID
+	 * @param string $context The context; 'view' (default) or 'edit'.
+	 * @return array Post entity
+	 */
+	public function get_post( $id, $context = 'view' ) {
+		$id = (int) $id;
+
+		$post = get_post( $id, ARRAY_A );
+
+		if ( empty( $id ) || empty( $post['ID'] ) ) {
+			return new WP_Error( 'json_post_invalid_id', __( 'Invalid post ID.' ), array( 'status' => 404 ) );
+		}
+
+		if ( ! json_check_post_permission( $post, 'read' ) ) {
+			return new WP_Error( 'json_user_cannot_read', __( 'Sorry, you cannot read this post.' ), array( 'status' => 401 ) );
+		}
+
+		// Link headers (see RFC 5988)
+
+		$response = new WP_JSON_Response();
+		// Modified now, no cache
+		$response->header( 'Cache-Control', 'no-cache, no-store, must-revalidate' );
+		$response->header( 'Expires', 'Wed, 11 Jan 1984 05:00:00 GMT' );
+		$response->header( 'Pragma', 'no-cache' );
+		$response->header( 'Last-Modified', gmdate( 'D, d M Y H:i:s' ) . ' GMT'  );
+
+		$post = $this->prepare_post( $post, $context );
+
+		if ( is_wp_error( $post ) ) {
+			return $post;
+		}
+
+		foreach ( $post['meta']['links'] as $rel => $url ) {
+			$response->link_header( $rel, $url );
+		}
+
+		$response->link_header( 'alternate',  get_permalink( $id ), array( 'type' => 'text/html' ) );
+		$response->set_data( $post );
+
+		return $response;
+	}
+
+	/**
+	 * Retrieve posts. We need to override last modified date
+	 *
+	 * @since 6.4.9
+	 *
+	 * The optional $filter parameter modifies the query used to retrieve posts.
+	 * Accepted keys are 'post_type', 'post_status', 'number', 'offset',
+	 * 'orderby', and 'order'.
+	 *
+	 * @uses wp_get_recent_posts()
+	 * @see get_posts() for more on $filter values
+	 *
+	 * @param array $filter Parameters to pass through to `WP_Query`
+	 * @param string $context The context; 'view' (default) or 'edit'.
+	 * @param string|array $type Post type slug, or array of slugs
+	 * @param int $page Page number (1-indexed)
+	 * @return stdClass[] Collection of Post entities
+	 */
+	public function get_posts( $filter = array(), $context = 'edit', $type = 'post', $page = 1 ) {
+		$query = array();
+
+		// Validate post types and permissions
+		$query['post_type'] = array();
+
+		foreach ( (array) $type as $type_name ) {
+			$post_type = get_post_type_object( $type_name );
+
+			if ( ! ( (bool) $post_type ) || ! $post_type->show_in_json ) {
+				return new WP_Error( 'json_invalid_post_type', sprintf( __( 'The post type "%s" is not valid' ), $type_name ), array( 'status' => 403 ) );
+			}
+
+			$query['post_type'][] = $post_type->name;
+		}
+
+		global $wp;
+
+		// Allow the same as normal WP
+		$valid_vars = apply_filters('query_vars', $wp->public_query_vars);
+
+		// If the user has the correct permissions, also allow use of internal
+		// query parameters, which are only undesirable on the frontend
+		//
+		// To disable anyway, use `add_filter('json_private_query_vars', '__return_empty_array');`
+
+		if ( current_user_can( $post_type->cap->edit_posts ) ) {
+			$private = apply_filters( 'json_private_query_vars', $wp->private_query_vars );
+			$valid_vars = array_merge( $valid_vars, $private );
+		}
+
+		// Define our own in addition to WP's normal vars
+		$json_valid = array( 'posts_per_page' );
+		$valid_vars = array_merge( $valid_vars, $json_valid );
+
+		// Filter and flip for querying
+		$valid_vars = apply_filters( 'json_query_vars', $valid_vars );
+		$valid_vars = array_flip( $valid_vars );
+
+		// Exclude the post_type query var to avoid dodging the permission
+		// check above
+		unset( $valid_vars['post_type'] );
+
+		foreach ( $valid_vars as $var => $index ) {
+			if ( isset( $filter[ $var ] ) ) {
+				$query[ $var ] = apply_filters( 'json_query_var-' . $var, $filter[ $var ] );
+			}
+		}
+
+		// Special parameter handling
+		$query['paged'] = absint( $page );
+
+		$post_query = new WP_Query();
+		$posts_list = $post_query->query( $query );
+		$response   = new WP_JSON_Response();
+		$response->query_navigation_headers( $post_query );
+
+		if ( ! $posts_list ) {
+			$response->set_data( array() );
+			return $response;
+		}
+
+		// holds all the posts data
+		$struct = array();
+
+		// Modified now, no cache
+		$response->header( 'Cache-Control', 'no-cache, no-store, must-revalidate' );
+		$response->header( 'Expires', 'Wed, 11 Jan 1984 05:00:00 GMT' );
+		$response->header( 'Pragma', 'no-cache' );
+		$response->header( 'Last-Modified', gmdate( 'D, d M Y H:i:s' ) . ' GMT'  );
+
+		foreach ( $posts_list as $post ) {
+			$post = get_object_vars( $post );
+
+			// Do we have permission to read this post?
+			if ( ! json_check_post_permission( $post, 'read' ) ) {
+				continue;
+			}
+
+			$response->link_header( 'item', json_url( '/posts/' . $post['ID'] ), array( 'title' => $post['post_title'] ) );
+			$post_data = $this->prepare_post( $post, $context );
+			if ( is_wp_error( $post_data ) ) {
+				continue;
+			}
+
+			$struct[] = $post_data;
+		}
+		$response->set_data( $struct );
+
+		return $response;
+	}
+
+
+	/**
 	 * Ensure value is boolean
 	 *
 	 * @param mixed $value
@@ -548,7 +706,7 @@ class CCF_API extends WP_JSON_Posts {
 			return new WP_Error( 'json_cannot_view_ccf_forms', esc_html__( 'Sorry, you cannot view forms.', 'custom-contact-forms' ), array( 'status' => 403 ) );
 		}
 
-		return parent::get_posts( $filter, $context, 'ccf_form', $page );
+		return $this->get_posts( $filter, $context, 'ccf_form', $page );
 	}
 
 	/**
@@ -570,7 +728,7 @@ class CCF_API extends WP_JSON_Posts {
 
 		$filter['post_parent'] = $id;
 
-		return parent::get_posts( $filter, $context, 'ccf_submission', $page );
+		return $this->get_posts( $filter, $context, 'ccf_submission', $page );
 	}
 
 	/**
@@ -598,7 +756,7 @@ class CCF_API extends WP_JSON_Posts {
 			return new WP_Error( 'json_cannot_view_ccf_form', esc_html__( 'Sorry, you cannot view this form.', 'custom-contact-forms' ), array( 'status' => 403 ) );
 		}
 
-		return parent::get_post( $id, $context );
+		return $this->get_post( $id, $context );
 	}
 
 	/**
