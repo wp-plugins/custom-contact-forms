@@ -172,6 +172,12 @@ the screen options panel. In this panel you can check which columns you would li
   CCF uses RESTful HTTP verbs such as PUT and DELETE. If your web server does not support those HTTP requests, the
   plugin will not work. You will need to contact your host to resolve this.
 
+* __Form mail is not getting emailed to me. What's wrong?__
+
+  CCF relies on default WordPress email functionality. If CCF email is not sending, most likely no WordPress email is
+  sending. You can test this by trying to send yourself a lost password email. If you don't receive the lost password
+  email, then there is an issue with your host or a plugin/theme conflict.
+
 ## Development
 
 #### Setup
@@ -221,6 +227,14 @@ where:
 Run the plugin tests:
 ```
 phpunit
+```
+
+##### Dockunit
+
+This plugin contains a valid [Dockunit](https://www.npmjs.com/package/dockunit) file for running unit tests across a variety of environments locally (PHP 5.2 and 5.5). You can use Dockunit (after installing it via npm) by running:
+
+```bash
+dockunit
 ```
 
 #### Extending the Plugin

@@ -72,7 +72,8 @@
       .ccf-main-modal .field h4:hover {
         border: #999 1px solid; }
     .ccf-main-modal .field .right {
-      float: right; }
+      float: right;
+      display: block; }
       .ccf-main-modal .field .right a {
         color: inherit;
         margin-left: 3px; }
@@ -292,16 +293,32 @@
       width: 40%;
       bottom: 50px;
       left: 25%;
-      overflow: scroll;
       right: 35%;
       top: 0;
       overflow: auto;
       border-top: 1px solid #ddd;
       padding: 21px; }
+      .ccf-main-modal .ccf-form-pane .form-content .field-placeholder {
+        border: 1px dashed #e5e5e5;
+        height: 46px;
+        margin-bottom: 5px; }
       .ccf-main-modal .ccf-form-pane .form-content .no-fields {
         font-size: 22px;
         padding: 16px;
         font-style: italic; }
+      .ccf-main-modal .ccf-form-pane .form-content:after {
+        width: 100%;
+        display: block;
+        margin-top: 5px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        font-style: italic;
+        font-size: 22px;
+        text-align: center;
+        padding: 1em .5em;
+        border: 4px dashed #e5e5e5;
+        content: attr(data-drag-message); }
     .ccf-main-modal .ccf-form-pane .right-sidebar {
       box-sizing: border-box;
       padding: 0;

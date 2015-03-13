@@ -1190,25 +1190,26 @@
 					specialFields.appendChild( new wp.ccf.views.FieldRowPlaceholder( { type: type } ).render().el );
 				});
 
+				var fieldModels = SELF.model.get( 'fields' );
+				var formContent = SELF.el.querySelectorAll( '.form-content' )[0];
+				var $formContent = $( formContent );
+
 				$( SELF.el.querySelectorAll( '.left-sidebar' )[0].querySelectorAll( '.field' ) ).draggable( {
 					cursor: 'move',
+					distance: 2,
 					zIndex: 160001,
-					//opacity: 0.75,
 					scroll: false,
-					containment: '.ccf-form-pane',
+					containment: 'document',
 					appendTo: '.ccf-main-modal',
-					snap: true,
+					snap: false,
 					connectToSortable: '.form-content',
 					helper: function( event ) {
 						var $field = $( event.currentTarget );
 						var $helper = $( '<div class="field" data-field-type="' + $field.attr( 'data-field-type' ) + '"><h4>' + $field.find( '.label' ).html() + '</h4></div>' );
-						return $helper.css( { 'width': $field.width(), 'height': $field.height() } );
+						return $helper.css( { 'width': $formContent.width(), opacity: '.75', 'height': $field.height() } );
 					}
 
 				});
-
-				var fieldModels = SELF.model.get( 'fields' );
-				var formContent = SELF.el.querySelectorAll( '.form-content' )[0];
 
 				if ( fieldModels.length >= 1 ) {
 					formContent.innerHTML = '';
@@ -1221,7 +1222,9 @@
 
 				$( formContent ).sortable( {
 					axis: 'y',
+					distance: 2,
 					handle: 'h4',
+					placeholder: 'field-placeholder',
 					stop: function( event, $ui ) {
 						if ( ! $ui.item.hasClass( 'instantiated' ) ) {
 							var type = $ui.item.attr( 'data-field-type' );
