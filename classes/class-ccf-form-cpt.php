@@ -10,6 +10,14 @@ class CCF_Form_CPT {
 	public function __construct() {}
 
 	/**
+	 * Keep track of post types when we change them
+	 *
+	 * @var $old_post_types
+	 * @since 6.5
+	 */
+	public $old_post_types = false;
+
+	/**
 	 * Setup form screen with actions and filters
 	 *
 	 * @since 6.0
@@ -38,7 +46,7 @@ class CCF_Form_CPT {
 			return;
 		}
 
-		$submissions = get_children( array( 'post_parent' => $form_id, 'numberposts' => apply_filters( 'ccf_max_submissions', 5000, get_post( $form_id ) ) ) );
+		$submissions = get_children( array( 'post_parent' => $form_id, 'post_type' => 'ccf_submission', 'numberposts' => apply_filters( 'ccf_max_submissions', 5000, get_post( $form_id ) ) ) );
 		if ( ! empty( $submissions ) ) {
 			foreach ( $submissions as $submission ) {
 				wp_delete_post( $submission->ID, true );
@@ -63,6 +71,14 @@ class CCF_Form_CPT {
 
 	}
 
+	/**
+	 * Add extra html to screen options for submission columns
+	 *
+	 * @param array $options
+	 * @param array $screen
+	 * @since 6.0
+	 * @return string
+	 */
 	public function filter_screen_options( $options, $screen ) {
 		global $pagenow;
 		if ( 'post.php' !== $pagenow || empty( $_GET['post'] ) || 'ccf_form' !== get_post_type( $_GET['post'] ) ) {
@@ -167,18 +183,12 @@ class CCF_Form_CPT {
 	}
 
 	/**
-	 * Output submissions meta box
+	 * Output submissions meta box. This is a placeholder method since JS will do the work.
 	 *
 	 * @param object $post
 	 * @since 6.0
 	 */
-	public function meta_box_submissions( $post ) {
-
-		$page = ( empty( $_GET['submission_page'] ) || 1 == $_GET['submission_page'] ) ? 1 : (int) $_GET['submission_page'];
-
-
-		wp_reset_postdata();
-	}
+	public function meta_box_submissions( $post ) { }
 
 	/**
 	 * Output at a glance meta box. This contains stats about the form.
@@ -216,6 +226,8 @@ class CCF_Form_CPT {
 				<a class="submitdelete deletion" href="<?php echo get_delete_post_link($post->ID); ?>"><?php esc_html_e( 'Move to Trash', 'custom-contact-forms' ); ?></a>
 				<div class="clear"></div>
 			</div>
+
+			<a class="button export-button" href="<?php echo esc_url( admin_url( 'post.php?action=edit&post=' . (int) $post->ID . '&nonce=' . wp_create_nonce( 'ccf_form_export' ) ) . '&export=1' ); ?>"><?php esc_html_e( 'Export', 'custom-contact-forms' ); ?></a>
 		</div>
 		<?php
 	}
@@ -256,6 +268,11 @@ class CCF_Form_CPT {
 		<?php
 	}
 
+	/**
+	 * Setup JS and CSS
+	 *
+	 * @since 6.0
+	 */
 	public function action_admin_enqueue_scripts() {
 		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
 			$admin_css_path = '/build/css/admin.css';
@@ -274,7 +291,7 @@ class CCF_Form_CPT {
 
 		global $pagenow;
 
-		if ( ( 'post.php' === $pagenow && 'ccf_form' === get_post_type() ) || ( 'post-new.php' === $pagenow && 'ccf_form' === $_GET['post_type'] ) ) {
+		if ( ( 'post.php' === $pagenow && 'ccf_form' === get_post_type() ) || ( 'post-new.php' === $pagenow && isset( $_GET['post_type'] ) && 'ccf_form' === $_GET['post_type'] ) ) {
 			wp_dequeue_script( 'autosave' );
 
 			add_thickbox();

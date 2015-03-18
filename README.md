@@ -160,6 +160,22 @@ Scroll to the `Submissions` meta box. Click one the eye icon to view more inform
 In the `Submissions` meta box, you can add and remove columns. Click the cog icon at the top of the meta box to open
 the screen options panel. In this panel you can check which columns you would like to see in the table.
 
+### Import/Export
+
+Custom Contact Forms allows you to import and export forms and form submissions using the default WordPress
+importer/exporter functionality. You can export all your forms (with submissions) within the standard WordPress export view:
+
+![Export CCF Forms](https://tlovett1.files.wordpress.com/2015/03/export-all1.png)
+
+You can also export a single form (with submissions) within the `Edit Form` screen:
+
+![Export Single CCF Form](https://tlovett1.files.wordpress.com/2015/03/export-single.png)
+
+Both export methods will produce a standard WordPress WXR file. You can import your WXR files using the standard
+WordPress importer:
+
+![Import CCF Forms](https://tlovett1.files.wordpress.com/2015/03/import.png)
+
 ## Frequently Asked Questions
 
 * __My form(s) will not save. What's wrong?__
@@ -167,16 +183,17 @@ the screen options panel. In this panel you can check which columns you would li
   You most likely have a theme or plugin conflict. Try deactivating other plugins and activating a default theme. If
   forms still won't save, please create an issue.
 
-* __When I save, delete, or edit a form, I get a HTTP 501 error. What should I do?__
-
-  CCF uses RESTful HTTP verbs such as PUT and DELETE. If your web server does not support those HTTP requests, the
-  plugin will not work. You will need to contact your host to resolve this.
-
 * __Form mail is not getting emailed to me. What's wrong?__
 
   CCF relies on default WordPress email functionality. If CCF email is not sending, most likely no WordPress email is
   sending. You can test this by trying to send yourself a lost password email. If you don't receive the lost password
   email, then there is an issue with your host or a plugin/theme conflict.
+
+* __My form won't submit on the front end of my website. What's wrong?__
+
+  Most likely there is a JavaScript error on your page that is conflicting with the form. This is the result of a theme
+  or plugin conflict. Try deactivating other plugins and activating a default theme. Another possibility is that your
+  theme does not call `wp_head()` or `wp_footer()`.
 
 ## Development
 
