@@ -2881,8 +2881,13 @@
 							var container = metabox.querySelectorAll( '.inside' )[0];
 
 							var settings = document.createElement( 'div' );
-							settings.className = 'ccf-submission-settings';
+							settings.className = 'ccf-submission-icon';
 							settings.setAttribute( 'data-icon', '' );
+
+							var download = document.createElement( 'a' );
+							download.href = '?action=edit&post=' + parseInt( ccfSettings.postId ) + '&download_submissions=1&download_submissions_nonce=' + ccfSettings.downloadSubmissionsNonce;
+							download.className = 'ccf-submission-icon';
+							download.setAttribute( 'data-icon', '' );
 
 							var screenOptionsLink = document.getElementById( 'show-settings-link' );
 							settings.onclick = function() {
@@ -2890,6 +2895,7 @@
 							};
 
 							metabox.insertBefore( settings, metabox.firstChild.nextSibling.nextSibling );
+							metabox.insertBefore( download, metabox.firstChild.nextSibling.nextSibling );
 
 							wp.ccf.createSubmissionsTable( container );
 						}
