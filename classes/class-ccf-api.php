@@ -28,6 +28,7 @@ class CCF_API extends WP_JSON_Posts {
 		parent::__construct( $server );
 
 		add_filter( 'json_prepare_post', array( $this, 'filter_prepare_post' ), 10, 3 );
+		add_filter( 'json_pre_dispatch', array( $this, 'filter_json_pre_dispatch' ), 10, 2 );
 
 		$this->field_attribute_keys = apply_filters( 'ccf_field_attributes', array(
 			'type' => array(
@@ -126,6 +127,19 @@ class CCF_API extends WP_JSON_Posts {
 				'escape' => array( $this, 'boolval' ),
 			),
 		) );
+	}
+
+	/**
+	 * Allow Backbone to emulate HTTP
+	 *
+	 * @param $result
+	 * @param object $server
+	 * @since 6.6.5
+	 */
+	function filter_json_pre_dispatch( $result, $server ) {
+		if ( isset( $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] ) ) {
+			$server->method = $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'];
+		}
 	}
 
 	/**
@@ -398,6 +412,8 @@ class CCF_API extends WP_JSON_Posts {
 			$_post['completionRedirectUrl'] = esc_url_raw( get_post_meta( $post['ID'], 'ccf_form_completion_redirect_url', true ) );
 			$_post['completionMessage'] = esc_html( get_post_meta( $post['ID'], 'ccf_form_completion_message', true ) );
 			$_post['sendEmailNotifications'] = (bool) get_post_meta( $post['ID'], 'ccf_form_send_email_notifications', true );
+			$_post['pause'] = (bool) get_post_meta( $post['ID'], 'ccf_form_pause', true );
+			$_post['pauseMessage'] = esc_html( get_post_meta( $post['ID'], 'ccf_form_pause_message', true ) );
 			$_post['emailNotificationAddresses'] = esc_html( get_post_meta( $post['ID'], 'ccf_form_email_notification_addresses', true ) );
 			$_post['emailNotificationFromType'] = esc_html( get_post_meta( $post['ID'], 'ccf_form_email_notification_from_type', true ) );
 			$_post['emailNotificationFromAddress'] = esc_html( get_post_meta( $post['ID'], 'ccf_form_email_notification_from_address', true ) );
@@ -550,6 +566,14 @@ class CCF_API extends WP_JSON_Posts {
 
 		if ( isset( $data['sendEmailNotifications'] ) ) {
 			update_post_meta( $result, 'ccf_form_send_email_notifications', (bool) $data['sendEmailNotifications'] );
+		}
+
+		if ( isset( $data['pause'] ) ) {
+			update_post_meta( $result, 'ccf_form_pause', (bool) $data['pause'] );
+		}
+
+		if ( isset( $data['pauseMessage'] ) ) {
+			update_post_meta( $result, 'ccf_form_pause_message', sanitize_text_field( $data['pauseMessage'] ) );
 		}
 
 		if ( isset( $data['emailNotificationAddresses'] ) ) {
@@ -820,6 +844,14 @@ class CCF_API extends WP_JSON_Posts {
 
 		if ( isset( $data['completionMessage'] ) ) {
 			update_post_meta( $result, 'ccf_form_completion_message', sanitize_text_field( $data['completionMessage'] ) );
+		}
+
+		if ( isset( $data['pause'] ) ) {
+			update_post_meta( $result, 'ccf_form_pause', (bool) $data['pause'] );
+		}
+
+		if ( isset( $data['pauseMessage'] ) ) {
+			update_post_meta( $result, 'ccf_form_pause_message', sanitize_text_field( $data['pauseMessage'] ) );
 		}
 
 		if ( isset( $data['completionRedirectUrl'] ) ) {
